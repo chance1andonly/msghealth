@@ -228,11 +228,11 @@ function shotPhone(t) {
   cText('Hi Priya! Ready for', -316, -48, 30, '#fff', { weight: 700, emboss: false });
   cText('your next touch-up?', -316, -8, 30, '#fff', { weight: 700, emboss: false });
   ctx.restore();
-  if (b1 > 0.9) cText('Delivered', 170, 60, 24, '#8a949a', { align: 'right', weight: 800, emboss: false });
+  if (b1 > 0.9) cText('Delivered', 176, -46, 24, '#8a949a', { align: 'right', weight: 800, emboss: false });
   const typing = t > 20.8 && t < 21.9;
   if (typing) {
-    cRect(-180, 110, 130, 70, 35, '#e6e1d8', { shadow: 4 });
-    for (let i = 0; i < 3; i++) cEll(-146 + i * 30, 145 - ((POSE + i) % 3) * 5, 9, 9, '#9aa6ad', { shadow: 0 });
+    cRect(-180, 0, 130, 70, 35, '#e6e1d8', { shadow: 4 });
+    for (let i = 0; i < 3; i++) cEll(-146 + i * 30, 35 - ((POSE + i) % 3) * 5, 9, 9, '#9aa6ad', { shadow: 0 });
   }
   const later = seg(t, 22.1, 22.5);
   if (later > 0) cText('3 days later…', 0, 330, 32, '#b3a89a', { align: 'center', weight: 800, emboss: false, alpha: later });
