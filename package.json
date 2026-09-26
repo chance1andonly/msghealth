@@ -1,0 +1,26 @@
+{
+  "name": "msghealth-demo-film",
+  "version": "1.0.0",
+  "description": "Claymation-style animated product demo for MsgHealth, rendered procedurally in the browser",
+  "scripts": {
+    "render": "node scripts/render.mjs",
+    "snap": "node scripts/snap.mjs",
+    "audio": "node scripts/audio.mjs dist/score.wav"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chance1andonly/msghealth.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chance1andonly/msghealth/issues"
+  },
+  "homepage": "https://github.com/chance1andonly/msghealth#readme",
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  },
+  "private": true,
+  "type": "module"
+}
