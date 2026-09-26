@@ -1,9 +1,10 @@
-# MsgHealth — Claymation Product Film
+# MsgHealth — Paper Cut-Out Product Film
 
 A 94-second animated product demo for **MsgHealth** (msghealth.net), done in a stop-motion
-clay style. It's built as code: every character, set, prop and UI screen is drawn
-procedurally on an HTML canvas with clay shading, fingerprint texture, "boiling"
-stop-motion jitter (animated on twos at 12 poses/sec), depth of field, film grain and a colour grade.
+cut-paper style. It's built as code: every character, set, prop and UI screen is drawn
+procedurally on an HTML canvas as layered pieces of coloured card, with paper-fibre texture,
+pale cut edges, tight layered shadows and hand-placed "boil" jitter (animated on twos at 12 poses/sec),
+plus depth of field, film grain and a colour grade. There are no captions: the story is told visually.
 
 - **Final video:** `dist/msghealth-demo.mp4` (1920×1080, 24 fps, H.264 + AAC)
 - **Interactive player:** open `index.html` through any static server (e.g. `npx serve .`) to play and scrub
@@ -33,14 +34,13 @@ automatic outreach, SMS & email, booking and appointment management, reviews and
 loyalty and retention, payments and invoicing, analytics and reporting, the inbox, automations and
 contacting a representative. The people, the business and the numbers on screen are illustrative.
 
-## Brand assets (please read)
+## Brand assets
 
-msghealth.net could not be reached from the build environment, so the **logo and colours are placeholders**.
-To apply the official brand:
+- Logo mark: `assets/logo.png` (official, transparent PNG), paired with a "MsgHealth" wordmark
+- Brand colour: `#4F46E5`, set in `src/brand.js` along with `primaryDark` and `ink`
 
-1. Save the official logo as `assets/logo.png` (transparent PNG). The film picks it up automatically.
-2. Put the official colours into `src/brand.js` (`colors.primary`, `primaryDark`, `ink`, …).
-3. Re-render: `npm run render`
+After changing either one, re-render with `npm run render`. Captions can be turned back on with
+`SHOW_CAPTIONS` in `src/clay.js`.
 
 ## Rendering
 
@@ -58,7 +58,7 @@ is the same on every run.
 ## Code map
 
 - `src/brand.js`: brand name, colours, tagline, URL and feature names
-- `src/clay.js`: the clay material (shading, texture, boil), camera, layers and depth of field, grading, captions
+- `src/clay.js`: the paper material (texture, cut edges, layered shadows, boil), camera, layers and depth of field, grading, captions
 - `src/characters.js`: the cast (Sam, Jordan, Priya, Alex, Morgan, Dana) and their faces, poses and props
 - `src/sets.js`: the street, the salon interior, Jordan's living room and the support desk
 - `src/app.js`: the MsgHealth interface in clay (Client Health, Automations, Inbox, Overview, Help)

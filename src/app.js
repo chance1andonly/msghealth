@@ -12,13 +12,13 @@ function drawLogo(x, y, s = 1, o = {}) {
   const sq = 1 + (1 - press) * 0.35;
   ctx.scale(s * (1 / sq + (sq - 1) * 0.2), s * (press < 1 ? press * 0.9 + 0.1 : 1));
   if (o.alpha != null) ctx.globalAlpha = o.alpha;
-  if (LOGO) {
-    const h = o.markOnly ? 150 : 130, w = (LOGO.width / LOGO.height) * h;
-    ctx.drawImage(LOGO, -w / 2, -h / 2, w, h);
-    ctx.restore(); return;
-  }
   const ink = o.light ? '#fffaf2' : C().ink;
-  const mark = (mx) => {
+  const mark = LOGO ? (mx) => {
+    // official mark, lifted off the page like a paper cut-out
+    const h = 150, w = (LOGO.width / LOGO.height) * h;
+    ctx.save(); ctx.shadowColor = 'rgba(30,20,60,0.3)'; ctx.shadowBlur = 8 * CAMZ * s; ctx.shadowOffsetY = 5 * CAMZ * s;
+    ctx.drawImage(LOGO, mx - w / 2, -h / 2 - 4, w, h); ctx.restore();
+  } : (mx) => {
     // speech bubble with a heartbeat line
     clay((k) => { k.beginPath(); k.roundRect(mx - 62, -58, 124, 100, 34); k.moveTo(mx - 30, 36); k.lineTo(mx - 44, 66); k.lineTo(mx - 6, 40); k.closePath(); }, C().primary, { x: mx - 62, y: -58, w: 124, h: 124 }, { shadow: 12, gloss: 1.2 });
     ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -303,8 +303,8 @@ function helpLayer(st) {
     cRect(x, 150, 580, 120, 34, C().primary, { shadow: 0 });
     miniFace(x + 70, 210, 36, 'rep');
     cText('Dana', x + 124, 204, 32, '#fffdf8', { weight: 900, emboss: false });
-    cText('MsgHealth Representative', x + 124, 240, 22, '#e3f6f2', { weight: 700, emboss: false });
-    cEll(x + 530, 210, 10, 10, '#7cf0a8', { shadow: 0 });
+    cText('MsgHealth Representative', x + 124, 240, 22, '#e0defc', { weight: 700, emboss: false });
+    cEll(x + 530, 210, 10, 10, '#86efac', { shadow: 0 });
     const msgs = st.msgs ?? [];
     const lines = [
       ['Q', ['How do I change when my', 'reminder texts go out?']],

@@ -126,7 +126,7 @@ function shotMontage(t) {
         if (k <= 0 || k >= 1) continue;
         const x = 2140 + i * 40 + Math.sin(k * 5 + i) * 20, y = 500 - ease.out(k) * 240;
         ctx.save(); ctx.globalAlpha = 1 - seg(k, 0.7, 1); ctx.translate(x, y); ctx.scale(pop(k * 3), pop(k * 3));
-        cRect(-46, -30, 92, 60, 26, i === 1 ? '#fffdf8' : '#bfe9e2', { shadow: 8 });
+        cRect(-46, -30, 92, 60, 26, i === 1 ? '#fffdf8' : '#dcd9fb', { shadow: 8 });
         check(0, 0, 30, BRAND.colors.primaryDark);
         ctx.restore();
       }

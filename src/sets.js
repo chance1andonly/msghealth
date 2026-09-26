@@ -286,8 +286,8 @@ function salonDesk(t, st) {
   cRect(1985, 598, 10, 44, 3, '#b5533a', { shadow: 0 });
   // phone on stand
   cRect(2112, 520, 60, 116, 12, '#262a33', { shadow: 10 });
-  cRect(2118, 528, 48, 100, 8, st.phoneLit ? '#d5f3ee' : '#3d4754', { shadow: 0, tex: 0.3 });
-  if (st.phoneLit) glow(2142, 578, 90, '#bff5ea', 0.5);
+  cRect(2118, 528, 48, 100, 8, st.phoneLit ? '#e3e1fc' : '#3d4754', { shadow: 0, tex: 0.3 });
+  if (st.phoneLit) glow(2142, 578, 90, '#c7c3fa', 0.5);
   // tablet on stand
   const { x: tx, y: ty, w: tw, h: th } = TABLET;
   cRect(tx - 30, ty + th / 2 - 4, 60, 70, 10, '#3a3f48', { shadow: 10 });

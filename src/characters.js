@@ -209,7 +209,7 @@ function prop(kind, [x, y, a], o) {
   } else if (kind === 'phone') {
     c.rotate(o.phoneRot ?? -0.2);
     cRect(-24, -64, 48, 90, 10, '#262a33', { shadow: 8 });
-    cRect(-19, -58, 38, 74, 6, o.phoneLit ? '#bfe9e2' : '#44505e', { shadow: 0, tex: 0.3 });
+    cRect(-19, -58, 38, 74, 6, o.phoneLit ? '#dcd9fb' : '#44505e', { shadow: 0, tex: 0.3 });
   } else if (kind === 'card') {
     c.rotate(-0.3);
     cRect(-34, -30, 68, 44, 7, '#2f6fb0', { shadow: 6 });

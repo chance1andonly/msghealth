@@ -56,32 +56,21 @@ function makeTextures() {
   t.fillStyle = '#808080'; t.fillRect(0, 0, 512, 512);
   const img = t.getImageData(0, 0, 512, 512);
   for (let i = 0; i < img.data.length; i += 4) {
-    const v = 128 + (Math.random() - 0.5) * 38;
+    const v = 128 + (Math.random() - 0.5) * 22;
     img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
   }
   t.putImageData(img, 0, 0);
-  for (let k = 0; k < 90; k++) { // soft mottling
-    const x = Math.random() * 512, y = Math.random() * 512, r = 10 + Math.random() * 50;
+  for (let k = 0; k < 60; k++) { // paper tooth: soft blotches
+    const x = Math.random() * 512, y = Math.random() * 512, r = 20 + Math.random() * 70;
     const g = t.createRadialGradient(x, y, 0, x, y, r);
     const v = Math.random() < 0.5 ? 0 : 255;
-    g.addColorStop(0, `rgba(${v},${v},${v},0.10)`); g.addColorStop(1, `rgba(${v},${v},${v},0)`);
+    g.addColorStop(0, `rgba(${v},${v},${v},0.06)`); g.addColorStop(1, `rgba(${v},${v},${v},0)`);
     t.fillStyle = g; t.fillRect(x - r, y - r, r * 2, r * 2);
   }
-  for (let k = 0; k < 14; k++) { // fingerprints
-    const x = Math.random() * 512, y = Math.random() * 512, rot = Math.random() * 6.28;
-    t.save(); t.translate(x, y); t.rotate(rot);
-    for (let r = 3; r < 26; r += 3.2) {
-      t.beginPath(); t.ellipse(0, 0, r * 1.3, r, 0, 0.3, Math.PI * 1.7);
-      t.strokeStyle = 'rgba(40,40,40,0.10)'; t.lineWidth = 1.1; t.stroke();
-      t.beginPath(); t.ellipse(0.8, 0.8, r * 1.3, r, 0, 0.3, Math.PI * 1.7);
-      t.strokeStyle = 'rgba(255,255,255,0.08)'; t.stroke();
-    }
-    t.restore();
-  }
-  for (let k = 0; k < 40; k++) { // sculpting tool drags
-    const x = Math.random() * 512, y = Math.random() * 512, a = Math.random() * 6.28, l = 20 + Math.random() * 60;
-    t.beginPath(); t.moveTo(x, y); t.quadraticCurveTo(x + Math.cos(a) * l * 0.5 + 8, y + Math.sin(a) * l * 0.5, x + Math.cos(a) * l, y + Math.sin(a) * l);
-    t.strokeStyle = 'rgba(30,30,30,0.07)'; t.lineWidth = 1.5; t.stroke();
+  for (let k = 0; k < 900; k++) { // paper fibres
+    const x = Math.random() * 512, y = Math.random() * 512, a = Math.random() * 6.28, l = 4 + Math.random() * 18;
+    t.beginPath(); t.moveTo(x, y); t.quadraticCurveTo(x + Math.cos(a + 0.6) * l * 0.5, y + Math.sin(a + 0.6) * l * 0.5, x + Math.cos(a) * l, y + Math.sin(a) * l);
+    t.strokeStyle = Math.random() < 0.5 ? 'rgba(255,255,255,0.22)' : 'rgba(40,40,40,0.14)'; t.lineWidth = 0.6 + Math.random() * 0.6; t.stroke();
   }
   TEX = tc;
   for (let k = 0; k < 4; k++) { // film grain frames
@@ -136,55 +125,53 @@ function smoothClosed(c, pts) {
   c.closePath();
 }
 
-// ── the clay material ────────────────────────────────────────────────────────
+// ── the paper material ───────────────────────────────────────────────────────
+// Every shape is a hand-cut piece of coloured card, layered on the one below.
 // path: fn(ctx) that builds the path. bb: {x,y,w,h} bounds for shading.
 function clay(path, color, bb, o = {}) {
   const c = ctx;
   const id = CALL++;
   const j = o.still ? 0 : (o.jit ?? 0.9);
   const jx = (hash(POSE * 13.1 + id * 7.7) - 0.5) * j, jy = (hash(POSE * 5.3 + id * 3.9) - 0.5) * j;
+  const { x, y, w, h } = bb;
   c.save();
   c.translate(jx, jy);
+  if (j > 0) { // cut-outs never sit perfectly still between frames
+    const cx = x + w / 2, cy = y + h / 2, rot = (hash(POSE * 2.7 + id * 1.9) - 0.5) * 0.006 * j;
+    c.translate(cx, cy); c.rotate(rot); c.translate(-cx, -cy);
+  }
   const sh = o.shadow ?? 12;
-  if (sh > 0) {
-    c.shadowColor = `rgba(45,25,10,${o.shadowA ?? 0.33})`;
-    c.shadowBlur = sh * CAMZ;
-    c.shadowOffsetX = sh * 0.25 * CAMZ;
-    c.shadowOffsetY = sh * 0.55 * CAMZ;
+  if (sh > 0) { // layered-paper drop shadow: tight and directional
+    c.shadowColor = `rgba(40,28,20,${(o.shadowA ?? 0.33) * 0.9})`;
+    c.shadowBlur = sh * 0.45 * CAMZ;
+    c.shadowOffsetX = sh * 0.18 * CAMZ;
+    c.shadowOffsetY = sh * 0.4 * CAMZ;
   }
   path(c);
   c.fillStyle = color; c.fill();
   c.shadowColor = 'transparent';
   if (o.flat) { c.restore(); return; }
   c.clip();
-  const { x, y, w, h } = bb;
   const m = Math.max(w, h);
-  // key light from top-left, falloff bottom-right
-  const g = c.createLinearGradient(x, y, x + w * 0.55, y + h);
-  g.addColorStop(0, `rgba(255,246,228,${0.30 * (o.light ?? 1)})`);
-  g.addColorStop(0.45, 'rgba(255,255,255,0)');
-  g.addColorStop(1, `rgba(35,18,6,${0.30 * (o.dark ?? 1)})`);
+  // very soft light falloff across the sheet (paper is matte)
+  const g = c.createLinearGradient(x, y, x + w * 0.3, y + h);
+  g.addColorStop(0, `rgba(255,250,240,${0.10 * (o.light ?? 1)})`);
+  g.addColorStop(1, `rgba(35,22,10,${0.10 * (o.dark ?? 1)})`);
   c.fillStyle = g; c.fillRect(x - 4, y - 4, w + 8, h + 8);
-  // soft specular bloom (clay is matte-ish with a waxy sheen)
-  const hx = x + w * 0.3, hy = y + h * 0.24;
-  const r = Math.min(w, h) * 0.55 + 2;
-  const s = c.createRadialGradient(hx, hy, 0, hx, hy, r);
-  s.addColorStop(0, `rgba(255,255,255,${0.22 * (o.gloss ?? 1)})`); s.addColorStop(1, 'rgba(255,255,255,0)');
-  c.fillStyle = s; c.fillRect(x - 4, y - 4, w + 8, h + 8);
-  // rolled edge: darken inside the silhouette border
-  path(c);
-  const ew = Math.max(2, Math.min(w, h) * 0.09);
-  c.lineWidth = ew * 2; c.strokeStyle = 'rgba(40,20,8,0.10)'; c.stroke();
-  c.lineWidth = ew; c.strokeStyle = 'rgba(40,20,8,0.08)'; c.stroke();
-  // clay surface texture (fingerprints, mottling)
+  // paper fibre texture
   if (o.tex !== 0) {
     c.globalCompositeOperation = 'soft-light';
-    c.globalAlpha = o.tex ?? 0.85;
-    const sc = o.texScale ?? clamp(m / 380, 0.25, 2.2);
+    c.globalAlpha = Math.min(1, (o.tex ?? 0.85) * 1.1);
+    const sc = o.texScale ? o.texScale * 0.5 : clamp(m / 900, 0.2, 0.8);
     const ox = hash(id * 1.3) * 512, oy = hash(id * 2.9) * 512;
     TEXPAT.setTransform(new DOMMatrix().translate(x - ox * sc, y - oy * sc).scale(sc));
     c.fillStyle = TEXPAT; c.fillRect(x - 4, y - 4, w + 8, h + 8);
+    c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1;
   }
+  // cut edge: the paler paper core catches light along the scissor line
+  path(c);
+  c.lineWidth = Math.max(1.2, Math.min(w, h) * 0.022);
+  c.strokeStyle = 'rgba(255,252,245,0.45)'; c.stroke();
   c.restore();
 }
 
@@ -292,7 +279,7 @@ function grade({ warm = 0.1, cool = 0, dark = 0, vignette = 0.45 } = {}) {
   g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, `rgba(40,25,15,${vignette})`);
   c.fillStyle = g; c.fillRect(0, 0, W, H);
   // film grain
-  c.globalCompositeOperation = 'overlay'; c.globalAlpha = 0.07;
+  c.globalCompositeOperation = 'overlay'; c.globalAlpha = 0.05;
   c.imageSmoothingEnabled = true;
   c.drawImage(GRAIN[POSE % GRAIN.length], 0, 0, W, H);
   c.restore();
@@ -303,8 +290,10 @@ function letterbox(a = 1) {
 }
 function fadeBlack(a) { if (a <= 0) return; screenSpace(); ctx.fillStyle = `rgba(10,8,6,${clamp(a)})`; ctx.fillRect(0, 0, W, H); }
 
-// Story caption (lower third).
+// Story caption (lower third). Disabled: the film tells its story without captions.
+const SHOW_CAPTIONS = false;
 function caption(str, t, a, b, { y = H - 150, size = 46, sub = null } = {}) {
+  if (!SHOW_CAPTIONS) return;
   const k = Math.min(seg(t, a, a + 0.5), 1 - seg(t, b - 0.5, b));
   if (k <= 0) return;
   screenSpace();
