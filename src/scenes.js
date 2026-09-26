@@ -5,7 +5,7 @@ const DURATION = 94;
 
 const blinkAt = (t, seed = 0) => ((sm(t) + hash(seed) * 3) % 3.7 < 0.1 ? 1 : 0);
 const appToWorld = (ax, ay) => [TABLET.x - TABLET.w / 2 + (ax * TABLET.w) / APP_W, TABLET.y - TABLET.h / 2 + (ay * TABLET.h) / APP_H];
-const TAB_Z = 5.05; // zoom at which the tablet fills the frame
+const TAB_Z = 4.85; // zoom at which the tablet screen sits fully inside the letterbox
 
 // ── generic shot helpers ─────────────────────────────────────────────────────
 function salonShot(t, cam, st, cast = {}) {
@@ -40,6 +40,29 @@ function crossfade(t, a, b, drawA, drawB) {
   drawA();
   screenSpace();
   withLayer(4, () => { screenSpace(); ctx.fillStyle = '#0b0906'; ctx.fillRect(0, 0, W, H); drawB(); }, { alpha: ease.sine(k) });
+}
+// Paper wipe: the next scene slides in as a fresh sheet with a hand-torn edge.
+function wipe(t, a, b, drawA, drawB) {
+  const k = seg(t, a, b);
+  if (k <= 0) return drawA();
+  if (k >= 1) return drawB();
+  const e = ease.io(k), x0 = W * (1 - e);
+  drawA();
+  const L = layer(5), prev = ctx;
+  ctx = L; L.setTransform(1, 0, 0, 1, 0, 0); L.fillStyle = '#0b0906'; L.fillRect(0, 0, W, H); drawB(); ctx = prev;
+  const edge = (c) => {
+    c.beginPath(); c.moveTo(W + 10, -10); c.lineTo(x0, -10);
+    for (let y = 0; y <= H + 20; y += 24) c.lineTo(x0 + (hash(y * 0.37 + 11) - 0.5) * 16, y);
+    c.lineTo(W + 10, H + 10); c.closePath();
+  };
+  screenSpace();
+  ctx.save(); // soft shadow the sheet casts on the scene below
+  ctx.shadowColor = 'rgba(20,12,6,0.45)'; ctx.shadowBlur = 28; ctx.shadowOffsetX = -10;
+  edge(ctx); ctx.fillStyle = '#efe6d6'; ctx.fill(); ctx.restore();
+  ctx.save(); edge(ctx); ctx.clip(); ctx.drawImage(L.canvas, 0, 0); ctx.restore();
+  ctx.save(); ctx.beginPath(); // pale torn fibre edge
+  for (let y = -10; y <= H + 20; y += 24) { const x = x0 + (hash(y * 0.37 + 11) - 0.5) * 16; y < 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+  ctx.strokeStyle = 'rgba(255,250,240,0.85)'; ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
 }
 // Whip pan: A streaks off left, B streaks in from right, with directional smear.
 function whip(t, a, b, drawA, drawB) {
@@ -100,8 +123,8 @@ function shotMontage(t) {
     { t: 9.0, x: 1540, y: 560, z: 1.36 },
     { t: 10.4, x: 2180, y: 540, z: 1.3 },
     { t: 12.2, x: 2300, y: 540, z: 1.26 },
-    { t: 13.8, x: 3160, y: 480, z: 1.12 },
-    { t: 16.0, x: 3200, y: 470, z: 1.2 },
+    { t: 13.8, x: 3300, y: 480, z: 1.12 },
+    { t: 16.0, x: 3300, y: 470, z: 1.2 },
   ], t);
   const sam = samMontage(t);
   const phone = t > 10.3 && t < 11.6;
@@ -221,7 +244,7 @@ function shotPhone(t) {
 // C3 · One quietly goes elsewhere (through the window)
 function shotWindow(t) {
   const L = leakLight(t);
-  const cam = camPath([{ t: 23, x: 400, y: 400, z: 1.6 }, { t: 26.4, x: 360, y: 410, z: 1.8 }], t);
+  const cam = camPath([{ t: 23, x: 290, y: 400, z: 1.8 }, { t: 26.4, x: 280, y: 405, z: 1.86 }], t);
   salonShot(t, cam, { light: L, windowSharp: true, walker: seg(t, 23.2, 26.2) });
   grade({ warm: 0.05, cool: 0.12 * (1 - L), dark: 0.22 * (1 - L) });
   caption('One quietly goes somewhere else.', t, 23.3, 26.4);
@@ -250,8 +273,8 @@ function shotConfused(t) {
       mood: 'worried', look: scratch ? [0, -0.8] : [0.6, 0.4], tilt: scratch ? -0.1 : -0.03, blink: blinkAt(t, 2),
     }),
     front: () => {
-      qmark(1880, 250, 0.8, seg(t, 30.4, 30.8), 1);
-      qmark(2100, 220, 0.6, seg(t, 30.8, 31.2), 2);
+      qmark(1990, 310, 0.7, seg(t, 30.4, 30.8), 1);
+      qmark(2150, 290, 0.55, seg(t, 30.8, 31.2), 2);
     },
   });
   grade({ warm: 0.02, cool: 0.14, dark: 0.26 });
@@ -265,7 +288,7 @@ function splash(x, y, w, h, t) {
   if (k < 1) { ctx.save(); ctx.globalAlpha = 1 - k; oldScreen(x, y, w, h); ctx.restore(); }
   const press = seg(t, 33.0, 33.9);
   if (press > 0) {
-    ctx.save(); ctx.translate(x + w / 2, y + h / 2);
+    ctx.save(); ctx.globalAlpha = 1 - seg(t, 35.45, 35.85); ctx.translate(x + w / 2, y + h / 2);
     const z = CAMZ; CAMZ = z * 0.2;
     drawLogo(0, 0, 0.2 * pop(press), { press: ease.elastic(press) });
     CAMZ = z; ctx.restore();
@@ -278,7 +301,7 @@ function shotArrive(t) {
     { t: 34.4, x: 2180, y: 490, z: 1.75 },
     { t: 36.6, x: TABLET.x, y: TABLET.y, z: TAB_Z, e: ease.in },
   ], t);
-  const toApp = seg(t, 35.6, 36.4);
+  const toApp = seg(t, 35.9, 36.35);
   salonShot(t, cam, {
     light: L, board: [0, 0, 1, 0, 1, 1, 1, 1],
     tablet: (x, y, w, h) => {
@@ -301,17 +324,14 @@ function shotArrive(t) {
 function shotHealth(t) {
   const drop = ease.io(seg(t, 38.4, 40.0));
   const j = lerp(78, 38, drop);
-  const [jx, jy] = appToWorld(880, 500);
   const cam = camPath([
     { t: 36.6, x: TABLET.x, y: TABLET.y, z: TAB_Z },
-    { t: 38.0, x: TABLET.x + 2, y: TABLET.y + 1, z: TAB_Z * 1.03 },
-    { t: 40.4, x: jx, y: jy, z: TAB_Z * 1.42 },
-    { t: 45, x: jx + 4, y: jy + 2, z: TAB_Z * 1.5 },
+    { t: 45, x: TABLET.x + 3, y: TABLET.y + 2, z: TAB_Z * 1.02 },
   ], t);
   tabletShot(t, {
     view: 'health', nav: 'Client Health', title: 'Client Health',
     jordan: j, counts: [lerp(128, 127, drop), 9, lerp(2, 3, drop)],
-    pulse: Math.sin(seg(t, 39.2, 41.6) * Math.PI), flag: seg(t, 40.2, 40.8), signals: seg(t, 40.8, 41.8), focus: seg(t, 40.2, 41),
+    pulse: Math.sin(seg(t, 39.2, 41.6) * Math.PI), flag: seg(t, 40.2, 40.8), signals: seg(t, 40.8, 41.8), focus: seg(t, 40.2, 41), dim: seg(t, 40.2, 41),
   }, cam);
   grade({ warm: 0.08, vignette: 0.4 });
   caption('MsgHealth scores the health of every client.', t, 37.0, 40.2);
@@ -320,13 +340,14 @@ function shotHealth(t) {
 
 // ── F · Automatic outreach → reply → rebooked ────────────────────────────────
 function shotAutomation(t) {
-  const cam = camPath([{ t: 45, x: TABLET.x, y: TABLET.y, z: TAB_Z }, { t: 48.8, x: TABLET.x + 6, y: TABLET.y, z: TAB_Z * 1.08 }], t);
+  const cam = camPath([{ t: 45, x: TABLET.x, y: TABLET.y, z: TAB_Z }, { t: 48.8, x: TABLET.x + 3, y: TABLET.y, z: TAB_Z * 1.02 }], t);
   tabletShot(t, { view: 'automation', nav: 'Automations', title: 'Automations', blocks: seg(t, 45.3, 47.3) * 4, toggle: ease.out(seg(t, 47.4, 47.8)) }, cam);
   grade({ warm: 0.08, vignette: 0.4 });
   // a real message leaves the screen
   const k = seg(t, 48.0, 49.0);
   if (k > 0) {
     screenSpace();
+    ctx.fillStyle = `rgba(20,16,40,${0.45 * ease.out(clamp(k * 3))})`; ctx.fillRect(0, 0, W, H);
     const s = lerp(0.4, 1.25, ease.out(k));
     ctx.save(); ctx.translate(lerp(820, 1300, ease.in(k)), lerp(600, 520, k)); ctx.scale(s, s); ctx.rotate(-0.05);
     smsBubble(0, 0, ["Hi Jordan! We miss you", "at Sam's Studio. Want your", 'usual Thursday spot?']);
@@ -375,7 +396,7 @@ function shotJordan(t) {
   caption('Jordan gets a personal text — and replies.', t, 49.6, 53.2);
 }
 function shotInbox(t) {
-  const cam = camPath([{ t: 53.6, x: TABLET.x, y: TABLET.y, z: TAB_Z }, { t: 57.4, x: TABLET.x + 8, y: TABLET.y + 6, z: TAB_Z * 1.1 }], t);
+  const cam = camPath([{ t: 53.6, x: TABLET.x, y: TABLET.y, z: TAB_Z }, { t: 57.4, x: TABLET.x + 3, y: TABLET.y + 1, z: TAB_Z * 1.02 }], t);
   const up = ease.io(seg(t, 55.4, 56.6));
   tabletShot(t, { view: 'inbox', nav: 'Inbox', title: 'Inbox', sms: 1, email: 1, reply: seg(t, 53.9, 54.4), booked: seg(t, 54.8, 55.4), jordan: lerp(38, 86, up) }, cam);
   if (up > 0 && up < 1) { const [rx, ry] = appToWorld(1480, 214); camera(cam.x, cam.y, cam.z); glow(rx, ry, 30, BRAND.colors.healthy, 0.6 * Math.sin(up * Math.PI)); }
@@ -396,12 +417,12 @@ function shotShelf(t) {
   const i = clamp(Math.floor(f), 0, 3);
   const within = f - i;
   const move = i < 3 ? ease.io(seg(within, 0.8, 1)) : 0;
-  const cx = (i + move) * 1100;
+  const cx = (i + move) * 1400;
   camera(cx, 560, 1.0);
   cRect(-1400, -800, 6200, 2600, 0, '#3b2f28', { shadow: 0, texScale: 2.2 }); // workshop wall
   cRect(-1400, 900, 6200, 60, 10, '#7a5a40', { shadow: 18 }); // shelf
   SHELF.forEach((b, k) => {
-    const x = k * 1100;
+    const x = k * 1400;
     const lt = t - (SHELF_T0 + k * SHELF_D);
     cRect(x - 480, 170, 960, 730, 36, shade(b.bg, -0.2), { shadow: 26 });
     cRect(x - 450, 200, 900, 670, 26, b.bg, { shadow: 0, texScale: 1.6 });
@@ -420,7 +441,7 @@ function dioramaReviews(x, t) {
   person({ who: 'alex', x: x - 230, y: 880, s: 0.95, armR: { a: 0.7, e: 1.9 }, holdR: 'phone', phoneLit: t > 0.3, mood: t > 0.9 ? 'grin' : 'smile', look: [0.7, 0.3], blink: blinkAt(t, 11) });
   cRect(x + 60, 250, 340, 420, 24, '#fffdf8', { shadow: 14 });
   cText('Reviews', x + 230, 310, 36, '#4a3a2c', { align: 'center', weight: 900 });
-  for (let r = 0; r < 2; r++) { cRect(x + 90, 340 + r * 70, 280, 56, 12, '#f6efe2', { shadow: 3 }); for (let q = 0; q < 5; q++) star(x + 118 + q * 30, 368 + r * 70, 11, '#f2b441', 0, { shadow: 2 }); }
+  for (let r = 0; r < 2; r++) { cRect(x + 90, 330 + r * 54, 280, 44, 12, '#f6efe2', { shadow: 3 }); for (let q = 0; q < 5; q++) star(x + 118 + q * 30, 352 + r * 54, 10, '#f2b441', 0, { shadow: 2 }); }
   const reqK = pop(seg(t, 0.1, 0.5));
   if (reqK > 0 && t < 1.0) { ctx.save(); ctx.translate(x - 150, 330); ctx.scale(reqK * 0.55, reqK * 0.55); smsBubble(0, 0, ['How was your visit?', 'Leave a quick review ★'], '#fffdf8', '#16303f', 520); ctx.restore(); }
   for (let i = 0; i < 5; i++) {
@@ -430,7 +451,7 @@ function dioramaReviews(x, t) {
     star(sx, sy, 28 * (0.6 + 0.4 * pop(k)), '#f2b441', k * 3);
   }
   const card = pop(seg(t, 1.9, 2.4));
-  if (card > 0) { ctx.save(); ctx.translate(x + 230, 570); ctx.scale(card, card); cRect(-140, -50, 280, 100, 18, '#fbf2dc', { shadow: 6 }); cText('New 5-star review', 0, 10, 26, '#4a3a2c', { align: 'center', weight: 900 }); ctx.restore(); }
+  if (card > 0) { ctx.save(); ctx.translate(x + 230, 588); ctx.scale(card, card); cRect(-140, -50, 280, 100, 18, '#fbf2dc', { shadow: 6 }); cText('New 5-star review', 0, 10, 26, '#4a3a2c', { align: 'center', weight: 900 }); ctx.restore(); }
 }
 function dioramaLoyalty(x, t) {
   person({ who: 'morgan', x: x + 280, y: 880, s: 0.9, flip: true, mood: t > 1.9 ? 'grin' : 'smile', armR: t > 1.9 ? { a: 2.6, e: -0.2 } : { a: 0.2, e: 0.2 }, look: [-0.8, 0.2], blink: blinkAt(t, 13) });
@@ -491,11 +512,12 @@ function dioramaAnalytics(x, t) {
 // ── H · The result ───────────────────────────────────────────────────────────
 function overviewState(t) { return { view: 'overview', nav: 'Client Health', title: 'Overview', feed: clamp((t - 72.2) / 0.4, 0, 5) }; }
 function shotResult(t) {
-  const cam = camPath([
+  const cam = t < 71.2 ? camPath([
     { t: 68.4, x: 1900, y: 520, z: 0.62 },
-    { t: 70.8, x: 1980, y: 520, z: 0.7 },
-    { t: 72.4, x: TABLET.x, y: TABLET.y, z: TAB_Z, e: ease.io },
-    { t: 75, x: TABLET.x + 4, y: TABLET.y + 2, z: TAB_Z * 1.04 },
+    { t: 71.2, x: 1960, y: 520, z: 0.66 },
+  ], t) : camPath([
+    { t: 71.2, x: TABLET.x, y: TABLET.y, z: TAB_Z },
+    { t: 75, x: TABLET.x + 3, y: TABLET.y + 1, z: TAB_Z * 1.02 },
   ], t);
   const board = BOARD_WHO.map((_, i) => ([0, 1, 3].includes(i) ? pop(seg(t, 68.9 + i * 0.25, 69.4 + i * 0.25)) : 1));
   if (cam.z > 4.2) {
@@ -540,20 +562,20 @@ function shotHelp(t) {
     const cam = camPath([{ t: 75, x: 2090, y: 460, z: 1.85 }, { t: 76.8, x: 2110, y: 470, z: 2.0 }], t);
     salonShot(t, cam, { light: 1, phoneLit: false, tablet: (x, y, w, h) => appInRect(overviewState(80), x, y, w, h) }, {
       back: () => person({ who: 'sam', x: 2040, y: 790, armR: { a: 0.3, e: 0.3 }, armL: { a: 2.6, e: 1.4 }, mood: 'o', look: [1, 0.3], tilt: 0.12, blink: blinkAt(t, 1) }),
-      front: () => qmark(2130, 260, 0.7, seg(t, 75.4, 75.8), 5),
+      front: () => qmark(2150, 330, 0.6, seg(t, 75.4, 75.8), 5),
     });
     grade({ warm: 0.14 });
     caption('Got a question?', t, 75.2, 76.8);
     return;
   }
   if (t < 81.8) {
-    const cam = camPath([{ t: 76.8, x: TABLET.x, y: TABLET.y, z: TAB_Z }, { t: 81.8, x: TABLET.x + 20, y: TABLET.y, z: TAB_Z * 1.08 }], t);
+    const cam = camPath([{ t: 76.8, x: TABLET.x, y: TABLET.y, z: TAB_Z }, { t: 81.8, x: TABLET.x + 3, y: TABLET.y, z: TAB_Z * 1.02 }], t);
     tabletShot(t, helpState(t), cam);
     camera(cam.x, cam.y, cam.z);
     const fm = seg(t, 76.9, 77.5), fm2 = seg(t, 77.9, 78.3), out = seg(t, 78.5, 78.9);
     if (out < 1) {
-      let ax = lerp(1700, 1440, ease.io(fm)), ay = lerp(1150, 96, ease.io(fm));
-      ax = lerp(ax, 1300, ease.io(fm2)); ay = lerp(ay, 186, ease.io(fm2));
+      let ax = lerp(1700, 1380, ease.io(fm)), ay = lerp(1150, 88, ease.io(fm));
+      ax = lerp(ax, 1172, ease.io(fm2)); ay = lerp(ay, 190, ease.io(fm2));
       ay += ease.in(out) * 900;
       const press = (t > 77.5 && t < 77.8) || (t > 78.3 && t < 78.5) ? 1 : 0;
       finger(ax, ay + press * 6, press);
@@ -569,7 +591,7 @@ function shotHelp(t) {
 function shotSplit(t) {
   const k = ease.out(seg(t, 81.8, 82.4));
   screenSpace(); ctx.fillStyle = '#1b1612'; ctx.fillRect(0, 0, W, H);
-  const pw = 900, ph = 800, gap = 40, y0 = 140;
+  const pw = 900, ph = 740, gap = 40, y0 = 230;
   const panel = (x, fn) => {
     ctx.save(); screenSpace(); ctx.beginPath(); ctx.roundRect(x, y0, pw, ph, 40); ctx.clip();
     const tr = new DOMMatrix().translate(x + pw / 2, y0 + ph / 2);
@@ -595,16 +617,17 @@ function shotSplit(t) {
   });
   screenSpace();
   const b = pop(seg(t, 82.3, 82.8));
-  if (b > 0) { ctx.save(); ctx.translate(W / 2, 250); ctx.scale(b * 0.8, b * 0.8); smsBubble(0, 0, ["Hi Sam! Happy to help.", "I'll walk you through it."], mix(BRAND.colors.primary, '#ffffff', 0.85), '#16303f', 520); ctx.restore(); }
+  if (b > 0) { ctx.save(); ctx.translate(W / 2, 140); ctx.scale(b * 0.72, b * 0.72); smsBubble(0, 0, ["Hi Sam! Happy to help.", "I'll walk you through it."], mix(BRAND.colors.primary, '#ffffff', 0.85), '#16303f', 520); ctx.restore(); }
   grade({ warm: 0.14, vignette: 0.5 });
   caption('Never alone with the software.', t, 82.2, 84.2, { sub: 'Real representatives, ready to help.' });
 }
 
 // ── J · Ending ───────────────────────────────────────────────────────────────
 function shotEnding(t) {
-  const cam = camPath([{ t: 84.2, x: 560, y: 610, z: 1.7 }, { t: 88.2, x: 760, y: 360, z: 0.82, e: ease.out }], t);
+  const cam = camPath([{ t: 84.2, x: 560, y: 610, z: 1.7 }, { t: 87.0, x: 760, y: 360, z: 0.82, e: ease.io }], t);
   camera(cam.x, cam.y, cam.z);
   street(t, 1, {
+    noClouds: true,
     inside: (gx, gy, gw, gh) => {
       barberChairMini(gx + gw * 0.42, gy + gh);
       person({ who: 'jordan', x: gx + gw * 0.42, y: gy + gh - 22, s: 0.42, seated: true, mood: 'grin', noShadow: true });
@@ -617,13 +640,15 @@ function shotEnding(t) {
     },
   });
   grade({ warm: 0.18, vignette: 0.55 });
-  const k = Math.min(seg(t, 84.8, 85.6), 1 - seg(t, 88.6, 89.3));
+  const k = Math.min(seg(t, 86.4, 87.2), 1 - seg(t, 88.9, 89.4));
   if (k > 0) {
     screenSpace(); ctx.save(); ctx.globalAlpha = ease.out(k);
     ctx.font = `700 64px ${FONT.title}`; ctx.textAlign = 'center';
     ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 30; ctx.fillStyle = '#fffaf2';
     ctx.fillText('Stop guessing when your customers', W / 2, 172 + (1 - k) * 12);
+    ctx.__tx = W / 2; ctx.__ty = 172; logText(ctx, 'Stop guessing when your customers');
     ctx.fillText('are planning to leave.', W / 2, 252 + (1 - k) * 12);
+    ctx.__tx = W / 2; ctx.__ty = 252; logText(ctx, 'are planning to leave.');
     ctx.restore();
   }
 }
@@ -658,25 +683,26 @@ function shotLogo(t) {
 
 // ── master timeline ──────────────────────────────────────────────────────────
 function drawFilm(t) {
-  if (t < 6.0) crossfade(t, 5.4, 6.0, () => shotOpening(t), () => shotMontage(Math.max(t, 6)));
+  if (t < 6.0) wipe(t, 5.4, 6.0, () => shotOpening(t), () => shotMontage(Math.max(t, 6)));
   else if (t < 16) shotMontage(t);
-  else if (t < 19.5) crossfade(t, 16, 16.4, () => shotMontage(16), () => shotCalendar(t));
+  else if (t < 19.5) wipe(t, 16, 16.5, () => shotMontage(16), () => shotCalendar(t));
   else if (t < 23) shotPhone(t);
   else if (t < 26.4) shotWindow(t);
   else if (t < 28.6) shotBoard(t);
   else if (t < 32.4) shotConfused(t);
   else if (t < 36.6) shotArrive(t);
   else if (t < 45) shotHealth(t);
-  else if (t < 48.8) crossfade(t, 45, 45.35, () => shotHealth(45), () => shotAutomation(t));
+  else if (t < 48.8) wipe(t, 45, 45.5, () => shotHealth(45), () => shotAutomation(t));
   else if (t < 49.3) whip(t, 48.8, 49.3, () => shotAutomation(48.8), () => shotJordan(49.3));
   else if (t < 53.3) shotJordan(t);
   else if (t < 53.8) whip(t, 53.3, 53.8, () => shotJordan(53.3), () => shotInbox(53.8));
   else if (t < SHELF_T0) shotInbox(t);
-  else if (t < 68.4) crossfade(t, SHELF_T0, SHELF_T0 + 0.4, () => shotInbox(SHELF_T0), () => shotShelf(t));
-  else if (t < 75) crossfade(t, 68.4, 68.8, () => shotShelf(68.4), () => shotResult(t));
+  else if (t < 68.4) wipe(t, SHELF_T0, SHELF_T0 + 0.5, () => shotInbox(SHELF_T0), () => shotShelf(t));
+  else if (t < 71.2) wipe(t, 68.4, 68.9, () => shotShelf(68.4), () => shotResult(t));
+  else if (t < 75) wipe(t, 71.2, 71.7, () => shotResult(71.2), () => shotResult(t));
   else if (t < 84.2) shotHelp(t);
-  else if (t < 89.4) crossfade(t, 84.2, 84.8, () => shotHelp(84.2), () => shotEnding(t));
-  else crossfade(t, 89.4, 89.9, () => shotEnding(89.4), () => shotLogo(t));
+  else if (t < 89.4) wipe(t, 84.2, 84.7, () => shotHelp(84.2), () => shotEnding(t));
+  else wipe(t, 89.4, 89.9, () => shotEnding(89.4), () => shotLogo(t));
   letterbox(1);
   fadeBlack(1 - seg(t, 0, 1.2));
   fadeBlack(seg(t, DURATION - 0.6, DURATION));

@@ -165,8 +165,10 @@ function viewHealth(st) {
       ctx.restore();
     }
     ctx.restore();
+    if (!isJ && st.dim) { ctx.save(); ctx.fillStyle = `rgba(244,241,234,${0.55 * st.dim})`; ctx.beginPath(); ctx.roundRect(366, y - 4, 1200, h - 8, 28); ctx.fill(); ctx.restore(); }
     y += h;
   });
+  if (st.dim) { ctx.save(); ctx.fillStyle = `rgba(244,241,234,${0.55 * st.dim})`; ctx.beginPath(); ctx.roundRect(366, 156, 1200, 150, 30); ctx.fill(); ctx.restore(); }
 }
 
 // ── Automations view ─────────────────────────────────────────────────────────
@@ -287,13 +289,15 @@ function viewOverview(st) {
 // ── Help → Contact a Representative ──────────────────────────────────────────
 function helpLayer(st) {
   const m = st.help;
+  const scrim = Math.max(clamp(m) * (st.chat > 0 ? 0 : 1), ease.out(clamp(st.chat ?? 0)));
+  if (scrim > 0) { ctx.fillStyle = `rgba(30,27,75,${0.28 * scrim})`; ctx.fillRect(0, 0, APP_W, APP_H); }
   if (m > 0 && !(st.chat > 0)) {
     const p = pop(clamp(m));
-    ctx.save(); ctx.translate(1440, 130); ctx.scale(p, p);
-    cRect(-240, 0, 360, 110, 26, '#fffdf8', { shadow: 16 });
-    cRect(-224, 16, 328, 78, 20, st.repHi ? mix(C().primary, '#ffffff', 0.8) : '#f6f2ea', { shadow: 2 });
-    miniFace(-180, 55, 24, 'rep');
-    cText('Contact a Representative', -140, 64, 23, C().ink, { weight: 900, emboss: false });
+    ctx.save(); ctx.translate(1560, 130); ctx.scale(p, p);
+    cRect(-440, 0, 440, 110, 26, '#fffdf8', { shadow: 16 });
+    cRect(-424, 16, 408, 78, 20, st.repHi ? mix(C().primary, '#ffffff', 0.8) : '#f6f2ea', { shadow: 2 });
+    miniFace(-388, 55, 24, 'rep');
+    cText('Contact a Representative', -350, 64, 25, C().ink, { weight: 900, emboss: false });
     ctx.restore();
   }
   if (st.chat > 0) {

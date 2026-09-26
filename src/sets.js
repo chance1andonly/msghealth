@@ -56,7 +56,7 @@ function street(t, mood = 0, opts = {}) {
   ctx.fillStyle = g; ctx.fillRect(-1200, -600, 4400, 1600);
   // sun / clouds
   glow(mood ? 1500 : 300, mood ? 640 : 180, 380, mood ? '#ffb070' : '#fff1c8', 0.6);
-  const clouds = [[150, 90, 1], [700, 40, 1.3], [1350, 120, 0.9], [1850, 60, 1.1]];
+  const clouds = opts.noClouds ? [] : [[150, 90, 1], [700, 40, 1.3], [1350, 120, 0.9], [1850, 60, 1.1]];
   clouds.forEach(([x, y, s], i) => {
     const dx = ((t * 6 + i * 50) % 300);
     for (let k = 0; k < 4; k++) cBlob(x + dx + k * 50 * s, y + (k % 2) * -22 * s, 70 * s, 42 * s, mood ? '#f3c3b0' : '#fffaf2', { seed: i * 9 + k, shadow: 4, wob: 0.08, light: 1.2 });
@@ -82,7 +82,7 @@ function street(t, mood = 0, opts = {}) {
   for (let i = -6; i < 16; i++) cRect(i * 260, 1040, 130, 16, 8, '#e9e1cf', { shadow: 2 });
   // lamp post & tree
   lampPost(1340, 890, mood);
-  tree(-80, 900);
+  tree(-600, 900);
   if (opts.after) opts.after();
 }
 function shopFacade(x, y, w, color, name, mood, trim, hero = false, opts = {}) {
@@ -209,8 +209,8 @@ function salonBack(t, st) {
   cEll(1600, 596, 34, 12, '#f4f1ea', { shadow: 5 }); // towel
 
   // sign above the desk
-  cRect(1980, 118, 540, 116, 30, '#f7efe2', { shadow: 14 });
-  cText("Sam's Studio", 2250, 196, 66, '#b5533a', { font: FONT.title, weight: 700, align: 'center' });
+  cRect(2040, 30, 420, 100, 28, '#f7efe2', { shadow: 14 });
+  cText("Sam's Studio", 2250, 98, 56, '#b5533a', { font: FONT.title, weight: 700, align: 'center' });
   // shelf with products
   cRect(1930, 318, 640, 22, 8, '#8a5a3a', { shadow: 12 });
   for (let i = 0; i < 9; i++) {
@@ -259,7 +259,7 @@ function salonBack(t, st) {
   // barber chair
   barberChair(1400);
   // pendant lamps
-  [1400, 2250, 3100].forEach((x, i) => {
+  [1400, 2760, 3100].forEach((x, i) => {
     const sway = Math.sin(t * 0.9 + i) * 3;
     ctx.save(); ctx.strokeStyle = '#2a2622'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x, -500); ctx.lineTo(x + sway, 40); ctx.stroke(); ctx.restore();
     clay((k) => { k.beginPath(); k.moveTo(x + sway - 90, 110); k.quadraticCurveTo(x + sway - 70, 30, x + sway, 30); k.quadraticCurveTo(x + sway + 70, 30, x + sway + 90, 110); k.closePath(); }, '#2f5a57', { x: x - 90, y: 30, w: 180, h: 80 }, { shadow: 10 });
@@ -275,7 +275,7 @@ function barberChair(x) {
 }
 function salonLights(st) {
   const L = st.light ?? 1;
-  [1400, 2250, 3100].forEach((x) => { glow(x, 130, 700, '#ffc98a', 0.34 * L); glow(x, 120, 120, '#fff4d6', 0.6 * L); });
+  [1400, 2760, 3100].forEach((x) => { glow(x, 130, 700, '#ffc98a', 0.34 * L); glow(x, 120, 120, '#fff4d6', 0.6 * L); });
 }
 // Desk sits in front of Sam when Sam is behind it.
 function salonDesk(t, st) {
@@ -379,8 +379,8 @@ function supportDesk(t) {
   cRect(-800, -400, 3600, 1300, 0, '#e3ece6', { shadow: 0, texScale: 2.2 });
   cRect(-800, 880, 3600, 600, 0, '#9f8a74', { shadow: 0 });
   // wall: brand plaque & plant shelf
-  cRect(560, 160, 520, 150, 28, '#fbfaf6', { shadow: 14 });
-  drawLogo(820, 235, 0.72, { plaque: true });
+  cRect(580, 260, 480, 120, 28, '#fbfaf6', { shadow: 14 });
+  drawLogo(820, 320, 0.56, { plaque: true });
   cRect(1260, 330, 360, 20, 8, '#8a6a4a', { shadow: 10 });
   plant(1340, 330, 0.5, '#e7a3a0', 21); plant(1520, 330, 0.45, '#8fbfb4', 22);
   cRect(160, 200, 260, 200, 12, '#f7f3ea', { shadow: 12 });

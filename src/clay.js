@@ -199,7 +199,19 @@ function cText(str, x, y, size, color, o = {}) {
     c.fillStyle = 'rgba(255,250,240,0.35)'; c.fillText(str, x - size * 0.015, y - size * 0.02);
   }
   c.fillStyle = color; c.fillText(str, x, y);
+  c.__tx = x; c.__ty = y; logText(c, str);
   c.restore();
+}
+// Text audit (used by scripts/audit-text.mjs): screen-space box of every string drawn.
+window.TEXT_LOG = null;
+function logText(c, str) {
+  if (!window.TEXT_LOG || !str.trim()) return;
+  const m = c.measureText(str), T = c.getTransform();
+  const xs = [], ys = [];
+  for (const [px, py] of [[-m.actualBoundingBoxLeft, -m.actualBoundingBoxAscent], [m.actualBoundingBoxRight, -m.actualBoundingBoxAscent], [-m.actualBoundingBoxLeft, m.actualBoundingBoxDescent], [m.actualBoundingBoxRight, m.actualBoundingBoxDescent]]) {
+    const q = T.transformPoint(new DOMPoint(c.__tx + px, c.__ty + py)); xs.push(q.x); ys.push(q.y);
+  }
+  window.TEXT_LOG.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys), a: c.globalAlpha, layer: c === MAIN ? 'main' : LAYERS.indexOf(c) });
 }
 function textW(str, size, weight = 800, font = FONT.ui) {
   ctx.save(); ctx.font = `${weight} ${size}px ${font}`; const w = ctx.measureText(str).width; ctx.restore(); return w;

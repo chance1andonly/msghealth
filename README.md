@@ -50,7 +50,12 @@ Requirements: Node 18+, Playwright's Chromium, and an `ffmpeg` build with libx26
 npm install
 FFMPEG=/path/to/ffmpeg npm run render          # → dist/msghealth-demo.mp4
 node scripts/snap.mjs out/ 12 40.5 88          # still frames for review
+node scripts/audit-text.mjs 0.25               # flag cropped or overlapping on-screen text
 ```
+
+The text audit records the screen position of every string drawn and lists strings that the frame
+or letterbox cuts off, or that overlap other text. Some flags are expected: text crossing the frame
+edge during a camera move, and text hidden underneath an opaque panel or message bubble.
 
 `WORKERS=n` sets how many browser pages render in parallel. Textures are seeded, so the output
 is the same on every run.
