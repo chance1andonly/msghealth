@@ -165,6 +165,7 @@ function finger(x1, y1, x2, y2, r, col, hi) {
 }
 function hand(p, x, y, ang, kind, side, spec = {}) {
   const c = ctx; c.save(); c.translate(x, y); c.rotate(ang - Math.PI / 2); // local +y = along the forearm, away from wrist
+  if (spec.flat) c.scale(1, spec.flat); // lying on a surface seen from the front: foreshortened
   const col = p.skin, dk = p.skinDark;
   if (kind === 'wave') {
     c.rotate(side * 0.1);
@@ -178,10 +179,25 @@ function hand(p, x, y, ang, kind, side, spec = {}) {
   } else if (kind === 'fist') {
     cBlob(0, 24, 21, 21, col, { seed: 43, wob: 0.02, shadow: 6, jit: 0.2 });
     [-12, -4, 4, 12].forEach((fx) => cEll(fx, 40, 5.4, 6, dk, { shadow: 2, jit: 0.1 }));
-  } else if (kind === 'mouse') { // resting on a mouse, fingers on the buttons
-    cEll(0, 34, 26, 16, '#23262e', { shadow: 6, jit: 0.1, gloss: 1.2 }); // mouse under palm
-    cBlob(0, 24, 20, 18, col, { seed: 45, wob: 0.02, shadow: 4, jit: 0.2 });
-    [-9, -1, 7].forEach((fx) => finger(fx, 30, fx, 44, 4.8, col, true));
+  } else if (kind === 'mouse') { // hand resting over a mouse, seen from the front
+    const t = side; // thumb goes on the side nearer the body
+    contact(0, 50, 26, 6, 0.35);
+    // mouse: a low dome with a split between the buttons and a scroll wheel
+    clay((k) => { k.beginPath(); k.moveTo(-18, 48); k.quadraticCurveTo(-19, 20, 0, 18); k.quadraticCurveTo(19, 20, 18, 48); k.quadraticCurveTo(0, 56, -18, 48); k.closePath(); }, '#2A2E37', { x: -19, y: 18, w: 38, h: 38 }, { shadow: 5 });
+    cRect(-14, 44, 28, 5, 2.5, '#3A3F4B', { shadow: 0, tex: 0 }); // front lip of the mouse
+    cRect(-1, 24, 2, 14, 1, '#15181E', { shadow: 0, tex: 0 });
+    cRect(-2.2, 27, 4.4, 7, 2.2, '#4A505C', { shadow: 0, tex: 0 });
+    // thumb against the inner side of the mouse
+    cCap(-t * 15, 14, -t * 19, 34, 5.2, col, { shadow: 3 });
+    // back of the hand, cupped over the mouse
+    clay((k) => { k.beginPath(); k.moveTo(-11, -2); k.quadraticCurveTo(-18, 10, -17, 26); k.quadraticCurveTo(0, 32, 17, 26); k.quadraticCurveTo(18, 10, 11, -2); k.closePath(); }, col, { x: -18, y: -2, w: 36, h: 32 }, { shadow: 4 });
+    // fingers: index and middle on the buttons, ring and little finger curled on the outer side
+    [[-t * 8, 35, 4.6], [-t * 0.5, 36, 4.6], [t * 7.5, 33, 4.3], [t * 14, 30, 3.8]].forEach(([fx2, len, r]) => {
+      cCap(fx2, 24, fx2 * 1.05, len, r, col, { shadow: 2.5 });
+      cEll(fx2 * 1.05, len + 0.5, r * 0.55, r * 0.45, shade(col, 0.16), { shadow: 0, tex: 0 });
+    });
+    ctx.save(); ctx.strokeStyle = 'rgba(90,45,25,0.35)'; ctx.lineWidth = 0.8; // knuckle line
+    ctx.beginPath(); ctx.moveTo(-14, 22); ctx.quadraticCurveTo(0, 26, 14, 22); ctx.stroke(); ctx.restore();
   }
   c.restore();
 }
