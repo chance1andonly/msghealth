@@ -49,7 +49,7 @@ function deskStage(t, o) { // owner seated at the front desk, monitor to the sid
   cRect(x - 230, 700, 460, 700, 70, '#262B36', { shadow: 18, jit: 0.2 }); // chair back
   // forearms rest on the desk, pointing toward the lens (foreshortened)
   const body = { who: 'owner', x, y, s, expr: o.expr, look: o.look, blink: blinkAt(t, 5), tilt: o.tilt ?? 0,
-    armR: { to: [86, 192], kind: 'mouse', angle: Math.PI / 2, l1: 150, l2: 34, bend: 1 }, armL: { to: [-86, 194], kind: 'rest', angle: Math.PI / 2, l1: 150, l2: 34, bend: -1 } };
+    armR: { to: [74, 192], kind: 'mouse', angle: Math.PI / 2, l1: 150, l2: 44, bend: -1 }, armL: { to: [-74, 194], kind: 'rest', angle: Math.PI / 2, l1: 150, l2: 44, bend: 1 } };
   puppet({ ...body, noArms: true });
   const top = y + 196 * s; // desk surface at elbow height
   cRect(-40, top - 40, 1160, 80, 10, '#8A5A3A', { shadow: 16, jit: 0.1 });
