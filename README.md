@@ -70,3 +70,35 @@ is the same on every run.
 - `src/scenes.js`: the shot list, blocking, camera moves and transitions
 - `scripts/audio.mjs`: the original synthesised score and sound design, synced to picture
 - `scripts/render.mjs`: frame capture → ffmpeg → MP4
+
+---
+
+# 30-second vertical social ad (9:16)
+
+A paid social ad for TikTok, Instagram Reels and YouTube Shorts:
+`dist/msghealth-ad-9x16.mp4` (1080×1920, 24 fps, 30 s). It has music and sound effects only;
+the voiceover is recorded separately (see below).
+
+- Source: `ad.html`, `src/ad/people.js` (owner and customer), `src/ad/ui.js` (product screens), `src/ad/shots.js` (the edit)
+- Sound: `scripts/ad-audio.mjs` writes `dist/ad-music-sfx.wav`, with the music already dipped under each voiceover line
+- Render: `FFMPEG=/path/to/ffmpeg npm run render:ad`
+- Text check: `npm run audit:ad` flags text that is cropped, overlapping, over a face, or outside the platform-safe area
+
+Structure: pattern interrupt (0–3 s) → problem (3–7) → discovery (7–11) → product action (11–18) →
+result (18–24) → payoff (24–27) → CTA (27–30). The MsgHealth logo first appears at 7 s.
+
+## Voiceover script
+
+Each line needs to fit its window. The two on-camera lines are lip-synced to the timings shown.
+
+| # | Window | Speaker | Line |
+|---|---|---|---|
+| 1 | 0:01.95 – 0:03.40 | Owner, on camera (mouth moves 2.0–3.3 s) | "Wait… why are my customers leaving?" |
+| 2 | 0:03.55 – 0:06.30 | Narrator | "The problem is, they usually don't tell you." |
+| 3 | 0:08.95 – 0:11.30 | Narrator | "MsgHealth shows you who's at risk — before they're gone." |
+| 4 | 0:13.05 – 0:15.50 | Narrator | "And helps you take action while you still can." |
+| 5 | 0:24.35 – 0:25.45 | Sarah (customer), on camera (mouth moves 24.45–25.35 s) | "See you next month." |
+| 6 | 0:27.15 – 0:29.85 | Narrator | "Stop guessing when your customers are planning to leave." |
+
+Keep the delivery natural and conversational, as if one business owner were talking to another.
+0:01.85–0:02.00 is deliberately silent, right before line 1.

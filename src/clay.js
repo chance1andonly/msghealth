@@ -1,7 +1,11 @@
 // Clay rendering engine: shading, texture, stop-motion "boil", camera, grading.
 'use strict';
 
-const W = 1920, H = 1080;
+// A page can set window.FORMAT before loading the engine (see ad.html).
+const FMT = window.FORMAT || {};
+const W = FMT.w ?? 1920, H = FMT.h ?? 1080;
+const MATERIAL = FMT.material ?? 'paper'; // 'paper' (cut card) | 'clay' (soft 3D miniature)
+const BOIL = FMT.boil ?? 1;               // strength of the stop-motion jitter
 const FPS = 24;       // output frame rate
 const POSE_FPS = 12;  // stop-motion: characters/objects are animated "on twos"
 
@@ -129,9 +133,10 @@ function smoothClosed(c, pts) {
 // Every shape is a hand-cut piece of coloured card, layered on the one below.
 // path: fn(ctx) that builds the path. bb: {x,y,w,h} bounds for shading.
 function clay(path, color, bb, o = {}) {
+  if (MATERIAL === 'clay') return clay3d(path, color, bb, o);
   const c = ctx;
   const id = CALL++;
-  const j = o.still ? 0 : (o.jit ?? 0.9);
+  const j = o.still ? 0 : (o.jit ?? 0.9) * BOIL;
   const jx = (hash(POSE * 13.1 + id * 7.7) - 0.5) * j, jy = (hash(POSE * 5.3 + id * 3.9) - 0.5) * j;
   const { x, y, w, h } = bb;
   c.save();
@@ -175,6 +180,51 @@ function clay(path, color, bb, o = {}) {
   c.restore();
 }
 
+// ── the miniature material ───────────────────────────────────────────────────
+// Soft, sculpted 3D look: key light top-left, waxy sheen, rolled edges, contact shadow.
+function clay3d(path, color, bb, o = {}) {
+  const c = ctx;
+  const id = CALL++;
+  const j = o.still ? 0 : (o.jit ?? 0.9) * BOIL;
+  const jx = (hash(POSE * 13.1 + id * 7.7) - 0.5) * j, jy = (hash(POSE * 5.3 + id * 3.9) - 0.5) * j;
+  const { x, y, w, h } = bb;
+  c.save();
+  c.translate(jx, jy);
+  const sh = o.shadow ?? 12;
+  if (sh > 0) {
+    c.shadowColor = `rgba(10,14,30,${o.shadowA ?? 0.3})`;
+    c.shadowBlur = sh * 1.1 * CAMZ;
+    c.shadowOffsetX = sh * 0.15 * CAMZ;
+    c.shadowOffsetY = sh * 0.5 * CAMZ;
+  }
+  path(c);
+  c.fillStyle = color; c.fill();
+  c.shadowColor = 'transparent';
+  if (o.flat) { c.restore(); return; }
+  c.clip();
+  const g = c.createLinearGradient(x, y, x + w * 0.5, y + h);
+  g.addColorStop(0, `rgba(255,250,242,${0.24 * (o.light ?? 1)})`);
+  g.addColorStop(0.5, 'rgba(255,255,255,0)');
+  g.addColorStop(1, `rgba(12,14,30,${0.30 * (o.dark ?? 1)})`);
+  c.fillStyle = g; c.fillRect(x - 4, y - 4, w + 8, h + 8);
+  const hx = x + w * 0.32, hy = y + h * 0.22, r = Math.min(w, h) * 0.6 + 2;
+  const s = c.createRadialGradient(hx, hy, 0, hx, hy, r);
+  s.addColorStop(0, `rgba(255,255,255,${0.16 * (o.gloss ?? 1)})`); s.addColorStop(1, 'rgba(255,255,255,0)');
+  c.fillStyle = s; c.fillRect(x - 4, y - 4, w + 8, h + 8);
+  path(c);
+  const ew = Math.max(1.5, Math.min(w, h) * 0.08);
+  c.lineWidth = ew * 2; c.strokeStyle = 'rgba(12,14,30,0.10)'; c.stroke();
+  if (o.tex !== 0) {
+    c.globalCompositeOperation = 'soft-light';
+    c.globalAlpha = (o.tex ?? 0.85) * 0.6;
+    const sc = o.texScale ? o.texScale * 0.5 : clamp(Math.max(w, h) / 900, 0.2, 0.8);
+    const ox = hash(id * 1.3) * 512, oy = hash(id * 2.9) * 512;
+    TEXPAT.setTransform(new DOMMatrix().translate(x - ox * sc, y - oy * sc).scale(sc));
+    c.fillStyle = TEXPAT; c.fillRect(x - 4, y - 4, w + 8, h + 8);
+  }
+  c.restore();
+}
+
 // Convenience wrappers ----------------------------------------------------------
 function cRect(x, y, w, h, r, color, o) { clay(P.rr(x, y, w, h, r), color, { x, y, w, h }, o); }
 function cEll(cx, cy, rx, ry, color, o) { clay(P.ell(cx, cy, rx, ry), color, { x: cx - rx, y: cy - ry, w: rx * 2, h: ry * 2 }, o); }
@@ -186,7 +236,7 @@ function cCap(x1, y1, x2, y2, r, color, o) {
 }
 
 // Embossed clay lettering.
-const FONT = { ui: 'Nunito', title: 'Fraunces' };
+const FONT = FMT.font ? { ui: FMT.font, title: FMT.font } : { ui: 'Nunito', title: 'Fraunces' };
 function cText(str, x, y, size, color, o = {}) {
   const c = ctx;
   c.save();
@@ -204,14 +254,14 @@ function cText(str, x, y, size, color, o = {}) {
 }
 // Text audit (used by scripts/audit-text.mjs): screen-space box of every string drawn.
 window.TEXT_LOG = null;
-function logText(c, str) {
+function logText(c, str, kind = 'world') {
   if (!window.TEXT_LOG || !str.trim()) return;
   const m = c.measureText(str), T = c.getTransform();
   const xs = [], ys = [];
   for (const [px, py] of [[-m.actualBoundingBoxLeft, -m.actualBoundingBoxAscent], [m.actualBoundingBoxRight, -m.actualBoundingBoxAscent], [-m.actualBoundingBoxLeft, m.actualBoundingBoxDescent], [m.actualBoundingBoxRight, m.actualBoundingBoxDescent]]) {
     const q = T.transformPoint(new DOMPoint(c.__tx + px, c.__ty + py)); xs.push(q.x); ys.push(q.y);
   }
-  window.TEXT_LOG.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys), a: c.globalAlpha, layer: c === MAIN ? 'main' : LAYERS.indexOf(c) });
+  window.TEXT_LOG.push({ str, kind, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys), a: c.globalAlpha, layer: c === MAIN ? 'main' : LAYERS.indexOf(c) });
 }
 function textW(str, size, weight = 800, font = FONT.ui) {
   ctx.save(); ctx.font = `${weight} ${size}px ${font}`; const w = ctx.measureText(str).width; ctx.restore(); return w;

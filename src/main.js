@@ -15,7 +15,7 @@ function renderFrame(t) {
   const L = layer(7);
   L.setTransform(1, 0, 0, 1, 0, 0); L.globalCompositeOperation = 'copy'; L.drawImage(MAIN.canvas, 0, 0); L.globalCompositeOperation = 'source-over';
   MAIN.save(); MAIN.setTransform(1, 0, 0, 1, 0, 0);
-  MAIN.filter = 'contrast(1.14) saturate(1.22) brightness(0.99)';
+  MAIN.filter = FMT.post ?? 'contrast(1.14) saturate(1.22) brightness(0.99)';
   MAIN.globalCompositeOperation = 'copy'; MAIN.drawImage(L.canvas, 0, 0);
   MAIN.restore();
 }
@@ -25,8 +25,10 @@ window.ready = (async () => {
   ctx = MAIN;
   makeTextures();
   TEXPAT = MAIN.createPattern(TEX, 'repeat');
-  await Promise.all(['400', '700', '800', '900'].map((w) => document.fonts.load(`${w} 40px Nunito`)).concat(
-    ['600', '700'].map((w) => document.fonts.load(`${w} 40px Fraunces`))));
+  await Promise.all(FMT.font
+    ? ['400', '500', '600', '700', '800'].map((w) => document.fonts.load(`${w} 40px ${FMT.font}`))
+    : ['400', '700', '800', '900'].map((w) => document.fonts.load(`${w} 40px Nunito`)).concat(
+      ['600', '700'].map((w) => document.fonts.load(`${w} 40px Fraunces`))));
   LOGO = await new Promise((res) => {
     const im = new Image();
     im.onload = () => res(im); im.onerror = () => res(null);

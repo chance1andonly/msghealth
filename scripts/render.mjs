@@ -1,5 +1,6 @@
-// Renders the film to MP4 (1920×1080, 24 fps, H.264 + AAC).
-//   npm run render            → dist/msghealth-demo.mp4
+// Renders a film to MP4 (24 fps, H.264 + AAC).
+//   npm run render            → dist/msghealth-demo.mp4        (16:9 film, index.html)
+//   npm run render:ad         → dist/msghealth-ad-9x16.mp4     (9:16 social ad, ad.html)
 // Env: FFMPEG (path to an ffmpeg with libx264), WORKERS (parallel browser pages, default 3)
 import fs from 'node:fs';
 import path from 'node:path';
@@ -8,13 +9,17 @@ import { spawn, execFileSync } from 'node:child_process';
 import { openFilm, ROOT } from './lib.mjs';
 
 const FFMPEG = process.env.FFMPEG || 'ffmpeg';
+const ENTRY = process.env.ENTRY || 'index.html';
+const IS_AD = ENTRY === 'ad.html';
+const OUT_NAME = IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
+const AUDIO_SCRIPT = IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
 const FPS = 24;
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
 const DIST = path.join(ROOT, 'dist');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'msgh-'));
 fs.mkdirSync(DIST, { recursive: true });
 
-const probe = await openFilm();
+const probe = await openFilm(ENTRY);
 const duration = probe.duration;
 await probe.close();
 const total = Math.round(duration * FPS);
@@ -23,7 +28,7 @@ console.log(`rendering ${total} frames with ${WORKERS} workers…`);
 const t0 = Date.now();
 let done = 0;
 async function worker(k, from, to) {
-  const film = await openFilm();
+  const film = await openFilm(ENTRY);
   const out = path.join(TMP, `part${k}.mp4`);
   const ff = spawn(FFMPEG, ['-loglevel', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
     '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-tune', 'animation', '-r', String(FPS), out], { stdio: ['pipe', 'inherit', 'inherit'] });
@@ -45,9 +50,9 @@ const parts = await Promise.all(Array.from({ length: WORKERS }, (_, k) => worker
 
 const list = path.join(TMP, 'list.txt');
 fs.writeFileSync(list, parts.map((p) => `file '${p}'`).join('\n'));
-const wav = path.join(DIST, 'score.wav');
-execFileSync('node', [path.join(ROOT, 'scripts/audio.mjs'), wav], { stdio: 'inherit' });
-const mp4 = path.join(DIST, 'msghealth-demo.mp4');
+const wav = path.join(DIST, IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
+execFileSync('node', [path.join(ROOT, AUDIO_SCRIPT), wav], { stdio: 'inherit' });
+const mp4 = path.join(DIST, `${OUT_NAME}.mp4`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', list, '-i', wav,
   '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', mp4], { stdio: 'inherit' });
 fs.rmSync(TMP, { recursive: true, force: true });

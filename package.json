@@ -5,7 +5,9 @@
   "scripts": {
     "render": "node scripts/render.mjs",
     "snap": "node scripts/snap.mjs",
-    "audio": "node scripts/audio.mjs dist/score.wav"
+    "audio": "node scripts/audio.mjs dist/score.wav",
+    "render:ad": "ENTRY=ad.html node scripts/render.mjs",
+    "audit:ad": "ENTRY=ad.html node scripts/audit-text.mjs"
   },
   "repository": {
     "type": "git",

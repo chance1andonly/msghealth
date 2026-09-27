@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MsgHealth Social Ad</title>
+<style>
+  @font-face { font-family: 'Inter'; font-weight: 400; src: url(assets/fonts/inter-latin-400-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 500; src: url(assets/fonts/inter-latin-500-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 600; src: url(assets/fonts/inter-latin-600-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 700; src: url(assets/fonts/inter-latin-700-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 800; src: url(assets/fonts/inter-latin-800-normal.woff2) format('woff2'); }
+  :root { --bg: #0b0906; --fg: #f3ece0; --muted: #a79d8e; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: Inter, system-ui, sans-serif; }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 16px; box-sizing: border-box; }
+  canvas { height: calc(100vh - 90px); max-width: 100%; aspect-ratio: 9 / 16; display: block; border-radius: 6px; background: #000; }
+  .bar { width: min(100%, calc((100vh - 90px) * 9 / 16)); min-width: 300px; display: flex; gap: 12px; align-items: center; }
+  button { background: #1f1a14; color: var(--fg); border: 1px solid #3a3128; border-radius: 6px; padding: 6px 14px; font: 700 14px Inter, sans-serif; cursor: pointer; }
+  input[type=range] { flex: 1; accent-color: #16a594; }
+  #time { font: 700 13px Inter, sans-serif; color: var(--muted); min-width: 92px; text-align: right; }
+  body.render { padding: 0; display: block; }
+  body.render canvas { width: 1080px; height: 1920px; border-radius: 0; }
+  body.render .bar { display: none; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<div class="bar">
+  <button id="play">Play</button>
+  <input id="seek" type="range" min="0" max="1000" value="0">
+  <span id="time">0.0s</span>
+</div>
+<script>window.FORMAT = { w: 1080, h: 1920, font: 'Inter', material: 'clay', boil: 0.35, post: 'contrast(1.06) saturate(1.06)' };</script>
+<script src="src/brand.js"></script>
+<script src="src/clay.js"></script>
+<script src="src/characters.js"></script>
+<script src="src/sets.js"></script>
+<script src="src/app.js"></script>
+<script src="src/ad/people.js"></script>
+<script src="src/ad/ui.js"></script>
+<script src="src/ad/shots.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
