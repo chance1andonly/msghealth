@@ -93,41 +93,31 @@ function uLogo(x, y, size, o = {}) {
 }
 
 // ── phone: lock screen with notifications (the owner's phone, before MsgHealth) ──
-const NOTIFS = [
-  { app: 'Bookings', icon: 'calendar', col: '#EF4444', title: 'Sarah K. canceled', body: 'Thursday, 2:00 PM appointment' },
-  { app: 'Bookings', icon: 'calendar', col: '#EF4444', title: "Marcus L. hasn't rebooked", body: 'Last visit 9 weeks ago' },
-  { app: 'Messages', icon: 'message', col: '#22C55E', title: 'Jen P.', body: 'No reply in 3 weeks' },
-];
 function phoneLock(w, h, st) {
   const c = ctx; c.save(); c.scale(w / 390, h / 844);
   const g = c.createLinearGradient(0, 0, 0, 844); g.addColorStop(0, '#2B3350'); g.addColorStop(1, '#141A2E');
   c.fillStyle = g; c.fillRect(0, 0, 390, 844);
   uText('9:41', 30, 22, 15, 600, '#fff');
   uText('12:48', 195, 196, 76, 600, '#fff', { align: 'center' });
-  NOTIFS.forEach((n, i) => {
-    const k = clamp((st.n ?? 3) - i);
-    if (k <= 0) return;
-    const e = ease.out(k), y = 240 + i * 92 - (1 - e) * 30;
-    c.save(); c.globalAlpha *= e;
-    uRect(14, y, 362, 80, 22, 'rgba(255,255,255,0.86)');
-    uRect(28, y + 16, 26, 26, 7, n.col); uIcon(n.icon, 41, y + 29, 16, '#fff', 2.2);
-    uText(n.app.toUpperCase(), 64, y + 26, 11.5, 600, '#475569', { ls: 0.4 }); uText('now', 360, y + 26, 12, 500, '#64748B', { align: 'right' });
-    uText(n.title, 28, y + 52, 15, 600, UIC.text); uText(n.body, 28, y + 70, 14, 400, '#334155');
-    c.restore();
+  // notification: icon on the left, text in its own column (never under the icon)
+  let y = 236;
+  uRect(14, y, 362, 84, 22, 'rgba(255,255,255,0.88)');
+  uRect(28, y + 22, 40, 40, 10, '#EF4444'); uIcon('calendar', 48, y + 42, 24, '#fff', 2.2);
+  uText('Sarah K. canceled', 82, y + 36, 16, 600, UIC.text); uText('now', 360, y + 34, 13, 500, '#64748B', { align: 'right' });
+  uText('Thursday, 2:00 PM appointment', 82, y + 60, 15, 400, '#334155');
+  // regulars, directly beneath it
+  y += 96;
+  const cnt = st.count ?? 3, shown = Math.ceil(cnt - 1e-6);
+  uRect(14, y, 362, 166, 22, 'rgba(255,255,255,0.88)');
+  uRect(28, y + 22, 40, 40, 10, '#3B82F6'); uIcon('user', 48, y + 42, 24, '#fff', 2.2);
+  uText('Regulars this month', 82, y + 36, 16, 600, UIC.text); uText('now', 360, y + 34, 13, 500, '#64748B', { align: 'right' });
+  uText(`${shown} customer${shown === 1 ? '' : 's'}`, 82, y + 94, 36, 700, shown > 0 ? UIC.text : UIC.risk);
+  [['SK', '#F97316'], ['ML', '#0EA5E9'], ['JP', '#A855F7']].forEach(([ini, col], i) => {
+    const a2 = clamp(cnt - i); // each avatar fades out as the count drops past it
+    if (a2 <= 0) return;
+    c.save(); c.globalAlpha *= a2; uAvatar(100 + i * 42, y + 132, 17, ini, col); c.restore();
   });
-  // widget: regulars this month
-  const wy = 530, cnt = st.count ?? 3;
-  uRect(14, wy, 362, 170, 24, 'rgba(255,255,255,0.14)');
-  uText('Regulars this month', 34, wy + 38, 16, 600, 'rgba(255,255,255,0.85)');
-  const shown = Math.ceil(cnt - 1e-6);
-  const label = shown > 0 ? `${shown} customer${shown === 1 ? '' : 's'}` : '0 customers';
-  uText(label, 34, wy + 92, 40, 700, shown > 0 ? '#fff' : '#FCA5A5');
-  const av = [['SK', '#F97316'], ['ML', '#0EA5E9'], ['JP', '#A855F7']];
-  av.forEach(([ini, col], i) => {
-    const a = clamp(cnt - i); // each avatar fades as the count drops past it
-    if (a <= 0) return;
-    c.save(); c.globalAlpha *= a; uAvatar(52 + i * 42, wy + 134, 18, ini, col); c.restore();
-  });
+  uText('No Older Notifications', 195, 700, 15, 600, 'rgba(255,255,255,0.55)', { align: 'center' });
   c.restore();
 }
 

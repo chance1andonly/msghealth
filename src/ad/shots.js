@@ -38,7 +38,7 @@ function ownerHoldingPhone(t, x, y, s, expr, o = {}) {
   const ph = [8, 64]; // phone at chest height, in body units
   const vib = o.vib ? Math.sin(POSE * 2.9) * 1.6 : 0;
   puppet({ who: 'owner', x, y, s, expr, look: o.look ?? [0.05, 0.9], blink: o.blink ?? 0, tilt: o.tilt ?? 0, talk: o.talk ?? 0,
-    armL: { to: [-100, 290], kind: 'rest' }, armR: { to: [ph[0] + 36, ph[1] + 62], kind: 'none' },
+    armL: { to: [-100, 290], kind: 'rest' }, armR: { to: [ph[0] + 31, ph[1] + 36], kind: 'none' }, // wrist meets the palm
     after: () => heldPhone(PEOPLE.owner, ph[0] + vib, ph[1], PH.w, PH.h, -0.07, 'back', null, o.glow ?? 0) });
 }
 function closeUp(t, who, expr, o = {}) {
@@ -94,8 +94,8 @@ function sHookFace(t) { // phone buzzing in hand, three notifications, rising co
   salonBG(t, { x: 1480, y: 440, z: 1.2 }, { light: 1 }, 11);
   const push = ease.in(seg(t, 0.55, 0.8));
   ctx.save(); applyCam(hx, hy, 1 + push * 0.22, hr);
-  const e = t < 0.12 ? EXPR.neutral : t < 0.37 ? mixExpr('neutral', 'concerned', seg(t, 0.12, 0.3)) : mixExpr('concerned', 'confused', seg(t, 0.37, 0.62));
-  const buzz = [0.1, 0.35, 0.6].some((p) => t > p && t < p + 0.14);
+  const e = t < 0.14 ? EXPR.neutral : t < 0.45 ? mixExpr('neutral', 'concerned', seg(t, 0.14, 0.4)) : mixExpr('concerned', 'confused', seg(t, 0.45, 0.7));
+  const buzz = t > 0.1 && t < 0.3;
   ownerHoldingPhone(t, 540, 930, 4.3, e, { vib: buzz, glow: 0.8 });
   faceLight(560, 700, 330, '#9DB4FF', buzz ? 0.34 : 0.2);
   ctx.restore();
@@ -110,7 +110,7 @@ function sHookPhone(t) { // rapid push into the phone: 3 → 2 → 1 → gone
   ctx.save(); applyCam(hx, hy, 1, hr);
   ctx.translate(540, 960 - focus * s); ctx.scale(s, s); CAMZ = s;
   const count = t < 1.25 ? 3 : t < 1.45 ? lerp(3, 2, seg(t, 1.25, 1.37)) : t < 1.65 ? lerp(2, 1, seg(t, 1.45, 1.57)) : lerp(1, 0, seg(t, 1.65, 1.77));
-  heldPhone(PEOPLE.owner, 0, 0, PH.w, PH.h, 0, 'screen', (w, h) => phoneLock(w, h, { n: lerp(2, 3, seg(t, 0.8, 0.95)), count }));
+  heldPhone(PEOPLE.owner, 0, 0, PH.w, PH.h, 0, 'screen', (w, h) => phoneLock(w, h, { count }));
   ctx.restore();
   finish({ warm: 0.02 });
 }

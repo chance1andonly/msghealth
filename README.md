@@ -77,11 +77,11 @@ is the same on every run.
 
 A paid social ad for TikTok, Instagram Reels and YouTube Shorts, in a cut-paper style: characters and sets are layered pieces of card,
 while the MsgHealth screens stay crisp so they're readable.
-`dist/msghealth-ad-9x16.mp4` (1080×1920, 24 fps, 30 s). It has music and sound effects only;
+`dist/msghealth-ad-9x16.mp4` (1080×1920, 24 fps, 30 s). It has sound effects only (no music);
 the voiceover is recorded separately (see below).
 
 - Source: `ad.html`, `src/ad/people.js` (owner and customer), `src/ad/ui.js` (product screens), `src/ad/shots.js` (the edit)
-- Sound: `scripts/ad-audio.mjs` writes `dist/ad-music-sfx.wav`, with the music already dipped under each voiceover line
+- Sound: `scripts/ad-audio.mjs` writes `dist/ad-music-sfx.wav` (sound effects only)
 - Render: `FFMPEG=/path/to/ffmpeg npm run render:ad`
 - Text check: `npm run audit:ad` flags text that is cropped, overlapping, over a face, or outside the platform-safe area
 

@@ -123,8 +123,7 @@ function torsoPath(k) {
 function torso(p) {
   clay(torsoPath, p.shirt, { x: -94, y: -16, w: 188, h: 316 }, { shadow: 14 });
   if (p.hairStyle === 'short') { // henley: placket strip + punched buttons
-    cRect(-8, 2, 16, 70, 4, p.shirtDark, { shadow: 3 });
-    for (let i = 0; i < 3; i++) cEll(0, 14 + i * 20, 3, 3, '#E8E2D6', { shadow: 1.5 });
+    for (let i = 0; i < 3; i++) cEll(0, 34 + i * 20, 3, 3, '#E8E2D6', { shadow: 1.5 });
     cRect(-60, 180, 48, 56, 6, p.shirtDark, { shadow: 3 }); // pocket
   } else { // sweater: rib collar and hem strips
     clay((k) => { k.beginPath(); k.moveTo(-26, -14); k.quadraticCurveTo(0, 10, 26, -14); k.lineTo(22, -4); k.quadraticCurveTo(0, 18, -22, -4); k.closePath(); }, p.shirtDark, { x: -26, y: -14, w: 52, h: 32 }, { shadow: 2 });
@@ -150,7 +149,7 @@ function arm(p, side, spec) {
   cCap(sx, sy, ex, ey, 21, p.shirt, { shadow: 8, jit: 0.3 });
   const cuffX = ex + (wx - ex) * 0.42, cuffY = ey + (wy - ey) * 0.42;
   cCap(ex, ey, cuffX, cuffY, 18, p.shirt, { shadow: 6, jit: 0.3 });
-  cCap(cuffX, cuffY, wx, wy, 13.5, p.skinDark, { shadow: 6, jit: 0.3 });
+  cCap(cuffX, cuffY, wx, wy, 13.5, p.skin, { shadow: 6, jit: 0.1 });
   cCap(ex - (ex - cuffX) * 0.1, ey, cuffX, cuffY, 19, p.shirtDark, { shadow: 0, jit: 0.3, tex: 0.3 }); // rolled sleeve
   const ang = spec.angle ?? Math.atan2(wy - ey, wx - ex);
   if (spec.kind !== 'none') hand(p, wx, wy, ang, spec.kind ?? 'rest', side, spec);
@@ -195,14 +194,21 @@ function heldPhone(p, x, y, w, h, rot, view, screenFn, glow = 0) {
   cBlob(w / 2 + 4, h * 0.2, 17, 25, p.skin, { seed: 51, wob: 0.02, shadow: 6, jit: 0.2 }); // palm behind the phone's near edge
   if (view === 'back') {
     cRect(-w / 2, -h / 2, w, h, r, '#1c2130', { shadow: 10, jit: 0.1, gloss: 1.4 });
-    cRect(-w / 2 + 5, -h / 2 + 5, 19, 19, 6, '#2a3042', { shadow: 2, jit: 0.1 });
-    cEll(-w / 2 + 11, -h / 2 + 11, 3.2, 3.2, '#0b0d14', { shadow: 0, jit: 0 });
+    // camera plateau with three lenses, flash and sensor (iPhone Pro layout)
+    const bx = -w / 2 + 3.5, by = -h / 2 + 3.5, bs = 22;
+    cRect(bx, by, bs, bs, 6, '#2c3346', { shadow: 3, jit: 0.1 });
+    for (const [lx2, ly2] of [[6.2, 6.2], [6.2, 15.8], [15.4, 11]]) {
+      cEll(bx + lx2, by + ly2, 4.4, 4.4, '#141821', { shadow: 1.5, jit: 0.05 });
+      cEll(bx + lx2, by + ly2, 2.7, 2.7, '#070910', { shadow: 0, jit: 0, tex: 0 });
+      c.save(); c.fillStyle = 'rgba(160,180,255,0.55)'; c.beginPath(); c.arc(bx + lx2 - 0.9, by + ly2 - 0.9, 0.7, 0, 7); c.fill(); c.restore();
+    }
+    cEll(bx + 16.2, by + 4.2, 1.7, 1.7, '#F3EACB', { shadow: 0, jit: 0, tex: 0 }); // flash
+    cEll(bx + 16.2, by + 17.8, 1.4, 1.4, '#0b0d14', { shadow: 0, jit: 0, tex: 0 }); // sensor
     for (let i = 0; i < 4; i++) { // fingers wrap around the far edge and rest on the back
       const fy = h * 0.02 + i * 10.5, len = [20, 23, 21, 16][i];
       cCap(-w / 2 - 3, fy, -w / 2 + len, fy + 1.5, 5.2, p.skin, { shadow: 3, jit: 0.12 });
       c.save(); c.strokeStyle = 'rgba(70,35,20,0.35)'; c.lineWidth = 0.7; c.beginPath(); c.moveTo(-w / 2 + len * 0.45, fy - 4.6); c.lineTo(-w / 2 + len * 0.45, fy + 5.8); c.stroke(); c.restore(); // knuckle crease
     }
-    if (glow > 0) { c.save(); c.globalCompositeOperation = 'screen'; c.globalAlpha = glow; c.fillStyle = '#9fb7ff'; c.fillRect(-w / 2, -h / 2 - 3, w, 3); c.restore(); }
   } else {
     cRect(-w / 2, -h / 2, w, h, r, '#11141c', { shadow: 14, jit: 0.1, gloss: 1.2 });
     const b = w * 0.04;
