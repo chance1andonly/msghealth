@@ -193,9 +193,9 @@ function heldPhone(p, x, y, w, h, rot, view, screenFn, glow = 0) {
   const r = w * 0.17;
   cBlob(w / 2 + 4, h * 0.2, 17, 25, p.skin, { seed: 51, wob: 0.02, shadow: 6, jit: 0.2 }); // palm behind the phone's near edge
   if (view === 'back') {
-    for (let i = 0; i < 4; i++) { // fingers are behind the phone; only the tips show past the far edge
-      const fy = -h * 0.02 + i * 11, tip = [4.5, 5.5, 5, 3.5][i];
-      cCap(-w / 2 - tip, fy, w / 2 - 4, fy + 2, 5.2, p.skin, { shadow: 3, jit: 0.1 });
+    for (let i = 0; i < 4; i++) { // fingers are behind the phone; only the tips show past the right edge
+      const fy = -h * 0.14 + i * 10.5, tip = [3.5, 5, 5.5, 4.5][i];
+      cCap(-w / 2 + 9, fy, w / 2 + tip, fy + 2, 5.2, p.skin, { shadow: 3, jit: 0.1 });
     }
     cRect(-w / 2, -h / 2, w, h, r, '#1c2130', { shadow: 10, jit: 0.1, gloss: 1.4 });
     // camera plateau with three lenses, flash and sensor (iPhone Pro layout)
