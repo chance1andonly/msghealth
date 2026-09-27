@@ -193,6 +193,10 @@ function heldPhone(p, x, y, w, h, rot, view, screenFn, glow = 0) {
   const r = w * 0.17;
   cBlob(w / 2 + 4, h * 0.2, 17, 25, p.skin, { seed: 51, wob: 0.02, shadow: 6, jit: 0.2 }); // palm behind the phone's near edge
   if (view === 'back') {
+    for (let i = 0; i < 4; i++) { // fingers are behind the phone; only the tips show past the far edge
+      const fy = -h * 0.02 + i * 11, tip = [4.5, 5.5, 5, 3.5][i];
+      cCap(-w / 2 - tip, fy, w / 2 - 4, fy + 2, 5.2, p.skin, { shadow: 3, jit: 0.1 });
+    }
     cRect(-w / 2, -h / 2, w, h, r, '#1c2130', { shadow: 10, jit: 0.1, gloss: 1.4 });
     // camera plateau with three lenses, flash and sensor (iPhone Pro layout)
     const bx = -w / 2 + 3.5, by = -h / 2 + 3.5, bs = 22;
@@ -204,11 +208,6 @@ function heldPhone(p, x, y, w, h, rot, view, screenFn, glow = 0) {
     }
     cEll(bx + 16.2, by + 4.2, 1.7, 1.7, '#F3EACB', { shadow: 0, jit: 0, tex: 0 }); // flash
     cEll(bx + 16.2, by + 17.8, 1.4, 1.4, '#0b0d14', { shadow: 0, jit: 0, tex: 0 }); // sensor
-    for (let i = 0; i < 4; i++) { // fingers wrap around the far edge and rest on the back
-      const fy = h * 0.02 + i * 10.5, len = [20, 23, 21, 16][i];
-      cCap(-w / 2 - 3, fy, -w / 2 + len, fy + 1.5, 5.2, p.skin, { shadow: 3, jit: 0.12 });
-      c.save(); c.strokeStyle = 'rgba(70,35,20,0.35)'; c.lineWidth = 0.7; c.beginPath(); c.moveTo(-w / 2 + len * 0.45, fy - 4.6); c.lineTo(-w / 2 + len * 0.45, fy + 5.8); c.stroke(); c.restore(); // knuckle crease
-    }
   } else {
     cRect(-w / 2, -h / 2, w, h, r, '#11141c', { shadow: 14, jit: 0.1, gloss: 1.2 });
     const b = w * 0.04;
