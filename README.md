@@ -75,7 +75,8 @@ is the same on every run.
 
 # 30-second vertical social ad (9:16)
 
-A paid social ad for TikTok, Instagram Reels and YouTube Shorts:
+A paid social ad for TikTok, Instagram Reels and YouTube Shorts, in a cut-paper style: characters and sets are layered pieces of card,
+while the MsgHealth screens stay crisp so they're readable.
 `dist/msghealth-ad-9x16.mp4` (1080×1920, 24 fps, 30 s). It has music and sound effects only;
 the voiceover is recorded separately (see below).
 
