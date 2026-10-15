@@ -75,8 +75,8 @@ is the same on every run.
 
 # 47-second motion-graphics product demo (16:9)
 
-A customer-facing product demo in a kinetic-typography / motion-design style. It uses a HUD frame
-with a slate, timecode and bar counter, squash & stretch, shape morphs with bounding-box handles,
+A customer-facing product demo in a kinetic-typography / motion-design style. It uses thin corner
+brackets (no on-screen labels), squash & stretch, shape morphs with bounding-box handles,
 dot-grid data, hard colour-field cuts and crisp product UI. It ends on a call to action.
 
 - **Final video:** `dist/msghealth-product-demo.mp4` (1920×1080, **60 fps**, H.264 + AAC, 47 s)
@@ -109,7 +109,7 @@ remap at 2–3× speed, and ends on the same CTA.
 - Render: `npm run render:fast` · text check: `npm run audit:fast`
 
 The CTA label is `BRAND.cta` in `src/brand.js`. Code: `demo.html`, `src/demo/engine.js` (easing,
-type, HUD, icons, grading), `src/demo/scenes.js` (the shots and cut list), `src/demo/main.js`.
+type, corner frame, icons, grading), `src/demo/scenes.js` (the shots and cut list), `src/demo/main.js`.
 The fonts are Inter, Instrument Serif and JetBrains Mono (all SIL OFL), bundled in `assets/fonts/`.
 
 ---

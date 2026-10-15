@@ -3,7 +3,7 @@
 //
 // A small, deterministic 2D toolkit: every frame is a pure function of time t,
 // so the browser player, stills and the final render all match exactly.
-// Easing, kinetic type, the HUD frame, icons, the logo and the finishing pass.
+// Easing, kinetic type, the corner frame, icons, the logo and the finishing pass.
 // ─────────────────────────────────────────────────────────────────────────────
 'use strict';
 
@@ -113,7 +113,9 @@ function logText(s, x, y, o) {
 // Per-letter layout for kinetic type: calls fn(ch, i, x) with each glyph's left edge.
 function eachLetter(s, x, o, fn) {
   ctx.save(); style({ ...o, align: 'left' });
-  const xs = [...s].map((_, i) => ctx.measureText(s.slice(0, i)).width);
+  // o.gaps = { index: px } opens up a tight kerning pair before that letter
+  let extra = 0;
+  const xs = [...s].map((_, i) => ctx.measureText(s.slice(0, i)).width + (extra += o.gaps?.[i] ?? 0));
   ctx.restore();
   [...s].forEach((ch, i) => fn(ch, i, x + xs[i]));
 }
@@ -217,29 +219,15 @@ function logoTile(x, y, size, a = 1, corner = 0.225) {
   });
 }
 
-// ── HUD frame (corner brackets, slate, timecode, bar counter) ────────────────
-function hud(t, tone, label, bar, bars, a = 1) {
+// ── frame: thin corner brackets (no text), tinted for the background ────────
+function hud(tone, a = 1) {
   if (a <= 0) return;
-  const col = tone === 'dark' ? 'rgba(242,239,232,0.6)' : 'rgba(11,11,20,0.62)';
   const m = 34, L = 26;
   ctx.save(); ctx.globalAlpha = a;
-  ctx.strokeStyle = col; ctx.lineWidth = 2;
+  ctx.strokeStyle = tone === 'dark' ? 'rgba(242,239,232,0.5)' : 'rgba(11,11,20,0.5)'; ctx.lineWidth = 2;
   [[m, m, 1, 1], [W - m, m, -1, 1], [m, H - m, 1, -1], [W - m, H - m, -1, -1]].forEach(([x, y, sx, sy]) => {
     ctx.beginPath(); ctx.moveTo(x, y + sy * L); ctx.lineTo(x, y); ctx.lineTo(x + sx * L, y); ctx.stroke();
   });
-  const o = { size: 15, weight: 500, fam: F.mono, ls: 2, color: col, kind: 'hud' };
-  circle(70, 66, 4.5, C.coral);
-  txt("MSGHEALTH / PRODUCT FILM '26", 84, 71, o);
-  const f = Math.floor(t * FPS + 1e-6), ss = Math.floor(f / FPS), ff = f % FPS;
-  txt(`TC 00:00:${String(ss).padStart(2, '0')}:${String(ff).padStart(2, '0')}`, W - 66, 71, { ...o, align: 'right' });
-  txt(label, 66, H - 56, o);
-  const sq = 10, gap = 5, x1 = W - 66, x0 = x1 - bars * (sq + gap) + gap;
-  for (let i = 0; i < bars; i++) {
-    const x = x0 + i * (sq + gap), y = H - 56 - 11;
-    ctx.beginPath(); ctx.rect(x + 0.5, y + 0.5, sq - 1, sq - 1);
-    if (i < bar) { ctx.fillStyle = col; ctx.fill(); } else { ctx.strokeStyle = col; ctx.lineWidth = 1.2; ctx.stroke(); }
-  }
-  txt(`BAR ${String(bar).padStart(2, '0')}/${String(bars).padStart(2, '0')}`, x0 - 20, H - 56, { ...o, align: 'right' });
   ctx.restore();
 }
 

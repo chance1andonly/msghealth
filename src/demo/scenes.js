@@ -137,8 +137,8 @@ function scene2(t) {
   });
 
   // LEAVE — rises in, then falls apart letter by letter
-  const o = { size: 330, weight: 900, ls: -14, color: C.ink };
-  const word = 'LEAVE', ww = measure(word, o), x0 = 960 - ww / 2 - 30, by = 690;
+  const o = { size: 330, weight: 900, ls: -2, color: C.ink, gaps: { 4: 34 } }; // Inter kerns V–E into a touch at this size
+  const word = 'LEAVE', ww = measure(word, o) + 34, x0 = 960 - ww / 2 - 30, by = 690;
   const order = [4, 1, 3, 0, 2];
   if (t < 6.4) riseText(word, x0, by, o, t, 5.35, 0.05, 0.62, 380);
   else eachLetter(word, x0, o, (ch, i, lx) => {
@@ -459,7 +459,7 @@ function scene6(t) {
     if (k <= 0) return;
     around(out ? bx + bw : bx, y + bh, k, () => {
       rrect(bx, y, bw, bh, 22); ctx.fillStyle = col; ctx.fill();
-      lines.forEach((l, i) => txt(l, bx + 20, y + 40 + i * 30, o));
+      lines.forEach((l, i) => txt(l, bx + 20, y + 28 + i * 30, { ...o, base: 'middle' }));
     });
   };
   // typing indicator before the first message
@@ -663,13 +663,13 @@ const SCENES = [
   { t0: 13.2, t1: 17.0, label: '04 — MEET MSGHEALTH', tone: 'dark', vig: 0.55, draw: scene4 },
   { t0: 17.0, t1: 23.0, label: '05 — CLIENT HEALTH', tone: 'light', vig: 0.16, draw: scene5 },
   { t0: 23.0, t1: 29.6, label: '06 — AUTOMATIONS', tone: 'dark', vig: 0.5, draw: scene6 },
-  { t0: 29.6, t1: 35.0, label: '07 — TOOLKIT', tone: (t) => SLAMS[slamAt(t)].tone, vig: 0.3, draw: scene7, sub: (t) => ` / ${SLAMS[slamAt(t)].w.toUpperCase()}` },
+  { t0: 29.6, t1: 35.0, label: '07 — TOOLKIT', tone: (t) => SLAMS[slamAt(t)].tone, vig: 0.3, draw: scene7 },
   { t0: 35.0, t1: 39.6, label: '08 — OVERVIEW', tone: 'light', vig: 0.22, draw: scene8 },
   { t0: 39.6, t1: 47.0, label: '09 — GET STARTED', tone: 'dark', vig: 0.4, draw: scene9 },
 ];
 
-// HUD tone for scene i at film time t: the wipes at the end of scenes 4, 5 and 8
-// hand the HUD over to the next scene's tone before the cut.
+// Frame tone for scene i at film time t: the wipes at the end of scenes 4, 5 and 8
+// hand the frame over to the next scene's tone before the cut.
 function sceneTone(i, t) {
   const s = SCENES[i];
   let tone = typeof s.tone === 'function' ? s.tone(t) : s.tone;
@@ -683,5 +683,5 @@ function drawFilm(t) {
   const s = SCENES[i];
   ctx.save(); s.draw(t); ctx.restore();
   finish(t, s.vig);
-  hud(t, sceneTone(i, t), s.label + (s.sub ? s.sub(t) : ''), i + 1, SCENES.length);
+  hud(sceneTone(i, t));
 }

@@ -60,7 +60,7 @@ function hookQuiet(t) {
 // ── cut list ─────────────────────────────────────────────────────────────────
 // `src: [a, b]` replays that span of the 47 s film (scenes.js) squeezed into this cut.
 const FAST = [
-  { t0: 0, t1: 1.4, label: '01 — HOOK', draw: hookSlams, tone: (t) => HOOK[hookAt(t)].tone, vig: 0.25, sub: (t) => ` / ${HOOK[hookAt(t)].w.toUpperCase()}` },
+  { t0: 0, t1: 1.4, label: '01 — HOOK', draw: hookSlams, tone: (t) => HOOK[hookAt(t)].tone, vig: 0.25 },
   { t0: 1.4, t1: 2.4, label: '02 — THE SILENCE', draw: hookQuiet, tone: 'dark', vig: 0.55 },
   { t0: 2.4, t1: 4.2, scene: 2, src: [9.0, 13.2] },
   { t0: 4.2, t1: 5.8, scene: 3, src: [13.2, 17.0] },
@@ -74,22 +74,19 @@ const FAST = [
 const remap = (c, t) => lerp(c.src[0], c.src[1], (t - c.t0) / (c.t1 - c.t0));
 
 function drawFast(t) {
-  const i = Math.max(0, FAST.findIndex((c) => t < c.t1));
-  const c = FAST[i];
-  let tone, label, vig;
+  const c = FAST[Math.max(0, FAST.findIndex((x) => t < x.t1))];
+  let tone, vig;
   ctx.save();
   if (c.src) {
-    const tm = Math.min(remap(c, t), c.src[1] - 1e-4), s = SCENES[c.scene];
-    s.draw(tm);
-    tone = sceneTone(c.scene, tm); vig = s.vig;
-    label = `${String(i + 1).padStart(2, '0')} — ${s.label.split(' — ')[1]}${s.sub ? s.sub(tm) : ''}`;
+    const tm = Math.min(remap(c, t), c.src[1] - 1e-4);
+    SCENES[c.scene].draw(tm);
+    tone = sceneTone(c.scene, tm); vig = SCENES[c.scene].vig;
   } else {
     c.draw(t);
     tone = typeof c.tone === 'function' ? c.tone(t) : c.tone; vig = c.vig;
-    label = c.label + (c.sub ? c.sub(t) : '');
   }
   ctx.restore();
   finish(t, vig);
-  hud(t, tone, label, i + 1, FAST.length);
+  hud(tone);
 }
 window.DRAW = drawFast;
