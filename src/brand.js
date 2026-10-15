@@ -10,6 +10,7 @@ window.BRAND = {
   tagline: 'Know your customers. Keep your customers.',
   closingLine: 'Stop guessing when your customers are planning to leave.',
   url: 'msghealth.net',
+  cta: 'Get started', // call-to-action button in the product demo's end card (demo.html)
   logoFile: 'assets/logo.png', // official mark; a fallback mark is drawn if missing
 
   colors: {

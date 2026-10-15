@@ -73,6 +73,36 @@ is the same on every run.
 
 ---
 
+# 47-second motion-graphics product demo (16:9)
+
+A customer-facing product demo in a kinetic-typography / motion-design style. It uses a HUD frame
+with a slate, timecode and bar counter, squash & stretch, shape morphs with bounding-box handles,
+dot-grid data, hard colour-field cuts and crisp product UI. It ends on a call to action.
+
+- **Final video:** `dist/msghealth-product-demo.mp4` (1920×1080, **60 fps**, H.264 + AAC, 47 s)
+- **Sound:** sound effects only, no music or voice (`scripts/demo-audio.mjs` → `dist/demo-sfx.wav`)
+- **Voiceover script for ElevenLabs:** [`VOICEOVER.md`](VOICEOVER.md), with each line timed to the picture
+- **Player:** open `demo.html` through a static server (e.g. `npx serve .`) to play and scrub
+- Render: `npm run render:demo` · text check: `npm run audit:demo`
+
+| Time | Beat | What the viewer sees |
+|---|---|---|
+| 0–4.6s | The silence | A message bounces in (squash & stretch, timing chart), is delivered… the typing dots give up, and it falls through the floor. |
+| 4.6–9s | The problem | *they don't complain. they just* **LEAVE.** The letters fall away. |
+| 9–13.2s | Churn | A grid of 112 regulars. One by one, 27 go quiet. |
+| 13.2–17s | Meet MsgHealth | The healthy dots pull together → circle → squircle → logo → wordmark. |
+| 17–23s | Client health | Jordan's score drops 78 → 38, the **At risk** flag goes up, and the churn signals appear. |
+| 23–29.6s | Automations | The win-back flow builds and switches on. Jordan gets a text, replies, and is booked. Score back to 86. |
+| 29.6–35s | Toolkit | Hard-cut slams: Inbox · Bookings · Reviews · Loyalty · Payments · Reports. |
+| 35–39.6s | Overview | Donut of Healthy / Needs attention / At risk, plus the returning-clients trend. |
+| 39.6–47s | CTA | **Stop guessing.** → logo + tagline → **Get started →** button (clicked) + msghealth.net |
+
+The CTA label is `BRAND.cta` in `src/brand.js`. Code: `demo.html`, `src/demo/engine.js` (easing,
+type, HUD, icons, grading), `src/demo/scenes.js` (the shots and cut list), `src/demo/main.js`.
+The fonts are Inter, Instrument Serif and JetBrains Mono (all SIL OFL), bundled in `assets/fonts/`.
+
+---
+
 # 30-second vertical social ad (9:16)
 
 A paid social ad for TikTok, Instagram Reels and YouTube Shorts, in a cut-paper style: characters and sets are layered pieces of card,

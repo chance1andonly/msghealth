@@ -32,11 +32,12 @@ export async function openFilm(entry = process.env.ENTRY || 'index.html') {
   await page.goto(`http://127.0.0.1:${srv.address().port}/${entry}?render`);
   await page.evaluate(() => window.ready);
   const duration = await page.evaluate(() => DURATION);
+  const fps = await page.evaluate(() => window.FPS ?? 24);
   // Render a frame and return it as an encoded image buffer.
   const frame = async (t, type = 'image/jpeg', q = 0.95) => {
     const b64 = await page.evaluate(([t, type, q]) => { window.renderFrame(t); return document.getElementById('c').toDataURL(type, q).split(',')[1]; }, [t, type, q]);
     return Buffer.from(b64, 'base64');
   };
   const close = async () => { await browser.close(); srv.close(); };
-  return { page, frame, duration, close };
+  return { page, frame, duration, fps, close };
 }
