@@ -9,7 +9,9 @@
     "render:ad": "ENTRY=ad.html node scripts/render.mjs",
     "audit:ad": "ENTRY=ad.html node scripts/audit-text.mjs",
     "render:demo": "ENTRY=demo.html node scripts/render.mjs",
-    "audit:demo": "ENTRY=demo.html node scripts/audit-text.mjs"
+    "audit:demo": "ENTRY=demo.html node scripts/audit-text.mjs",
+    "render:fast": "ENTRY=demo-fast.html node scripts/render.mjs",
+    "audit:fast": "ENTRY=demo-fast.html node scripts/audit-text.mjs"
   },
   "repository": {
     "type": "git",

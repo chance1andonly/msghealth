@@ -5,7 +5,7 @@ function renderFrame(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none';
   ctx.fillStyle = C.ink; ctx.fillRect(0, 0, W, H);
-  drawFilm(clamp(t, 0, DURATION - 1 / FPS));
+  (window.DRAW ?? drawFilm)(clamp(t, 0, DURATION - 1 / FPS)); // demo-fast.html sets DRAW to its own cut list
 }
 
 window.ready = (async () => {

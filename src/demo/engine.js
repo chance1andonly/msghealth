@@ -7,7 +7,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 'use strict';
 
-const W = 1920, H = 1080, FPS = 60, DURATION = 47;
+// a page can set window.FILM_DURATION before loading this file to host a different cut
+const W = 1920, H = 1080, FPS = 60, DURATION = window.FILM_DURATION ?? 47;
 let ctx = null;
 let LOGO = null, LOGO_WHITE = null;
 

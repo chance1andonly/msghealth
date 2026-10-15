@@ -97,6 +97,17 @@ dot-grid data, hard colour-field cuts and crisp product UI. It ends on a call to
 | 35–39.6s | Overview | Donut of Healthy / Needs attention / At risk, plus the returning-clients trend. |
 | 39.6–47s | CTA | **Stop guessing.** → logo + tagline → **Get started →** button (clicked) + msghealth.net |
 
+### Fast cut (20.5 s)
+
+The same film, cut for attention, with a new cut every 0.35–3 s. It opens on four one-word slams
+(**Your / customers / are / leaving.**), then replays each shot from the 47 s demo through a time
+remap at 2–3× speed, and ends on the same CTA.
+
+- **Final video:** `dist/msghealth-product-demo-fast.mp4` (1920×1080, 60 fps, 20.5 s)
+- **Voiceover script:** [`VOICEOVER-FAST.md`](VOICEOVER-FAST.md) · **SFX:** `scripts/demo-fast-audio.mjs` → `dist/demo-fast-sfx.wav`
+- Source: `demo-fast.html` + `src/demo/fast.js` (the hook shots and the cut list; changes to `scenes.js` carry over to both cuts)
+- Render: `npm run render:fast` · text check: `npm run audit:fast`
+
 The CTA label is `BRAND.cta` in `src/brand.js`. Code: `demo.html`, `src/demo/engine.js` (easing,
 type, HUD, icons, grading), `src/demo/scenes.js` (the shots and cut list), `src/demo/main.js`.
 The fonts are Inter, Instrument Serif and JetBrains Mono (all SIL OFL), bundled in `assets/fonts/`.

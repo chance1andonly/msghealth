@@ -668,14 +668,20 @@ const SCENES = [
   { t0: 39.6, t1: 47.0, label: '09 — GET STARTED', tone: 'dark', vig: 0.4, draw: scene9 },
 ];
 
-function drawFilm(t) {
-  const i = Math.max(0, SCENES.findIndex((s) => t < s.t1));
-  const s = SCENES[i === -1 ? SCENES.length - 1 : i];
-  ctx.save(); s.draw(t); ctx.restore();
-  // the wipes at the end of scenes 4, 5 and 8 hand the HUD over to the next scene's tone
+// HUD tone for scene i at film time t: the wipes at the end of scenes 4, 5 and 8
+// hand the HUD over to the next scene's tone before the cut.
+function sceneTone(i, t) {
+  const s = SCENES[i];
   let tone = typeof s.tone === 'function' ? s.tone(t) : s.tone;
   if (i === 3 && t > 16.85) tone = 'light';
   if ((i === 4 && t > 22.85) || (i === 7 && t >= 39.4)) tone = 'dark';
+  return tone;
+}
+
+function drawFilm(t) {
+  const i = Math.max(0, SCENES.findIndex((s) => t < s.t1));
+  const s = SCENES[i];
+  ctx.save(); s.draw(t); ctx.restore();
   finish(t, s.vig);
-  hud(t, tone, s.label + (s.sub ? s.sub(t) : ''), i + 1, SCENES.length);
+  hud(t, sceneTone(i, t), s.label + (s.sub ? s.sub(t) : ''), i + 1, SCENES.length);
 }

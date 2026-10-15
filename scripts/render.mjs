@@ -2,6 +2,7 @@
 //   npm run render            → dist/msghealth-demo.mp4          (16:9 paper film, index.html, 24 fps)
 //   npm run render:ad         → dist/msghealth-ad-9x16.mp4       (9:16 social ad, ad.html, 24 fps)
 //   npm run render:demo       → dist/msghealth-product-demo.mp4  (16:9 motion-graphics demo, demo.html, 60 fps)
+//   npm run render:fast       → dist/msghealth-product-demo-fast.mp4  (20.5 s fast cut, demo-fast.html, 60 fps)
 // Env: FFMPEG (path to an ffmpeg with libx264), WORKERS (parallel browser pages, default 3)
 import fs from 'node:fs';
 import path from 'node:path';
@@ -15,6 +16,7 @@ const TARGETS = {
   'index.html': { out: 'msghealth-demo', audio: 'scripts/audio.mjs', wav: 'score.wav' },
   'ad.html': { out: 'msghealth-ad-9x16', audio: 'scripts/ad-audio.mjs', wav: 'ad-music-sfx.wav' },
   'demo.html': { out: 'msghealth-product-demo', audio: 'scripts/demo-audio.mjs', wav: 'demo-sfx.wav' },
+  'demo-fast.html': { out: 'msghealth-product-demo-fast', audio: 'scripts/demo-fast-audio.mjs', wav: 'demo-fast-sfx.wav' },
 };
 const TARGET = TARGETS[ENTRY];
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
