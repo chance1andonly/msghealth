@@ -313,7 +313,9 @@ function drawApp(t) {
     txt(c.v, 880, y + 46, { size: 23, w: 500, color: C.mute });
     box(1030, y + 33, 260, 10, 5, C.line); box(1030, y + 33, 260 * sc / 100, 10, 5, scoreColor(sc));
     txt(String(Math.round(sc)), 1310, y + 47, { size: 28, w: 700, color: scoreColor(sc) });
-    const lab = sc >= 70 ? 'Healthy' : sc >= 50 ? 'Needs attention' : 'At risk', col = scoreColor(sc);
+    // win-back rows flip straight from At risk to Healthy as the reply lands (no wide "Needs attention" chip under the pill)
+    const lab = risky && rep > 0 ? (rep >= 0.35 ? 'Healthy' : 'At risk') : sc >= 70 ? 'Healthy' : sc >= 50 ? 'Needs attention' : 'At risk';
+    const col = { Healthy: C.ok, 'Needs attention': C.warn, 'At risk': C.risk }[lab];
     box(1400, y + 19, tw(lab, 20, 700) + 40, 38, 19, mixc('#ffffff', col, 0.14));
     txt(lab, 1420, y + 45, { size: 20, w: 700, color: mixc(col, '#1e1b4b', 0.35) });
     if (risky) {
