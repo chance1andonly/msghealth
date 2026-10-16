@@ -112,11 +112,11 @@ A typographic product film for msghealth.net, built from the structure of a mode
 (hook → logo → one typed request → proof → three consequences → promise → lockup) and re-made in
 the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with deep-indigo ink, the official logo mark and Inter type.
 
-- **Final video:** `dist/msghealth-launch.mp4` (1920×1080, 30 fps, 33 s, H.264 + AAC)
+- **Final video:** `dist/msghealth-launch.mp4` (1920×1080, 60 fps with motion blur, 33 s, H.264 + AAC)
 - Source: `launch.html` + `src/launch.js` (all scenes, one canvas, `renderFrame(t)`); sound: `scripts/launch-audio.mjs`
-- Render: `FFMPEG=ffmpeg npm run render:launch` (≈1 min). Open `launch.html` through a static server to scrub it.
+- Render: `FFMPEG=ffmpeg npm run render:launch` (≈2 min; 4 motion-blur samples per frame). Open `launch.html` through a static server to scrub it.
 - Device: one indigo **pulse dot**. It sits on a flatline, becomes the logo, rides the product demo,
-  lands as the period of "Keep your customers." and beats again at the close.
+  lands as the period of "Keep your customers.", blooms into the logo, and beats again at the close.
 
 | Time | Beat |
 |---|---|

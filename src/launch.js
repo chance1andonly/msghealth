@@ -89,7 +89,7 @@ function ecg(u) {
 const PULSE_BW = 300, PULSE_SP = 780;
 const pulseOff = (x, t, speed) => { const ph = (((x - t * speed) % PULSE_SP) + PULSE_SP) % PULSE_SP; return ph < PULSE_BW ? ecg(ph / PULSE_BW) : 0; };
 // y of the pulse line at x = 960 (where the dot sits), so the dot rides the line
-const pulseDotY = (y, half, amp, t, speed = 520) => y + pulseOff(960, t, speed) * amp * clamp(half / 180);
+const pulseDotY = (y, half, amp, t, speed = 520) => { let o = 0; for (let k = -3; k <= 3; k++) o += pulseOff(960 + k * 7, t, speed); return y + (o / 7) * amp * clamp(half / 180); };
 function pulseLine(y, half, amp, t, lw = 5, speed = 480) {
   if (half <= 0) return;
   ctx.save(); ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.strokeStyle = C.accent; ctx.beginPath();
@@ -111,21 +111,32 @@ const hsh = (i, j, k) => { const v = Math.sin(i * 127.1 + j * 311.7 + k * 74.7) 
 const CELLS = new Map();
 function cell(i, j) {
   const key = i * 4096 + j; let c = CELLS.get(key); if (c) return c;
-  c = { x: 24 + i * 312 + (((j % 2) + 2) % 2) * 20, y: -40 + j * 160 + (((i % 2) + 2) % 2) * 36,
+  // the opening view (6×7 cells) keeps its layout; everything beyond it is scattered, with gaps,
+  // mixed read states and late arrivals that keep popping in while the camera pulls back
+  const inner = i >= -1 && i <= 6 && j >= -1 && j <= 7;
+  c = { x: 24 + i * 312 + (((j % 2) + 2) % 2) * 20 + (inner ? 0 : (hsh(i, j, 5) - 0.5) * 70),
+    y: -40 + j * 160 + (((i % 2) + 2) % 2) * 36 + (inner ? 0 : (hsh(i, j, 6) - 0.5) * 50),
     n: NAMES[Math.floor(hsh(i, j, 2) * NAMES.length)], p: PREVIEWS[Math.floor(hsh(i, j, 3) * PREVIEWS.length)],
-    tint: TINTS[Math.floor(hsh(i, j, 4) * 4)], ta: 1.1 + 3.4 * Math.pow(hsh(i, j, 1), 1.5) };
+    tint: TINTS[Math.floor(hsh(i, j, 4) * 4)],
+    ta: inner ? 1.1 + 3.4 * Math.pow(hsh(i, j, 1), 1.5) : 1.1 + 4.5 * Math.pow(hsh(i, j, 1), 1.2),
+    skip: !inner && hsh(i, j, 7) < 0.14, deadA: lerp(0.3, 0.75, hsh(i, j, 8)),
+    nw: 90 + hsh(i, j, 9) * 70, pw: 110 + hsh(i, j, 10) * 80 };
   CELLS.set(key, c); return c;
 }
 function drawCard(c, t, s) {
+  if (c.skip) return;
   const p = P(t, c.ta, c.ta + 0.5); if (p <= 0) return;
   const e = back(p, 1.2), dead = P(t, c.ta + 1.0, c.ta + 1.8), sc = lerp(0.9, 1, e);
   const cy = c.y - t * 8;
   ctx.save();
   const dist = Math.hypot(c.x + 146 - 960, cy + 48 - 540), quiet = lerp(1, lerp(0.12, 1, clamp((dist - 420) / 520)), P(t, 1.4, 2.0));
-  ctx.globalAlpha *= clamp(p * 2) * lerp(1, 0.5, dead) * quiet;
+  ctx.globalAlpha *= clamp(p * 2) * lerp(1, c.deadA, dead) * quiet;
   ctx.translate(c.x + 146, cy + 48 + (1 - e) * 30); ctx.scale(sc, sc); ctx.translate(-146, -48);
-  if (s < 0.35) { // far out: just a field of small cards
-    ctx.fillStyle = '#ecebfa'; ctx.fillRect(0, 0, 292, 96); dot(48, 48, 26, '#d6d3f4');
+  if (s < 0.35) { // far out: the same card, with its text drawn as bars (too small to read anyway)
+    box(0, 0, 292, 96, 20, '#fff', { stroke: C.line, lw: Math.min(6, 1.2 / s) });
+    dot(48, 48, 26, c.tint);
+    box(88, 26, c.nw, 18, 9, '#d3d0ee'); box(88, 58, c.pw, 14, 7, '#e6e4f5');
+    box(226, 18, 48, 10, 5, t > c.ta + 1.0 ? '#ecebf7' : '#dedcf1');
     ctx.restore(); return;
   }
   box(0, 0, 292, 96, 20, '#fff', s < 0.6 ? { stroke: C.line, lw: 3 } : { shadow: 24, sa: 0.1 });
@@ -151,11 +162,11 @@ function drawHook(t) {
   g.addColorStop(0, `rgba(251,251,255,${0.97 * P(t, 1.3, 1.9)})`); g.addColorStop(1, 'rgba(251,251,255,0)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   // headline
-  const shake = (1 - P(t, 4.0, 4.4)) * (t >= 4.0 ? Math.sin(t * 90) * 9 : 0);
+  const shake = t >= 4.0 ? Math.exp(-(t - 4.0) * 7) * Math.sin((t - 4.0) * 34) * 7 : 0;
   ctx.translate(shake, -shake * 0.6);
   rise('Your customers', 960, 490, P(t, 1.5, 2.1), { size: 150, w: 700, ls: -7, align: 'center' });
   if (t >= 4.0) {
-    const sl = P(t, 4.0, 4.22), z = lerp(1.28, 1, eo(sl));
+    const sl = P(t, 4.0, 4.34), z = lerp(1.22, 1, eo(sl));
     ctx.save(); ctx.translate(960, 690); ctx.scale(z, z); ctx.translate(-960, -690);
     txt('go quiet.', 960, 690, { size: 190, w: 800, ls: -9, align: 'center', a: clamp(sl * 4), color: mixc(C.ink, C.soft, io(P(t, 4.5, 5.3))) });
     ctx.restore();
@@ -175,16 +186,16 @@ function lockup(t, t0, o) {
   const { cx = 960, cy = 500, mark = 300, word = 190, ls = -7, c1, c2, fold = 0, scale = 1 } = o;
   const gw = tw('MsgHealth', word, 700, ls), glyph = mark * 0.73, total = glyph + 36 + gw;
   const x0 = cx - total / 2, mx = x0 + glyph / 2;
-  const pop = back(P(t, t0, t0 + 0.6), 1.5);
+  const pop = o.markK ?? back(P(t, t0, t0 + 0.6), 1.5);
   ctx.save(); ctx.translate(cx, cy); ctx.scale(scale, scale); ctx.translate(-cx, -cy);
   const fm = lerp(mx, cx, io(fold)), ms = lerp(1, 0.14, io(fold)) * pop;
-  logo(fm, cy, mark * ms, c1, 1 - P(fold, 0.7, 1));
+  logo(fm, cy, mark * ms, c1, (o.markA ?? 1) * (1 - P(fold, 0.7, 1)));
   const wp = io(P(t, t0 + 0.35, t0 + 0.95)) * (1 - io(clamp(fold * 1.6)));
   if (wp > 0.002) { ctx.save(); ctx.beginPath(); ctx.rect(x0 + glyph + 30, cy - word, gw * wp, word * 1.6); ctx.clip();
   txt('MsgHealth', x0 + glyph + 36, cy + word * 0.36, { size: word, w: 700, ls, color: c2 });
   ctx.restore(); }
   ctx.restore();
-  return { x0, total };
+  return { x0, total, mx };
 }
 function drawMark(t) {
   const flood = 2400 * expo(P(t, 6.0, 6.7));
@@ -416,7 +427,7 @@ function drawFeatures(t) {
 // ── 5 · Finale (24.5–33 s): "Keep your customers." ───────────────────────────
 function drawEnd(t) {
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
-  const ex = P(t, 28.4, 29.0);
+  const ex = P(t, 28.2, 28.7);
   // dot: from the last node to the line, then hops into the period
   const w2 = tw('customers', 200, 800, -9), total = w2 + 46, px0 = 960 - total / 2;
   const perX = px0 + w2 + 30, perY = 690 - 15;
@@ -425,28 +436,34 @@ function drawEnd(t) {
   else if (t < 26.9) d = [960, pulseDotY(900, 960 * expo(P(t, 24.8, 25.6)) + 20, 100, t)];
   else if (t < 27.4) { const k = io(P(t, 26.9, 27.4)); d = [lerp(960, perX, k), lerp(pulseDotY(900, 960, 100, 26.9), perY, k) - Math.sin(k * Math.PI) * 260]; }
   else d = [perX, perY];
-  if (t < 28.4) { // headline + heartbeat
+  if (t < 28.2) { // headline + heartbeat
     pulseLine(900, 960 * expo(P(t, 24.8, 25.6)) + 20, 100, t, 5, 520);
     rise('Keep your', 960, 480, P(t, 25.3, 25.85), { size: 200, w: 800, ls: -9, align: 'center' });
     if (t >= 26.3) {
-      const sl = P(t, 26.3, 26.52), z = lerp(1.2, 1, eo(sl));
+      const sl = P(t, 26.3, 26.62), z = lerp(1.16, 1, eo(sl));
       ctx.save(); ctx.translate(960, 690); ctx.scale(z, z); ctx.translate(-960, -690);
       txt('customers', px0, 690, { size: 200, w: 800, ls: -9, a: clamp(sl * 4) }); ctx.restore();
     }
     if (t > 27.4) { const q = P(t, 27.4, 28.1); ring(perX, perY, 17 + q * 90, 3, C.accent, (1 - q) * 0.6); }
   }
   // text exits as the dot becomes the mark
-  if (t >= 28.4 && t < 29.0) {
+  if (t >= 28.2 && t < 28.7) {
     ctx.save(); ctx.globalAlpha = 1 - ex; ctx.translate(0, -50 * ex);
     rise('Keep your', 960, 480, 1, { size: 200, w: 800, ls: -9, align: 'center' });
     txt('customers', px0, 690, { size: 200, w: 800, ls: -9 }); ctx.restore();
   }
-  if (t < 28.4) dot(d[0], d[1], t < 27.4 ? 15 : 17);
-  else if (t < 29.0) { const k = io(ex); dot(lerp(perX, 960, k), lerp(perY, 500, k), lerp(17, 30, k)); }
-  // lockup
-  if (t >= 29.0) {
+  // the period glides to where the mark will sit, swells, and blooms into the logo
+  const LK = { cy: 500, mark: 280, word: 170, ls: -6, c1: C.accent, c2: C.ink };
+  const mx = 960 - (280 * 0.73 + 36 + tw('MsgHealth', 170, 700, -6)) / 2 + 280 * 0.73 / 2;
+  const mk = P(t, 28.85, 29.3);
+  if (t < 28.2) dot(d[0], d[1], t < 27.4 ? 15 : 17);
+  else if (mk < 1) {
+    const k = io(P(t, 28.2, 28.9));
+    dot(lerp(perX, mx, k), lerp(perY, 500, k) - Math.sin(k * Math.PI) * 70, lerp(17, 46, k) * (1 - eo(mk)), C.accent, 1 - P(mk, 0.4, 1));
+  }
+  if (t >= 28.85) {
     const fold = io(P(t, 31.6, 32.3));
-    const lk = lockup(t, 29.0, { cy: 500, mark: 280, word: 170, ls: -6, c1: C.accent, c2: C.ink, fold });
+    lockup(t, 29.0, { ...LK, fold, markK: lerp(0.22, 1, back(mk, 1.3)), markA: clamp(mk * 2.5) });
     const up = eo(P(t, 30.4, 30.9)) * (1 - P(t, 31.5, 31.9));
     if (up > 0) {
       const u = 'msghealth.net', uw = tw(u, 50, 650, -1);
@@ -463,7 +480,17 @@ function drawEnd(t) {
 }
 
 // ── frame ────────────────────────────────────────────────────────────────────
+let MAIN, SCRATCH, SUB = 1;
+const SHUTTER = 0.5 / 60; // 180° at 60 fps
 function renderFrame(t) {
+  if (SUB <= 1) { ctx = MAIN; drawScene(t); return; }
+  for (let k = 0; k < SUB; k++) {
+    ctx = SCRATCH; drawScene(clamp(t + ((k + 0.5) / SUB - 0.5) * SHUTTER, 0, DURATION - 1e-4));
+    MAIN.setTransform(1, 0, 0, 1, 0, 0); MAIN.globalAlpha = 1 / (k + 1); MAIN.drawImage(SCRATCH.canvas, 0, 0);
+  }
+  MAIN.globalAlpha = 1; ctx = MAIN;
+}
+function drawScene(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
   if (t < 6.0) { drawHook(t); }
@@ -482,10 +509,11 @@ function renderFrame(t) {
 window.renderFrame = renderFrame;
 window.DURATION = DURATION;
 window.ready = (async () => {
-  ctx = document.getElementById('c').getContext('2d');
+  MAIN = ctx = document.getElementById('c').getContext('2d');
+  const sc = document.createElement('canvas'); sc.width = W; sc.height = H; SCRATCH = sc.getContext('2d');
   await Promise.all(['400', '500', '600', '650', '700', '800'].map((w) => document.fonts.load(`${w} 40px Inter`)));
   LOGO = await new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = BRAND.logoFile; });
-  if (location.search.includes('render')) document.body.classList.add('render');
+  if (location.search.includes('render')) { document.body.classList.add('render'); SUB = 4; }
   renderFrame(0);
   // in-browser player
   const play = document.getElementById('play'), seek = document.getElementById('seek'), label = document.getElementById('time');
