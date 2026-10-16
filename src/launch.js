@@ -344,9 +344,17 @@ function drawProduct(t) {
   const s = 1 + 0.05 * P(t, 14.1, 18.5), out = P(t, 18.15, 18.5);
   ctx.save(); ctx.translate(960, 540); ctx.scale(s + out * 0.18, s + out * 0.18); ctx.translate(-960, -540); ctx.globalAlpha = 1 - out;
   drawApp(t); ctx.restore();
-  // shutter: the indigo flood collapses to a line, which then retracts to nothing
-  const hh = lerp(H, 6, io(P(t, 14.15, 14.6))), ww = lerp(W, 0, io(P(t, 14.6, 14.95)));
-  if (ww > 1) { ctx.fillStyle = C.accent; ctx.beginPath(); ctx.roundRect(960 - ww / 2, 540 - hh / 2, ww, hh, Math.min(ww, hh) / 2); ctx.fill(); }
+  // shutter: the indigo flood first settles to exactly the app window (the "screen" of this scene),
+  // then collapses to a line, which retracts to nothing
+  const m = io(P(t, 14.12, 14.5)), c = io(P(t, 14.55, 14.95)), r = io(P(t, 14.95, 15.3));
+  const wx = lerp(0, 90, m), wy = lerp(0, 70, m), wW = lerp(W, 1740, m), wH = lerp(H, 940, m);
+  const hh = lerp(wH, 6, c), ww = lerp(wW, 0, r);
+  if (ww > 1 && t >= 14.1) {
+    ctx.save(); ctx.translate(960, 540); ctx.scale(s, s); ctx.translate(-960, -540);
+    ctx.fillStyle = C.accent; ctx.beginPath();
+    ctx.roundRect(wx + (wW - ww) / 2, wy + (wH - hh) / 2, ww, hh, Math.min(lerp(0, 30, m), ww / 2, hh / 2) + (c > 0 ? (Math.min(ww, hh) / 2 - Math.min(30, ww / 2, hh / 2)) * c : 0));
+    ctx.fill(); ctx.restore();
+  }
 }
 
 // ── 4 · Three features (18.5–24.5 s) ─────────────────────────────────────────
