@@ -86,15 +86,17 @@ function ecg(u) {
   for (let i = 1; i < ECG.length; i++) if (u <= ECG[i][0]) { const a = ECG[i - 1], b = ECG[i]; return a[1] + (b[1] - a[1]) * ((u - a[0]) / (b[0] - a[0])); }
   return 0;
 }
+const PULSE_BW = 300, PULSE_SP = 780;
+const pulseOff = (x, t, speed) => { const ph = (((x - t * speed) % PULSE_SP) + PULSE_SP) % PULSE_SP; return ph < PULSE_BW ? ecg(ph / PULSE_BW) : 0; };
+// y of the pulse line at x = 960 (where the dot sits), so the dot rides the line
+const pulseDotY = (y, half, amp, t, speed = 520) => y + pulseOff(960, t, speed) * amp * clamp(half / 180);
 function pulseLine(y, half, amp, t, lw = 5, speed = 480) {
   if (half <= 0) return;
-  const BW = 300, SP = 780;
   ctx.save(); ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.strokeStyle = C.accent; ctx.beginPath();
   let first = true;
   for (let x = 960 - half; x <= 960 + half + 1; x += 3) {
-    const ph = (((x - t * speed) % SP) + SP) % SP;
     const tap = clamp(Math.min(x - (960 - half), 960 + half - x) / 180);
-    const yy = y + (ph < BW ? ecg(ph / BW) : 0) * amp * tap;
+    const yy = y + pulseOff(x, t, speed) * amp * tap;
     if (first) { ctx.moveTo(x, yy); first = false; } else ctx.lineTo(x, yy);
   }
   ctx.stroke(); ctx.restore();
@@ -104,21 +106,29 @@ function pulseLine(y, half, amp, t, lw = 5, speed = 480) {
 const NAMES = ['Jordan R.', 'Priya S.', 'Morgan E.', 'Alex C.', 'Dana O.', 'Sam P.', 'Lee N.', 'Maya T.', 'Chris B.', 'Nina K.', 'Omar F.', 'Ella W.', 'Theo M.', 'Ivy L.', 'Noah D.', 'Zoe H.', 'Ravi G.', 'Lena V.', 'Marco J.', 'Aya Q.', 'Kai U.', 'Rosa Z.'];
 const PREVIEWS = ['Time to rebook?', 'We miss you!', 'Your next visit is due', 'Still need that slot?', 'Hi! Free this week?', 'Haven’t seen you lately', 'Book your next one?', 'Reminder: it’s been a while'];
 const TINTS = ['#e0def9', '#e8e5fb', '#dcd9f7', '#e3e0fa'];
-const CARDS = (() => {
-  const r = rng(7), list = [];
-  for (let j = 0; j < 7; j++) for (let i = 0; i < 6; i++) list.push({ x: 24 + i * 312 + (j % 2) * 20, y: -40 + j * 160 + (i % 2) * 36, n: NAMES[(i * 7 + j * 3) % NAMES.length], p: PREVIEWS[(i * 5 + j) % PREVIEWS.length], k: r(), tint: TINTS[(i + j) % 4] });
-  const order = list.map((c, i) => i).sort((a, b) => list[a].k - list[b].k);
-  order.forEach((idx, rank) => { list[idx].ta = 1.1 + 3.4 * Math.pow(rank / list.length, 1.5); });
-  return list;
-})();
-function drawCard(c, t) {
+// An endless field: every grid cell is generated on demand from a hash, so zooming out never runs out of clients.
+const hsh = (i, j, k) => { const v = Math.sin(i * 127.1 + j * 311.7 + k * 74.7) * 43758.5453; return v - Math.floor(v); };
+const CELLS = new Map();
+function cell(i, j) {
+  const key = i * 4096 + j; let c = CELLS.get(key); if (c) return c;
+  c = { x: 24 + i * 312 + (((j % 2) + 2) % 2) * 20, y: -40 + j * 160 + (((i % 2) + 2) % 2) * 36,
+    n: NAMES[Math.floor(hsh(i, j, 2) * NAMES.length)], p: PREVIEWS[Math.floor(hsh(i, j, 3) * PREVIEWS.length)],
+    tint: TINTS[Math.floor(hsh(i, j, 4) * 4)], ta: 1.1 + 3.4 * Math.pow(hsh(i, j, 1), 1.5) };
+  CELLS.set(key, c); return c;
+}
+function drawCard(c, t, s) {
   const p = P(t, c.ta, c.ta + 0.5); if (p <= 0) return;
   const e = back(p, 1.2), dead = P(t, c.ta + 1.0, c.ta + 1.8), sc = lerp(0.9, 1, e);
+  const cy = c.y - t * 8;
   ctx.save();
-  const dist = Math.hypot(c.x + 146 - 960, c.y - t * 8 + 48 - 540), quiet = lerp(1, lerp(0.12, 1, clamp((dist - 420) / 520)), P(t, 1.4, 2.0));
+  const dist = Math.hypot(c.x + 146 - 960, cy + 48 - 540), quiet = lerp(1, lerp(0.12, 1, clamp((dist - 420) / 520)), P(t, 1.4, 2.0));
   ctx.globalAlpha *= clamp(p * 2) * lerp(1, 0.5, dead) * quiet;
-  ctx.translate(c.x + 146, c.y - t * 8 + 48 + (1 - e) * 30); ctx.scale(sc, sc); ctx.translate(-146, -48);
-  box(0, 0, 292, 96, 20, '#fff', { shadow: 24, sa: 0.1 });
+  ctx.translate(c.x + 146, cy + 48 + (1 - e) * 30); ctx.scale(sc, sc); ctx.translate(-146, -48);
+  if (s < 0.35) { // far out: just a field of small cards
+    ctx.fillStyle = '#ecebfa'; ctx.fillRect(0, 0, 292, 96); dot(48, 48, 26, '#d6d3f4');
+    ctx.restore(); return;
+  }
+  box(0, 0, 292, 96, 20, '#fff', s < 0.6 ? { stroke: C.line, lw: 3 } : { shadow: 24, sa: 0.1 });
   dot(48, 48, 26, c.tint);
   txt(c.n.split(' ').map((w) => w[0]).join(''), 48, 56, { size: 21, w: 700, color: C.accent, align: 'center' });
   txt(c.n, 88, 42, { size: 23, w: 700 });
@@ -127,11 +137,16 @@ function drawCard(c, t) {
   ctx.restore();
 }
 function drawHook(t) {
-  const imp = P(t, 5.35, 6.0), s = lerp(1, 0.0001, ei(imp));
+  // after "go quiet." the camera pulls back through an endless field of unanswered clients
+  const zo = P(t, 4.9, 5.8), s = Math.exp(Math.log(0.07) * zo * zo * (3 - 2 * zo));
   const baseY = lerp(540, 930, io(P(t, 1.3, 2.1)));
+  const amp = 110 * (1 - Math.pow(P(t, 2.2, 4.4), 1.3)) * P(t, 1.1, 1.5);
   ctx.save();
+  ctx.globalAlpha = 1 - P(t, 5.55, 5.95);
   ctx.translate(960, 540); ctx.scale(s, s); ctx.translate(-960, -540);
-  CARDS.forEach((c) => drawCard(c, t));
+  const xmin = 960 - 960 / s, xmax = 960 + 960 / s, ymin = 540 - 540 / s, ymax = 540 + 540 / s;
+  for (let j = Math.floor((ymin + t * 8 + 40) / 160) - 2; j <= Math.ceil((ymax + t * 8 + 40) / 160) + 1; j++)
+    for (let i = Math.floor((xmin - 24) / 312) - 2; i <= Math.ceil((xmax - 24) / 312) + 1; i++) drawCard(cell(i, j), t, s);
   const g = ctx.createRadialGradient(960, 540, 60, 960, 540, 860);
   g.addColorStop(0, `rgba(251,251,255,${0.97 * P(t, 1.3, 1.9)})`); g.addColorStop(1, 'rgba(251,251,255,0)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
@@ -146,11 +161,11 @@ function drawHook(t) {
     ctx.restore();
   }
   // pulse line with fading heartbeat
-  const amp = 110 * (1 - Math.pow(P(t, 2.2, 4.4), 1.3)) * P(t, 1.1, 1.5);
   pulseLine(baseY, 960 * expo(P(t, 0.3, 1.2)) + 20, amp, t, 5, 520);
   ctx.restore();
-  // the dot owns the frame: still on the line, then it falls to centre
-  const dy = lerp(baseY, 540, ei(imp));
+  // the dot owns the frame: it rides the line (following every beat), then settles at the centre
+  const wy = pulseDotY(baseY, 960 * expo(P(t, 0.3, 1.2)) + 20, amp, t);
+  const dy = lerp(540 + (wy - 540) * s, 540, io(P(t, 5.6, 6.0)));
   const bump = t > 1.1 && t < 4.4 ? 1 + 0.25 * Math.max(0, Math.sin(t * Math.PI * 2 - 1.2)) * (1 - P(t, 2.2, 4.4)) : 1;
   dot(960, dy, 14 * bump * P(t, 0.0, 0.35 + 1e-6));
 }
@@ -259,7 +274,6 @@ function drawApp(t) {
 
   // header + counters
   txt('Client health', 430, 168, { size: 46, w: 700, ls: -1.4 });
-  txt('Live', 1760, 136, { size: 22, w: 600, color: C.mute, align: 'right' });
   const rep3 = (i) => eo(P(t, CLIENTS[i].rep, CLIENTS[i].rep + 0.6));
   const nReplied = rep3(0) + rep3(1) + rep3(2);
   const stats = [['Healthy', Math.round(41 + nReplied), C.ok], ['Needs attention', 12, C.warn], ['At risk', Math.round(5 - nReplied), C.risk]];
@@ -317,16 +331,9 @@ function drawProduct(t) {
   const s = 1 + 0.05 * P(t, 14.1, 18.5), out = P(t, 18.15, 18.5);
   ctx.save(); ctx.translate(960, 540); ctx.scale(s + out * 0.18, s + out * 0.18); ctx.translate(-960, -540); ctx.globalAlpha = 1 - out;
   drawApp(t); ctx.restore();
-  // shutter: the indigo flood collapses to a line, then to the dot
-  const hh = lerp(H, 6, io(P(t, 14.15, 14.6))), ww = lerp(W, 28, io(P(t, 14.6, 14.9)));
-  const hh2 = t > 14.6 ? lerp(6, 28, io(P(t, 14.6, 14.9))) : hh;
-  if (t < 14.9) { ctx.fillStyle = C.accent; ctx.beginPath(); ctx.roundRect(960 - ww / 2, 540 - hh2 / 2, ww, hh2, Math.min(ww, hh2) / 2); ctx.fill(); }
-  else if (t < 15.3) {
-    const k = io(P(t, 14.9, 15.3)), x = lerp(960, 1684, k), y = lerp(540, 130, k) - Math.sin(k * Math.PI) * 120;
-    dot(x, y, 14);
-  } else {
-    dot(1684, 130, 9); const ph = (t * 1) % 1; ring(1684, 130, 9 + ph * 22, 2.5, C.accent, (1 - ph) * 0.6);
-  }
+  // shutter: the indigo flood collapses to a line, which then retracts to nothing
+  const hh = lerp(H, 6, io(P(t, 14.15, 14.6))), ww = lerp(W, 0, io(P(t, 14.6, 14.95)));
+  if (ww > 1) { ctx.fillStyle = C.accent; ctx.beginPath(); ctx.roundRect(960 - ww / 2, 540 - hh / 2, ww, hh, Math.min(ww, hh) / 2); ctx.fill(); }
 }
 
 // ── 4 · Three features (18.5–24.5 s) ─────────────────────────────────────────
@@ -415,8 +422,8 @@ function drawEnd(t) {
   const perX = px0 + w2 + 30, perY = 690 - 15;
   let d = null;
   if (t < 25.0) { const k = io(P(t, 24.5, 25.0)); d = [lerp(1770, 960, k), lerp(980, 900, k) - Math.sin(k * Math.PI) * 60]; }
-  else if (t < 26.9) d = [960, 900];
-  else if (t < 27.4) { const k = io(P(t, 26.9, 27.4)); d = [lerp(960, perX, k), lerp(900, perY, k) - Math.sin(k * Math.PI) * 260]; }
+  else if (t < 26.9) d = [960, pulseDotY(900, 960 * expo(P(t, 24.8, 25.6)) + 20, 100, t)];
+  else if (t < 27.4) { const k = io(P(t, 26.9, 27.4)); d = [lerp(960, perX, k), lerp(pulseDotY(900, 960, 100, 26.9), perY, k) - Math.sin(k * Math.PI) * 260]; }
   else d = [perX, perY];
   if (t < 28.4) { // headline + heartbeat
     pulseLine(900, 960 * expo(P(t, 24.8, 25.6)) + 20, 100, t, 5, 520);
