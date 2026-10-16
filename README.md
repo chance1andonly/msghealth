@@ -106,13 +106,13 @@ Keep the delivery natural and conversational, as if one business owner were talk
 
 ---
 
-# 33-second launch film (16:9)
+# 33-second launch film (9:16 portrait)
 
 A typographic product film for msghealth.net, built from the structure of a modern launch video
 (hook → logo → one typed request → proof → three consequences → promise → lockup) and re-made in
 the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with deep-indigo ink, the official logo mark and Inter type.
 
-- **Final video:** `dist/msghealth-launch.mp4` (1920×1080, 60 fps with motion blur, 33 s, H.264 + AAC)
+- **Final video:** `dist/msghealth-launch.mp4` (1080×1920 portrait 9:16, 60 fps with motion blur, 33 s, H.264 + AAC)
 - Source: `launch.html` + `src/launch.js` (all scenes, one canvas, `renderFrame(t)`); sound: `scripts/launch-audio.mjs`
 - Render: `FFMPEG=ffmpeg npm run render:launch` (≈2 min; 4 motion-blur samples per frame). Open `launch.html` through a static server to scrub it.
 - Device: one indigo **pulse dot**. It sits on a flatline, becomes the logo, rides the product demo,

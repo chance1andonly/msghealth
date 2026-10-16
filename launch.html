@@ -13,18 +13,18 @@
   :root { --bg: #0d0c24; --fg: #f1f0ff; --muted: #9c9ac4; --accent: #4f46e5; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: Inter, system-ui, sans-serif; }
   body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 16px; box-sizing: border-box; }
-  canvas { width: min(100%, calc((100vh - 90px) * 16 / 9)); aspect-ratio: 16 / 9; display: block; border-radius: 6px; background: #fff; }
-  .bar { width: min(100%, calc((100vh - 90px) * 16 / 9)); display: flex; gap: 12px; align-items: center; }
+  canvas { width: min(100%, calc((100vh - 90px) * 9 / 16)); aspect-ratio: 9 / 16; display: block; border-radius: 6px; background: #fff; }
+  .bar { width: min(100%, calc((100vh - 90px) * 9 / 16)); display: flex; gap: 12px; align-items: center; }
   button { background: #1b1940; color: var(--fg); border: 1px solid #38347a; border-radius: 6px; padding: 6px 14px; font: 700 14px Inter, sans-serif; cursor: pointer; }
   input[type=range] { flex: 1; accent-color: var(--accent); }
   #time { font: 600 13px Inter, sans-serif; color: var(--muted); min-width: 92px; text-align: right; }
   body.render { padding: 0; display: block; }
-  body.render canvas { width: 1920px; height: 1080px; border-radius: 0; }
+  body.render canvas { width: 1080px; height: 1920px; border-radius: 0; }
   body.render .bar { display: none; }
 </style>
 </head>
 <body>
-<canvas id="c" width="1920" height="1080"></canvas>
+<canvas id="c" width="1080" height="1920"></canvas>
 <div class="bar">
   <button id="play">Play</button>
   <input id="seek" type="range" min="0" max="1000" value="0">
