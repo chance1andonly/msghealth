@@ -11,9 +11,10 @@ import { openFilm, ROOT } from './lib.mjs';
 const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const ENTRY = process.env.ENTRY || 'index.html';
 const IS_AD = ENTRY === 'ad.html';
-const OUT_NAME = IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
-const AUDIO_SCRIPT = IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
-const FPS = 24;
+const IS_LAUNCH = ENTRY === 'launch.html';
+const OUT_NAME = IS_LAUNCH ? 'msghealth-launch' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
+const AUDIO_SCRIPT = IS_LAUNCH ? 'scripts/launch-audio.mjs' : IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
+const FPS = IS_LAUNCH ? 30 : 24;
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
 const DIST = path.join(ROOT, 'dist');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'msgh-'));
@@ -50,7 +51,7 @@ const parts = await Promise.all(Array.from({ length: WORKERS }, (_, k) => worker
 
 const list = path.join(TMP, 'list.txt');
 fs.writeFileSync(list, parts.map((p) => `file '${p}'`).join('\n'));
-const wav = path.join(DIST, IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
+const wav = path.join(DIST, IS_LAUNCH ? 'launch-score.wav' : IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
 execFileSync('node', [path.join(ROOT, AUDIO_SCRIPT), wav], { stdio: 'inherit' });
 const mp4 = path.join(DIST, `${OUT_NAME}.mp4`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', list, '-i', wav,

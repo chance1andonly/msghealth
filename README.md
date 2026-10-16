@@ -103,3 +103,26 @@ Each line needs to fit its window. The two on-camera lines are lip-synced to the
 
 Keep the delivery natural and conversational, as if one business owner were talking to another.
 0:01.85–0:02.00 is deliberately silent, right before line 1.
+
+---
+
+# 33-second launch film (16:9)
+
+A typographic product film for msghealth.net, built from the structure of a modern launch video
+(hook → logo → one typed request → proof → three consequences → promise → lockup) and re-made in
+the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with deep-indigo ink, the official logo mark and Inter type.
+
+- **Final video:** `dist/msghealth-launch.mp4` (1920×1080, 30 fps, 33 s, H.264 + AAC)
+- Source: `launch.html` + `src/launch.js` (all scenes, one canvas, `renderFrame(t)`); sound: `scripts/launch-audio.mjs`
+- Render: `FFMPEG=ffmpeg npm run render:launch` (≈1 min). Open `launch.html` through a static server to scrub it.
+- Device: one indigo **pulse dot**. It sits on a flatline, becomes the logo, rides the product demo,
+  lands as the period of "Keep your customers." and beats again at the close.
+
+| Time | Beat |
+|---|---|
+| 0–6 s | "Your customers / go quiet." Unanswered messages pile up, the heartbeat fades to a flatline, silence |
+| 6–10 s | Indigo ink flood, MsgHealth lockup, "Know who's about to leave." |
+| 10–14 s | One typed request: "Win back clients who've gone quiet." |
+| 14–18.5 s | Client Health: scores, At risk flags, SMS + email outreach, replies, "3 clients rebooked this week" |
+| 18.5–24.5 s | At-risk clients, flagged early · Win-backs sent for you · Bookings back on the calendar |
+| 24.5–33 s | "Keep your customers." → lockup → msghealth.net → the dot beats |
