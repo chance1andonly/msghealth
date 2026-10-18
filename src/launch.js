@@ -120,7 +120,7 @@ const CUE = (() => {
   c.words = ph.slice(0, 6); c.click = ph[6];
   const ah = hitsIn(TM.app.t0 + 1.0, TM.app.out - 0.3, 13);      // client health: a row per hit, then each change
   c.rows = ah[0]; c.sms = ah.slice(1, 4); c.replies = ah.slice(5, 8); c.toast = ah[9]; // cards together; pills on the beat
-  c.feat = TM.feat.map((t0) => { const h = hitsIn(t0 + 0.15, t0 + TM.featDur - 0.25, 6); return { line2: h[0], ks: h.slice(1).map((x) => x - t0) }; });
+  c.feat = TM.feat.map((t0, k) => { const h = hitsIn(t0 + 0.15, TM.featEnd[k] - 0.25, 6); return { line2: h[0], ks: h.slice(1).map((x) => x - t0) }; });
   return c;
 })();
 
@@ -475,8 +475,8 @@ function featCard(k, tt, ks) {
 function drawFeatures(t) {
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
   FEATS.forEach((f, k) => {
-    const tt = t - f.t0; if (tt < 0 || tt >= TM.featDur) return;
-    const ex = k === 2 ? 0 : P(tt, TM.featDur - 0.3, TM.featDur);
+    const dur = TM.featEnd[k] - f.t0, tt = t - f.t0; if (tt < 0 || tt >= dur) return;
+    const ex = k === 2 ? 0 : P(tt, dur - 0.3, dur);
     ctx.save(); ctx.globalAlpha = 1 - ex; ctx.translate(-40 * ex, 0);
     txt(`0${k + 1}`, 80, 270, { size: 28, w: 700, color: C.accent, ls: 2, a: eo(P(tt, 0, 0.3)) });
     const l2 = CUE.feat[k].line2 - f.t0; // line 1 lands on the beat, line 2 and the card on the next hit

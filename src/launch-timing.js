@@ -10,14 +10,15 @@ globalThis.TIMING = (() => {
   const T = { B, D, SONG_START, at, DURATION: 33, HOOK: 6.0 / D }; // the hook plays 1.33× faster than it was designed
   T.iris = [at(3.4), at(4)]; // logo → prompt
   T.prompt = { t0: at(4), end: at(8) };
-  T.app = { t0: at(8), out: at(16.55), end: at(17) };
-  T.feat = [at(17), at(20), at(23)]; T.featDur = 3 * B;
+  T.app = { t0: at(8), out: at(15.55), end: at(16) }; // ends on the hit right after the toast
+  T.feat = [at(16), at(19), at(22)];
   const E0 = at(26);
   T.end = {
     t0: E0, hopLine: [E0, E0 + 0.5], line: [E0 + 0.3, E0 + 1.1],
     keep: at(27), customers: at(28), hop: [at(29.2), at(30)], ring: at(30),
     exit: at(31), logo: at(32), url: at(33.3), urlOut: at(34.4), fold: at(34.8),
   };
+  T.featEnd = [T.feat[1], T.feat[2], E0]; // 3 beats each; the last card holds a beat longer
   T.end.foldEnd = T.end.fold + 0.55;
   T.end.loop = { dot: [T.end.foldEnd - 0.25, T.end.foldEnd - 0.05], stub: [T.end.foldEnd - 0.2, T.end.foldEnd], beat: T.end.foldEnd };
   return T;
