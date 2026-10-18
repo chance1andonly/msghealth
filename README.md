@@ -114,6 +114,11 @@ the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with deep-indigo ink
 
 - **Final video:** `dist/msghealth-launch.mp4` (1080×1920 portrait 9:16, 60 fps with motion blur, 33 s, H.264 + AAC)
 - Source: `launch.html` + `src/launch.js` (all scenes, one canvas, `renderFrame(t)`); sound: `scripts/launch-audio.mjs`
+- Timing: every cue lives in `src/launch-timing.js`, shared by picture and sound. The music bed is an instrumental
+  (place it at `assets/audio/song.mp3`, not committed) cut at 4.345 s so its first kick lands on the 6.0 s drop;
+  each act starts on a beat of its 76.2 BPM grid, and the effects are pitched to its key (F♯ minor pentatonic).
+- Loops seamlessly: the last frame is pixel-identical to the first (the dot on its 40 px of line), and the audio
+  ends in silence that runs into the song's silent opening.
 - Render: `FFMPEG=ffmpeg npm run render:launch` (≈2 min; 4 motion-blur samples per frame). Open `launch.html` through a static server to scrub it.
 - Device: one indigo **pulse dot**. It sits on a flatline, becomes the logo, rides the product demo,
   lands as the period of "Keep your customers.", blooms into the logo, and beats again at the close.

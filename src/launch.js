@@ -5,6 +5,7 @@
 'use strict';
 
 const W = 1080, H = 1920, CX = W / 2, CY = H / 2, DURATION = 33;
+const TM = TIMING; // every cue time lives in src/launch-timing.js (shared with the soundtrack)
 const K = BRAND.colors;
 const C = {
   ink: K.ink, deep: '#14123a', accent: K.primary, accentDark: K.primaryDark,
@@ -180,20 +181,20 @@ function drawHook(t) {
   const wy = pulseDotY(baseY, half, amp, t);
   const dy = lerp(CY + (wy - CY) * s, CY, io(P(t, 5.6, 6.0)));
   const bump = t > 1.1 && t < 4.4 ? 1 + 0.25 * Math.max(0, Math.sin(t * Math.PI * 2 - 1.2)) * (1 - P(t, 2.2, 4.4)) : 1;
-  dot(CX, dy, 14 * bump * P(t, 0.0, 0.35 + 1e-6));
+  dot(CX, dy, 14 * bump);
 }
 
 // ── 1 · Mark (6–10 s): ink flood, lockup ─────────────────────────────────────
 const LK = { mark: 196, word: 124, ls: -4.5 }; // horizontal lockup sized for a 1080-wide frame
 const LKY = 880;
 function lockup(t, t0, o) {
-  const { cx = CX, cy = LKY, mark = LK.mark, word = LK.word, ls = LK.ls, c1, c2, fold = 0, scale = 1 } = o;
+  const { cx = CX, cy = LKY, foldY = o.cy ?? LKY, mark = LK.mark, word = LK.word, ls = LK.ls, c1, c2, fold = 0, scale = 1 } = o;
   const gw = tw('MsgHealth', word, 700, ls), glyph = mark * 0.73, total = glyph + 28 + gw;
   const x0 = cx - total / 2, mx = x0 + glyph / 2;
   const pop = o.markK ?? back(P(t, t0, t0 + 0.6), 1.5);
   ctx.save(); ctx.translate(cx, cy); ctx.scale(scale, scale); ctx.translate(-cx, -cy);
-  const fm = lerp(mx, cx, io(fold)), ms = lerp(1, 0.14, io(fold)) * pop;
-  logo(fm, cy, mark * ms, c1, (o.markA ?? 1) * (1 - P(fold, 0.7, 1)));
+  const fm = lerp(mx, cx, io(fold)), fy = lerp(cy, foldY, io(fold)), ms = lerp(1, 0.14, io(fold)) * pop;
+  logo(fm, fy, mark * ms, c1, (o.markA ?? 1) * (1 - P(fold, 0.7, 1)));
   const wp = io(P(t, t0 + 0.35, t0 + 0.95)) * (1 - io(clamp(fold * 1.6)));
   if (wp > 0.002) { ctx.save(); ctx.beginPath(); ctx.rect(x0 + glyph + 22, cy - word, gw * wp, word * 1.6); ctx.clip();
   txt('MsgHealth', x0 + glyph + 28, cy + word * 0.36, { size: word, w: 700, ls, color: c2 });
@@ -210,7 +211,7 @@ function drawMark(t) {
   g.addColorStop(0, '#2c2778'); g.addColorStop(1, C.deep); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   ctx.restore();
   if (t < 6.2) dot(CX, CY, 14 + 10 * P(t, 6.0, 6.2));
-  const punch = [8.0, 8.5, 9.0].reduce((a, b) => a + (t > b ? Math.exp(-(t - b) * 14) * 0.022 : 0), 0);
+  const punch = TM.punches.reduce((a, b) => a + (t > b ? Math.exp(-(t - b) * 14) * 0.022 : 0), 0);
   if (t >= 6.1) lockup(t, 6.1, { c1: '#ffffff', c2: '#ffffff', scale: 1 + punch });
   txt('Know who’s about to leave.', CX, LKY + 150, { size: 42, w: 500, color: '#a9a6e0', align: 'center', a: eo(P(t, 7.3, 7.9)), ls: -0.5 });
 }
@@ -231,13 +232,13 @@ const GHOST = (() => {
   return c;
 })();
 const PROMPT = 'Win back clients who’ve gone quiet.';
-const typeT = (i) => 11.0 + 2.0 * (i / (PROMPT.length - 1)) + 0.03 * Math.sin(i * 12.9898);
+const typeT = (i) => TM.prompt.typeStart + TM.prompt.typeDur * (i / (PROMPT.length - 1)) + 0.03 * Math.sin(i * 12.9898);
 function drawPrompt(t) {
-  const s = 1 + 0.1 * eo(P(t, 10, 13.6));
+  const s = 1 + 0.1 * eo(P(t, TM.prompt.t0, TM.prompt.click));
   ctx.save(); ctx.translate(CX, CY); ctx.scale(s, s); ctx.translate(-CX, -CY);
   ctx.fillStyle = C.mist; ctx.fillRect(-100, -100, W + 200, H + 200);
   ctx.globalAlpha = 0.9; ctx.drawImage(GHOST, 0, 0); ctx.globalAlpha = 1;
-  const bp = back(P(t, 10.15, 10.7), 1.2), press = P(t, 13.4, 13.5) * (1 - P(t, 13.52, 13.62));
+  const bp = back(P(t, TM.prompt.t0 + 0.1, TM.prompt.t0 + 0.65), 1.2), K = TM.prompt.click, press = P(t, K - 0.1, K) * (1 - P(t, K + 0.02, K + 0.12));
   ctx.save(); ctx.globalAlpha = clamp(bp * 2); ctx.translate(CX, CY + (1 - bp) * 24);
   box(-480, -56, 960, 112, 56, '#fff', { shadow: 60, sa: 0.18, sy: 24 });
   logo(-425, 0, 64, C.accent);
@@ -251,22 +252,22 @@ function drawPrompt(t) {
     txt(PROMPT[i], x0 + pre, 13, { size: 36, w: 500, ls: -0.4, color: mixc(C.accent, C.ink, P(t, ti, ti + 0.45)) });
     end = x0 + ctx.measureText(PROMPT.slice(0, i + 1)).width;
   }
-  if (t > 10.9 && t < 13.45 && Math.floor(t * 2) % 2 === 0) { ctx.fillStyle = C.accent; ctx.fillRect(end + 3, -24, 3, 48); }
+  if (t > TM.prompt.typeStart - 0.4 && t < TM.prompt.click - 0.05 && Math.floor(t * 2) % 2 === 0) { ctx.fillStyle = C.accent; ctx.fillRect(end + 3, -24, 3, 48); }
   dot(412, 0, 40 - press * 5, C.accent);
   ctx.save(); ctx.translate(412, 0); ctx.strokeStyle = '#fff'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   ctx.beginPath(); ctx.moveTo(0, 14); ctx.lineTo(0, -14); ctx.moveTo(-12, -2); ctx.lineTo(0, -14); ctx.lineTo(12, -2); ctx.stroke(); ctx.restore();
   ctx.restore(); ctx.restore();
-  if (t >= 13.6) { // indigo flood grows out of the send button
+  if (t >= TM.prompt.flood) { // indigo flood grows out of the send button
     const bx = CX + 412 * s;
-    ctx.fillStyle = C.accent; ctx.beginPath(); ctx.arc(bx, CY, 2400 * expo(P(t, 13.6, 14.15)), 0, 7); ctx.fill();
+    ctx.fillStyle = C.accent; ctx.beginPath(); ctx.arc(bx, CY, 2400 * expo(P(t, TM.prompt.flood, TM.prompt.end)), 0, 7); ctx.fill();
   }
 }
 
 // ── 3 · Product: Client Health (14–18.5 s) ───────────────────────────────────
 const CLIENTS = [
-  { n: 'Jordan Reyes', v: '6 weeks ago', s: 38, up: 86, rep: 16.6 },
-  { n: 'Priya Shah', v: '7 weeks ago', s: 31, up: 82, rep: 16.9 },
-  { n: 'Morgan Ellis', v: '5 weeks ago', s: 44, up: 79, rep: 17.2 },
+  { n: 'Jordan Reyes', v: '6 weeks ago', s: 38, up: 86, rep: TM.app.replies[0] },
+  { n: 'Priya Shah', v: '7 weeks ago', s: 31, up: 82, rep: TM.app.replies[1] },
+  { n: 'Morgan Ellis', v: '5 weeks ago', s: 44, up: 79, rep: TM.app.replies[2] },
   { n: 'Alex Chen', v: '3 weeks ago', s: 58 },
   { n: 'Dana Okafor', v: '1 week ago', s: 91 },
   { n: 'Sam Patel', v: '2 days ago', s: 88 },
@@ -286,7 +287,7 @@ function drawApp(t) {
   const nReplied = rep3(0) + rep3(1) + rep3(2);
   const stats = [['Healthy', Math.round(41 + nReplied), C.ok], ['Needs attention', 12, C.warn], ['At risk', Math.round(5 - nReplied), C.risk]];
   let sx = 80;
-  const sIn = eo(P(t, 14.75, 15.2));
+  const sIn = eo(P(t, TM.app.stats, TM.app.stats + 0.45));
   stats.forEach(([l, v, col]) => {
     const w = tw(l, 24, 600) + tw(String(v), 28, 700) + 86;
     ctx.save(); ctx.globalAlpha = sIn;
@@ -297,13 +298,13 @@ function drawApp(t) {
   });
 
   CLIENTS.forEach((c, i) => {
-    const y = 490 + i * 170, ti = 14.9 + i * 0.07, p = eo(P(t, ti, ti + 0.45));
+    const y = 490 + i * 170, ti = TM.app.rows + i * 0.07, p = eo(P(t, ti, ti + 0.45));
     if (p <= 0) return;
     const risky = i < 3, rep = risky ? rep3(i) : 0;
     const g = eo(P(t, ti + 0.1, ti + 0.75));
     const sc = risky ? lerp(c.s, c.up, rep) * g : c.s * g;
     ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 22);
-    box(70, y, 940, 150, 26, risky && rep < 1 ? mixc('#ffffff', '#fdecea', clamp(P(t, 15.6, 16.0) * (1 - rep))) : '#fff', { stroke: C.line, lw: 1.5 });
+    box(70, y, 940, 150, 26, risky && rep < 1 ? mixc('#ffffff', '#fdecea', clamp(P(t, TM.app.hl, TM.app.hl + 0.4) * (1 - rep))) : '#fff', { stroke: C.line, lw: 1.5 });
     dot(130, y + 48, 30, TINTS[i % 4]); txt(c.n.split(' ').map((w) => w[0]).join(''), 130, y + 57, { size: 24, w: 700, color: C.accent, align: 'center' });
     txt(c.n, 182, y + 58, { size: 34, w: 650 });
     // win-back rows flip straight from At risk to Healthy as the reply lands (no wide "Needs attention" chip under the pill)
@@ -316,7 +317,7 @@ function drawApp(t) {
     box(290, y + 107, 270, 12, 6, C.line); box(290, y + 107, 270 * sc / 100, 12, 6, scoreColor(sc));
     txt(String(Math.round(sc)), 582, y + 122, { size: 34, w: 700, color: scoreColor(sc) });
     if (risky) {
-      const so = P(t, 16.0 + i * 0.2, 16.35 + i * 0.2);
+      const so = P(t, TM.app.sms + i * 0.2, TM.app.sms + 0.35 + i * 0.2);
       if (rep > 0.02) {
         box(710, y + 92, 276, 44, 22, mixc('#ffffff', C.ok, 0.14)); check(738, y + 114, 20, C.ok, 3.5);
         txt('Replied · booked', 762, y + 122, { size: 22, w: 700, color: C.ok });
@@ -328,7 +329,7 @@ function drawApp(t) {
     ctx.restore();
   });
   // toast
-  const tp = back(P(t, 17.4, 17.8), 1.3);
+  const tp = back(P(t, TM.app.toast, TM.app.toast + 0.4), 1.3);
   if (tp > 0) {
     ctx.save(); ctx.globalAlpha = clamp(tp * 2); ctx.translate(0, (1 - tp) * 30);
     box(70, 1700, 600, 76, 38, C.ink, { shadow: 30, sa: 0.3 });
@@ -338,15 +339,15 @@ function drawApp(t) {
   ctx.restore();
 }
 function drawProduct(t) {
-  const s = 1 + 0.05 * P(t, 14.1, 18.5), out = P(t, 18.15, 18.5);
+  const A = TM.app, s = 1 + 0.05 * P(t, A.t0, A.end), out = P(t, A.out, A.end);
   ctx.save(); ctx.translate(CX, CY); ctx.scale(s + out * 0.18, s + out * 0.18); ctx.translate(-CX, -CY); ctx.globalAlpha = 1 - out;
   drawApp(t); ctx.restore();
   // shutter: the indigo flood first settles to exactly the app window (the "screen" of this scene),
   // then collapses to a line, which retracts to nothing
-  const m = io(P(t, 14.12, 14.5)), c = io(P(t, 14.55, 14.95)), r = io(P(t, 14.95, 15.3));
+  const m = io(P(t, A.t0 + 0.02, A.t0 + 0.4)), c = io(P(t, A.t0 + 0.45, A.t0 + 0.85)), r = io(P(t, A.t0 + 0.85, A.t0 + 1.2));
   const wx = lerp(0, WIN.x, m), wy = lerp(0, WIN.y, m), wW = lerp(W, WIN.w, m), wH = lerp(H, WIN.h, m);
   const hh = lerp(wH, 6, c), ww = lerp(wW, 0, r);
-  if (ww > 1 && t >= 14.1) {
+  if (ww > 1 && t >= A.t0) {
     ctx.save(); ctx.translate(CX, CY); ctx.scale(s, s); ctx.translate(-CX, -CY);
     ctx.fillStyle = C.accent; ctx.beginPath();
     ctx.roundRect(wx + (wW - ww) / 2, wy + (wH - hh) / 2, ww, hh, Math.min(lerp(0, WIN.r, m), ww / 2, hh / 2) + (c > 0 ? (Math.min(ww, hh) / 2 - Math.min(WIN.r, ww / 2, hh / 2)) * c : 0));
@@ -356,9 +357,9 @@ function drawProduct(t) {
 
 // ── 4 · Three features (18.5–24.5 s) ─────────────────────────────────────────
 const FEATS = [
-  { l: ['At-risk clients,', 'flagged early.'], t0: 18.5 },
-  { l: ['Win-backs sent', 'for you.'], t0: 20.5 },
-  { l: ['Bookings back', 'on the calendar.'], t0: 22.5 },
+  { l: ['At-risk clients,', 'flagged early.'], t0: TM.feat[0] },
+  { l: ['Win-backs sent', 'for you.'], t0: TM.feat[1] },
+  { l: ['Bookings back', 'on the calendar.'], t0: TM.feat[2] },
 ];
 const NODE_X = [80, CX, 1000], PROG_Y = 1760;
 function featCard(k, tt) { // drawn in a 700×640 card space; the caller scales it up to fit the portrait frame
@@ -411,8 +412,8 @@ function featCard(k, tt) { // drawn in a 700×640 card space; the caller scales 
 function drawFeatures(t) {
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
   FEATS.forEach((f, k) => {
-    const tt = t - f.t0; if (tt < 0 || tt >= 2.0) return;
-    const ex = k === 2 ? 0 : P(tt, 1.7, 2.0);
+    const tt = t - f.t0; if (tt < 0 || tt >= TM.featDur) return;
+    const ex = k === 2 ? 0 : P(tt, TM.featDur - 0.3, TM.featDur);
     ctx.save(); ctx.globalAlpha = 1 - ex; ctx.translate(-40 * ex, 0);
     txt(`0${k + 1}`, 80, 270, { size: 28, w: 700, color: C.accent, ls: 2, a: eo(P(tt, 0, 0.3)) });
     f.l.forEach((s, i) => rise(s, 80, 430 + i * 118, P(tt, 0.05 + i * 0.15, 0.6 + i * 0.15), { size: 100, w: 700, ls: -4.5 }));
@@ -421,69 +422,71 @@ function drawFeatures(t) {
     ctx.restore();
   });
   // the progress line — the dot is handed from feature to feature
-  const aIn = P(t, 18.5, 18.8), aOut = 1 - P(t, 24.5, 24.5 + 1e-6);
+  const aIn = P(t, TM.feat[0], TM.feat[0] + 0.3), aOut = 1;
   ctx.save(); ctx.globalAlpha = aIn * aOut;
   ctx.fillStyle = C.line; ctx.fillRect(80, PROG_Y - 2, 920, 4);
-  const k = t < 20.5 ? 0 : t < 22.5 ? 1 : 2;
+  const k = t < TM.feat[1] ? 0 : t < TM.feat[2] ? 1 : 2;
   const px = k === 0 ? 80 : lerp(NODE_X[k - 1], NODE_X[k], io(P(t, FEATS[k].t0, FEATS[k].t0 + 0.6)));
   ctx.fillStyle = C.accent; ctx.fillRect(80, PROG_Y - 2, px - 80, 4);
   NODE_X.forEach((x) => dot(x, PROG_Y, 9, px >= x - 1 ? C.accent : C.line));
   dot(px, PROG_Y, 15); ctx.restore();
 }
 
-// ── 5 · Finale (24.5–33 s): "Keep your customers." ───────────────────────────
+// ── 5 · Finale: "Keep your customers." → logo → the opening frame again (seamless loop) ──────
 const END = { size: 168, y1: 860, y2: 1040, lineY: 1400 };
 function drawEnd(t) {
+  const E = TM.end;
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
-  const ex = P(t, 28.2, 28.7);
-  const half = CX * expo(P(t, 24.8, 25.6)) + 20;
+  const half = CX * expo(P(t, E.line[0], E.line[1])) + 20;
   // dot: from the last node to the line, then hops into the period
   const w2 = tw('customers', END.size, 800, -8), total = w2 + 40, px0 = CX - total / 2;
   const perX = px0 + w2 + 26, perY = END.y2 - 14;
   let d = null;
-  if (t < 25.0) { const k = io(P(t, 24.5, 25.0)); d = [lerp(1000, CX, k), lerp(PROG_Y, END.lineY, k) - Math.sin(k * Math.PI) * 80]; }
-  else if (t < 26.9) d = [CX, pulseDotY(END.lineY, half, 100, t)];
-  else if (t < 27.4) { const k = io(P(t, 26.9, 27.4)); d = [lerp(CX, perX, k), lerp(pulseDotY(END.lineY, CX, 100, 26.9), perY, k) - Math.sin(k * Math.PI) * 220]; }
+  if (t < E.hopLine[1]) { const k = io(P(t, E.hopLine[0], E.hopLine[1])); d = [lerp(1000, CX, k), lerp(PROG_Y, END.lineY, k) - Math.sin(k * Math.PI) * 80]; }
+  else if (t < E.hop[0]) d = [CX, pulseDotY(END.lineY, half, 100, t)];
+  else if (t < E.hop[1]) { const k = io(P(t, E.hop[0], E.hop[1])); d = [lerp(CX, perX, k), lerp(pulseDotY(END.lineY, CX, 100, E.hop[0]), perY, k) - Math.sin(k * Math.PI) * 220]; }
   else d = [perX, perY];
-  if (t < 28.2) { // headline + heartbeat
+  const exit = E.exit, ex = P(t, exit, exit + 0.5);
+  if (t < exit) { // headline + heartbeat
     pulseLine(END.lineY, half, 100, t, 5, 520);
-    rise('Keep your', CX, END.y1, P(t, 25.3, 25.85), { size: END.size, w: 800, ls: -8, align: 'center' });
-    if (t >= 26.3) {
-      const sl = P(t, 26.3, 26.62), z = lerp(1.16, 1, eo(sl));
+    rise('Keep your', CX, END.y1, P(t, E.keep, E.keep + 0.55), { size: END.size, w: 800, ls: -8, align: 'center' });
+    if (t >= E.customers) {
+      const sl = P(t, E.customers, E.customers + 0.32), z = lerp(1.16, 1, eo(sl));
       ctx.save(); ctx.translate(CX, END.y2); ctx.scale(z, z); ctx.translate(-CX, -END.y2);
       txt('customers', px0, END.y2, { size: END.size, w: 800, ls: -8, a: clamp(sl * 4) }); ctx.restore();
     }
-    if (t > 27.4) { const q = P(t, 27.4, 28.1); ring(perX, perY, 15 + q * 80, 3, C.accent, (1 - q) * 0.6); }
+    if (t > E.ring) { const q = P(t, E.ring, E.ring + 0.7); ring(perX, perY, 15 + q * 80, 3, C.accent, (1 - q) * 0.6); }
   }
   // text exits as the dot becomes the mark
-  if (t >= 28.2 && t < 28.7) {
+  if (t >= exit && t < exit + 0.5) {
     ctx.save(); ctx.globalAlpha = 1 - ex; ctx.translate(0, -50 * ex);
     rise('Keep your', CX, END.y1, 1, { size: END.size, w: 800, ls: -8, align: 'center' });
     txt('customers', px0, END.y2, { size: END.size, w: 800, ls: -8 }); ctx.restore();
   }
   // the period glides to where the mark will sit, swells, and blooms into the logo
   const mx = lockupMx();
-  const mk = P(t, 28.85, 29.3);
-  if (t < 28.2) dot(d[0], d[1], t < 27.4 ? 14 : 15);
+  const mk = P(t, E.logo - 0.15, E.logo + 0.3);
+  if (t < exit) dot(d[0], d[1], t < E.hop[1] ? 14 : 15);
   else if (mk < 1) {
-    const k = io(P(t, 28.2, 28.9));
+    const k = io(P(t, exit, E.logo - 0.15));
     dot(lerp(perX, mx, k), lerp(perY, LKY, k) - Math.sin(k * Math.PI) * 70, lerp(15, 40, k) * (1 - eo(mk)), C.accent, 1 - P(mk, 0.4, 1));
   }
-  if (t >= 28.85) {
-    const fold = io(P(t, 31.6, 32.3));
-    lockup(t, 29.0, { c1: C.accent, c2: C.ink, fold, markK: lerp(0.22, 1, back(mk, 1.3)), markA: clamp(mk * 2.5) });
-    const up = eo(P(t, 30.4, 30.9)) * (1 - P(t, 31.5, 31.9));
+  if (t >= E.logo - 0.15) {
+    const fold = io(P(t, E.fold, E.foldEnd));
+    lockup(t, E.logo, { c1: C.accent, c2: C.ink, fold, foldY: CY, markK: lerp(0.22, 1, back(mk, 1.3)), markA: clamp(mk * 2.5) });
+    const up = eo(P(t, E.url, E.url + 0.5)) * (1 - P(t, E.urlOut, E.urlOut + 0.3));
     if (up > 0) {
       const u = 'msghealth.net', uw = tw(u, 46, 650, -1);
       ctx.save(); ctx.globalAlpha = up; ctx.translate(0, (1 - up) * 14);
       txt(u, CX, LKY + 140, { size: 46, w: 650, color: C.accent, align: 'center', ls: -1 });
-      ctx.fillStyle = C.accent; ctx.fillRect(CX - uw / 2, LKY + 156, uw * eo(P(t, 30.6, 31.2)), 3); ctx.restore();
+      ctx.fillStyle = C.accent; ctx.fillRect(CX - uw / 2, LKY + 156, uw * eo(P(t, E.url + 0.2, E.url + 0.8)), 3); ctx.restore();
     }
-    // bookend: the dot returns to the centre and beats once, twice
-    if (t >= 32.1) {
-      dot(CX, LKY, 14 * P(t, 32.1, 32.3));
-      [32.45, 32.65].forEach((b) => { const q = P(t, b, b + 0.5); if (q > 0 && q < 1) ring(CX, LKY, 14 + q * 100, 3, C.accent, (1 - q) * 0.55); });
-    }
+    // the last frame is the first frame: the same dot, same place, same 40 px of line (so the video loops seamlessly)
+    const L = E.loop;
+    if (t >= L.stub[0]) pulseLine(CY, 20 * eo(P(t, L.stub[0], L.stub[1])), 0, t, 5, 520);
+    if (t >= L.dot[0]) dot(CX, CY, 14 * eo(P(t, L.dot[0], L.dot[1])));
+    const q = P(t, L.beat, L.beat + 0.42);
+    if (q > 0 && q < 1) ring(CX, CY, 14 + q * 110, 3, C.accent, (1 - q) * 0.55);
   }
 }
 
@@ -501,15 +504,15 @@ function renderFrame(t) {
 function drawScene(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
-  if (t < 6.0) { drawHook(t); }
-  else if (t < 9.4) { drawMark(t); }
-  else if (t < 10.0) {
+  if (t < TM.D) { drawHook(t); }
+  else if (t < TM.iris[0]) { drawMark(t); }
+  else if (t < TM.iris[1]) {
     drawMark(t);
-    ctx.save(); ctx.beginPath(); ctx.arc(CX, CY, 1500 * io(P(t, 9.4, 10.0)), 0, 7); ctx.clip(); drawPrompt(t); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.arc(CX, CY, 1500 * io(P(t, TM.iris[0], TM.iris[1])), 0, 7); ctx.clip(); drawPrompt(t); ctx.restore();
   }
-  else if (t < 14.1) drawPrompt(t);
-  else if (t < 18.5) drawProduct(t);
-  else if (t < 24.5) drawFeatures(t);
+  else if (t < TM.app.t0) drawPrompt(t);
+  else if (t < TM.app.end) drawProduct(t);
+  else if (t < TM.end.t0) drawFeatures(t);
   else drawEnd(t);
   // fade to paper from the last frame's dot is handled in drawEnd; subtle vignette for depth on light scenes
 }
