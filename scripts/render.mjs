@@ -1,4 +1,4 @@
-// Renders a film to MP4 (24 fps, H.264 + AAC).
+// Renders a film to MP4 (H.264 + AAC; 24 fps, the promo at 60 fps).
 //   npm run render            → dist/msghealth-demo.mp4        (16:9 film, index.html)
 //   npm run render:ad         → dist/msghealth-ad-9x16.mp4     (9:16 social ad, ad.html)
 //   npm run render:promo      → dist/msghealth-promo.mp4       (16:9 kinetic promo, promo.html)
@@ -15,7 +15,7 @@ const IS_AD = ENTRY === 'ad.html';
 const IS_PROMO = ENTRY === 'promo.html'; // uses a recorded music track instead of the synthesised score
 const OUT_NAME = IS_PROMO ? 'msghealth-promo' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
 const AUDIO_SCRIPT = IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
-const FPS = 24;
+const FPS = IS_PROMO ? 60 : 24;
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
 const DIST = path.join(ROOT, 'dist');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'msgh-'));

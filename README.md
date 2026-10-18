@@ -106,24 +106,30 @@ Keep the delivery natural and conversational, as if one business owner were talk
 
 ---
 
-# 14-second kinetic promo (16:9)
+# 36-second kinetic promo (16:9, 60 fps)
 
-A short motion-graphics promo in the style of SaaS launch edits: big type revealed word by word out of a blur,
-soft gradient light, product cards gliding in and one dark glitch beat. Every cut lands on a beat of the track.
+A motion-graphics promo in the style of SaaS launch edits: big type that snaps in word by word, product cards,
+one dark glitch beat, then the Analytics & Predictions dashboard with its numbers rising one at a time.
+Nothing pulses or drifts. Elements appear on beats, half-beats or quarter-beats, and every scene cuts on a beat.
 
-- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 24 fps, 14.4 s)
-- Source: `promo.html`, `src/promo.js`. The beat grid is set at the top of that file (`BEAT`, `B0`).
-- Music: `assets/audio/promo-track.m4a`, cut from a supplied reference clip. Check you have the rights to the song before running it as a paid ad.
+- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 36.5 s)
+- Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top, and all timing is written in beats (`b(k)`).
+- Music: `assets/audio/promo-track.m4a`, the supplied song looped twice on its 8-beat phrase (beats 6–14) so the beat holds for the whole video.
+  Check you have the rights to the song before running it as a paid ad.
 - Render: `npm run render:promo`
 
-| Time | Beat |
-|---|---|
-| 0–1.8s | "Your customers don't say goodbye." |
-| 1.8–3.6s | Quiet signals float in (no visit in 62 days, no reply, didn't rebook, cancelled twice), then "They just go quiet." |
-| 3.6–4.5s | Dark glitch: "Then they're gone." |
-| 4.5–6.4s | "Meet…" → the MsgHealth logo and wordmark |
-| 6.4–8.2s | A tilted Client Health dashboard flattens. Jordan drops from 78 to 38 and is flagged At risk, with the reasons shown. |
-| 8.2–10s | The automation runs (Detecting → Writing → Sending → Inviting) while Jordan's phone gets the text and Jordan replies "Yes please!" |
-| 10–11s | Booked: Thursday 10:00. The health score climbs back up. |
-| 11–12.8s | "Know your customers. Keep your customers." |
-| 12.8–14.4s | Logo, MsgHealth, msghealth.net |
+| Beats | Time | What's on screen |
+|---|---|---|
+| 0–5 | 0–5.4s | "I don't know how salon owners could live without this." |
+| 5–7 | 5.4–7.3s | "Repeat clients are the business." |
+| 7–9 | 7.3–9.1s | "But when a regular stops booking…": Jan, Feb, Mar booked, April empty |
+| 9–11 | 9.1–11s | Dark glitch: "You won't see it coming until they're gone." |
+| 11–13 | 11–12.8s | "Meet" → MsgHealth: client retention for salons |
+| 13–15 | 12.8–14.7s | "It tells you who's drifting and brings them back." Health scores, churn alerts, automatic win-backs |
+| 15–17 | 14.7–16.5s | Every client gets a health score. Jordan is flagged At risk. |
+| 17–19 | 16.5–18.3s | Top churn risks and churn risk drivers |
+| 19–21 | 18.3–20.2s | The win-back runs (At risk → SMS → Email → Invite), Jordan replies, and the visit is booked |
+| 21–23 | 20.2–22s | Booking, reviews, loyalty, payments, inbox, automations |
+| 23–33 | 22–31.3s | Analytics & Predictions. Starts low, then the camera moves onto each card in turn as it rises: client health 31→84% healthy, repeat bookings 38→79%, retention forecast 21→68%, revenue won back $0→$4,436. On the pull-back, the cohort grid and business health (41→88) rise. |
+| 33–35 | 31.3–33.1s | "Know your customers. Keep your customers." |
+| 35–end | 33.1–36.5s | Logo, MsgHealth, msghealth.net |

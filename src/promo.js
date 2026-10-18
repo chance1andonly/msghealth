@@ -1,16 +1,20 @@
-// MsgHealth · 14.4s kinetic product promo (1920 × 1080)
-// Clean motion-graphics style: big type revealed word by word, soft gradient light,
-// product cards gliding in, one dark glitch beat. Every cut lands on the music.
+// MsgHealth · 36.5s kinetic product promo (1920 × 1080, 60 fps)
+// Clean motion-graphics style: big type that snaps in word by word, product cards, one dark
+// glitch beat, then the Analytics & Predictions dashboard with its numbers rising one at a time.
+// Nothing pulses or drifts: things appear on the beat, hold, and scenes cut on the beat.
 'use strict';
 
-const W = 1920, H = 1080, FPS = 24;
-const DURATION = 14.4;
+const W = 1920, H = 1080, FPS = 60;
+const DURATION = 36.54;
 const C = BRAND.colors;
 const FONT = 'Inter';
+const IND = '#5b50e8';        // dashboard chart indigo
+const MUTED = '#6b6b85', FAINT = '#9a9ab0', LINE = '#ececf3';
 
-// Beat grid of assets/audio/promo-track.m4a (~65 BPM, first downbeat at 0.86s).
-const BEAT = 0.917, B0 = 0.86;
-const b = (k) => B0 + k * BEAT;
+// Beat grid of assets/audio/promo-track.m4a (65 BPM, first downbeat 0.816s). The track is the
+// supplied song looped on 8-beat phrases, so this grid holds for its whole length.
+const BEAT = 0.9225, B0 = 0.816;
+const b = (k) => B0 + k * BEAT; // k may be fractional: .5 = half beat, .25 = quarter beat
 
 let ctx = null, LOGO = null;
 
@@ -22,26 +26,31 @@ const ease = {
   out: (t) => 1 - Math.pow(1 - t, 3),
   expo: (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)),
   inOut: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
-  back: (t) => { const s = 1.6; return 1 + (s + 1) * Math.pow(t - 1, 3) + s * Math.pow(t - 1, 2); },
 };
-const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
 function rgba(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
+const money = (v) => '$' + Math.round(v).toLocaleString('en-US');
+
+// The one entrance used everywhere: a fast snap out of a blur.
+const SNAP = 0.17;
+const snapP = (t, at) => ease.expo(seg(t, at, at + SNAP));
 
 // ── drawing primitives ───────────────────────────────────────────────────────
 function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function fillRR(x, y, w, h, r, col) { rr(x, y, w, h, r); ctx.fillStyle = col; ctx.fill(); }
 function card(x, y, w, h, r, o = {}) {
   ctx.save();
   ctx.shadowColor = o.shadowColor ?? 'rgba(30,27,75,0.10)';
   ctx.shadowBlur = o.shadow ?? 40; ctx.shadowOffsetY = (o.shadow ?? 40) * 0.35;
-  rr(x, y, w, h, r); ctx.fillStyle = o.fill ?? '#ffffff'; ctx.fill();
+  fillRR(x, y, w, h, r, o.fill ?? '#ffffff');
   ctx.restore();
   if (o.stroke) { rr(x, y, w, h, r); ctx.strokeStyle = o.stroke; ctx.lineWidth = o.lw ?? 1.5; ctx.stroke(); }
 }
-function font(size, weight = 600) { ctx.font = `${weight} ${size}px ${FONT}`; ctx.letterSpacing = `${(-size * 0.03).toFixed(2)}px`; }
-function text(s, x, y, size, weight, color, align = 'left') {
-  font(size, weight); ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillStyle = color; ctx.fillText(s, x, y);
+function font(size, weight = 600, track = -0.03) { ctx.font = `${weight} ${size}px ${FONT}`; ctx.letterSpacing = `${(size * track).toFixed(2)}px`; }
+function text(s, x, y, size, weight, color, align = 'left', track) {
+  font(size, weight, track ?? (size >= 40 ? -0.03 : -0.005));
+  ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillStyle = color; ctx.fillText(s, x, y);
 }
-function tw(s, size, weight = 600) { font(size, weight); return ctx.measureText(s).width; }
+function tw(s, size, weight = 600, track) { font(size, weight, track ?? (size >= 40 ? -0.03 : -0.005)); return ctx.measureText(s).width; }
 function avatar(x, y, r, initials, color) {
   ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = rgba(color, 0.16); ctx.fill();
   text(initials, x, y + 1, r * 0.8, 700, color, 'center');
@@ -49,187 +58,151 @@ function avatar(x, y, r, initials, color) {
 function pill(x, y, label, color, size = 22, align = 'left') {
   const w = tw(label, size, 600) + size * 1.3, h = size * 1.7;
   const x0 = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
-  rr(x0, y - h / 2, w, h, h / 2); ctx.fillStyle = rgba(color, 0.14); ctx.fill();
+  fillRR(x0, y - h / 2, w, h, h / 2, rgba(color, 0.14));
   text(label, x0 + w / 2, y + 1, size, 600, color, 'center');
   return w;
 }
-function logoMark(x, y, s, a = 1) {
-  if (!LOGO || a <= 0) return;
-  ctx.save(); ctx.globalAlpha *= a; ctx.drawImage(LOGO, x - s / 2, y - s / 2, s, s); ctx.restore();
+function check(x, y, s, col = '#fff', lw = 4) {
+  ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(x - s * 0.45, y); ctx.lineTo(x - s * 0.12, y + s * 0.34); ctx.lineTo(x + s * 0.5, y - s * 0.36); ctx.stroke();
 }
-// Draw `fn` with a blur / alpha / scale envelope around (cx, cy).
-function fx(o, fn) {
-  const { a = 1, blur = 0, s = 1, cx = W / 2, cy = H / 2, dx = 0, dy = 0 } = o;
-  if (a <= 0.001) return;
+function logoMark(x, y, s) { if (LOGO) ctx.drawImage(LOGO, x - s / 2, y - s / 2, s, s); }
+
+// Draw `fn` snapping in at time `at`, scaled around (cx, cy).
+function snapIn(t, at, cx, cy, fn, o = {}) {
+  if (t < at) return;
+  const p = snapP(t, at);
   ctx.save();
-  ctx.globalAlpha *= clamp(a);
-  if (blur > 0.3) ctx.filter = `blur(${blur.toFixed(1)}px)`;
-  ctx.translate(cx + dx, cy + dy); ctx.scale(s, s); ctx.translate(-cx, -cy);
+  ctx.globalAlpha *= p;
+  const bl = (1 - p) * (o.blur ?? 12);
+  if (bl > 0.3) ctx.filter = `blur(${bl.toFixed(1)}px)`;
+  ctx.translate(cx, cy + (1 - p) * (o.dy ?? 22)); const s = lerp(o.from ?? 0.94, 1, p); ctx.scale(s, s); ctx.translate(-cx, -cy);
   fn();
   ctx.restore();
 }
-// In/out envelope: p rises over [a, a+inD], falls over [c-outD, c].
-const env = (t, a, c, inD = 0.3, outD = 0.25) => Math.min(ease.out(seg(t, a, a + inD)), 1 - ease.inOut(seg(t, c - outD, c)));
 
-// Words revealed one by one, each sharpening out of a blur. words: [text, color?]
-function words(t, list, x, y, size, t0, o = {}) {
-  const weight = o.weight ?? 700, stagger = o.stagger ?? 0.12, dur = o.dur ?? 0.4, gap = size * 0.26;
-  const ws = list.map(([s]) => tw(s, size, weight));
-  const total = ws.reduce((p, w) => p + w, 0) + gap * (list.length - 1);
+// A line of text whose chunks appear at their own times. chunks: [text, time, colour?]
+// The whole line is laid out up front so nothing shifts when a chunk lands.
+function line(t, chunks, x, y, size, o = {}) {
+  const weight = o.weight ?? 700, gap = tw(' ', size, weight);
+  const ws = chunks.map(([s]) => tw(s, size, weight));
+  const total = ws.reduce((p, w) => p + w, 0) + gap * (chunks.length - 1);
   let cx = o.align === 'left' ? x : x - total / 2;
-  const out = o.out != null ? ease.inOut(seg(t, o.out, o.out + 0.25)) : 0;
-  list.forEach(([s, col], i) => {
-    const p = ease.out(seg(t, t0 + i * stagger, t0 + i * stagger + dur));
-    const a = p * (1 - out);
-    if (a > 0.001) {
-      ctx.save();
-      ctx.globalAlpha *= a;
-      const bl = (1 - p) * 16 + out * 14;
-      if (bl > 0.3) ctx.filter = `blur(${bl.toFixed(1)}px)`;
-      text(s, cx, y + (1 - p) * size * 0.35 - out * size * 0.2, size, weight, col ?? C.ink);
-      ctx.restore();
-    }
-    cx += ws[i] + gap;
+  chunks.forEach(([s, at, col], i) => {
+    const w = ws[i], x0 = cx;
+    snapIn(t, at, x0 + w / 2, y, () => text(s, x0, y, size, weight, col ?? C.ink), { dy: size * 0.3, from: 0.96 });
+    cx += w + gap;
   });
   return total;
 }
 
-// ── backgrounds ──────────────────────────────────────────────────────────────
-function lightBG(t, tint = C.primary) {
+// ── backgrounds (static: no drifting light) ──────────────────────────────────
+function lightBG(tint = C.primary) {
   ctx.fillStyle = '#f7f7fa'; ctx.fillRect(0, 0, W, H);
-  const blobs = [[0.18, 0.25, tint, 0.10], [0.85, 0.2, '#e879f9', 0.07], [0.7, 0.9, '#38bdf8', 0.07], [0.3, 0.85, tint, 0.06]];
-  blobs.forEach(([bx, by, col, a], i) => {
-    const x = (bx + 0.04 * Math.sin(t * 0.6 + i * 2)) * W, y = (by + 0.04 * Math.cos(t * 0.5 + i)) * H;
-    const g = ctx.createRadialGradient(x, y, 0, x, y, 720);
+  [[0.15, 0.2, tint, 0.09], [0.88, 0.18, '#e879f9', 0.06], [0.75, 0.92, '#38bdf8', 0.06], [0.25, 0.9, tint, 0.05]].forEach(([bx, by, col, a]) => {
+    const x = bx * W, y = by * H, g = ctx.createRadialGradient(x, y, 0, x, y, 760);
     g.addColorStop(0, rgba(col, a)); g.addColorStop(1, rgba(col, 0));
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   });
 }
-function darkBG(t) {
+function darkBG() {
   ctx.fillStyle = '#0a0a0f'; ctx.fillRect(0, 0, W, H);
   const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, 900);
   g.addColorStop(0, 'rgba(79,70,229,0.16)'); g.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-}
-function scanlines(a) {
-  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = '#000';
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
   for (let y = 0; y < H; y += 4) ctx.fillRect(0, y, W, 2);
-  ctx.restore();
 }
 
-// ── scenes ───────────────────────────────────────────────────────────────────
-// 1 · 0 – 1.78 · hook
+// ── 1 · hook ─────────────────────────────────────────────────────────────────
 function sHook(t) {
-  lightBG(t);
-  const up = ease.inOut(seg(t, b(0) - 0.1, b(0) + 0.25));
-  words(t, [['Your'], ['customers']], W / 2, H / 2 - up * 70, 120, 0.05, { out: b(1) - 0.25 });
-  words(t, [["don't"], ['say'], ['goodbye.', C.primary]], W / 2, H / 2 + 80, 120, b(0), { out: b(1) - 0.25 });
+  lightBG();
+  line(t, [["I", b(-0.5)], ["don't", b(0)], ['know', b(0.5)], ['how', b(1)], ['salon', b(1.5)], ['owners', b(2)]], W / 2, H / 2 - 70, 112);
+  line(t, [['could', b(2.5)], ['live', b(3)], ['without', b(3.5)], ['this.', b(4), C.primary]], W / 2, H / 2 + 70, 112);
 }
 
-// 2 · 1.78 – 3.61 · the quiet signals
-const SIGNALS = [
-  { n: 'Jordan Lee', i: 'JL', c: '#4f46e5', l: 'Last visit 62 days ago', x: 470, y: 330, r: -4 },
-  { n: 'Priya Shah', i: 'PS', c: '#db2777', l: 'Delivered · no reply', x: 1450, y: 300, r: 3 },
-  { n: 'Morgan Diaz', i: 'MD', c: '#0891b2', l: "Didn't rebook", x: 560, y: 780, r: 3 },
-  { n: 'Alex Kim', i: 'AK', c: '#d97706', l: 'Cancelled twice', x: 1390, y: 800, r: -3 },
-];
-function signalCard(s, t, t0, k) {
-  const p = ease.back(seg(t, t0, t0 + 0.4));
-  const drift = Math.sin(t * 1.4 + k) * 8;
-  const cw = 440, ch = 116;
-  fx({ a: seg(t, t0, t0 + 0.2), s: 0.85 + 0.15 * p, cx: s.x, cy: s.y, dy: (1 - p) * 40 + drift }, () => {
-    ctx.translate(s.x, s.y); ctx.rotate((s.r * Math.PI) / 180); ctx.translate(-s.x, -s.y);
-    const x = s.x - cw / 2, y = s.y - ch / 2;
-    card(x, y, cw, ch, 26);
-    avatar(x + 62, y + ch / 2, 34, s.i, s.c);
-    text(s.n, x + 116, y + 42, 30, 700, C.ink);
-    text(s.l, x + 116, y + 80, 24, 500, '#8a8aa3');
-    ctx.beginPath(); ctx.arc(x + cw - 34, y + 36, 8, 0, Math.PI * 2); ctx.fillStyle = C.risk; ctx.fill();
+// ── 2 · why repeat clients matter ────────────────────────────────────────────
+function sRegulars(t) {
+  lightBG();
+  line(t, [['Repeat', b(5)], ['clients', b(5.5)]], W / 2, H / 2 - 70, 120);
+  line(t, [['are', b(6)], ['the', b(6.25)], ['business.', b(6.5), C.primary]], W / 2, H / 2 + 70, 120);
+}
+
+// ── 3 · a regular quietly stops booking ──────────────────────────────────────
+function sStops(t) {
+  lightBG();
+  line(t, [['But', b(7)], ['when', b(7.25)], ['a', b(7.5)], ['regular', b(7.5)], ['stops', b(7.75)], ['booking…', b(8)]], W / 2, 280, 88);
+  const months = [['Jan', b(8)], ['Feb', b(8.25)], ['Mar', b(8.5)], ['Apr', b(8.75)]];
+  const cw = 300, ch = 260, gap = 40, x0 = W / 2 - (4 * cw + 3 * gap) / 2, y0 = 440;
+  months.forEach(([m, at], i) => {
+    const x = x0 + i * (cw + gap), empty = i === 3;
+    snapIn(t, at, x + cw / 2, y0 + ch / 2, () => {
+      if (empty) {
+        fillRR(x, y0, cw, ch, 28, 'rgba(255,255,255,0.6)');
+        ctx.setLineDash([12, 10]); rr(x, y0, cw, ch, 28); ctx.strokeStyle = rgba(C.risk, 0.7); ctx.lineWidth = 3; ctx.stroke(); ctx.setLineDash([]);
+      } else card(x, y0, cw, ch, 28);
+      text(m, x + 34, y0 + 52, 34, 700, empty ? C.risk : C.ink);
+      if (empty) { text('No booking', x + cw / 2, y0 + 160, 30, 600, C.risk, 'center'); return; }
+      fillRR(x + 30, y0 + 110, cw - 60, 104, 18, rgba(C.primary, 0.1));
+      avatar(x + 76, y0 + 162, 26, 'JL', C.primary);
+      text('Jordan', x + 116, y0 + 148, 26, 700, C.ink);
+      text('10:00 · Cut', x + 116, y0 + 180, 22, 500, MUTED);
+    });
   });
 }
-function sSignals(t) {
-  lightBG(t);
-  const t0 = b(1);
-  const fade = 1 - ease.inOut(seg(t, b(2) + 0.05, b(2) + 0.4)); // cards recede behind the line
-  fx({ blur: (1 - fade) * 10, a: 0.35 + 0.65 * fade, s: 1 + (1 - fade) * 0.06 }, () =>
-    SIGNALS.forEach((s, k) => signalCard(s, t, t0 + k * (BEAT / 4), k)));
-  words(t, [['They'], ['just'], ['go'], ['quiet.', C.primary]], W / 2, H / 2, 118, b(2), { stagger: 0.1 });
-}
 
-// 3 · 3.61 – 4.53 · dark glitch beat
-function sGlitch(t) {
-  darkBG(t);
-  const k = t - b(3);
-  const hit = Math.max(0, 1 - k / 0.25);                    // RGB split on the downbeat
-  const jitter = hash(Math.floor(t * 24)) - 0.5;
-  const line = "Then they're gone.";
-  const y = H / 2;
-  const reveal = ease.out(seg(k, 0, 0.35));
+// ── 4 · dark glitch beat ─────────────────────────────────────────────────────
+function glitchText(t, s, at, x, y, size) {
+  if (t < at) return;
+  const k = t - at, hit = clamp(1 - k / 0.13);
   ctx.save();
-  ctx.globalAlpha = reveal;
-  ctx.filter = `blur(${((1 - reveal) * 10).toFixed(1)}px)`;
-  ctx.shadowColor = 'rgba(255,255,255,0.55)'; ctx.shadowBlur = 28;
+  ctx.shadowColor = 'rgba(255,255,255,0.45)'; ctx.shadowBlur = 26;
   ctx.globalCompositeOperation = 'lighter';
-  const off = 14 * hit + 3;
-  text(line, W / 2 - off + jitter * 10 * hit, y, 112, 600, 'rgba(255,40,80,0.85)', 'center');
-  text(line, W / 2 + off, y, 112, 600, 'rgba(40,220,255,0.85)', 'center');
-  text(line, W / 2, y, 112, 600, 'rgba(255,255,255,0.9)', 'center');
+  const off = 16 * hit + 2.5;
+  text(s, x - off, y, size, 600, 'rgba(255,40,80,0.85)', 'center');
+  text(s, x + off, y, size, 600, 'rgba(40,220,255,0.85)', 'center');
+  text(s, x, y, size, 600, 'rgba(255,255,255,0.92)', 'center');
   ctx.restore();
-  // horizontal slice tears
-  if (hit > 0 || k > 0.75) {
-    const n = 5;
-    for (let i = 0; i < n; i++) {
-      const sy = hash(i + Math.floor(t * 24) * 7) * H, sh = 6 + hash(i * 3.1) * 26;
-      const sx = (hash(i * 9.7 + t) - 0.5) * 80;
-      ctx.drawImage(ctx.canvas, 0, sy, W, sh, sx, sy, W, sh);
+  if (hit > 0) { // slice tears on the hit frames only
+    for (let i = 0; i < 6; i++) {
+      const r = Math.sin(i * 91.7 + at * 13.1) * 0.5 + 0.5, sy = y - size + r * size * 2, sh = 6 + ((i * 7) % 5) * 6;
+      ctx.drawImage(ctx.canvas, 0, sy, W, sh, (i % 2 ? 1 : -1) * 60 * hit, sy, W, sh);
     }
   }
-  scanlines(0.28);
-  // flash to white into the reveal
-  const fl = seg(t, b(4) - 0.12, b(4));
-  if (fl > 0) { ctx.fillStyle = `rgba(247,247,250,${fl})`; ctx.fillRect(0, 0, W, H); }
+}
+function sGlitch(t) {
+  darkBG();
+  glitchText(t, "You won't see it coming", b(9), W / 2, H / 2 - 70, 96);
+  glitchText(t, "until they're gone.", b(10), W / 2, H / 2 + 70, 96);
 }
 
-// 4 · 4.53 – 6.36 · Meet MsgHealth
+// ── 5 · Meet MsgHealth ───────────────────────────────────────────────────────
 function sMeet(t) {
-  lightBG(t);
-  const t0 = b(4), t1 = b(5);
-  // "Meet" with three bouncing dots
-  const meetOut = ease.inOut(seg(t, t1 - 0.15, t1 + 0.1));
-  fx({ a: 1 - meetOut, blur: meetOut * 12 }, () => {
-    const mw = words(t, [['Meet']], W / 2 - 40, H / 2, 130, t0 + 0.02, { dur: 0.35 });
-    for (let i = 0; i < 3; i++) {
-      const p = ease.out(seg(t, t0 + 0.25 + i * 0.12, t0 + 0.45 + i * 0.12));
-      const bob = Math.sin((t - t0) * 9 - i * 1.1) * 10 * p;
-      ctx.beginPath(); ctx.arc(W / 2 - 40 + mw / 2 + 36 + i * 30, H / 2 + 30 - bob, 9 * p, 0, Math.PI * 2);
-      ctx.fillStyle = [C.primary, '#db2777', '#0891b2'][i]; ctx.fill();
-    }
-  });
-  // logo presses in, wordmark slides out from behind it
-  const p = ease.back(seg(t, t1, t1 + 0.45));
-  const slide = ease.expo(seg(t, t1 + 0.2, t1 + 0.75));
-  const ww = tw(BRAND.name, 150, 700), gap = 36, ls = 170;
-  const full = ls + gap + ww;
-  const lx = lerp(W / 2, W / 2 - full / 2 + ls / 2, slide);
-  fx({ a: seg(t, t1, t1 + 0.15), s: 0.6 + 0.4 * p, cx: lx, cy: H / 2 }, () => {
-    const g = ctx.createRadialGradient(lx, H / 2, 0, lx, H / 2, 260);
-    g.addColorStop(0, rgba(C.primary, 0.22 * p)); g.addColorStop(1, rgba(C.primary, 0));
-    ctx.fillStyle = g; ctx.fillRect(lx - 300, H / 2 - 300, 600, 600);
-    logoMark(lx, H / 2, ls);
-  });
-  if (slide > 0) {
-    ctx.save();
-    const x0 = lx + ls / 2 + gap;
-    ctx.beginPath(); ctx.rect(x0 - 10, 0, W, H); ctx.clip();
-    ctx.globalAlpha = slide;
-    if (slide < 0.98) ctx.filter = `blur(${((1 - slide) * 10).toFixed(1)}px)`;
-    text(BRAND.name, x0 - (1 - slide) * 120, H / 2 + 6, 150, 700, C.ink);
-    ctx.restore();
-  }
-  words(t, [['Customer'], ['health,'], ['before'], ["it's"], ['too'], ['late.']], W / 2, H / 2 + 160, 40, t1 + 0.5, { weight: 500, stagger: 0.05, dur: 0.3 });
+  lightBG();
+  if (t < b(12)) { line(t, [['Meet', b(11)]], W / 2, H / 2, 140); return; }
+  const ls = 190, ww = tw(BRAND.name, 160, 700), gap = 40, full = ls + gap + ww;
+  const lx = W / 2 - full / 2 + ls / 2;
+  snapIn(t, b(12), lx, H / 2, () => logoMark(lx, H / 2, ls), { from: 0.7 });
+  snapIn(t, b(12) + BEAT / 8, lx + ls / 2 + gap + ww / 2, H / 2, () => text(BRAND.name, lx + ls / 2 + gap, H / 2 + 6, 160, 700, C.ink), { dy: 0 });
+  line(t, [['Client'], ['retention'], ['for'], ['salons.']].map(([s], i) => [s, b(12.5) + i * BEAT / 8, i === 3 ? C.primary : MUTED]), W / 2, H / 2 + 170, 48, { weight: 600 });
 }
 
-// 5 · 6.36 – 8.20 · Client Health dashboard, tilted then flattening into Jordan's row
+// ── 6 · what it does, in three words ─────────────────────────────────────────
+function sWhat(t) {
+  lightBG();
+  line(t, [['It', b(13)], ['tells', b(13.25)], ['you', b(13.5)], ['who’s', b(13.75)], ['drifting', b(14), C.primary]], W / 2, 400, 104);
+  line(t, [['and', b(14.25)], ['brings', b(14.5)], ['them', b(14.5)], ['back.', b(14.75), C.primary]], W / 2, 540, 104);
+  const chips = [['Health scores', C.healthy], ['Churn alerts', C.risk], ['Automatic win-backs', C.primary]];
+  const size = 30, ws = chips.map(([s]) => tw(s, size, 600) + size * 1.3), gap = 24;
+  let x = W / 2 - (ws.reduce((a, c) => a + c, 0) + gap * 2) / 2;
+  chips.forEach(([s, col], i) => {
+    const x0 = x;
+    snapIn(t, b(15) - BEAT / 4 + (i * BEAT) / 8, x0 + ws[i] / 2, 700, () => { fillRR(x0, 674, ws[i], 52, 26, '#fff'); pill(x0, 700, s, col, size); });
+    x += ws[i] + gap;
+  });
+}
+
+// ── 7 · every client gets a health score ─────────────────────────────────────
 const ROWS = [
   { n: 'Alex Kim', i: 'AK', c: '#d97706', s: 91, st: 'Healthy', sc: C.healthy, v: '4 days ago' },
   { n: 'Priya Shah', i: 'PS', c: '#db2777', s: 54, st: 'Needs attention', sc: C.attention, v: '3 weeks ago' },
@@ -237,246 +210,371 @@ const ROWS = [
   { n: 'Casey Park', i: 'CP', c: '#0891b2', s: 86, st: 'Healthy', sc: C.healthy, v: '1 week ago' },
   { n: 'Riley Chen', i: 'RC', c: '#7c3aed', s: 79, st: 'Healthy', sc: C.healthy, v: '9 days ago' },
 ];
-function dashboard(t, t0) {
-  const x = 260, y = 150, w = 1400, h = 800;
-  // glow border like a lit glass panel
-  ctx.save();
-  const gr = ctx.createLinearGradient(x, y, x + w, y + h);
-  gr.addColorStop(0, '#e879f9'); gr.addColorStop(0.5, C.primary); gr.addColorStop(1, '#38bdf8');
-  ctx.shadowColor = rgba(C.primary, 0.35); ctx.shadowBlur = 80;
-  rr(x - 3, y - 3, w + 6, h + 6, 34); ctx.fillStyle = gr; ctx.fill();
-  ctx.restore();
-  card(x, y, w, h, 32, { shadow: 0 });
-  // sidebar
-  ctx.save(); rr(x, y, 300, h, 32); ctx.clip(); ctx.fillStyle = '#f3f3f8'; ctx.fillRect(x, y, 300, h); ctx.restore();
-  logoMark(x + 52, y + 56, 44);
-  text(BRAND.name, x + 86, y + 57, 28, 700, C.ink);
-  BRAND.nav.forEach((n, i) => {
-    const ny = y + 140 + i * 62, on = i === 0;
-    if (on) { rr(x + 20, ny - 24, 260, 48, 14); ctx.fillStyle = rgba(C.primary, 0.12); ctx.fill(); }
-    ctx.beginPath(); ctx.roundRect(x + 40, ny - 9, 18, 18, 5); ctx.fillStyle = on ? C.primary : '#c9c9d9'; ctx.fill();
-    text(n, x + 74, ny + 1, 24, on ? 700 : 500, on ? C.primary : '#6b6b85');
-  });
-  // header
-  const mx = x + 350;
-  text('Client Health', mx, y + 70, 44, 700, C.ink);
-  pill(x + w - 50, y + 70, '1 at risk', C.risk, 22, 'right');
-  ['Client', 'Last visit', 'Health', 'Status'].forEach((hd, i) => text(hd, mx + [0, 400, 640, 820][i], y + 150, 20, 600, '#9a9ab0'));
+function sHealth(t) {
+  lightBG();
+  line(t, [['Every', b(15)], ['client', b(15.25)]], 150, 420, 92, { align: 'left' });
+  line(t, [['gets', b(15.5)], ['a', b(15.5)], ['health', b(15.75), C.primary], ['score.', b(15.75), C.primary]], 150, 530, 92, { align: 'left' });
+  const x = 1000, w = 780, rh = 116, y0 = 250;
+  snapIn(t, b(15.5), x + w / 2, H / 2, () => card(x, y0 - 40, w, rh * 5 + 80, 32));
   ROWS.forEach((r, i) => {
-    const ry = y + 220 + i * 112;
-    const rp = ease.out(seg(t, t0 + 0.1 + i * 0.06, t0 + 0.5 + i * 0.06));
-    const jordan = i === 2;
-    const dim = jordan ? 0 : 0.55 * ease.inOut(seg(t, b(7), b(7) + 0.4)); // focus on Jordan
-    fx({ a: rp * (1 - dim), dy: (1 - rp) * 30 }, () => {
-      const drop = ease.inOut(seg(t, t0 + 0.45, b(7)));
-      const score = jordan ? Math.round(lerp(78, 38, drop)) : r.s;
-      const flag = jordan ? ease.back(seg(t, b(7), b(7) + 0.35)) : 1;
-      if (jordan) {
-        const hl = ease.out(seg(t, b(7), b(7) + 0.3));
-        rr(mx - 24, ry - 46, w - 380, 92, 18); ctx.fillStyle = rgba(C.risk, 0.07 * hl); ctx.fill();
-      }
-      ctx.fillStyle = '#ececf4'; ctx.fillRect(mx, ry + 56, w - 400, 2);
-      avatar(mx + 30, ry, 28, r.i, r.c);
-      text(r.n, mx + 76, ry + 1, 28, 600, C.ink);
-      text(r.v, mx + 400, ry + 1, 24, 500, jordan ? C.risk : '#6b6b85');
-      // score bar
-      const col = jordan ? (score > 60 ? C.healthy : score > 45 ? C.attention : C.risk) : r.sc;
-      rr(mx + 640, ry - 6, 120, 12, 6); ctx.fillStyle = '#ececf4'; ctx.fill();
-      rr(mx + 640, ry - 6, 120 * score / 100, 12, 6); ctx.fillStyle = col; ctx.fill();
-      text(String(score), mx + 600, ry + 1, 26, 700, col, 'right');
-      if (!jordan || flag > 0) fx({ s: jordan ? flag : 1, cx: mx + 900, cy: ry, a: jordan ? clamp(flag) : 1 }, () =>
-        pill(mx + 820, ry, jordan && flag <= 0 ? 'Healthy' : r.st, jordan ? C.risk : r.sc, 22));
+    const ry = y0 + 30 + i * rh, at = b(15.75) + (i * BEAT) / 8, jordan = i === 2, flag = b(16.5);
+    snapIn(t, at, x + w / 2, ry, () => {
+      if (jordan && t >= flag) { const p = snapP(t, flag); fillRR(x + 16, ry - 50, w - 32, 100, 20, rgba(C.risk, 0.08 * p)); }
+      avatar(x + 66, ry, 30, r.i, r.c);
+      text(r.n, x + 114, ry - 14, 28, 600, C.ink);
+      text(r.v, x + 114, ry + 20, 22, 500, jordan ? C.risk : FAINT);
+      text(String(r.s), x + 470, ry + 1, 34, 700, r.sc, 'right');
+      fillRR(x + 490, ry - 6, 90, 12, 6, LINE); fillRR(x + 490, ry - 6, (90 * r.s) / 100, 12, 6, r.sc);
+      if (!jordan) pill(x + w - 36, ry, r.st, r.sc, 22, 'right');
+      else snapIn(t, flag, x + w - 90, ry, () => pill(x + w - 36, ry, r.st, r.sc, 22, 'right'), { from: 0.6, dy: 0 });
+    }, { dy: 16 });
+  });
+}
+
+// ── 8 · who is about to leave, and why ───────────────────────────────────────
+function sChurn(t) {
+  lightBG();
+  line(t, [['See', b(17)], ['who’s', b(17.25)], ['about', b(17.5)], ['to', b(17.5)], ['leave,', b(17.75)], ['and', b(18)], ['why.', b(18), C.primary]], W / 2, 210, 80);
+  const y = 330, h = 560, w = 680;
+  const cards = [
+    { x: 250, at: b(18.25), title: 'Top churn risks', sub: 'The clients most likely to leave',
+      rows: [['Jordan Lee', 72, '72%', C.risk], ['Priya Shah', 58, '58%', C.attention], ['Morgan Diaz', 44, '44%', C.attention], ['Alex Kim', 12, '12%', C.healthy]] },
+    { x: 990, at: b(18.5), title: 'Churn risk drivers', sub: 'What is pushing risk up, by clients affected',
+      rows: [['Overdue 60+ days', 100, '13', IND], ['Low visit frequency', 54, '7', IND], ['No-show streak', 23, '3', IND], ['Low ratings', 15, '2', IND]] },
+  ];
+  cards.forEach((c) => snapIn(t, c.at, c.x + w / 2, y + h / 2, () => {
+    card(c.x, y, w, h, 28);
+    text(c.title, c.x + 44, y + 64, 34, 700, C.ink);
+    text(c.sub, c.x + 44, y + 106, 22, 500, FAINT);
+    c.rows.forEach(([n, pct, val, col], i) => {
+      const ry = y + 190 + i * 92, fill = ease.out(seg(t, c.at + 0.08 + i * 0.04, c.at + 0.4 + i * 0.04));
+      text(n, c.x + 44, ry, 26, 600, C.ink);
+      text(val, c.x + w - 44, ry, 26, 700, col, 'right');
+      fillRR(c.x + 44, ry + 26, w - 88, 12, 6, LINE);
+      fillRR(c.x + 44, ry + 26, ((w - 88) * pct * fill) / 100, 12, 6, col);
+    });
+  }));
+}
+
+// ── 9 · win them back on autopilot ───────────────────────────────────────────
+function sWinBack(t) {
+  lightBG('#7c3aed');
+  line(t, [['Win', b(19)], ['them', b(19.25)], ['back', b(19.25)], ['on', b(19.5)], ['autopilot.', b(19.5), C.primary]], W / 2, 190, 88);
+  const nodes = [['At risk detected', C.risk, 'alert'], ['SMS sent', C.primary, 'chat'], ['Email follow-up', '#0891b2', 'mail'], ['Invite to book', C.healthy, 'cal']];
+  const nw = 330, nh = 130, gap = 70, x0 = W / 2 - (4 * nw + 3 * gap) / 2, ny = 330;
+  nodes.forEach(([label, col, icon], i) => {
+    const x = x0 + i * (nw + gap), at = b(19.75) + (i * BEAT) / 4;
+    if (i > 0 && t >= at) { // connector draws in with the node
+      const p = snapP(t, at);
+      ctx.strokeStyle = rgba(C.primary, 0.5); ctx.lineWidth = 4; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(x - gap + 10, ny + nh / 2); ctx.lineTo(x - gap + 10 + (gap - 20) * p, ny + nh / 2); ctx.stroke();
+    }
+    snapIn(t, at, x + nw / 2, ny + nh / 2, () => {
+      card(x, ny, nw, nh, 26);
+      ctx.beginPath(); ctx.arc(x + 62, ny + nh / 2, 32, 0, Math.PI * 2); ctx.fillStyle = rgba(col, 0.14); ctx.fill();
+      glyph(icon, x + 62, ny + nh / 2, col);
+      text(`Step ${i + 1}`, x + 112, ny + 46, 20, 600, FAINT);
+      text(label, x + 112, ny + 80, 27, 700, C.ink);
     });
   });
+  // the conversation it starts
+  const by = 560;
+  snapIn(t, b(20.25), 640, by + 80, () => {
+    avatar(470, by + 60, 30, 'S', C.primary);
+    fillRR(520, by, 640, 140, 30, '#ececf4');
+    text("Hi Jordan! We miss you. Want your usual", 556, by + 50, 28, 500, C.ink);
+    text('Thursday at 10:00?', 556, by + 92, 28, 500, C.ink);
+  });
+  snapIn(t, b(20.5), 1300, by + 230, () => {
+    fillRR(1060, by + 175, 400, 100, 30, C.primary);
+    text('Yes please! See you then.', 1094, by + 226, 28, 600, '#fff');
+    avatar(1510, by + 225, 30, 'JL', C.primary);
+  });
+  snapIn(t, b(20.75), W / 2, by + 360, () => {
+    fillRR(W / 2 - 230, by + 322, 460, 76, 38, rgba(C.healthy, 0.16));
+    ctx.beginPath(); ctx.arc(W / 2 - 180, by + 360, 20, 0, Math.PI * 2); ctx.fillStyle = C.healthy; ctx.fill();
+    check(W / 2 - 180, by + 360, 20, '#fff', 4);
+    text('Booked · Thu 10:00', W / 2 - 146, by + 361, 30, 700, '#1f8a52');
+  }, { from: 0.8 });
+}
+function glyph(kind, x, y, col) { // small line icons
+  ctx.save(); ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 3.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (kind === 'alert') { ctx.beginPath(); ctx.moveTo(x, y - 14); ctx.lineTo(x + 15, y + 12); ctx.lineTo(x - 15, y + 12); ctx.closePath(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x, y + 3); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y + 8, 1.6, 0, 7); ctx.fill(); }
+  if (kind === 'chat') { rr(x - 15, y - 12, 30, 20, 6); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 6, y + 8); ctx.lineTo(x - 10, y + 15); ctx.lineTo(x + 2, y + 8); ctx.stroke(); }
+  if (kind === 'mail') { rr(x - 16, y - 11, 32, 22, 4); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 15, y - 9); ctx.lineTo(x, y + 2); ctx.lineTo(x + 15, y - 9); ctx.stroke(); }
+  if (kind === 'cal') { rr(x - 15, y - 12, 30, 27, 5); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 15, y - 3); ctx.lineTo(x + 15, y - 3); ctx.moveTo(x - 7, y - 16); ctx.lineTo(x - 7, y - 9); ctx.moveTo(x + 7, y - 16); ctx.lineTo(x + 7, y - 9); ctx.stroke(); }
+  if (kind === 'star') { ctx.beginPath(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 7 : 16, a = -Math.PI / 2 + (i * Math.PI) / 5; ctx.lineTo(x + r * Math.cos(a), y + r * Math.sin(a)); } ctx.closePath(); ctx.stroke(); }
+  if (kind === 'gift') { rr(x - 15, y - 6, 30, 21, 3); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 17, y - 6); ctx.lineTo(x + 17, y - 6); ctx.moveTo(x, y - 6); ctx.lineTo(x, y + 15); ctx.stroke(); ctx.beginPath(); ctx.arc(x - 6, y - 11, 5, 0, 7); ctx.arc(x + 6, y - 11, 5, 0, 7); ctx.stroke(); }
+  if (kind === 'card') { rr(x - 17, y - 12, 34, 24, 4); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 17, y - 4); ctx.lineTo(x + 17, y - 4); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 10, y + 5); ctx.lineTo(x - 2, y + 5); ctx.stroke(); }
+  if (kind === 'bolt') { ctx.beginPath(); ctx.moveTo(x + 3, y - 16); ctx.lineTo(x - 10, y + 2); ctx.lineTo(x, y + 2); ctx.lineTo(x - 3, y + 16); ctx.lineTo(x + 10, y - 2); ctx.lineTo(x, y - 2); ctx.closePath(); ctx.stroke(); }
+  ctx.restore();
+}
+
+// ── 10 · everything else a salon runs on ─────────────────────────────────────
+function sToolkit(t) {
+  lightBG();
+  line(t, [['Everything', b(21)], ['else,', b(21.25)], ['in', b(21.5)], ['one', b(21.5)], ['place.', b(21.75), C.primary]], W / 2, 220, 88);
+  const tiles = [
+    ['Online booking', 'Clients book 24/7', 'cal', C.primary], ['Review requests', 'Sent after every visit', 'star', C.attention],
+    ['Loyalty rewards', 'Points that bring them back', 'gift', '#db2777'], ['Payments', 'Invoices and card payments', 'card', C.healthy],
+    ['Inbox', 'SMS and email in one thread', 'chat', '#0891b2'], ['Automations', 'Follow-ups that run themselves', 'bolt', '#7c3aed'],
+  ];
+  const tw0 = 470, th = 170, gx = 36, gy = 36, x0 = W / 2 - (3 * tw0 + 2 * gx) / 2, y0 = 360;
+  tiles.forEach(([name, desc, ic, col], i) => {
+    const x = x0 + (i % 3) * (tw0 + gx), y = y0 + Math.floor(i / 3) * (th + gy), at = b(22) + (i * BEAT) / 8;
+    snapIn(t, at, x + tw0 / 2, y + th / 2, () => {
+      card(x, y, tw0, th, 28);
+      fillRR(x + 34, y + th / 2 - 38, 76, 76, 20, rgba(col, 0.13));
+      glyph(ic, x + 72, y + th / 2, col);
+      text(name, x + 136, y + th / 2 - 18, 32, 700, C.ink);
+      text(desc, x + 136, y + th / 2 + 22, 22, 500, MUTED);
+    });
+  });
+}
+
+// ── 11 · Analytics & Predictions (rebuilt from the product) ──────────────────
+// Rises happen one at a time; the camera moves onto each card on the beat before it climbs.
+const RISE = {
+  health: [b(24.5), b(25.5)],
+  rebook: [b(26.5), b(27.5)],
+  forecast: [b(28.5), b(29.5)],
+  revenue: [b(30.5), b(31.5)],
+  cohort: [b(32.25), b(33)],
+};
+const r = (t, k) => ease.inOut(seg(t, RISE[k][0], RISE[k][1]));
+const LAYOUT = { // world coordinates of the dashboard page (1920 × 1080)
+  side: 300, x0: 330, colW: 506, gap: 20, row1: 288, row1h: 312, row2: 668, row2h: 386,
+};
+const cardBox = {
+  health: [LAYOUT.x0, LAYOUT.row1, LAYOUT.colW, LAYOUT.row1h],
+  rebook: [LAYOUT.x0 + LAYOUT.colW + LAYOUT.gap, LAYOUT.row1, LAYOUT.colW, LAYOUT.row1h],
+  revenue: [LAYOUT.x0 + 2 * (LAYOUT.colW + LAYOUT.gap), LAYOUT.row1, LAYOUT.colW, LAYOUT.row1h],
+  forecast: [LAYOUT.x0, LAYOUT.row2, 900, LAYOUT.row2h],
+  cohort: [LAYOUT.x0 + 920, LAYOUT.row2, 1890 - LAYOUT.x0 - 920, LAYOUT.row2h],
+};
+function dcard(key, title, sub) {
+  const [x, y, w, h] = cardBox[key];
+  fillRR(x, y, w, h, 12, '#fff'); rr(x, y, w, h, 12); ctx.strokeStyle = '#e6e6ee'; ctx.lineWidth = 1.2; ctx.stroke();
+  text(title, x + 20, y + 30, 15, 600, '#16162a');
+  text(sub, x + 20, y + 51, 12, 400, MUTED);
+  for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(x + w - 36 + i * 6, y + 30, 1.6, 0, 7); ctx.fillStyle = '#55556a'; ctx.fill(); }
+  return [x, y, w, h];
+}
+function delta(t, key, x, y, label) { // "+46 pts" tag snaps in as the rise finishes
+  snapIn(t, RISE[key][1] - 0.05, x, y, () => pill(x, y, label, '#1f9d5c', 12, 'left'), { from: 0.7, dy: 0, blur: 6 });
+}
+function dashSidebar(t) {
+  const L = LAYOUT;
+  ctx.fillStyle = '#fbfbfd'; ctx.fillRect(0, 0, L.side, H);
+  ctx.fillStyle = '#ececf2'; ctx.fillRect(L.side, 0, 1, H);
+  logoMark(36, 34, 30); text(BRAND.name, 58, 35, 19, 700, '#1a1a33');
+  const bh = Math.round(lerp(41, 88, r(t, 'cohort')));
+  text('Business health', 18, 80, 13, 500, MUTED);
+  text(`${bh}`, 236, 80, 13, 700, '#16162a', 'right'); text('/100', 266, 80, 13, 500, FAINT, 'right');
+  fillRR(18, 94, 264, 5, 3, LINE); fillRR(18, 94, (264 * bh) / 100, 5, 3, bh > 70 ? '#22c55e' : bh > 50 ? C.attention : C.risk);
+  fillRR(14, 114, 272, 34, 6, '#fff'); rr(14, 114, 272, 34, 6); ctx.strokeStyle = '#e6e6ee'; ctx.stroke();
+  text('Ask AI Analyst', 46, 131, 13, 500, '#3a3a55');
+  const nav = [['Dashboard', 0, 1], ['Dashboard', 1], ['Action Center', 1], ['Analytics & Predictions', 1, 2], ['At-Risk Clients', 1], ['Custom Reports', 1], ['Marketing Sources', 1],
+    ['Finance', 0], ['Customers', 0], ['Messages', 0], ['Calls & Video', 0], ['Marketing', 0], ['Scheduling & Jobs', 0], ['Team & Tools', 0]];
+  let y = 180;
+  nav.forEach(([n, sub, on]) => {
+    if (on === 2) fillRR(34, y - 13, 248, 27, 5, rgba(C.primary, 0.09));
+    if (!sub) { fillRR(20, y - 7, 14, 14, 3, '#c5c5d6'); }
+    text(n, sub ? 42 : 44, y + 1, 13.5, on ? 600 : 500, on === 2 ? C.primary : sub ? '#4a4a66' : '#22223a');
+    y += sub ? 29 : 34;
+  });
+  avatar(30, H - 34, 14, 'S', '#16162a');
+  text('Support', 54, H - 41, 13, 600, '#22223a'); text('Owner', 54, H - 25, 11, 500, FAINT);
+}
+function dashHeader() {
+  const x = LAYOUT.x0;
+  text('Analytics & Predictions', x, 32, 19, 700, '#16162a');
+  text('Your business at a glance: health, revenue, activity and forecasts that update automatically.', x, 54, 12, 400, MUTED);
+  [['AI Analyst', 1290, 100], ['Search anything…', 1404, 190], ['My Dashboard', 1608, 128]].forEach(([s, bx, bw]) => {
+    rr(bx, 20, bw, 32, 6); ctx.strokeStyle = '#e3e3ec'; ctx.lineWidth = 1.2; ctx.stroke(); text(s, bx + 14, 36, 12, 500, '#3a3a55');
+  });
+  fillRR(1750, 20, 140, 32, 6, C.primary); text('+ Add Client', 1820, 36, 12.5, 600, '#fff', 'center');
+  ['Overview', 'Revenue', 'Retention', 'Economics', 'Growth'].forEach((s, i) => {
+    const tx = x + 10 + i * 86;
+    text(s, tx, 114, 12.5, i === 2 ? 600 : 500, i === 2 ? '#16162a' : '#55556f');
+    if (i === 2) { ctx.fillStyle = '#16162a'; ctx.fillRect(tx - 10, 131, tw(s, 12.5, 600) + 20, 2); }
+  });
+  ctx.fillStyle = '#ececf2'; ctx.fillRect(x, 133, 1560, 1);
+  text('Where clients stand', x, 252, 14.5, 600, '#16162a'); text('Risk and health across your whole client list today', x, 271, 12, 400, MUTED);
+  text('Forecast and engagement', x, 632, 14.5, 600, '#16162a'); text('Where retention is heading, and how each month’s clients stick', x, 651, 12, 400, MUTED);
+}
+function cardHealth(t) {
+  const [x, y] = dcard('health', 'Client health', 'Clients by health score band');
+  const k = r(t, 'health');
+  const vals = [lerp(31, 84, k), lerp(52, 13, k), lerp(17, 3, k)], cols = ['#22c55e', '#f59e0b', '#ef4444'];
+  const cx = x + 100, cy = y + 170, R = 62;
+  let a0 = -Math.PI / 2;
+  vals.forEach((v, i) => { const a1 = a0 + (v / 100) * Math.PI * 2; ctx.beginPath(); ctx.arc(cx, cy, R, a0 + 0.03, a1 - 0.03); ctx.strokeStyle = cols[i]; ctx.lineWidth = 16; ctx.lineCap = 'butt'; ctx.stroke(); a0 = a1; });
+  text(`${Math.round(vals[0])}%`, cx, cy - 6, 24, 700, '#16162a', 'center');
+  text('Healthy', cx, cy + 18, 11, 500, MUTED, 'center');
+  ['Healthy', 'At risk', 'Critical'].forEach((n, i) => {
+    const ly = y + 128 + i * 28;
+    ctx.beginPath(); ctx.arc(x + 210, ly, 4.5, 0, 7); ctx.fillStyle = cols[i]; ctx.fill();
+    text(n, x + 224, ly + 1, 13, 500, '#2a2a44');
+    text(`${Math.round(vals[i] * 0.4)}`, x + 420, ly + 1, 13, 600, '#16162a', 'right');
+    text(`${Math.round(vals[i])}%`, x + 468, ly + 1, 12, 500, FAINT, 'right');
+  });
+  ctx.fillStyle = LINE; ctx.fillRect(x + 210, y + 212, 270, 1);
+  text(`Average health score ${Math.round(lerp(46, 86, k))} out of 100`, x + 210, y + 232, 12, 500, MUTED);
+  delta(t, 'health', x + 210, y + 270, '+53 pts healthy');
+}
+function cardRebook(t) {
+  const [x, y, w] = dcard('rebook', 'Repeat booking rate', 'Clients who rebook within 60 days');
+  const k = r(t, 'rebook');
+  const v = lerp(38, 79, k);
+  text(`${Math.round(v)}%`, x + 20, y + 102, 40, 700, v > 60 ? '#16162a' : C.risk, 'left', -0.03);
+  text('of clients came back', x + 22, y + 136, 12, 500, MUTED);
+  const lo = [44, 41, 39, 37, 38, 38], hi = [44, 47, 55, 63, 71, 79];
+  const pts = lo.map((p, i) => lerp(p, hi[i], k));
+  const gx = x + 20, gw = w - 40, gy = y + 160, gh = 120;
+  const px = (i) => gx + (i * gw) / 5, py = (v) => gy + gh - ((v - 20) / 70) * gh;
+  ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(px(i), py(p)) : ctx.moveTo(px(i), py(p))));
+  ctx.lineTo(px(5), gy + gh); ctx.lineTo(px(0), gy + gh); ctx.closePath();
+  const g = ctx.createLinearGradient(0, gy, 0, gy + gh); g.addColorStop(0, rgba(IND, 0.22)); g.addColorStop(1, rgba(IND, 0)); ctx.fillStyle = g; ctx.fill();
+  ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(px(i), py(p)) : ctx.moveTo(px(i), py(p)))); ctx.strokeStyle = IND; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(px(5), py(pts[5]), 4.5, 0, 7); ctx.fillStyle = IND; ctx.fill();
+  ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'].forEach((m, i) => text(m, px(i), gy + gh + 16, 11, 500, FAINT, 'center'));
+  delta(t, 'rebook', x + 150, y + 102, '+41%');
+}
+function cardRevenue(t) {
+  const [x, y] = dcard('revenue', 'Revenue won back', 'From at-risk clients who rebooked');
+  const k = r(t, 'revenue');
+  text(money(lerp(0, 4436, k)), x + 20, y + 104, 40, 700, '#16162a', 'left', -0.03);
+  text(`${Math.round(lerp(0, 23, k))} clients won back this quarter`, x + 22, y + 138, 12, 500, MUTED);
+  ctx.fillStyle = LINE; ctx.fillRect(x + 20, y + 168, 466, 1);
+  text('Could still be lost', x + 20, y + 196, 12, 500, MUTED);
+  text(money(lerp(5750, 1315, k)), x + 20, y + 226, 22, 700, k > 0.5 ? '#16162a' : C.risk);
+  text('Rebook rate after win-back', x + 260, y + 196, 12, 500, MUTED);
+  text(`${Math.round(lerp(0, 64, k))}%`, x + 260, y + 226, 22, 700, '#16162a');
+  delta(t, 'revenue', x + 20, y + 270, `+${money(4436)} recovered`);
+}
+function cardForecast(t) {
+  const [x, y, w, h] = dcard('forecast', 'Retention forecast', 'Active clients projected over the next 6 months');
+  const k = r(t, 'forecast');
+  text(`${Math.round(lerp(21, 68, k))}%`, x + 20, y + 92, 26, 700, '#16162a', 'left', -0.02);
+  text('retained at 6 months', x + 82, y + 94, 12.5, 500, MUTED);
+  const lo = [40, 27, 19, 14, 11, 9, 8], hi = [40, 38, 36, 33, 31, 29, 27];
+  const gx = x + 60, gw = w - 90, gy = y + 130, gh = h - 180;
+  [0, 10, 20, 30, 40].forEach((v) => { const yy = gy + gh - (v / 40) * gh; ctx.fillStyle = '#f0f0f5'; ctx.fillRect(gx, yy, gw, 1); text(String(v), gx - 14, yy, 11, 500, FAINT, 'right'); });
+  ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'].forEach((m, i) => {
+    const v = lerp(lo[i], hi[i], k), bw = 46, bx = gx + (i + 0.5) * (gw / 7) - bw / 2, bh = (v / 40) * gh;
+    fillRR(bx, gy + gh - bh, bw, bh, [3, 3, 0, 0], i === 0 ? '#cfd3dd' : IND);
+    text(String(Math.round(v)), bx + bw / 2, gy + gh - bh - 12, 11, 500, '#55556f', 'center');
+    text(m, bx + bw / 2, gy + gh + 16, 11, 500, FAINT, 'center');
+  });
+  const tag = k > 0.5 ? ['High confidence', '#1f9d5c'] : ['Declining', C.risk];
+  pill(x + w - 60, y + 30, tag[0], tag[1], 11, 'right');
+  delta(t, 'forecast', x + 220, y + 93, '+47 pts');
+}
+function cardCohort(t) {
+  const [x, y, w] = dcard('cohort', 'Cohort retention', 'Share of each month’s new clients still booking');
+  const k = r(t, 'cohort');
+  const lo = [[100, 100, 75, 50, 25], [100, 89, 56, 33], [100, 71, 43], [100, 50], [100]];
+  const hi = [[100, 100, 100, 92, 88], [100, 100, 94, 90], [100, 100, 93], [100, 96], [100]];
+  const months = ['May', 'Jun', 'Jul', 'Aug', 'Sep'];
+  const cx0 = x + 70, cw = (w - 90) / 5, ch = 46, cy0 = y + 100;
+  ['M0', 'M1', 'M2', 'M3', 'M4'].forEach((m, j) => text(m, cx0 + j * cw + cw / 2, cy0 - 18, 11, 500, FAINT, 'center'));
+  months.forEach((m, i) => {
+    text(m, x + 20, cy0 + i * (ch + 4) + ch / 2, 12, 600, '#2a2a44');
+    for (let j = 0; j < 5; j++) {
+      const bx = cx0 + j * cw, by = cy0 + i * (ch + 4);
+      if (j >= lo[i].length) { text('–', bx + cw / 2, by + ch / 2, 12, 500, '#c5c5d6', 'center'); continue; }
+      const v = lerp(lo[i][j], hi[i][j], k);
+      ctx.fillStyle = rgba('#3b2fc9', 0.12 + 0.86 * Math.pow(v / 100, 1.6)); ctx.fillRect(bx + 1, by, cw - 2, ch);
+      text(`${Math.round(v)}%`, bx + cw / 2, by + ch / 2 + 1, 12, 600, v > 55 ? '#fff' : '#2a2a55', 'center');
+    }
+  });
+}
+function dashboardWorld(t) {
+  const at = b(23), step = BEAT / 8;
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#fafafc'; ctx.fillRect(LAYOUT.side, 0, W - LAYOUT.side, H);
+  snapIn(t, at, 150, H / 2, () => dashSidebar(t), { dy: 0, from: 0.98 });
+  snapIn(t, at, W / 2, 80, () => dashHeader(), { dy: 0, from: 0.98 });
+  [['health', cardHealth], ['rebook', cardRebook], ['revenue', cardRevenue], ['forecast', cardForecast], ['cohort', cardCohort]].forEach(([k, fn], i) => {
+    const [x, y, w, h] = cardBox[k];
+    snapIn(t, at + step * (i + 1), x + w / 2, y + h / 2, () => fn(t), { dy: 18 });
+  });
+}
+// Camera keys: [time, centre x, centre y, zoom]. Moves start on a beat and settle in 0.4s.
+const focus = (k, z) => { const [x, y, w, h] = cardBox[k]; return [x + w / 2, y + h / 2, z]; };
+const CAM = [
+  [b(23), W / 2, H / 2, 1],
+  [b(24), ...focus('health', 2.6)],
+  [b(26), ...focus('rebook', 2.6)],
+  [b(28), ...focus('forecast', 1.95)],
+  [b(30), ...focus('revenue', 2.6)],
+  [b(32), W / 2, H / 2, 1],
+];
+function camAt(t) {
+  let c = CAM[0].slice(1);
+  for (let i = 1; i < CAM.length; i++) {
+    const [at, ...to] = CAM[i];
+    const p = ease.inOut(seg(t, at, at + 0.42));
+    if (p <= 0) break;
+    // interpolate in log-zoom so the push feels even
+    c = [lerp(c[0], to[0], p), lerp(c[1], to[1], p), Math.exp(lerp(Math.log(c[2]), Math.log(to[2]), p))];
+  }
+  return c;
 }
 function sDashboard(t) {
-  lightBG(t);
-  const t0 = b(6);
-  const enter = ease.expo(seg(t, t0, t0 + 0.7));
-  const flat = ease.inOut(seg(t, t0 + 0.3, b(7) + 0.1));
-  const push = ease.inOut(seg(t, b(7) - 0.1, b(8)));
+  const [cx, cy, z] = camAt(t);
   ctx.save();
-  // tilted glass plane (affine): rotate + skew, easing to flat while the camera pushes in on Jordan
-  const tilt = 1 - flat;
-  const cx = W / 2, cy = H / 2;
-  const fy = 150 + 220 + 2 * 112; // Jordan's row
-  const zoom = lerp(1, 1.35, push);
-  ctx.translate(cx + (1 - enter) * 500, cy + (1 - enter) * 380);
-  ctx.scale(zoom, zoom);
-  ctx.translate(0, -(fy - cy) * push);
-  ctx.transform(1, -0.16 * tilt, 0.42 * tilt, 1 - 0.12 * tilt, 0, 0);
-  ctx.scale(lerp(0.8, 0.92, flat), lerp(0.8, 0.92, flat));
-  ctx.translate(-cx, -cy);
-  ctx.globalAlpha = seg(t, t0, t0 + 0.2);
-  dashboard(t, t0);
+  ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.translate(-cx, -cy);
+  dashboardWorld(t);
   ctx.restore();
-  // signals callout on Jordan
-  const cp = ease.back(seg(t, b(7) + 0.3, b(7) + 0.65));
-  if (cp > 0) fx({ a: clamp(cp), s: 0.9 + 0.1 * cp, cx: 1300, cy: 640, dy: (1 - cp) * 20 }, () => {
-    card(980, 640, 640, 190, 28, { shadow: 70, shadowColor: 'rgba(30,27,75,0.22)', stroke: rgba(C.risk, 0.35), lw: 2 });
-    text('Why Jordan is at risk', 1020, 692, 30, 700, C.ink);
-    pill(1020, 770, 'Visit overdue', C.risk, 28);
-    pill(1020 + 250, 770, 'No reply', C.attention, 28);
-  });
 }
 
-// 6 · 8.20 – 10.03 · automation runs itself
-const STEPS = [
-  ['Detecting', 'At-risk client'],
-  ['Writing', 'Win-back SMS'],
-  ['Sending', 'Follow-up email'],
-  ['Inviting', 'Book Thursday 10:00'],
-];
-function sAutomation(t) {
-  lightBG(t, '#7c3aed');
-  const t0 = b(8);
-  const cam = 1 + 0.04 * seg(t, t0, b(10));
-  fx({ s: cam }, () => {
-    const x = 330, y0 = 300, gapY = 120;
-    const step = (i) => t0 + 0.05 + i * (BEAT / 2);
-    STEPS.forEach(([verb, obj], i) => {
-      const p = ease.out(seg(t, step(i) - 0.1, step(i) + 0.25));
-      const active = t >= step(i) && t < step(i + 1);
-      const done = t >= step(i + 1);
-      const y = y0 + i * gapY;
-      fx({ a: 0.25 + 0.75 * p, blur: (1 - p) * 6 }, () => {
-        // status icon
-        ctx.beginPath(); ctx.arc(x, y, 20, 0, Math.PI * 2);
-        ctx.fillStyle = done ? C.healthy : active ? C.primary : '#d4d4e2'; ctx.fill();
-        if (done) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - 8, y); ctx.lineTo(x - 2, y + 7); ctx.lineTo(x + 9, y - 7); ctx.stroke(); }
-        if (active) { const a = (t * 6) % (Math.PI * 2); ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x, y, 9, a, a + 4); ctx.stroke(); }
-        text(verb, x + 48, y + 1, 52, active ? 700 : 500, active ? C.ink : '#8a8aa3');
-        const vw = tw(verb, 52, active ? 700 : 500);
-        const ow = tw(obj, 30, 600) + 36;
-        rr(x + 48 + vw + 24, y - 26, ow, 52, 12);
-        ctx.fillStyle = active ? rgba(C.primary, 0.12) : '#ececf4'; ctx.fill();
-        text(obj, x + 48 + vw + 42, y + 1, 30, 600, active ? C.primary : '#9a9ab0');
-        if (active) { // corner brackets on the active line
-          const bx0 = x - 40, bx1 = x + 48 + vw + 24 + ow + 20, by0 = y - 44, by1 = y + 44, L = 16;
-          ctx.strokeStyle = C.primary; ctx.lineWidth = 3;
-          [[bx0, by0, 1, 1], [bx1, by0, -1, 1], [bx0, by1, 1, -1], [bx1, by1, -1, -1]].forEach(([cx, cy, sx, sy]) => {
-            ctx.beginPath(); ctx.moveTo(cx + sx * L, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + sy * L); ctx.stroke();
-          });
-        }
-      });
-    });
-    // the phone receives the text and Jordan replies
-    const px = 1270, py = 170, pw = 420, ph = 760;
-    const pe = ease.expo(seg(t, t0 + 0.3, t0 + 0.9));
-    fx({ a: pe, dy: (1 - pe) * 140, cx: px + pw / 2, cy: py + ph / 2 }, () => {
-      card(px, py, pw, ph, 64, { fill: '#111118', shadow: 60, shadowColor: 'rgba(30,27,75,0.25)' });
-      rr(px + 14, py + 14, pw - 28, ph - 28, 52); ctx.fillStyle = '#ffffff'; ctx.fill();
-      rr(px + pw / 2 - 60, py + 30, 120, 30, 15); ctx.fillStyle = '#111118'; ctx.fill();
-      text("Sam's Studio", px + pw / 2, py + 110, 26, 700, C.ink, 'center');
-      text('Text message', px + pw / 2, py + 142, 18, 500, '#9a9ab0', 'center');
-      const m1 = ease.back(seg(t, step(1) + 0.15, step(1) + 0.45));
-      if (m1 > 0) fx({ a: clamp(m1), s: m1, cx: px + 40, cy: py + 260 }, () => {
-        rr(px + 36, py + 190, 300, 150, 26); ctx.fillStyle = '#ececf4'; ctx.fill();
-        ['Hi Jordan! We miss you.', 'Want your usual', 'Thursday at 10:00?'].forEach((l, i) => text(l, px + 60, py + 230 + i * 36, 22, 500, C.ink));
-      });
-      const typing = t > step(2) && t < step(3) + 0.1;
-      if (typing) {
-        rr(px + pw - 150, py + 380, 110, 54, 27); ctx.fillStyle = rgba(C.primary, 0.15); ctx.fill();
-        for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(px + pw - 120 + i * 25, py + 407 - Math.abs(Math.sin(t * 8 + i)) * 6, 6, 0, Math.PI * 2); ctx.fillStyle = C.primary; ctx.fill(); }
-      }
-      const m2 = ease.back(seg(t, step(3) + 0.1, step(3) + 0.4));
-      if (m2 > 0) fx({ a: clamp(m2), s: m2, cx: px + pw - 40, cy: py + 420 }, () => {
-        rr(px + pw - 320, py + 370, 284, 112, 26); ctx.fillStyle = C.primary; ctx.fill();
-        text('Yes please!', px + pw - 296, py + 408, 24, 600, '#fff');
-        text('Thursday works.', px + pw - 296, py + 444, 22, 500, 'rgba(255,255,255,0.9)');
-      });
-    });
-  });
-}
-
-// 7 · 10.03 – 10.95 · booked, score climbs back
-function sResult(t) {
-  lightBG(t, C.healthy);
-  const t0 = b(10);
-  const p = ease.back(seg(t, t0, t0 + 0.4));
-  const fill = ease.inOut(seg(t, t0 + 0.15, t0 + 0.8));
-  const score = Math.round(lerp(38, 86, fill));
-  const col = score > 60 ? C.healthy : score > 45 ? C.attention : C.risk;
-  fx({ a: clamp(p * 2), s: 0.85 + 0.15 * p }, () => {
-    // health ring
-    const rx = 700, ry = H / 2, R = 170;
-    ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.arc(rx, ry, R, 0, Math.PI * 2); ctx.strokeStyle = '#e6e6f0'; ctx.lineWidth = 28; ctx.stroke();
-    ctx.beginPath(); ctx.arc(rx, ry, R, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * score / 100); ctx.strokeStyle = col; ctx.stroke();
-    text(String(score), rx, ry - 8, 120, 800, C.ink, 'center');
-    text('Health score', rx, ry + 68, 26, 600, '#8a8aa3', 'center');
-    // booking card
-    const cp = ease.back(seg(t, t0 + 0.2, t0 + 0.55));
-    fx({ a: clamp(cp), dx: (1 - cp) * 80, cx: 1250, cy: ry }, () => {
-      card(980, ry - 130, 620, 260, 30, { shadow: 50 });
-      ctx.beginPath(); ctx.arc(1060, ry - 50, 34, 0, Math.PI * 2); ctx.fillStyle = C.healthy; ctx.fill();
-      ctx.strokeStyle = '#fff'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(1046, ry - 50); ctx.lineTo(1056, ry - 39); ctx.lineTo(1075, ry - 61); ctx.stroke();
-      text('Booked', 1114, ry - 50, 44, 700, C.ink);
-      avatar(1060, ry + 50, 30, 'JL', '#4f46e5');
-      text('Jordan Lee', 1106, ry + 36, 28, 600, C.ink);
-      text('Thursday · 10:00', 1106, ry + 72, 24, 500, '#6b6b85');
-      pill(1560, ry + 50, 'Healthy', C.healthy, 22, 'right');
-    });
-  });
-}
-
-// 8 · 10.95 – 12.78 · tagline
+// ── 12 · tagline ─────────────────────────────────────────────────────────────
 function sTagline(t) {
-  lightBG(t);
-  const [l1, l2] = BRAND.tagline.split('. ').map((s, i) => (i === 0 ? s + '.' : s));
-  const t0 = b(11), t1 = b(12);
-  const lift = ease.inOut(seg(t, t1 - 0.1, t1 + 0.25));
-  fx({ a: 1 - 0.55 * lift, blur: lift * 3 }, () =>
-    words(t, l1.split(' ').map((w) => [w]), W / 2, H / 2 - lift * 80, 124, t0 + 0.02));
-  words(t, l2.split(' ').map((w, i) => [w, i === 0 ? C.primary : C.ink]), W / 2, H / 2 + 80, 124, t1);
+  lightBG();
+  line(t, [['Know', b(33)], ['your', b(33.5)], ['customers.', b(33.5)]], W / 2, H / 2 - 75, 124);
+  line(t, [['Keep', b(34), C.primary], ['your', b(34.5)], ['customers.', b(34.5)]], W / 2, H / 2 + 75, 124);
 }
 
-// 9 · 12.78 – 14.4 · end card
+// ── 13 · end card ────────────────────────────────────────────────────────────
 function sEnd(t) {
-  lightBG(t);
-  const t0 = b(13);
-  const p = ease.back(seg(t, t0, t0 + 0.45));
-  const zoom = 1 + 0.03 * seg(t, t0, DURATION);
-  fx({ s: zoom }, () => {
-    const ls = 200, ww = tw(BRAND.name, 140, 700), gap = 40, full = ls + gap + ww;
-    const lx = W / 2 - full / 2 + ls / 2;
-    fx({ a: clamp(p * 2), s: 0.7 + 0.3 * p, cx: lx, cy: H / 2 - 40 }, () => logoMark(lx, H / 2 - 40, ls));
-    const q = ease.out(seg(t, t0 + 0.12, t0 + 0.5));
-    fx({ a: q, blur: (1 - q) * 12, dx: (1 - q) * -40 }, () => text(BRAND.name, lx + ls / 2 + gap, H / 2 - 34, 140, 700, C.ink));
-    words(t, [[BRAND.url, '#6b6b85']], W / 2, H / 2 + 120, 44, t0 + 0.46, { weight: 500 });
-  });
-  const out = seg(t, DURATION - 0.3, DURATION);
+  lightBG();
+  const ls = 200, ww = tw(BRAND.name, 150, 700), gap = 40, full = ls + gap + ww;
+  const lx = W / 2 - full / 2 + ls / 2, y = H / 2 - 50;
+  snapIn(t, b(35), lx, y, () => logoMark(lx, y, ls), { from: 0.7 });
+  snapIn(t, b(35) + BEAT / 8, lx + ls / 2 + gap + ww / 2, y, () => text(BRAND.name, lx + ls / 2 + gap, y + 6, 150, 700, C.ink), { dy: 0 });
+  line(t, [[BRAND.url, b(36), MUTED]], W / 2, H / 2 + 110, 46, { weight: 500 });
+  const out = seg(t, DURATION - 0.45, DURATION);
   if (out > 0) { ctx.fillStyle = `rgba(247,247,250,${out})`; ctx.fillRect(0, 0, W, H); }
 }
 
 const SCENES = [
-  [0, b(1), sHook],
-  [b(1), b(3), sSignals],
-  [b(3), b(4), sGlitch],
-  [b(4), b(6), sMeet],
-  [b(6), b(8), sDashboard],
-  [b(8), b(10), sAutomation],
-  [b(10), b(11), sResult],
-  [b(11), b(13), sTagline],
-  [b(13), DURATION + 1, sEnd],
+  [0, b(5), sHook],
+  [b(5), b(7), sRegulars],
+  [b(7), b(9), sStops],
+  [b(9), b(11), sGlitch],
+  [b(11), b(13), sMeet],
+  [b(13), b(15), sWhat],
+  [b(15), b(17), sHealth],
+  [b(17), b(19), sChurn],
+  [b(19), b(21), sWinBack],
+  [b(21), b(23), sToolkit],
+  [b(23), b(33), sDashboard],
+  [b(33), b(35), sTagline],
+  [b(35), DURATION + 1, sEnd],
 ];
 
 function renderFrame(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
   const [a, , fn] = SCENES.find(([s, e]) => t >= s && t < e) ?? SCENES[SCENES.length - 1];
-  // every cut lands with a short punch-in out of a blur
-  const k = ease.out(seg(t, a, a + 0.22));
+  // hard cut on the beat with a short punch-in
+  const k = ease.expo(seg(t, a, a + 0.16));
   ctx.save();
-  if (a > 0 && k < 1) {
-    ctx.translate(W / 2, H / 2); ctx.scale(1.05 - 0.05 * k, 1.05 - 0.05 * k); ctx.translate(-W / 2, -H / 2);
-  }
+  if (a > 0 && k < 1) { const s = 1.035 - 0.035 * k; ctx.translate(W / 2, H / 2); ctx.scale(s, s); ctx.translate(-W / 2, -H / 2); }
   fn(t);
   ctx.restore();
-  if (a > 0 && k < 1) { // smear the incoming frame for the first few frames
-    ctx.save(); ctx.globalAlpha = 1 - k; ctx.filter = `blur(${(10 * (1 - k)).toFixed(1)}px)`;
-    ctx.drawImage(ctx.canvas, 0, 0); ctx.restore();
-  }
 }
 
 window.DURATION = DURATION;
@@ -499,7 +597,7 @@ window.ready = (async () => {
     if (!playing) return;
     const t = au.currentTime;
     if (t >= DURATION || au.ended) { playing = false; btn.textContent = 'Replay'; show(DURATION); return; }
-    show(Math.floor(t * FPS) / FPS);
+    show(t);
     requestAnimationFrame(loop);
   };
   btn.onclick = () => {
