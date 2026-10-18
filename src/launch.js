@@ -83,48 +83,60 @@ function logo(x, y, size, color, a = 1) { // centred; the glyph fills ~73% of th
   ctx.save(); ctx.globalAlpha *= a; ctx.drawImage(tinted(color), x - size / 2, y - size / 2, size, size); ctx.restore();
 }
 // ── logo draw-on ─────────────────────────────────────────────────────────────
-// The mark is revealed along a pen path that follows its strokes (in the logo's 512 px space), from the end
-// farthest from the wordmark (the left bar) to the end nearest it (the right bar). Every pixel of the logo is
-// given the position along the path of the stroke it belongs to; at progress p, pixels up to p are shown.
-const PEN = [ // [x, y, mapped]: mapped=false marks a pen move between strokes (no pixels belong to it)
-  [110, 392, 1], [102, 330, 1], [102, 120, 1], [122, 86, 1], [150, 112, 1], [225, 238, 1], [190, 290, 1], [150, 335, 1], [115, 372, 1],
-  [258, 318, 0], [300, 250, 1], [385, 106, 1], [404, 140, 1], [404, 385, 1], [388, 420, 1],
-];
-const HOOK = [[330, 292], [380, 402]]; // the hook grows alongside the lower half of the right bar
+// The mark is revealed by flowing through its own pixels, so the reveal always follows the real strokes:
+// a geodesic distance (Dijkstra over the logo's pixels) from the end farthest from the wordmark. The left piece
+// starts at the bottom of its bar; a short cut across the bottom of its loop makes the flow run up the bar,
+// round the loop and back down, instead of both ways at once. The right piece starts at the foot of its diagonal
+// and flows up, down the right bar, round its bottom curve and up the hook (a second cut keeps the hook from
+// filling in early from the side). The ball rides the centre of the moving front.
+const DRAW_SEEDS = [[110, 392], [250, 318]];   // left bar foot, right diagonal foot (logo 512 px space)
+const DRAW_CUTS = [[[126, 318], [194, 388]],    // closes the left loop at its foot
+  [[366, 318], [388, 398]]];                    // separates the hook from the right bar until the bottom curve
 let LDRAW = null;
 function buildLogoDraw() {
   const N = 512, c = document.createElement('canvas'); c.width = c.height = N;
   const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(tinted(C.accent), 0, 0);
   const img = g.getImageData(0, 0, N, N), base = new Uint8ClampedArray(img.data);
-  const cum = [0]; for (let i = 1; i < PEN.length; i++) cum.push(cum[i - 1] + Math.hypot(PEN[i][0] - PEN[i - 1][0], PEN[i][1] - PEN[i - 1][1]));
-  const TOTAL = cum[cum.length - 1];
-  const at = (x, y) => { let best = 1e9, par = 0; // nearest point on the path → its arc length
-    for (let i = 1; i < PEN.length; i++) {
-      if (!PEN[i][2]) continue;
-      const [ax, ay] = PEN[i - 1], [bx, by] = PEN[i], dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy;
-      const u = clamp(((x - ax) * dx + (y - ay) * dy) / L2), d = Math.hypot(x - ax - u * dx, y - ay - u * dy);
-      if (d < best) { best = d; par = (cum[i - 1] + u * Math.sqrt(L2)) / TOTAL; }
-    }
-    return [best, par]; };
-  const pa = at(404, 300)[1], pb = 1, par = new Float32Array(N * N);
-  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
-    const i = y * N + x; if (!base[i * 4 + 3]) continue;
-    let [d, q] = at(x, y);
-    const [hx, hy] = HOOK[0], [ex, ey] = HOOK[1], dx = ex - hx, dy = ey - hy, u = clamp(((x - hx) * dx + (y - hy) * dy) / (dx * dx + dy * dy));
-    if (Math.hypot(x - hx - u * dx, y - hy - u * dy) < d) q = lerp(pa, pb, u);
-    par[i] = q;
-  }
-  LDRAW = { c, g, img, base, par, cum, TOTAL };
+  const inMask = (i) => base[i * 4 + 3] > 0;
+  const blocked = new Uint8Array(N * N);
+  for (const [[ax, ay], [bx, by]] of DRAW_CUTS) { const L = Math.hypot(bx - ax, by - ay);
+    for (let k = 0; k <= L * 2; k++) { const x = ax + (bx - ax) * k / (L * 2), y = ay + (by - ay) * k / (L * 2);
+      for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) blocked[Math.round(y + dy) * N + Math.round(x + dx)] = 1; } }
+  const geo = (sx, sy) => { // Dial's algorithm, steps of 10 (straight) and 14 (diagonal)
+    const dist = new Int32Array(N * N).fill(-1), buckets = [];
+    const push = (i, d) => { (buckets[d] || (buckets[d] = [])).push(i); };
+    for (let y = sy - 26; y <= sy + 26; y++) for (let x = sx - 26; x <= sx + 26; x++) { const i = y * N + x; if (Math.hypot(x - sx, y - sy) <= 26 && inMask(i) && !blocked[i]) { dist[i] = 0; push(i, 0); } }
+    const done = new Uint8Array(N * N);
+    for (let d = 0; d < buckets.length; d++) { const B = buckets[d]; if (!B) continue;
+      for (const i of B) { if (done[i] || dist[i] !== d) continue; done[i] = 1; const x = i % N, y = (i / N) | 0;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { if (!dx && !dy) continue; const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
+          const j = ny * N + nx; if (!inMask(j) || blocked[j] || done[j]) continue; const nd = d + (dx && dy ? 14 : 10); if (dist[j] < 0 || nd < dist[j]) { dist[j] = nd; push(j, nd); } } } }
+    return dist; };
+  const dA = geo(...DRAW_SEEDS[0]), dB = geo(...DRAW_SEEDS[1]);
+  let mA = 0, mB = 0; for (let i = 0; i < N * N; i++) { if (dA[i] > mA) mA = dA[i]; if (dB[i] > mB) mB = dB[i]; }
+  const GAP = 600, TOTAL = mA + GAP + mB, par = new Float32Array(N * N).fill(-1);
+  for (let i = 0; i < N * N; i++) { if (!inMask(i)) continue; if (dA[i] >= 0) par[i] = dA[i] / TOTAL; else if (dB[i] >= 0) par[i] = (mA + GAP + dB[i]) / TOTAL; }
+  for (let pass = 0; pass < 8; pass++) for (let i = 0; i < N * N; i++) { // pixels on the cut take their neighbours' (later) value
+    if (!inMask(i) || par[i] >= 0) continue; let v = -1; const x = i % N, y = (i / N) | 0;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const j = (y + dy) * N + x + dx; if (j >= 0 && j < N * N && par[j] > v) v = par[j]; }
+    if (v >= 0) par[i] = v; }
+  for (let i = 0; i < N * N; i++) if (inMask(i) && par[i] < 0) par[i] = 1;
+  // the pen: the centre of the front at each moment (opaque pixels only), smoothed
+  const BINS = 600, sx = new Float64Array(BINS), sy = new Float64Array(BINS), n = new Float64Array(BINS);
+  for (let i = 0; i < N * N; i++) { if (base[i * 4 + 3] < 200) continue; const b = Math.min(BINS - 1, (par[i] * BINS) | 0); sx[b] += i % N; sy[b] += (i / N) | 0; n[b]++; }
+  const pts = []; for (let b = 0; b < BINS; b++) pts.push(n[b] ? [sx[b] / n[b], sy[b] / n[b]] : null);
+  for (let b = 0; b < BINS; b++) if (!pts[b]) { let lo = b, hi = b; while (lo >= 0 && !pts[lo]) lo--; while (hi < BINS && !pts[hi]) hi++;
+    const A = pts[lo] || pts[hi], Bp = pts[hi] || pts[lo], u = lo < 0 || hi >= BINS ? 0 : (b - lo) / (hi - lo); pts[b] = [lerp(A[0], Bp[0], u), lerp(A[1], Bp[1], u)]; }
+  const pen = pts.map((_, b) => { let x = 0, y = 0, k = 0; for (let j = Math.max(0, b - 6); j <= Math.min(BINS - 1, b + 6); j++) { x += pts[j][0]; y += pts[j][1]; k++; } return [x / k, y / k]; });
+  LDRAW = { c, g, img, base, par, pen };
 }
-function penPoint(p) { // position along the pen path, in the logo's 512 space
-  const { cum, TOTAL } = LDRAW, s = clamp(p) * TOTAL;
-  let i = 1; while (i < cum.length - 1 && cum[i] < s) i++;
-  const u = clamp((s - cum[i - 1]) / (cum[i] - cum[i - 1] || 1));
-  return [lerp(PEN[i - 1][0], PEN[i][0], u), lerp(PEN[i - 1][1], PEN[i][1], u)];
+function penPoint(p) { // position of the pen along the drawing, in the logo's 512 space
+  const P_ = LDRAW.pen, f = clamp(p) * (P_.length - 1), i = Math.min(P_.length - 2, f | 0), u = f - i;
+  return [lerp(P_[i][0], P_[i + 1][0], u), lerp(P_[i][1], P_[i + 1][1], u)];
 }
 function drawLogoProgress(x, y, size, p) { // x, y: centre of the logo box
-  const { c, g, img, base, par } = LDRAW, d = img.data, soft = 0.018;
-  for (let i = 0, j = 3; i < par.length; i++, j += 4) { const a = base[j]; d[j] = a ? a * clamp((p - par[i]) / soft + 0.5) : 0; }
+  const { c, g, img, base, par } = LDRAW, d = img.data, soft = 0.012;
+  for (let i = 0, j = 3; i < par.length; i++, j += 4) { const a = base[j]; d[j] = a ? a * clamp((p - par[i]) / soft) : 0; } // only behind the front
   g.putImageData(img, 0, 0); ctx.drawImage(c, x - size / 2, y - size / 2, size, size);
 }
 function check(x, y, s, color, lw = 4) {
@@ -576,12 +588,12 @@ function drawEnd(t) {
   // the period glides to the centre of the screen, then draws the mark, which slides right and back into the lockup
   const size = LK.mark, glyph = size * 0.73, gw = tw('MsgHealth', LK.word, 700, LK.ls);
   const x0 = CX - (glyph + 28 + gw) / 2, mx = x0 + glyph / 2, textX = x0 + glyph + 28, textR = textX + gw;
-  const [sx0, sy0] = [(PEN[0][0] / 512 - 0.5) * size, (PEN[0][1] / 512 - 0.5) * size];
-  const drawC = [CX - sx0, LKY - sy0];          // the mark sits so its first stroke starts where the ball is
+  const drawC = [CX, LKY];                      // the drawn mark is centred on screen
+  const [s0x, s0y] = penPoint(0), start = [drawC[0] + (s0x / 512 - 0.5) * size, drawC[1] + (s0y / 512 - 0.5) * size]; // …and the ball waits where its first stroke begins
   const rightC = [textR - glyph / 2, LKY];      // the far end of where the wordmark will be
   const [d0, d1] = E.draw, [r0, r1] = E.right, [l0, l1] = E.left;
   if (t < exit) dot(d[0], d[1], t < E.hop[1] ? 14 : 15);
-  else if (t < d0) { const k = io(P(t, exit, d0)); dot(lerp(perX, CX, k), lerp(perY, LKY, k) - Math.sin(k * Math.PI) * 70, lerp(15, 13, k)); }
+  else if (t < d0) { const k = io(P(t, exit, d0)); dot(lerp(perX, start[0], k), lerp(perY, start[1], k) - Math.sin(k * Math.PI) * 70, lerp(15, 13, k)); }
   else if (t < l1) {
     let mc;
     if (t < d1) { // the ball traces the mark into existence
