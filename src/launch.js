@@ -67,14 +67,33 @@ function ring(x, y, r, lw, color, a) {
   ctx.save(); ctx.globalAlpha *= a; ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
 }
 const TINT = {};
-function logo(x, y, size, color, a = 1) { // centred; the glyph fills ~73% of the box
-  if (!LOGO || size <= 0) return;
+function tinted(color) {
   if (!TINT[color]) {
     const c = document.createElement('canvas'); c.width = c.height = 512;
     const g = c.getContext('2d'); g.drawImage(LOGO, 0, 0);
     g.globalCompositeOperation = 'source-in'; g.fillStyle = color; g.fillRect(0, 0, 512, 512); TINT[color] = c;
   }
-  ctx.save(); ctx.globalAlpha *= a; ctx.drawImage(TINT[color], x - size / 2, y - size / 2, size, size); ctx.restore();
+  return TINT[color];
+}
+function logo(x, y, size, color, a = 1) { // centred; the glyph fills ~73% of the box
+  if (!LOGO || size <= 0) return;
+  ctx.save(); ctx.globalAlpha *= a; ctx.drawImage(tinted(color), x - size / 2, y - size / 2, size, size); ctx.restore();
+}
+// A liquid morph from a dot into the logo: both shapes are drawn blurred into one mask and then cut back to a
+// hard edge, so the dot flows into the strokes of the mark instead of cross-fading (the "gooey" technique).
+const GOO = (() => { const S = 640, a = document.createElement('canvas'), b = document.createElement('canvas'); a.width = a.height = b.width = b.height = S; return { S, ga: a.getContext('2d', { willReadFrequently: true }), b, gb: b.getContext('2d') }; })();
+function gooMorph(x, y, k, r0, markSize, color) {
+  const { S, ga, b, gb } = GOO, h = S / 2;
+  ga.setTransform(1, 0, 0, 1, 0, 0); ga.clearRect(0, 0, S, S);
+  ga.filter = `blur(${(16 * Math.sin(Math.PI * k)).toFixed(2)}px)`; // softest in the middle of the morph
+  const r = r0 * (1 - k * k); // the dot holds its size while the mark grows out of it
+  if (r > 0.5) { ga.fillStyle = '#000'; ga.beginPath(); ga.arc(h, h, r, 0, 7); ga.fill(); }
+  const ms = markSize * lerp(0.45, 1, eo(k));
+  ga.drawImage(tinted('#000000'), h - ms / 2, h - ms / 2, ms, ms);
+  ga.filter = 'none';
+  const im = ga.getImageData(0, 0, S, S), d = im.data, [R, G, B] = rgb(color);
+  for (let i = 0; i < d.length; i += 4) { const v = clamp((d[i + 3] / 255 - 0.22) / 0.28); d[i] = R; d[i + 1] = G; d[i + 2] = B; d[i + 3] = v * v * (3 - 2 * v) * 255; }
+  gb.putImageData(im, 0, 0); ctx.drawImage(b, x - h, y - h);
 }
 function check(x, y, s, color, lw = 4) {
   ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -97,7 +116,7 @@ const CUE = (() => {
   const ph = hitsIn(TM.prompt.t0 + 0.2, TM.prompt.end - 0.6, 7); // prompt: one word per hit, then the click
   c.words = ph.slice(0, 6); c.click = ph[6];
   const ah = hitsIn(TM.app.t0 + 1.0, TM.app.out - 0.3, 13);      // client health: a row per hit, then each change
-  c.rows = ah.slice(0, 7); c.hl = ah[7]; c.sms = ah[8]; c.replies = ah.slice(9, 12); c.toast = ah[12];
+  c.rows = ah[0]; c.sms = ah.slice(1, 4); c.replies = ah.slice(5, 8); c.toast = ah[9]; // cards together; pills on the beat
   c.feat = TM.feat.map((t0) => { const h = hitsIn(t0 + 0.15, t0 + TM.featDur - 0.25, 6); return { line2: h[0], ks: h.slice(1).map((x) => x - t0) }; });
   return c;
 })();
@@ -241,7 +260,7 @@ function drawMark(t) {
   const TAG = 'Know who’s about to leave.'.split(' '), tagW = tw(TAG.join(' '), 42, 500, -0.5);
   let x = CX - tagW / 2;
   TAG.forEach((w, i) => {
-    const p = eo(P(t, CUE.tag[i] - 0.02, CUE.tag[i] + 0.22));
+    const p = eo(P(t, CUE.tag[i] - 0.03, CUE.tag[i] + 0.35));
     if (p > 0) txt(w, x, LKY + 150 + (1 - p) * 18, { size: 42, w: 500, color: '#a9a6e0', a: p, ls: -0.5 });
     x += tw(w + ' ', 42, 500, -0.5);
   });
@@ -319,7 +338,7 @@ function drawApp(t) {
 
   // header + counters
   txt('Client health', 80, 340, { size: 66, w: 700, ls: -2 });
-  const rep3 = (i) => eo(P(t, CLIENTS[i].rep, CLIENTS[i].rep + 0.3));
+  const rep3 = (i) => eo(P(t, CLIENTS[i].rep - 0.03, CLIENTS[i].rep + 0.35));
   const nReplied = rep3(0) + rep3(1) + rep3(2);
   const stats = [['Healthy', Math.round(41 + nReplied), C.ok], ['Needs attention', 12, C.warn], ['At risk', Math.round(5 - nReplied), C.risk]];
   let sx = 80;
@@ -334,13 +353,13 @@ function drawApp(t) {
   });
 
   CLIENTS.forEach((c, i) => {
-    const y = 490 + i * 170, ti = CUE.rows[i], p = eo(P(t, ti - 0.02, ti + 0.26));
+    const y = 490 + i * 170, ti = CUE.rows + i * 0.035, p = eo(P(t, ti - 0.05, ti + 0.45));
     if (p <= 0) return;
     const risky = i < 3, rep = risky ? rep3(i) : 0;
-    const g = eo(P(t, ti + 0.04, ti + 0.4));
+    const g = eo(P(t, ti + 0.1, ti + 0.75));
     const sc = risky ? lerp(c.s, c.up, rep) * g : c.s * g;
     ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 26);
-    box(70, y, 940, 150, 26, risky && rep < 1 ? mixc('#ffffff', '#fdecea', clamp(P(t, CUE.hl, CUE.hl + 0.15) * (1 - rep))) : '#fff', { stroke: C.line, lw: 1.5 });
+    box(70, y, 940, 150, 26, risky && rep < 1 ? mixc('#ffffff', '#fdecea', clamp(P(t, CUE.rows + 0.2, CUE.rows + 0.6) * (1 - rep))) : '#fff', { stroke: C.line, lw: 1.5 });
     dot(130, y + 48, 30, TINTS[i % 4]); txt(c.n.split(' ').map((w) => w[0]).join(''), 130, y + 57, { size: 24, w: 700, color: C.accent, align: 'center' });
     txt(c.n, 182, y + 58, { size: 34, w: 650 });
     // win-back rows flip straight from At risk to Healthy as the reply lands (no wide "Needs attention" chip under the pill)
@@ -353,19 +372,21 @@ function drawApp(t) {
     box(290, y + 107, 270, 12, 6, C.line); box(290, y + 107, 270 * sc / 100, 12, 6, scoreColor(sc));
     txt(String(Math.round(sc)), 582, y + 122, { size: 34, w: 700, color: scoreColor(sc) });
     if (risky) {
-      const so = P(t, CUE.sms + i * 0.04, CUE.sms + 0.18 + i * 0.04);
-      if (rep > 0.02) {
-        box(710, y + 92, 276, 44, 22, mixc('#ffffff', C.ok, 0.14)); check(738, y + 114, 20, C.ok, 3.5);
-        txt('Replied · booked', 762, y + 122, { size: 22, w: 700, color: C.ok });
-      } else if (so > 0) {
-        ctx.save(); ctx.globalAlpha = so; box(710, y + 92, 276, 44, 22, C.tint);
+      const so = eo(P(t, CUE.sms[i] - 0.03, CUE.sms[i] + 0.32)); // each pill slides in on its own beat
+      if (so > 0 && rep < 1) {
+        ctx.save(); ctx.globalAlpha *= so * (1 - rep); ctx.translate((1 - so) * 22, 0); box(710, y + 92, 276, 44, 22, C.tint);
         txt('SMS + email sent', 734, y + 122, { size: 22, w: 700, color: C.accent }); ctx.restore();
+      }
+      if (rep > 0) {
+        ctx.save(); ctx.globalAlpha *= rep; ctx.translate(0, (1 - rep) * 10);
+        box(710, y + 92, 276, 44, 22, mixc('#ffffff', C.ok, 0.14)); check(738, y + 114, 20, C.ok, 3.5);
+        txt('Replied · booked', 762, y + 122, { size: 22, w: 700, color: C.ok }); ctx.restore();
       }
     }
     ctx.restore();
   });
   // toast
-  const tp = back(P(t, CUE.toast, CUE.toast + 0.3), 1.3);
+  const tp = back(P(t, CUE.toast - 0.03, CUE.toast + 0.4), 1.2);
   if (tp > 0) {
     ctx.save(); ctx.globalAlpha = clamp(tp * 2); ctx.translate(0, (1 - tp) * 30);
     box(70, 1700, 600, 76, 38, C.ink, { shadow: 30, sa: 0.3 });
@@ -398,31 +419,32 @@ const FEATS = [
   { l: ['Bookings back', 'on the calendar.'], t0: TM.feat[2] },
 ];
 const NODE_X = [80, CX, 1000], PROG_Y = 1760;
-function featCard(k, tt, ks) { // ks: the hits (relative to the feature) that drive each change // drawn in a 700×640 card space; the caller scales it up to fit the portrait frame
+// Drawn in a 700×640 card space (the caller scales it up for the portrait frame). ks: the hits, relative to the
+// feature's start, that each change eases in on.
+function featCard(k, tt, ks) {
   const cx = 0, cy = 0, cw = 700, ch = 640;
   box(cx, cy, cw, ch, 36, '#fff', { shadow: 70, sa: 0.16, sy: 28, stroke: C.line, lw: 1.5 });
   if (k === 0) {
     dot(cx + 64, cy + 64, 30, C.tint); txt('JR', cx + 64, cy + 73, { size: 22, w: 700, color: C.accent, align: 'center' });
     txt('Jordan Reyes', cx + 112, cy + 62, { size: 32, w: 700, ls: -0.6 }); txt('Regular since 2023', cx + 112, cy + 92, { size: 21, w: 500, color: C.mute });
-    const s = 78 - 16 * eo(P(tt, ks[0], ks[0] + 0.16)) - 12 * eo(P(tt, ks[1], ks[1] + 0.16)) - 12 * eo(P(tt, ks[2], ks[2] + 0.16)), col = scoreColor(s), // the score drops a step on each hit
-      x = cx + cw / 2, y = cy + 290;
+    const s = lerp(78, 38, io(P(tt, ks[0] - 0.05, ks[0] + 0.95))), col = scoreColor(s), x = cx + cw / 2, y = cy + 290;
     ctx.save(); ctx.lineWidth = 26; ctx.lineCap = 'round';
     ctx.strokeStyle = C.line; ctx.beginPath(); ctx.arc(x, y, 130, 0, 7); ctx.stroke();
     ctx.strokeStyle = col; ctx.beginPath(); ctx.arc(x, y, 130, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * s / 100); ctx.stroke(); ctx.restore();
     txt(String(Math.round(s)), x, y + 34, { size: 96, w: 800, ls: -3, align: 'center', color: col });
     txt('Health score', x, y + 190, { size: 22, w: 600, color: C.mute, align: 'center' });
-    const cp = back(P(tt, ks[3] - 0.02, ks[3] + 0.25), 1.8);
+    const cp = back(P(tt, ks[3] - 0.03, ks[3] + 0.35), 1.4);
     if (cp > 0) { ctx.save(); ctx.translate(cx + cw - 64, cy + 62); ctx.scale(cp, cp); box(-84, -22, 84, 44, 22, mixc('#ffffff', C.risk, 0.14)); txt('At risk', -42, 8, { size: 21, w: 700, color: C.risk, align: 'center' }); ctx.restore(); }
     [['Visit overdue · 6 weeks', ks[3]], ['No reply · 3 messages', ks[4]]].forEach(([s2, ts], i) => {
-      const p = eo(P(tt, ts - 0.02, ts + 0.22)); ctx.save(); ctx.globalAlpha = p; ctx.translate((1 - p) * 20, 0);
+      const p = eo(P(tt, ts - 0.03, ts + 0.35)); ctx.save(); ctx.globalAlpha = p; ctx.translate((1 - p) * 20, 0);
       dot(cx + 70, cy + 520 + i * 56, 9, C.risk); txt(s2, cx + 96, cy + 530 + i * 56, { size: 26, w: 600 }); ctx.restore();
     });
   } else if (k === 1) {
     txt('Win-back automation', cx + 48, cy + 74, { size: 32, w: 700, ls: -0.6 });
-    const on = P(tt, ks[4] - 0.02, ks[4] + 0.15); box(cx + cw - 128, cy + 42, 80, 44, 22, mixc(C.line, C.accent, on)); dot(cx + cw - 106 + 36 * eo(on), cy + 64, 17, '#fff');
+    const on = io(P(tt, ks[4] - 0.03, ks[4] + 0.3)); box(cx + cw - 128, cy + 42, 80, 44, 22, mixc(C.line, C.accent, on)); dot(cx + cw - 106 + 36 * eo(on), cy + 64, 17, '#fff');
     const nodes = [['When a client is at risk', 0], ['Send SMS', 1], ['Send email', 2], ['Invite to book', 3]];
     nodes.forEach(([lab, i]) => {
-      const y = cy + 140 + i * 118, p = eo(P(tt, ks[i] - 0.02, ks[i] + 0.24)); // a step per hit
+      const y = cy + 140 + i * 118, p = eo(P(tt, ks[i] - 0.03, ks[i] + 0.35)); // a step per hit
       if (i > 0) { ctx.fillStyle = C.accent; ctx.fillRect(cx + 346, y - 22, 4, 22 * p); }
       ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 20);
       const trig = i === 0; box(cx + 60, y, 580, 84, 22, trig ? C.accent : '#fff', { stroke: trig ? null : C.line, lw: 2 });
@@ -437,10 +459,10 @@ function featCard(k, tt, ks) { // ks: the hits (relative to the feature) that dr
     [[0, 0], [1, 2], [2, 1], [4, 0], [4, 3], [0, 3], [2, 3]].forEach(([c, r], i) => { const p = eo(P(tt, 0.1 + i * 0.05, 0.4 + i * 0.05)); box(gx + c * colw, cy + 196 + r * 108 + (1 - p) * 10, colw - 14, 94, 14, '#f2f1fb', { }); });
     const sx = gx + 3 * colw, sy = cy + 196 + 108;
     box(sx, sy, colw - 14, 94, 14, null, { stroke: C.soft, lw: 2.5, dash: [8, 8] });
-    const fp = back(P(tt, ks[0] - 0.02, ks[0] + 0.25), 1.5);
+    const fp = back(P(tt, ks[0] - 0.03, ks[0] + 0.38), 1.2);
     if (fp > 0) { ctx.save(); ctx.translate(sx + 49, sy + 47); ctx.scale(fp, fp); box(-49, -47, 98, 94, 14, C.accent, { shadow: 30, sa: 0.35 });
       txt('Jordan', 0, -2, { size: 22, w: 700, color: '#fff', align: 'center' }); txt('10:00', 0, 26, { size: 18, w: 500, color: 'rgba(255,255,255,.75)', align: 'center' }); ctx.restore(); }
-    const bp = back(P(tt, ks[1] - 0.02, ks[1] + 0.28), 1.3);
+    const bp = back(P(tt, ks[1] - 0.03, ks[1] + 0.4), 1.1);
     if (bp > 0) { ctx.save(); ctx.globalAlpha = clamp(bp * 2); ctx.translate(0, (1 - bp) * 16);
       box(cx + 48, cy + 560, 604, 54, 27, mixc('#ffffff', C.ok, 0.13)); check(cx + 84, cy + 587, 18, C.ok, 3.5);
       txt('Booked · health score 86', cx + 112, cy + 596, { size: 25, w: 650, color: C.ok }); ctx.restore(); }
@@ -454,8 +476,8 @@ function drawFeatures(t) {
     ctx.save(); ctx.globalAlpha = 1 - ex; ctx.translate(-40 * ex, 0);
     txt(`0${k + 1}`, 80, 270, { size: 28, w: 700, color: C.accent, ls: 2, a: eo(P(tt, 0, 0.3)) });
     const l2 = CUE.feat[k].line2 - f.t0; // line 1 lands on the beat, line 2 and the card on the next hit
-    f.l.forEach((s, i) => { const a = i ? l2 - 0.02 : 0; rise(s, 80, 430 + i * 118, P(tt, a, a + 0.32), { size: 100, w: 700, ls: -4.5 }); });
-    const cp = eo(P(tt, l2 - 0.02, l2 + 0.3));
+    f.l.forEach((s, i) => { const a = i ? l2 - 0.02 : 0; rise(s, 80, 430 + i * 118, P(tt, a, a + 0.45), { size: 100, w: 700, ls: -4.5 }); });
+    const cp = eo(P(tt, l2 - 0.03, l2 + 0.45));
     ctx.save(); ctx.globalAlpha *= cp; ctx.translate(85, 700 + (1 - cp) * 40); ctx.scale(1.3, 1.3); featCard(k, tt, CUE.feat[k].ks); ctx.restore();
     ctx.restore();
   });
@@ -504,15 +526,13 @@ function drawEnd(t) {
   }
   // the period glides to where the mark will sit, swells, and blooms into the logo
   const mx = lockupMx();
-  const mk = P(t, E.logo - 0.15, E.logo + 0.3);
+  const m0 = E.logo - 0.3, m1 = E.logo + 0.4, mk = P(t, m0, m1);
   if (t < exit) dot(d[0], d[1], t < E.hop[1] ? 14 : 15);
-  else if (mk < 1) {
-    const k = io(P(t, exit, E.logo - 0.15));
-    dot(lerp(perX, mx, k), lerp(perY, LKY, k) - Math.sin(k * Math.PI) * 70, lerp(15, 40, k) * (1 - eo(mk)), C.accent, 1 - P(mk, 0.4, 1));
-  }
-  if (t >= E.logo - 0.15) {
+  else if (t < m0) { const k = io(P(t, exit, m0)); dot(lerp(perX, mx, k), lerp(perY, LKY, k) - Math.sin(k * Math.PI) * 70, lerp(15, 44, k)); }
+  else if (mk < 1) gooMorph(mx, LKY, io(mk), 44, LK.mark, C.accent);
+  if (t >= m0) {
     const fold = io(P(t, E.fold, E.foldEnd));
-    lockup(t, E.logo, { c1: C.accent, c2: C.ink, fold, foldY: CY, markK: lerp(0.22, 1, back(mk, 1.3)), markA: clamp(mk * 2.5) });
+    lockup(t, E.logo, { c1: C.accent, c2: C.ink, fold, foldY: CY, markK: 1, markA: mk >= 1 ? 1 : 0 });
     const up = eo(P(t, E.url, E.url + 0.5)) * (1 - P(t, E.urlOut, E.urlOut + 0.3));
     if (up > 0) {
       const u = 'msghealth.net', uw = tw(u, 46, 650, -1);

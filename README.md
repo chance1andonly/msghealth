@@ -118,8 +118,9 @@ the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with deep-indigo ink
   (place it at `assets/audio/song.mp3`, not committed) cut at 5.845 s so its first kick lands on the 4.5 s drop (the opening hook plays 1.33× faster to get there);
   each act starts on a beat of its 76.2 BPM grid. No sound effects play over the song.
 - Builds on the beat: `scripts/analyse-song.mjs` measures the song's percussion hits into `src/launch-music.js`, and
-  each thing on screen appears on a hit: the wordmark and tagline words, each typed word, every Client Health row,
-  the risk flags, the SMS, each reply and the toast, and every step inside the feature cards. Re-run it after
+  changes ease in on a hit: the wordmark and tagline words, each typed word, each SMS and reply pill and the toast
+  in Client Health (the cards themselves arrive together), and the steps inside the feature cards. The period melts
+  into the logo with a liquid (blur-and-threshold) morph. Re-run it after
   changing the song or the cut.
 - Loops seamlessly: the last frame is pixel-identical to the first (the dot on its 40 px of line), and the audio
   ends in silence that runs into the song's silent opening.
