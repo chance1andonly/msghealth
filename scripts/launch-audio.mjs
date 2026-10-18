@@ -1,6 +1,5 @@
 // Soundtrack for the 33 s launch film: a licensed instrumental as the music bed (cut so its first kick
-// lands on the drop at 6.0 s). Synthesised sound design only plays where the song is silent: the 6 s hook and
-// the closing heartbeat.
+// lands on the drop). The song plays alone — no sound effects.
 //   node scripts/launch-audio.mjs dist/launch-score.wav
 // Env: SONG (path to the mp3, default assets/audio/song.mp3 — not committed), FFMPEG.
 import fs from 'node:fs';
@@ -9,7 +8,7 @@ import { execFileSync } from 'node:child_process';
 import '../src/launch-timing.js';
 
 const TM = globalThis.TIMING;
-const SR = 48000, DUR = TM.DURATION, N = SR * DUR;
+const SR = 48000, DUR = TM.DURATION, N = Math.round(SR * DUR);
 const SONG = process.env.SONG || 'assets/audio/song.mp3';
 const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 
@@ -19,36 +18,12 @@ const pcm = new Float32Array(raw.buffer, raw.byteOffset, Math.floor(raw.byteLeng
 const M = [new Float32Array(N), new Float32Array(N)];
 for (let n = 0; n < N && 2 * n + 1 < pcm.length; n++) { M[0][n] = pcm[2 * n]; M[1][n] = pcm[2 * n + 1]; }
 // level the song to a fixed RMS over the part that plays (after the drop), so the effects sit at a known distance
-{ let e = 0, c = 0; for (let n = Math.floor(TM.D * SR); n < N; n++) { e += M[0][n] ** 2 + M[1][n] ** 2; c += 2; } const g = 0.13 / Math.sqrt(e / c); for (const ch of M) for (let n = 0; n < N; n++) ch[n] *= g; }
-// the song fades out under the logo fold so the film ends in silence and loops cleanly into its silent opening
-const fadeStart = TM.end.urlOut, fadeEnd = TM.end.foldEnd - 0.05;
-for (let n = 0; n < N; n++) { const t = n / SR; if (t > fadeStart) { const k = Math.min(1, (t - fadeStart) / (fadeEnd - fadeStart)); const g = Math.pow(1 - k, 2); M[0][n] *= g; M[1][n] *= g; } }
+{ let e = 0, c = 0; for (let n = Math.floor(TM.D * SR); n < N; n++) { e += M[0][n] ** 2 + M[1][n] ** 2; c += 2; } const g = 0.075 / Math.sqrt(e / c); for (const ch of M) for (let n = 0; n < N; n++) ch[n] *= g; }
+// a short fade at the very end so the last frame doesn't cut the song off mid-note
+for (let n = 0; n < N; n++) { const k = Math.min(1, (DUR - n / SR) / 0.5); if (k < 1) { const g = k * k; M[0][n] *= g; M[1][n] *= g; } }
 
-// ── sound design ─────────────────────────────────────────────────────────────
+// No sound effects: the song plays from start to finish (its intro carries the opening hook).
 const X = [new Float32Array(N), new Float32Array(N)];
-const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
-let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) * 2 - 1;
-function add(bus, t0, dur, fn, gain = 1, pan = 0) {
-  const s0 = Math.max(0, Math.floor(t0 * SR)), s1 = Math.min(N, Math.floor((t0 + dur) * SR));
-  const gl = gain * Math.cos((pan + 1) * Math.PI / 4), gr = gain * Math.sin((pan + 1) * Math.PI / 4);
-  for (let i = s0; i < s1; i++) { const v = fn((i - s0) / SR); bus[0][i] += v * gl; bus[1][i] += v * gr; }
-}
-const env = (t, a, d) => Math.min(1, t / a) * Math.exp(-t * d);
-const tick = (f = 1800) => (t) => Math.exp(-t * 90) * Math.sin(2 * Math.PI * f * t) * (1 + 0.3 * rnd());
-const thud = (f) => (t) => Math.exp(-t * 14) * Math.sin(2 * Math.PI * f * t) * Math.min(1, t / 0.006);
-const lubdub = (t, g = 1) => { add(X, t, 0.35, thud(58), 0.5 * g); add(X, t + 0.2, 0.35, thud(50), 0.36 * g); };
-
-// hook (0 → drop): a heartbeat that fades out, the slam, then the song's own silence.
-// Designed on a 6 s clock and played TM.HOOK× faster, exactly like the picture.
-const hk = (x) => x / TM.HOOK;
-[1.0, 2.0, 3.0].forEach((t, i) => lubdub(hk(t), 1 - i * 0.28));
-add(X, hk(4.0), 1.2, (t) => Math.exp(-t * 4) * Math.sin(2 * Math.PI * (44 + 60 * Math.exp(-t * 20)) * t) * 1.1, 0.55);
-add(X, hk(4.0), 0.25, (t) => Math.exp(-t * 30) * rnd(), 0.3);
-for (let k = 0; k < 42; k++) { const ta = hk(1.1 + 3.4 * Math.pow(k / 42, 1.5)); add(X, ta, 0.08, tick(2400 - k * 15), 0.05, ((k * 37) % 20) / 10 - 1); }
-
-// From the drop on, the song carries everything: no sound effects while it plays.
-// The only one left is the closing heartbeat, after the song has faded — the loop point.
-lubdub(TM.end.loop.beat, 0.9);
 
 // ── mix ──────────────────────────────────────────────────────────────────────
 function reverb(x, mix) {

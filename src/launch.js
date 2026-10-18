@@ -4,7 +4,7 @@
 // Everything is drawn on one canvas from a single time value, so renderFrame(t) is deterministic.
 'use strict';
 
-const W = 1080, H = 1920, CX = W / 2, CY = H / 2, DURATION = 33;
+const W = 1080, H = 1920, CX = W / 2, CY = H / 2, DURATION = TIMING.DURATION;
 // Everything is laid out on a 1080×1920 grid; the canvas itself can be rendered larger (?scale=2 → 2160×3840)
 // and at any frame rate (?fps=), so the film is resolution-independent.
 const QS = new URLSearchParams(location.search), DPR = +(QS.get('scale') || 1), FPS = +(QS.get('fps') || 60);
@@ -155,13 +155,13 @@ function hitsIn(a, b, n) {
 }
 const CUE = (() => {
   const c = {};
-  const mh = hitsIn(TM.D + 0.2, TM.iris[0], 6);                 // logo: the wordmark, then the tagline word by word
+  const mh = hitsIn(TM.D + 0.12, TM.iris[0], 6);                // logo: the wordmark, then the tagline word by word
   c.word = mh[0]; c.tag = mh.slice(1, 6);
-  const ph = hitsIn(TM.prompt.t0 + 0.2, TM.prompt.end - 0.6, 7); // prompt: one word per hit, then the click
+  const ph = hitsIn(TM.prompt.t0 + 0.15, TM.prompt.end - 0.5, 7); // prompt: one word per hit, then the click
   c.words = ph.slice(0, 6); c.click = ph[6];
-  const ah = hitsIn(TM.app.t0 + 1.0, TM.app.out - 0.3, 13);      // client health: a row per hit, then each change
+  const ah = hitsIn(TM.app.t0 + 0.6, TM.app.out - 0.2, 10);     // client health: a row per hit, then each change
   c.rows = ah[0]; c.sms = ah.slice(1, 5); c.replies = ah.slice(5, 9); c.toast = ah[9]; // cards together; pills on the beat
-  c.feat = TM.feat.map((t0, k) => { const l2 = t0 + TM.B / 2, h = hitsIn(l2 + 0.15, TM.featEnd[k] - 0.25, 5); return { line2: l2, ks: h.map((x) => x - t0) }; });
+  c.feat = TM.feat.map((t0, k) => { const l2 = t0 + TM.B / 2, h = hitsIn(l2 + 0.12, TM.featEnd[k] - 0.2, 5); return { line2: l2, ks: h.map((x) => x - t0) }; });
   return c;
 })();
 
@@ -398,7 +398,7 @@ function drawApp(t) {
   const lastChange = (lab) => { let c = -1; for (let i = 0; i < OUT; i++) { const r = CLIENTS[i].rep; if (r <= t && statusAt(i, r - 1e-3) !== statusAt(i, r) && (statusAt(i, r) === lab || statusAt(i, r - 1e-3) === lab)) c = Math.max(c, r); } return c; };
   const STATS = [['Healthy', C.ok], ['Needs attention', C.warn], ['At risk', C.risk]];
   let sx = 80;
-  const sIn = eo(P(t, TM.app.t0 + 0.9, TM.app.t0 + 1.2));
+  const sIn = eo(P(t, TM.app.t0 + 0.5, TM.app.t0 + 0.75));
   STATS.forEach(([l, col]) => {
     const now = countAt(l, t), tc = lastChange(l), k = tc < 0 ? 1 : eo(P(t, tc, tc + 0.32));
     const prev = tc < 0 ? now : countAt(l, tc - 1e-3);
@@ -462,7 +462,7 @@ function drawProduct(t) {
   drawApp(t); ctx.restore();
   // shutter: the indigo flood first settles to exactly the app window (the "screen" of this scene),
   // then collapses to a line, which retracts to nothing
-  const m = io(P(t, A.t0 + 0.02, A.t0 + 0.4)), c = io(P(t, A.t0 + 0.45, A.t0 + 0.85)), r = io(P(t, A.t0 + 0.85, A.t0 + 1.2));
+  const m = io(P(t, A.t0 + 0.02, A.t0 + 0.26)), c = io(P(t, A.t0 + 0.28, A.t0 + 0.52)), r = io(P(t, A.t0 + 0.52, A.t0 + 0.74));
   const wx = lerp(0, WIN.x, m), wy = lerp(0, WIN.y, m), wW = lerp(W, WIN.w, m), wH = lerp(H, WIN.h, m);
   const hh = lerp(wH, 6, c), ww = lerp(wW, 0, r);
   if (ww > 1 && t >= A.t0) {
@@ -488,16 +488,16 @@ function featCard(k, tt, ks) {
   if (k === 0) {
     dot(cx + 64, cy + 64, 30, C.tint); txt('JR', cx + 64, cy + 73, { size: 22, w: 700, color: C.accent, align: 'center' });
     txt('Jordan Reyes', cx + 112, cy + 62, { size: 32, w: 700, ls: -0.6 }); txt('Regular since 2023', cx + 112, cy + 92, { size: 21, w: 500, color: C.mute });
-    const s = lerp(78, 38, io(P(tt, ks[0] - 0.05, ks[0] + 0.95))), col = scoreColor(s), x = cx + cw / 2, y = cy + 290;
+    const s = lerp(78, 38, io(P(tt, ks[0] - 0.05, ks[0] + 0.5))), col = scoreColor(s), x = cx + cw / 2, y = cy + 290;
     ctx.save(); ctx.lineWidth = 26; ctx.lineCap = 'round';
     ctx.strokeStyle = C.line; ctx.beginPath(); ctx.arc(x, y, 130, 0, 7); ctx.stroke();
     ctx.strokeStyle = col; ctx.beginPath(); ctx.arc(x, y, 130, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * s / 100); ctx.stroke(); ctx.restore();
     txt(String(Math.round(s)), x, y + 34, { size: 96, w: 800, ls: -3, align: 'center', color: col });
     txt('Health score', x, y + 190, { size: 22, w: 600, color: C.mute, align: 'center' });
-    const cp = back(P(tt, ks[2] - 0.03, ks[2] + 0.35), 1.4);
+    const cp = back(P(tt, ks[3] - 0.03, ks[3] + 0.3), 1.4);
     if (cp > 0) { ctx.save(); ctx.translate(cx + cw - 64, cy + 62); ctx.scale(cp, cp); box(-84, -22, 84, 44, 22, mixc('#ffffff', C.risk, 0.14)); txt('At risk', -42, 8, { size: 21, w: 700, color: C.risk, align: 'center' }); ctx.restore(); }
     [['Visit overdue · 6 weeks', ks[2]], ['No reply · 3 messages', ks[3]]].forEach(([s2, ts], i) => {
-      const p = eo(P(tt, ts - 0.03, ts + 0.35)); ctx.save(); ctx.globalAlpha = p; ctx.translate((1 - p) * 20, 0);
+      const p = eo(P(tt, ts - 0.03, ts + 0.3)); ctx.save(); ctx.globalAlpha = p; ctx.translate((1 - p) * 20, 0);
       dot(cx + 70, cy + 520 + i * 56, 9, C.risk); txt(s2, cx + 96, cy + 530 + i * 56, { size: 26, w: 600 }); ctx.restore();
     });
   } else if (k === 1) {
@@ -568,7 +568,7 @@ function drawEnd(t) {
   else if (t < E.hop[0]) d = [CX, pulseDotY(END.lineY, half, amp(t), t)];
   else if (t < E.hop[1]) { const k = io(P(t, E.hop[0], E.hop[1])); d = [lerp(CX, perX, k), lerp(pulseDotY(END.lineY, CX, amp(E.hop[0]), E.hop[0]), perY, k) - Math.sin(k * Math.PI) * 220]; }
   else d = [perX, perY];
-  const exit = E.exit, ex = P(t, exit, exit + 0.5);
+  const exit = E.exit, ex = P(t, exit, exit + 0.3);
   if (t < exit) { // headline + heartbeat
     pulseLine(END.lineY, half, amp(t), t, 5, 520);
     rise('Keep your', CX, END.y1, P(t, E.keep, E.keep + 0.55), { size: END.size, w: 800, ls: -8, align: 'center' });
@@ -580,7 +580,7 @@ function drawEnd(t) {
     if (t > E.ring) { const q = P(t, E.ring, E.ring + 0.7); ring(d[0], d[1], 15 + q * 80, 3, C.accent, (1 - q) * 0.6); }
   }
   // text exits as the dot becomes the mark
-  if (t >= exit && t < exit + 0.5) {
+  if (t >= exit && t < exit + 0.3) {
     ctx.save(); ctx.globalAlpha = 1 - ex; ctx.translate(0, -50 * ex);
     rise('Keep your', CX, END.y1, 1, { size: END.size, w: 800, ls: -8, align: 'center' });
     txt('customers', px0, END.y2, { size: END.size, w: 800, ls: -8 }); ctx.restore();
@@ -613,22 +613,15 @@ function drawEnd(t) {
     }
     if (mc) logo(mc[0], mc[1], size, C.accent);
   }
-  if (t >= l1) {
-    const fold = io(P(t, E.fold, E.foldEnd));
-    lockup(t, l1 - 5, { c1: C.accent, c2: C.ink, fold, foldY: CY, markK: 1, markA: 1, wordT: l1 - 5 });
-    const up = eo(P(t, E.url, E.url + 0.5)) * (1 - P(t, E.urlOut, E.urlOut + 0.3));
+  if (t >= l1) { // the lockup and URL hold to the last frame
+    lockup(t, l1 - 5, { c1: C.accent, c2: C.ink, markK: 1, markA: 1, wordT: l1 - 5 });
+    const up = eo(P(t, E.url, E.url + 0.45));
     if (up > 0) {
       const u = 'msghealth.net', uw = tw(u, 46, 650, -1);
       ctx.save(); ctx.globalAlpha = up; ctx.translate(0, (1 - up) * 14);
       txt(u, CX, LKY + 140, { size: 46, w: 650, color: C.accent, align: 'center', ls: -1 });
-      ctx.fillStyle = C.accent; ctx.fillRect(CX - uw / 2, LKY + 156, uw * eo(P(t, E.url + 0.2, E.url + 0.8)), 3); ctx.restore();
+      ctx.fillStyle = C.accent; ctx.fillRect(CX - uw / 2, LKY + 156, uw * eo(P(t, E.url + 0.15, E.url + 0.6)), 3); ctx.restore();
     }
-    // the last frame is the first frame: the same dot, same place, same 40 px of line (so the video loops seamlessly)
-    const L = E.loop;
-    if (t >= L.stub[0]) pulseLine(CY, 20 * eo(P(t, L.stub[0], L.stub[1])), 0, t, 5, 520);
-    if (t >= L.dot[0]) dot(CX, CY, 14 * eo(P(t, L.dot[0], L.dot[1])));
-    const q = P(t, L.beat, L.beat + 0.42);
-    if (q > 0 && q < 1) ring(CX, CY, 14 + q * 110, 3, C.accent, (1 - q) * 0.55);
   }
 }
 

@@ -106,35 +106,21 @@ Keep the delivery natural and conversational, as if one business owner were talk
 
 ---
 
-# 33-second launch film (9:16 portrait)
+# Launch film (9:16 portrait, cut to the song)
 
-A typographic product film for msghealth.net, built from the structure of a modern launch video
-(hook → logo → one typed request → proof → three consequences → promise → lockup) and re-made in
-the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with deep-indigo ink, the official logo mark and Inter type.
+A typographic product film for msghealth.net in the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with
+deep-indigo ink, the official logo mark and Inter type. It runs the length of its song (20.9 s) and is cut to it.
 
-- **Final video:** `dist/msghealth-launch.mp4` (1440×2560 portrait 9:16, 60 fps with motion blur, 33 s, H.264 High@5.2 + AAC).
-  This is the only version rendered; 60 fps plays at the right speed everywhere and matches the platforms' cap.
-- Source: `launch.html` + `src/launch.js` (all scenes, one canvas, `renderFrame(t)`); sound: `scripts/launch-audio.mjs`
-- Timing: every cue lives in `src/launch-timing.js`, shared by picture and sound. The music bed is an instrumental
-  (place it at `assets/audio/song.mp3`, not committed) cut at 5.845 s so its first kick lands on the 4.5 s drop (the opening hook plays 1.33× faster to get there);
-  each act starts on a beat of its 76.2 BPM grid. No sound effects play over the song.
-- Builds on the beat: `scripts/analyse-song.mjs` measures the song's percussion hits into `src/launch-music.js`, and
-  changes ease in on a hit: the wordmark and tagline words, each typed word, each SMS and reply pill and the toast
-  in Client Health (the cards themselves arrive together), and the steps inside the feature cards. The period melts
-  draws the logo: it traces the mark along its strokes from the left bar to the right bar, the mark slides right to
-  the end of the wordmark, then back left into the lockup, uncovering "MsgHealth" behind it as it goes. Re-run it after
-  changing the song or the cut.
-- Loops seamlessly: the last frame is pixel-identical to the first (the dot on its 40 px of line), and the audio
-  ends in silence that runs into the song's silent opening.
-- Render: `FFMPEG=ffmpeg npm run render:launch` (≈3.5 min; 6 motion-blur samples per frame). Open `launch.html` through a static server to scrub it.
-- Device: one indigo **pulse dot**. It sits on a flatline, becomes the logo, rides the product demo,
-  lands as the period of "Keep your customers.", blooms into the logo, and beats again at the close.
-
-| Time | Beat |
-|---|---|
-| 0–6 s | "Your customers / go quiet." Unanswered messages pile up, the heartbeat fades to a flatline, silence |
-| 6–10 s | Indigo ink flood, MsgHealth lockup, "Know who's about to leave." |
-| 10–14 s | One typed request: "Win back clients who've gone quiet." |
-| 14–18.5 s | Client Health: scores, At risk flags, SMS + email outreach, replies, "3 clients rebooked this week" |
-| 18.5–24.5 s | At-risk clients, flagged early · Win-backs sent for you · Bookings back on the calendar |
-| 24.5–33 s | "Keep your customers." → lockup → msghealth.net → the dot beats |
+- **Final video:** `dist/msghealth-launch.mp4` (1440×2560, 60 fps with motion blur, 20.9 s, H.264 High@5.2 + AAC).
+  This is the only version rendered.
+- Source: `launch.html` + `src/launch.js` (all scenes on one canvas, laid out on a 1080×1920 grid, `renderFrame(t)`);
+  sound: `scripts/launch-audio.mjs`.
+- Timing: every cue lives in `src/launch-timing.js`. The song (145 BPM) goes in `assets/audio/song.mp3` (not
+  committed). The opening plays over its intro and the indigo flood lands on its first 808 at 4.93 s; each act starts
+  on a beat and, inside it, things appear on the song's hi-hat hits, measured by `scripts/analyse-song.mjs` into
+  `src/launch-music.js` (re-run it after changing the song or the cut). No sound effects play over the song.
+- Render: `FFMPEG=ffmpeg npm run render:launch` (≈2.5 min).
+- Device: one indigo pulse dot. It rides the heartbeat line, floods into the logo, rides the demo, lands as the period of
+  "Keep your customers." and then draws the logo: it traces the mark along its strokes (left bar → loop → diagonal →
+  right bar → hook), the mark slides right to the end of the wordmark, then back left into the lockup, uncovering
+  "MsgHealth" behind it, and the lockup and msghealth.net hold to the end.
