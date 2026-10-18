@@ -118,18 +118,21 @@ Nothing pulses or drifts. Elements appear on beats, half-beats or quarter-beats,
   Check you have the rights to the song before running it as a paid ad.
 - Render: `npm run render:promo`
 
+Pacing: the song's intro (to beat 5) carries the hook. After the bass comes in, scenes cut every 1.5–2.5 beats,
+and every scene holds for at least about a second after its last element lands.
+
 | Beats | Time | What's on screen |
 |---|---|---|
-| 0–5 | 0–5.4s | "I don't know how salon owners could live without this." |
-| 5–7 | 5.4–7.3s | "Repeat clients are the business." |
-| 7–9 | 7.3–9.1s | "But when a regular stops booking…": Jan, Feb, Mar booked, April empty |
-| 9–11 | 9.1–11s | Dark glitch: "You won't see it coming until they're gone." |
-| 11–13 | 11–12.8s | "Meet" → MsgHealth: client retention for salons |
-| 13–15 | 12.8–14.7s | "It tells you who's drifting and brings them back." Health scores, churn alerts, automatic win-backs |
-| 15–17 | 14.7–16.5s | Every client gets a health score. Jordan is flagged At risk. |
-| 17–19 | 16.5–18.3s | Top churn risks and churn risk drivers |
-| 19–21 | 18.3–20.2s | The win-back runs (At risk → SMS → Email → Invite), Jordan replies, and the visit is booked |
-| 21–23 | 20.2–22s | Booking, reviews, loyalty, payments, inbox, automations |
-| 23–33 | 22–31.3s | Analytics & Predictions. Starts low, then the camera moves onto each card in turn as it rises: client health 31→84% healthy, repeat bookings 38→79%, retention forecast 21→68%, revenue won back $0→$4,436. On the pull-back, the cohort grid and business health (41→88) rise. |
+| 0–5 | 0–5.4s | "I don't know how salon owners could live without this.", with "this" underlined in a hand-drawn stroke |
+| 5–7 | 5.4–7.3s | "Repeat clients are the business." (bass drops) |
+| 7–9.5 | 7.3–9.6s | "But when a regular stops booking…": Jan, Feb, Mar booked, April empty |
+| 9.5–11 | 9.6–11s | Dark glitch: "You won't see it coming until they're gone." |
+| 11–13.5 | 11–13.3s | Logo lands centre, steps right, then sweeps left as MsgHealth wipes in. "Client retention for salons." |
+| 13.5–15.5 | 13.3–15.1s | "It tells you who's drifting and brings them back." |
+| 15.5–17.5 | 15.1–17s | Health scores. Jordan is flagged At risk. |
+| 17.5–19.5 | 17–18.8s | Top churn risks and the drivers behind them |
+| 19.5–22 | 18.8–21.1s | The win-back runs, Jordan replies, and the visit is booked |
+| 22–24 | 21.1–23s | Booking, reviews, loyalty, payments, inbox, automations |
+| 24–33 | 23–31.3s | Analytics & Predictions. Each card rises in turn as the camera moves onto it, then the pull-back shows the cohort grid and business health rising |
 | 33–35 | 31.3–33.1s | "Know your customers. Keep your customers." |
-| 35–end | 33.1–36.5s | Logo, MsgHealth, msghealth.net |
+| 35–end | 33.1–36.5s | Logo, msghealth.net, "Start now · 50% off your first month" |
