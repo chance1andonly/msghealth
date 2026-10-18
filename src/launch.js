@@ -82,21 +82,50 @@ function logo(x, y, size, color, a = 1) { // centred; the glyph fills ~73% of th
   if (!LOGO || size <= 0) return;
   ctx.save(); ctx.globalAlpha *= a; ctx.drawImage(tinted(color), x - size / 2, y - size / 2, size, size); ctx.restore();
 }
-// A liquid morph from a dot into the logo: both shapes are drawn blurred into one mask and then cut back to a
-// hard edge, so the dot flows into the strokes of the mark instead of cross-fading (the "gooey" technique).
-const GOO = (() => { const S = 640, a = document.createElement('canvas'), b = document.createElement('canvas'); a.width = a.height = b.width = b.height = S * DPR; return { S, ga: a.getContext('2d', { willReadFrequently: true }), b, gb: b.getContext('2d') }; })();
-function gooMorph(x, y, k, r0, markSize, color) {
-  const { S, ga, b, gb } = GOO, h = S / 2;
-  ga.setTransform(DPR, 0, 0, DPR, 0, 0); ga.clearRect(0, 0, S, S);
-  ga.filter = `blur(${(16 * DPR * Math.sin(Math.PI * k)).toFixed(2)}px)`; // softest in the middle of the morph
-  const r = r0 * (1 - k * k); // the dot holds its size while the mark grows out of it
-  if (r > 0.5) { ga.fillStyle = '#000'; ga.beginPath(); ga.arc(h, h, r, 0, 7); ga.fill(); }
-  const ms = markSize * lerp(0.45, 1, eo(k));
-  ga.drawImage(tinted('#000000'), h - ms / 2, h - ms / 2, ms, ms);
-  ga.filter = 'none';
-  const im = ga.getImageData(0, 0, S * DPR, S * DPR), d = im.data, [R, G, B] = rgb(color);
-  for (let i = 0; i < d.length; i += 4) { const v = clamp((d[i + 3] / 255 - 0.22) / 0.28); d[i] = R; d[i + 1] = G; d[i + 2] = B; d[i + 3] = v * v * (3 - 2 * v) * 255; }
-  gb.putImageData(im, 0, 0); ctx.drawImage(b, x - h, y - h, S, S);
+// ── logo draw-on ─────────────────────────────────────────────────────────────
+// The mark is revealed along a pen path that follows its strokes (in the logo's 512 px space), from the end
+// farthest from the wordmark (the left bar) to the end nearest it (the right bar). Every pixel of the logo is
+// given the position along the path of the stroke it belongs to; at progress p, pixels up to p are shown.
+const PEN = [ // [x, y, mapped]: mapped=false marks a pen move between strokes (no pixels belong to it)
+  [110, 392, 1], [102, 330, 1], [102, 120, 1], [122, 86, 1], [150, 112, 1], [225, 238, 1], [190, 290, 1], [150, 335, 1], [115, 372, 1],
+  [258, 318, 0], [300, 250, 1], [385, 106, 1], [404, 140, 1], [404, 385, 1], [388, 420, 1],
+];
+const HOOK = [[330, 292], [380, 402]]; // the hook grows alongside the lower half of the right bar
+let LDRAW = null;
+function buildLogoDraw() {
+  const N = 512, c = document.createElement('canvas'); c.width = c.height = N;
+  const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(tinted(C.accent), 0, 0);
+  const img = g.getImageData(0, 0, N, N), base = new Uint8ClampedArray(img.data);
+  const cum = [0]; for (let i = 1; i < PEN.length; i++) cum.push(cum[i - 1] + Math.hypot(PEN[i][0] - PEN[i - 1][0], PEN[i][1] - PEN[i - 1][1]));
+  const TOTAL = cum[cum.length - 1];
+  const at = (x, y) => { let best = 1e9, par = 0; // nearest point on the path → its arc length
+    for (let i = 1; i < PEN.length; i++) {
+      if (!PEN[i][2]) continue;
+      const [ax, ay] = PEN[i - 1], [bx, by] = PEN[i], dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy;
+      const u = clamp(((x - ax) * dx + (y - ay) * dy) / L2), d = Math.hypot(x - ax - u * dx, y - ay - u * dy);
+      if (d < best) { best = d; par = (cum[i - 1] + u * Math.sqrt(L2)) / TOTAL; }
+    }
+    return [best, par]; };
+  const pa = at(404, 300)[1], pb = 1, par = new Float32Array(N * N);
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const i = y * N + x; if (!base[i * 4 + 3]) continue;
+    let [d, q] = at(x, y);
+    const [hx, hy] = HOOK[0], [ex, ey] = HOOK[1], dx = ex - hx, dy = ey - hy, u = clamp(((x - hx) * dx + (y - hy) * dy) / (dx * dx + dy * dy));
+    if (Math.hypot(x - hx - u * dx, y - hy - u * dy) < d) q = lerp(pa, pb, u);
+    par[i] = q;
+  }
+  LDRAW = { c, g, img, base, par, cum, TOTAL };
+}
+function penPoint(p) { // position along the pen path, in the logo's 512 space
+  const { cum, TOTAL } = LDRAW, s = clamp(p) * TOTAL;
+  let i = 1; while (i < cum.length - 1 && cum[i] < s) i++;
+  const u = clamp((s - cum[i - 1]) / (cum[i] - cum[i - 1] || 1));
+  return [lerp(PEN[i - 1][0], PEN[i][0], u), lerp(PEN[i - 1][1], PEN[i][1], u)];
+}
+function drawLogoProgress(x, y, size, p) { // x, y: centre of the logo box
+  const { c, g, img, base, par } = LDRAW, d = img.data, soft = 0.018;
+  for (let i = 0, j = 3; i < par.length; i++, j += 4) { const a = base[j]; d[j] = a ? a * clamp((p - par[i]) / soft + 0.5) : 0; }
+  g.putImageData(img, 0, 0); ctx.drawImage(c, x - size / 2, y - size / 2, size, size);
 }
 function check(x, y, s, color, lw = 4) {
   ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -119,8 +148,8 @@ const CUE = (() => {
   const ph = hitsIn(TM.prompt.t0 + 0.2, TM.prompt.end - 0.6, 7); // prompt: one word per hit, then the click
   c.words = ph.slice(0, 6); c.click = ph[6];
   const ah = hitsIn(TM.app.t0 + 1.0, TM.app.out - 0.3, 13);      // client health: a row per hit, then each change
-  c.rows = ah[0]; c.sms = ah.slice(1, 4); c.replies = ah.slice(5, 8); c.toast = ah[9]; // cards together; pills on the beat
-  c.feat = TM.feat.map((t0, k) => { const h = hitsIn(t0 + 0.15, TM.featEnd[k] - 0.25, 6); return { line2: h[0], ks: h.slice(1).map((x) => x - t0) }; });
+  c.rows = ah[0]; c.sms = ah.slice(1, 5); c.replies = ah.slice(5, 9); c.toast = ah[9]; // cards together; pills on the beat
+  c.feat = TM.feat.map((t0, k) => { const l2 = t0 + TM.B / 2, h = hitsIn(l2 + 0.15, TM.featEnd[k] - 0.25, 5); return { line2: l2, ks: h.map((x) => x - t0) }; });
   return c;
 })();
 
@@ -255,7 +284,6 @@ function lockup(t, t0, o) {
   ctx.restore();
   return { x0, total, mx };
 }
-const lockupMx = () => { const gw = tw('MsgHealth', LK.word, 700, LK.ls), glyph = LK.mark * 0.73; return CX - (glyph + 28 + gw) / 2 + glyph / 2; };
 function drawMark(t) {
   const D = TM.D, flood = 2400 * expo(P(t, D, D + 0.7));
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
@@ -335,7 +363,7 @@ const CLIENTS = [
   { n: 'Jordan Reyes', v: '6 weeks ago', s: 38, up: 86, rep: CUE.replies[0] },
   { n: 'Priya Shah', v: '7 weeks ago', s: 31, up: 82, rep: CUE.replies[1] },
   { n: 'Morgan Ellis', v: '5 weeks ago', s: 44, up: 79, rep: CUE.replies[2] },
-  { n: 'Alex Chen', v: '3 weeks ago', s: 58 },
+  { n: 'Alex Chen', v: '3 weeks ago', s: 58, up: 81, rep: CUE.replies[3] },
   { n: 'Dana Okafor', v: '1 week ago', s: 91 },
   { n: 'Sam Patel', v: '2 days ago', s: 88 },
   { n: 'Lee Nguyen', v: '9 days ago', s: 76 },
@@ -348,34 +376,43 @@ function drawApp(t) {
   logo(110, 214, 96, C.accent); txt('MsgHealth', 160, 228, { size: 38, w: 700, ls: -1 });
   dot(960, 210, 30, '#dedbf9'); txt('S', 960, 220, { size: 28, w: 700, color: C.accent, align: 'center' });
 
-  // header + counters
+  // header + counters — the counts are computed from the rows below, so they always agree with them
   txt('Client health', 80, 340, { size: 66, w: 700, ls: -2 });
-  const rep3 = (i) => eo(P(t, CLIENTS[i].rep - 0.03, CLIENTS[i].rep + 0.35));
-  const nReplied = rep3(0) + rep3(1) + rep3(2);
-  const stats = [['Healthy', Math.round(41 + nReplied), C.ok], ['Needs attention', 12, C.warn], ['At risk', Math.round(5 - nReplied), C.risk]];
+  const OUT = 4; // the first four rows get outreach
+  const rep3 = (i) => (i < OUT ? eo(P(t, CLIENTS[i].rep - 0.03, CLIENTS[i].rep + 0.35)) : 0);
+  const baseStatus = (s) => (s >= 70 ? 'Healthy' : s >= 50 ? 'Needs attention' : 'At risk');
+  const statusAt = (i, tt) => (i < OUT && tt >= CLIENTS[i].rep ? 'Healthy' : baseStatus(CLIENTS[i].s));
+  const countAt = (lab, tt) => CLIENTS.reduce((n, c, i) => n + (statusAt(i, tt) === lab), 0);
+  const lastChange = (lab) => { let c = -1; for (let i = 0; i < OUT; i++) { const r = CLIENTS[i].rep; if (r <= t && statusAt(i, r - 1e-3) !== statusAt(i, r) && (statusAt(i, r) === lab || statusAt(i, r - 1e-3) === lab)) c = Math.max(c, r); } return c; };
+  const STATS = [['Healthy', C.ok], ['Needs attention', C.warn], ['At risk', C.risk]];
   let sx = 80;
   const sIn = eo(P(t, TM.app.t0 + 0.9, TM.app.t0 + 1.2));
-  stats.forEach(([l, v, col]) => {
-    const w = tw(l, 24, 600) + tw(String(v), 28, 700) + 86;
+  STATS.forEach(([l, col]) => {
+    const now = countAt(l, t), tc = lastChange(l), k = tc < 0 ? 1 : eo(P(t, tc, tc + 0.32));
+    const prev = tc < 0 ? now : countAt(l, tc - 1e-3);
+    const wOf = (v) => tw(l, 24, 600) + tw(String(v), 28, 700) + 86, w = lerp(wOf(prev), wOf(now), k); // chips glide when a width changes
     ctx.save(); ctx.globalAlpha = sIn;
-    box(sx, 384, w, 58, 29, '#fff', { stroke: C.line });
+    box(sx, 384, w, 58, 29, k < 1 ? mixc('#ffffff', col, 0.12 * Math.sin(Math.PI * k)) : '#fff', { stroke: C.line });
     dot(sx + 30, 413, 9, col); txt(l, sx + 50, 422, { size: 24, w: 600, color: C.mute });
-    txt(String(v), sx + w - 20, 423, { size: 28, w: 700, align: 'right' });
-    ctx.restore(); sx += w + 12;
+    ctx.save(); ctx.beginPath(); ctx.rect(sx + w - 60, 392, 44, 42); ctx.clip(); // the number rolls: old one up and out, new one up and in
+    if (k < 1) txt(String(prev), sx + w - 20, 423 - 30 * k, { size: 28, w: 700, align: 'right', a: 1 - k });
+    txt(String(now), sx + w - 20, 423 + 30 * (1 - k), { size: 28, w: 700, align: 'right', a: k });
+    ctx.restore(); ctx.restore(); sx += w + 12;
   });
 
   CLIENTS.forEach((c, i) => {
     const y = 490 + i * 170, ti = CUE.rows + i * 0.035, p = eo(P(t, ti - 0.05, ti + 0.45));
     if (p <= 0) return;
-    const risky = i < 3, rep = risky ? rep3(i) : 0;
+    const risky = i < OUT, rep = rep3(i);
     const g = eo(P(t, ti + 0.1, ti + 0.75));
     const sc = risky ? lerp(c.s, c.up, rep) * g : c.s * g;
     ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 26);
-    box(70, y, 940, 150, 26, risky && rep < 1 ? mixc('#ffffff', '#fdecea', clamp(P(t, CUE.rows + 0.2, CUE.rows + 0.6) * (1 - rep))) : '#fff', { stroke: C.line, lw: 1.5 });
+    const tintc = baseStatus(c.s) === 'At risk' ? '#fdecea' : baseStatus(c.s) === 'Needs attention' ? '#fdf4e3' : '#ffffff';
+    box(70, y, 940, 150, 26, risky && rep < 1 ? mixc('#ffffff', tintc, clamp(P(t, CUE.rows + 0.2, CUE.rows + 0.6) * (1 - rep))) : '#fff', { stroke: C.line, lw: 1.5 });
     dot(130, y + 48, 30, TINTS[i % 4]); txt(c.n.split(' ').map((w) => w[0]).join(''), 130, y + 57, { size: 24, w: 700, color: C.accent, align: 'center' });
     txt(c.n, 182, y + 58, { size: 34, w: 650 });
-    // win-back rows flip straight from At risk to Healthy as the reply lands (no wide "Needs attention" chip under the pill)
-    const lab = risky && rep > 0 ? (rep >= 0.35 ? 'Healthy' : 'At risk') : sc >= 70 ? 'Healthy' : sc >= 50 ? 'Needs attention' : 'At risk';
+    // the status chip shows the client's real status (not the animating score), flipping when the reply lands
+    const lab = statusAt(i, t);
     const col = { Healthy: C.ok, 'Needs attention': C.warn, 'At risk': C.risk }[lab];
     const cw = tw(lab, 22, 700) + 44;
     box(990 - cw, y + 24, cw, 44, 22, mixc('#ffffff', col, 0.14));
@@ -403,7 +440,7 @@ function drawApp(t) {
     ctx.save(); ctx.globalAlpha = clamp(tp * 2); ctx.translate(0, (1 - tp) * 30);
     box(70, 1700, 600, 76, 38, C.ink, { shadow: 30, sa: 0.3 });
     dot(116, 1738, 20, C.ok); check(116, 1739, 15, '#fff', 3.5);
-    txt('3 clients rebooked this week', 152, 1749, { size: 28, w: 600, color: '#fff' }); ctx.restore();
+    txt('4 clients rebooked this week', 152, 1749, { size: 28, w: 600, color: '#fff' }); ctx.restore();
   }
   ctx.restore();
 }
@@ -445,21 +482,21 @@ function featCard(k, tt, ks) {
     ctx.strokeStyle = col; ctx.beginPath(); ctx.arc(x, y, 130, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * s / 100); ctx.stroke(); ctx.restore();
     txt(String(Math.round(s)), x, y + 34, { size: 96, w: 800, ls: -3, align: 'center', color: col });
     txt('Health score', x, y + 190, { size: 22, w: 600, color: C.mute, align: 'center' });
-    const cp = back(P(tt, ks[3] - 0.03, ks[3] + 0.35), 1.4);
+    const cp = back(P(tt, ks[2] - 0.03, ks[2] + 0.35), 1.4);
     if (cp > 0) { ctx.save(); ctx.translate(cx + cw - 64, cy + 62); ctx.scale(cp, cp); box(-84, -22, 84, 44, 22, mixc('#ffffff', C.risk, 0.14)); txt('At risk', -42, 8, { size: 21, w: 700, color: C.risk, align: 'center' }); ctx.restore(); }
-    [['Visit overdue · 6 weeks', ks[3]], ['No reply · 3 messages', ks[4]]].forEach(([s2, ts], i) => {
+    [['Visit overdue · 6 weeks', ks[2]], ['No reply · 3 messages', ks[3]]].forEach(([s2, ts], i) => {
       const p = eo(P(tt, ts - 0.03, ts + 0.35)); ctx.save(); ctx.globalAlpha = p; ctx.translate((1 - p) * 20, 0);
       dot(cx + 70, cy + 520 + i * 56, 9, C.risk); txt(s2, cx + 96, cy + 530 + i * 56, { size: 26, w: 600 }); ctx.restore();
     });
   } else if (k === 1) {
     txt('Win-back automation', cx + 48, cy + 74, { size: 32, w: 700, ls: -0.6 });
-    const on = io(P(tt, ks[4] - 0.03, ks[4] + 0.3)); box(cx + cw - 128, cy + 42, 80, 44, 22, mixc(C.line, C.accent, on)); dot(cx + cw - 106 + 36 * eo(on), cy + 64, 17, '#fff');
+    const on = io(P(tt, ks[3] - 0.03, ks[3] + 0.3)); box(cx + cw - 128, cy + 42, 80, 44, 22, mixc(C.line, C.accent, on)); dot(cx + cw - 106 + 36 * eo(on), cy + 64, 17, '#fff');
     const nodes = [['When a client is at risk', 0], ['Send SMS', 1], ['Send email', 2], ['Invite to book', 3]];
     nodes.forEach(([lab, i]) => {
-      const y = cy + 140 + i * 118, p = eo(P(tt, ks[i] - 0.03, ks[i] + 0.35)); // a step per hit
+      const y = cy + 140 + i * 118, p = eo(P(tt, (i ? ks[i - 1] : TM.B / 2) - 0.03, (i ? ks[i - 1] : TM.B / 2) + 0.35)); // trigger with the card, then a step per hit
       if (i > 0) { ctx.fillStyle = C.accent; ctx.fillRect(cx + 346, y - 22, 4, 22 * p); }
       ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 20);
-      const trig = i === 0; box(cx + 60, y, 580, 84, 22, trig ? C.accent : '#fff', { stroke: trig ? null : C.line, lw: 2 });
+      const trig = i === 0; box(cx + 60, y, 580, 84, 22, trig ? C.accent : '#fff', { stroke: trig ? null : mixc(C.line, C.accent, on * 0.8), lw: trig ? 2 : lerp(2, 3, on) }); // the flow lights up when it is switched on
       dot(cx + 114, y + 42, 22, trig ? 'rgba(255,255,255,.2)' : C.tint); txt(trig ? '⚡' : ['', '✉', '@', '▦'][i], cx + 114, y + 51, { size: 22, w: 700, color: trig ? '#fff' : C.accent, align: 'center' });
       txt(lab, cx + 156, y + 52, { size: 28, w: 650, color: trig ? '#fff' : C.ink }); ctx.restore();
     });
@@ -536,15 +573,37 @@ function drawEnd(t) {
     rise('Keep your', CX, END.y1, 1, { size: END.size, w: 800, ls: -8, align: 'center' });
     txt('customers', px0, END.y2, { size: END.size, w: 800, ls: -8 }); ctx.restore();
   }
-  // the period glides to where the mark will sit, swells, and blooms into the logo
-  const mx = lockupMx();
-  const m0 = E.logo - 0.3, m1 = E.logo + 0.4, mk = P(t, m0, m1);
+  // the period glides to the centre of the screen, then draws the mark, which slides right and back into the lockup
+  const size = LK.mark, glyph = size * 0.73, gw = tw('MsgHealth', LK.word, 700, LK.ls);
+  const x0 = CX - (glyph + 28 + gw) / 2, mx = x0 + glyph / 2, textX = x0 + glyph + 28, textR = textX + gw;
+  const [sx0, sy0] = [(PEN[0][0] / 512 - 0.5) * size, (PEN[0][1] / 512 - 0.5) * size];
+  const drawC = [CX - sx0, LKY - sy0];          // the mark sits so its first stroke starts where the ball is
+  const rightC = [textR - glyph / 2, LKY];      // the far end of where the wordmark will be
+  const [d0, d1] = E.draw, [r0, r1] = E.right, [l0, l1] = E.left;
   if (t < exit) dot(d[0], d[1], t < E.hop[1] ? 14 : 15);
-  else if (t < m0) { const k = io(P(t, exit, m0)); dot(lerp(perX, mx, k), lerp(perY, LKY, k) - Math.sin(k * Math.PI) * 70, lerp(15, 44, k)); }
-  else if (mk < 1) gooMorph(mx, LKY, io(mk), 44, LK.mark, C.accent);
-  if (t >= m0) {
+  else if (t < d0) { const k = io(P(t, exit, d0)); dot(lerp(perX, CX, k), lerp(perY, LKY, k) - Math.sin(k * Math.PI) * 70, lerp(15, 13, k)); }
+  else if (t < l1) {
+    let mc;
+    if (t < d1) { // the ball traces the mark into existence
+      const u = P(t, d0, d1), p = (1 - Math.cos(Math.PI * u)) / 2;
+      drawLogoProgress(drawC[0], drawC[1], size, p);
+      const [px, py] = penPoint(p);
+      dot(drawC[0] + (px / 512 - 0.5) * size, drawC[1] + (py / 512 - 0.5) * size, 13 * (1 - P(u, 0.9, 1)));
+      mc = null;
+    } else if (t < l0) { const k = io(P(t, r0, r1)); mc = [lerp(drawC[0], rightC[0], k), lerp(drawC[1], rightC[1], k)]; }
+    else { // sliding left, it uncovers the wordmark behind it
+      const k = io(P(t, l0, l1)); mc = [lerp(rightC[0], mx, k), LKY];
+      const edge = mc[0] + glyph / 2 + 8;
+      if (edge < textR) {
+        ctx.save(); ctx.beginPath(); ctx.rect(edge, LKY - LK.word, textR - edge + 20, LK.word * 1.6); ctx.clip();
+        txt('MsgHealth', textX, LKY + LK.word * 0.36, { size: LK.word, w: 700, ls: LK.ls, color: C.ink }); ctx.restore();
+      }
+    }
+    if (mc) logo(mc[0], mc[1], size, C.accent);
+  }
+  if (t >= l1) {
     const fold = io(P(t, E.fold, E.foldEnd));
-    lockup(t, E.logo, { c1: C.accent, c2: C.ink, fold, foldY: CY, markK: 1, markA: mk >= 1 ? 1 : 0 });
+    lockup(t, l1 - 5, { c1: C.accent, c2: C.ink, fold, foldY: CY, markK: 1, markA: 1, wordT: l1 - 5 });
     const up = eo(P(t, E.url, E.url + 0.5)) * (1 - P(t, E.urlOut, E.urlOut + 0.3));
     if (up > 0) {
       const u = 'msghealth.net', uw = tw(u, 46, 650, -1);
@@ -596,6 +655,7 @@ window.ready = (async () => {
   const sc = document.createElement('canvas'); sc.width = Math.round(W * DPR); sc.height = Math.round(H * DPR); SCRATCH = sc.getContext('2d');
   await Promise.all(['400', '500', '600', '650', '700', '800'].map((w) => document.fonts.load(`${w} 40px Inter`)));
   LOGO = await new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = BRAND.logoFile; });
+  if (LOGO) buildLogoDraw();
   if (location.search.includes('render')) { document.body.classList.add('render'); SUB = +(QS.get('sub') || 6); } // motion-blur samples per frame
   renderFrame(0);
   // in-browser player

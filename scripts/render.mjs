@@ -13,7 +13,7 @@ const ENTRY = process.env.ENTRY || 'index.html';
 const IS_AD = ENTRY === 'ad.html';
 const IS_LAUNCH = ENTRY === 'launch.html';
 const FPS = +(process.env.FPS || (IS_LAUNCH ? 60 : 24));
-const SCALE = +(process.env.SCALE || (IS_LAUNCH ? 2 : 1)); // launch film: 2× = 2160×3840 (4K)
+const SCALE = +(process.env.SCALE || (IS_LAUNCH ? 4 / 3 : 1)); // launch film: 1440×2560 at 60 fps (the only version we ship)
 process.env.FILM_QUERY = `fps=${FPS}&scale=${SCALE}`;
 const OUT_NAME = (IS_LAUNCH ? 'msghealth-launch' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo') + (process.env.SUFFIX || '');
 const AUDIO_SCRIPT = IS_LAUNCH ? 'scripts/launch-audio.mjs' : IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
