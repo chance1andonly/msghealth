@@ -5,6 +5,9 @@
 'use strict';
 
 const W = 1080, H = 1920, CX = W / 2, CY = H / 2, DURATION = 33;
+// Everything is laid out on a 1080×1920 grid; the canvas itself can be rendered larger (?scale=2 → 2160×3840)
+// and at any frame rate (?fps=), so the film is resolution-independent.
+const QS = new URLSearchParams(location.search), DPR = +(QS.get('scale') || 1), FPS = +(QS.get('fps') || 60);
 const TM = TIMING; // every cue time lives in src/launch-timing.js (shared with the soundtrack)
 const K = BRAND.colors;
 const C = {
@@ -53,7 +56,7 @@ function rise(s, x, y, p, o = {}) {
 }
 function box(x, y, w, h, r, fill, o = {}) {
   ctx.save();
-  if (o.shadow) { ctx.shadowColor = `rgba(30,27,75,${o.sa ?? 0.14})`; ctx.shadowBlur = o.shadow; ctx.shadowOffsetY = o.sy ?? o.shadow * 0.35; }
+  if (o.shadow) { ctx.shadowColor = `rgba(30,27,75,${o.sa ?? 0.14})`; ctx.shadowBlur = o.shadow * DPR; ctx.shadowOffsetY = (o.sy ?? o.shadow * 0.35) * DPR; }
   ctx.beginPath(); ctx.roundRect(x, y, Math.max(0, w), Math.max(0, h), Math.min(r, Math.max(0, w) / 2, Math.max(0, h) / 2));
   if (fill) { ctx.fillStyle = fill; ctx.fill(); }
   if (o.stroke) { ctx.shadowColor = 'transparent'; ctx.lineWidth = o.lw ?? 2; ctx.strokeStyle = o.stroke; if (o.dash) ctx.setLineDash(o.dash); ctx.stroke(); }
@@ -81,19 +84,19 @@ function logo(x, y, size, color, a = 1) { // centred; the glyph fills ~73% of th
 }
 // A liquid morph from a dot into the logo: both shapes are drawn blurred into one mask and then cut back to a
 // hard edge, so the dot flows into the strokes of the mark instead of cross-fading (the "gooey" technique).
-const GOO = (() => { const S = 640, a = document.createElement('canvas'), b = document.createElement('canvas'); a.width = a.height = b.width = b.height = S; return { S, ga: a.getContext('2d', { willReadFrequently: true }), b, gb: b.getContext('2d') }; })();
+const GOO = (() => { const S = 640, a = document.createElement('canvas'), b = document.createElement('canvas'); a.width = a.height = b.width = b.height = S * DPR; return { S, ga: a.getContext('2d', { willReadFrequently: true }), b, gb: b.getContext('2d') }; })();
 function gooMorph(x, y, k, r0, markSize, color) {
   const { S, ga, b, gb } = GOO, h = S / 2;
-  ga.setTransform(1, 0, 0, 1, 0, 0); ga.clearRect(0, 0, S, S);
-  ga.filter = `blur(${(16 * Math.sin(Math.PI * k)).toFixed(2)}px)`; // softest in the middle of the morph
+  ga.setTransform(DPR, 0, 0, DPR, 0, 0); ga.clearRect(0, 0, S, S);
+  ga.filter = `blur(${(16 * DPR * Math.sin(Math.PI * k)).toFixed(2)}px)`; // softest in the middle of the morph
   const r = r0 * (1 - k * k); // the dot holds its size while the mark grows out of it
   if (r > 0.5) { ga.fillStyle = '#000'; ga.beginPath(); ga.arc(h, h, r, 0, 7); ga.fill(); }
   const ms = markSize * lerp(0.45, 1, eo(k));
   ga.drawImage(tinted('#000000'), h - ms / 2, h - ms / 2, ms, ms);
   ga.filter = 'none';
-  const im = ga.getImageData(0, 0, S, S), d = im.data, [R, G, B] = rgb(color);
+  const im = ga.getImageData(0, 0, S * DPR, S * DPR), d = im.data, [R, G, B] = rgb(color);
   for (let i = 0; i < d.length; i += 4) { const v = clamp((d[i + 3] / 255 - 0.22) / 0.28); d[i] = R; d[i + 1] = G; d[i + 2] = B; d[i + 3] = v * v * (3 - 2 * v) * 255; }
-  gb.putImageData(im, 0, 0); ctx.drawImage(b, x - h, y - h);
+  gb.putImageData(im, 0, 0); ctx.drawImage(b, x - h, y - h, S, S);
 }
 function check(x, y, s, color, lw = 4) {
   ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -122,11 +125,12 @@ const CUE = (() => {
 })();
 
 // ── the pulse line ───────────────────────────────────────────────────────────
-const ECG = [[0, 0], [.1, 0], [.17, -.1], [.25, 0], [.36, 0], [.42, .16], [.5, -1], [.58, .5], [.66, 0], [.78, 0], [.86, -.22], [.95, 0], [1, 0]];
+// One heartbeat over u ∈ [0, 1], built from smooth Gaussian bumps (P, Q, R, S, T waves) so the line has no
+// corners at any size; negative is up.
+const bump = (u, c, w) => Math.exp(-0.5 * ((u - c) / w) ** 2);
 function ecg(u) {
   if (u < 0 || u > 1) return 0;
-  for (let i = 1; i < ECG.length; i++) if (u <= ECG[i][0]) { const a = ECG[i - 1], b = ECG[i]; return a[1] + (b[1] - a[1]) * ((u - a[0]) / (b[0] - a[0])); }
-  return 0;
+  return -0.1 * bump(u, 0.18, 0.035) + 0.16 * bump(u, 0.43, 0.014) - 1 * bump(u, 0.5, 0.019) + 0.46 * bump(u, 0.565, 0.017) - 0.22 * bump(u, 0.84, 0.05);
 }
 const PULSE_BW = 300, PULSE_SP = 780;
 const pulseOff = (x, t, speed) => { const ph = (((x - t * speed) % PULSE_SP) + PULSE_SP) % PULSE_SP; return ph < PULSE_BW ? ecg(ph / PULSE_BW) : 0; };
@@ -136,7 +140,7 @@ function pulseLine(y, half, amp, t, lw = 5, speed = 480) {
   if (half <= 0) return;
   ctx.save(); ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.strokeStyle = C.accent; ctx.beginPath();
   let first = true;
-  for (let x = CX - half; x <= CX + half + 1; x += 3) {
+  for (let x = CX - half; x <= CX + half + 0.5; x += 1) {
     const tap = clamp(Math.min(x - (CX - half), CX + half - x) / 180);
     const yy = y + pulseOff(x, t, speed) * amp * tap;
     if (first) { ctx.moveTo(x, yy); first = false; } else ctx.lineTo(x, yy);
@@ -269,7 +273,7 @@ function drawMark(t) {
 // ── 2 · Prompt (10–14 s) ─────────────────────────────────────────────────────
 const GHOST = (() => {
   const c = document.createElement('canvas'); c.width = W; c.height = H;
-  const g = c.getContext('2d'); g.filter = 'blur(10px)';
+  const g = c.getContext('2d'); g.filter = 'blur(10px)'; // drawn at layout size; it is a blurred backdrop anyway
   const r = rng(3);
   for (let i = 0; i < 17; i++) {
     const y = 60 + i * 114;
@@ -551,7 +555,7 @@ function drawEnd(t) {
 
 // ── frame ────────────────────────────────────────────────────────────────────
 let MAIN, SCRATCH, SUB = 1;
-const SHUTTER = 0.5 / 60; // 180° at 60 fps
+const SHUTTER = 0.5 / FPS; // 180° shutter at the render frame rate
 function renderFrame(t) {
   if (SUB <= 1) { ctx = MAIN; drawScene(t); return; }
   for (let k = 0; k < SUB; k++) {
@@ -561,7 +565,7 @@ function renderFrame(t) {
   MAIN.globalAlpha = 1; ctx = MAIN;
 }
 function drawScene(t) {
-  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
   if (t < TM.D) { drawHook(t * TM.HOOK); } // the hook was designed for 6 s; it now plays in 4.5
   else if (t < TM.iris[0]) { drawMark(t); }
@@ -579,11 +583,12 @@ function drawScene(t) {
 window.renderFrame = renderFrame;
 window.DURATION = DURATION;
 window.ready = (async () => {
-  MAIN = ctx = document.getElementById('c').getContext('2d');
-  const sc = document.createElement('canvas'); sc.width = W; sc.height = H; SCRATCH = sc.getContext('2d');
+  const el = document.getElementById('c'); el.width = Math.round(W * DPR); el.height = Math.round(H * DPR);
+  MAIN = ctx = el.getContext('2d');
+  const sc = document.createElement('canvas'); sc.width = Math.round(W * DPR); sc.height = Math.round(H * DPR); SCRATCH = sc.getContext('2d');
   await Promise.all(['400', '500', '600', '650', '700', '800'].map((w) => document.fonts.load(`${w} 40px Inter`)));
   LOGO = await new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = BRAND.logoFile; });
-  if (location.search.includes('render')) { document.body.classList.add('render'); SUB = 4; }
+  if (location.search.includes('render')) { document.body.classList.add('render'); SUB = +(QS.get('sub') || 6); } // motion-blur samples per frame
   renderFrame(0);
   // in-browser player
   const play = document.getElementById('play'), seek = document.getElementById('seek'), label = document.getElementById('time');

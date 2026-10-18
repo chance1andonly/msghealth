@@ -12,9 +12,11 @@ const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const ENTRY = process.env.ENTRY || 'index.html';
 const IS_AD = ENTRY === 'ad.html';
 const IS_LAUNCH = ENTRY === 'launch.html';
-const OUT_NAME = IS_LAUNCH ? 'msghealth-launch' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
+const FPS = +(process.env.FPS || (IS_LAUNCH ? 60 : 24));
+const SCALE = +(process.env.SCALE || (IS_LAUNCH ? 2 : 1)); // launch film: 2× = 2160×3840 (4K)
+process.env.FILM_QUERY = `fps=${FPS}&scale=${SCALE}`;
+const OUT_NAME = (IS_LAUNCH ? 'msghealth-launch' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo') + (process.env.SUFFIX || '');
 const AUDIO_SCRIPT = IS_LAUNCH ? 'scripts/launch-audio.mjs' : IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
-const FPS = IS_LAUNCH ? 60 : 24;
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
 const DIST = path.join(ROOT, 'dist');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'msgh-'));
@@ -32,7 +34,7 @@ async function worker(k, from, to) {
   const film = await openFilm(ENTRY);
   const out = path.join(TMP, `part${k}.mp4`);
   const ff = spawn(FFMPEG, ['-loglevel', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-tune', 'animation', '-r', String(FPS), out], { stdio: ['pipe', 'inherit', 'inherit'] });
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', process.env.CRF || '17', '-pix_fmt', 'yuv420p', '-tune', 'animation', '-profile:v', 'high', '-level', '5.2', '-r', String(FPS), out], { stdio: ['pipe', 'inherit', 'inherit'] });
   for (let f = from; f < to; f++) {
     const buf = await film.frame(f / FPS, 'image/jpeg', 0.96);
     if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));

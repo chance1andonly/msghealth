@@ -112,7 +112,8 @@ A typographic product film for msghealth.net, built from the structure of a mode
 (hook → logo → one typed request → proof → three consequences → promise → lockup) and re-made in
 the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with deep-indigo ink, the official logo mark and Inter type.
 
-- **Final video:** `dist/msghealth-launch.mp4` (1080×1920 portrait 9:16, 60 fps with motion blur, 33 s, H.264 + AAC)
+- **Final video:** `dist/msghealth-launch.mp4` (2160×3840 4K portrait 9:16, 60 fps with motion blur, 33 s, H.264 High@5.2 + AAC)
+- **High frame rate:** `dist/msghealth-launch-1440p-120fps.mp4` (1440×2560, 120 fps) for 120 Hz screens
 - Source: `launch.html` + `src/launch.js` (all scenes, one canvas, `renderFrame(t)`); sound: `scripts/launch-audio.mjs`
 - Timing: every cue lives in `src/launch-timing.js`, shared by picture and sound. The music bed is an instrumental
   (place it at `assets/audio/song.mp3`, not committed) cut at 5.845 s so its first kick lands on the 4.5 s drop (the opening hook plays 1.33× faster to get there);
@@ -124,7 +125,9 @@ the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with deep-indigo ink
   changing the song or the cut.
 - Loops seamlessly: the last frame is pixel-identical to the first (the dot on its 40 px of line), and the audio
   ends in silence that runs into the song's silent opening.
-- Render: `FFMPEG=ffmpeg npm run render:launch` (≈2 min; 4 motion-blur samples per frame). Open `launch.html` through a static server to scrub it.
+- Render: `FFMPEG=ffmpeg npm run render:launch` (≈8 min at 4K; 6 motion-blur samples per frame). The film is laid out
+  on a 1080×1920 grid and renders at any size and rate: `SCALE=1` gives 1080×1920, `FPS=120` a 120 fps master,
+  `SUFFIX=-x` changes the output name. Open `launch.html` through a static server to scrub it.
 - Device: one indigo **pulse dot**. It sits on a flatline, becomes the logo, rides the product demo,
   lands as the period of "Keep your customers.", blooms into the logo, and beats again at the close.
 
