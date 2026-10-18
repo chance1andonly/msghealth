@@ -13,8 +13,20 @@ const MUTED = '#6b6b85', FAINT = '#9a9ab0', LINE = '#ececf3';
 
 // Beat grid of assets/audio/promo-track.m4a (65 BPM, first downbeat 0.816s). The track is the
 // supplied song looped on 8-beat phrases, so this grid holds for its whole length.
+// Every entrance is then snapped onto a real hit in the song (src/promo-onsets.js), because the
+// groove swings: hits land at about 0, .27, .40, .52, .78 and .90 of each beat, not on straight quarters.
 const BEAT = 0.9225, B0 = 0.816;
-const b = (k) => B0 + k * BEAT; // k may be fractional: .5 = half beat, .25 = quarter beat
+function hit(t) { // nearest hit within 90 ms, else t unchanged
+  let best = t, d = 0.09;
+  for (const o of window.ONSETS || []) { const e = Math.abs(o - t); if (e < d) { d = e; best = o; } }
+  return best;
+}
+const b = (k) => hit(B0 + k * BEAT); // k may be fractional: .5 = half beat, .25 = quarter beat
+// The next n hits from `from`: for things that land one after another, each on its own hit.
+function hits(from, n) {
+  const O = (window.ONSETS || []).filter((o) => o >= from - 0.02);
+  return Array.from({ length: n }, (_, i) => O[i] ?? from + i * 0.12);
+}
 
 let ctx = null, LOGO = null;
 
@@ -70,6 +82,7 @@ function logoMark(x, y, s) { if (LOGO) ctx.drawImage(LOGO, x - s / 2, y - s / 2,
 
 // Draw `fn` snapping in at time `at`, scaled around (cx, cy).
 function snapIn(t, at, cx, cy, fn, o = {}) {
+  at = hit(at);
   if (t < at) return;
   const p = snapP(t, at);
   ctx.save();
@@ -105,47 +118,56 @@ function lightBG(tint = C.primary) {
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   });
 }
-function darkBG() {
-  ctx.fillStyle = '#0a0a0f'; ctx.fillRect(0, 0, W, H);
-  const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, 900);
-  g.addColorStop(0, 'rgba(79,70,229,0.16)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  ctx.fillStyle = 'rgba(0,0,0,0.28)';
-  for (let y = 0; y < H; y += 4) ctx.fillRect(0, y, W, 2);
-}
-
-// ── 1 · hook (the song's quiet intro, before the bass drops at beat 5) ───────
-// A marker stroke drawn under a word: a slightly wobbly swoosh revealed left to right.
+// ── 1 · hook as an incoming text (the song's quiet intro, before the bass drops at beat 5) ──
+// A marker underline: one smooth curve, thickest in the middle and tapering to round ends.
 function scribble(x0, x1, y, p, col) {
   if (p <= 0) return;
-  const n = 60, pts = [];
-  // one confident swoosh that bows down and lifts to the right…
-  for (let i = 0; i <= n; i++) {
-    const u = i / n;
-    pts.push([lerp(x0 - 18, x1 + 26, u), y + 7 * Math.sin(u * Math.PI) - 10 * u + 1.2 * Math.sin(u * 5 + 1), Math.sin(Math.min(1, u * 1.4) * Math.PI * 0.5)]);
-  }
-  // …then flicks back under itself, shorter and thinning out, like a marker double pass
-  for (let i = 1; i <= n * 0.6; i++) {
-    const u = i / n;
-    pts.push([lerp(x1 + 26, x0 + 30, u / 0.6 * 0.85), y + 4 + 16 * Math.sin(Math.min(1, u * 4) * Math.PI * 0.5) - 3 * u, 1 - u / 0.6 * 0.7]);
-  }
-  const m = Math.max(2, Math.round(pts.length * p));
+  const P = [[x0 - 14, y + 3], [x0 + (x1 - x0) * 0.3, y + 11], [x0 + (x1 - x0) * 0.72, y + 3], [x1 + 18, y - 7]];
+  const at = (u) => { const v = 1 - u; return [0, 1].map((k) => v * v * v * P[0][k] + 3 * v * v * u * P[1][k] + 3 * v * u * u * P[2][k] + u * u * u * P[3][k]); };
+  const n = 90, m = Math.max(1, Math.round(n * p));
   ctx.save();
   ctx.strokeStyle = col; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  for (let i = 1; i < m; i++) { // tapered: width follows the pen pressure in pts[i][2]
-    ctx.lineWidth = 3 + 8 * pts[i][2];
-    ctx.beginPath(); ctx.moveTo(pts[i - 1][0], pts[i - 1][1]); ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke();
+  for (let i = 1; i <= m; i++) {
+    const [ax, ay] = at((i - 1) / n), [bx, by] = at(i / n);
+    ctx.lineWidth = 5 + 6 * Math.pow(Math.sin(Math.PI * (i / n)), 0.7);
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
   }
   ctx.restore();
 }
+const HOOK = [["I don't know how", -0.5], ['salon owners could live', 1], ['without this.', 2.5]];
+window.SFX = HOOK.map(([, k]) => ({ t: b(k), kind: 'message' })); // a message chime per bubble
+function bubble(x, y, w, h, tail) {
+  fillRR(x, y, w, h, 44, '#e9e9eb');
+  if (!tail) return;
+  ctx.beginPath(); // the little hook at the bottom left of the newest bubble
+  ctx.moveTo(x + 6, y + h - 40);
+  ctx.bezierCurveTo(x + 6, y + h - 12, x - 4, y + h + 2, x - 16, y + h + 4);
+  ctx.bezierCurveTo(x + 8, y + h + 8, x + 26, y + h, x + 38, y + h - 10);
+  ctx.closePath(); ctx.fill();
+}
 function sHook(t) {
-  lightBG();
-  const size = 112;
-  line(t, [["I don't know how", b(-0.5)], ['salon owners', b(1)]], W / 2, H / 2 - 70, size);
-  const total = line(t, [['could live without', b(2)], ['this.', b(3), C.primary]], W / 2, H / 2 + 70, size);
-  // underline "this." (without the full stop) as if drawn by hand
-  const thisW = tw('this', size, 700), x1 = W / 2 + total / 2 - tw('.', size, 700);
-  scribble(x1 - thisW, x1, H / 2 + 70 + 74, ease.out(seg(t, b(3.5), b(3.5) + 0.32)), C.primary);
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+  text('Text Message', W / 2, 150, 26, 600, '#8e8e93', 'center');
+  text('Today 9:41 AM', W / 2, 186, 24, 500, '#8e8e93', 'center');
+  const size = 68, padX = 44, h = 124, gap = 16, x = W / 2 - 560, cy = H / 2 + 70;
+  const times = HOOK.map(([, k]) => b(k));
+  const n = times.filter((at) => t >= at).length;
+  if (!n) return;
+  const top = (count) => cy - (count * h + (count - 1) * gap) / 2;
+  const slide = snapP(t, times[n - 1]); // earlier bubbles step up as the new one arrives
+  HOOK.slice(0, n).forEach(([s], i) => {
+    const y = i < n - 1 ? lerp(top(n - 1), top(n), slide) + i * (h + gap) : top(n) + i * (h + gap);
+    const w = tw(s, size, 500) + padX * 2, last = i === n - 1;
+    const draw = () => {
+      bubble(x, y, w, h, last);
+      text(s, x + padX, y + h / 2 + 2, size, 500, '#000000');
+      if (i === 2) { // underline "this" in brand colour; the word itself stays black
+        const tx = x + padX + tw('without ', size, 500);
+        scribble(tx, tx + tw('this', size, 500), y + h / 2 + 44, ease.inOut(seg(t, b(3.5), b(3.5) + 0.36)), C.primary);
+      }
+    };
+    if (last) snapIn(t, times[i], x, y + h, draw, { from: 0.5, dy: 0, blur: 4 }); else draw();
+  });
 }
 
 // ── 2 · why repeat clients matter (bass drops here) ──────────────────────────
@@ -178,35 +200,18 @@ function sStops(t) {
   });
 }
 
-// ── 4 · dark glitch beat ─────────────────────────────────────────────────────
-function glitchText(t, s, at, x, y, size) {
-  if (t < at) return;
-  const k = t - at, hit = clamp(1 - k / 0.13);
-  ctx.save();
-  ctx.shadowColor = 'rgba(255,255,255,0.45)'; ctx.shadowBlur = 26;
-  ctx.globalCompositeOperation = 'lighter';
-  const off = 16 * hit + 2.5;
-  text(s, x - off, y, size, 600, 'rgba(255,40,80,0.85)', 'center');
-  text(s, x + off, y, size, 600, 'rgba(40,220,255,0.85)', 'center');
-  text(s, x, y, size, 600, 'rgba(255,255,255,0.92)', 'center');
-  ctx.restore();
-  if (hit > 0) { // slice tears on the hit frames only
-    for (let i = 0; i < 6; i++) {
-      const r = Math.sin(i * 91.7 + at * 13.1) * 0.5 + 0.5, sy = y - size + r * size * 2, sh = 6 + ((i * 7) % 5) * 6;
-      ctx.drawImage(ctx.canvas, 0, sy, W, sh, (i % 2 ? 1 : -1) * 60 * hit, sy, W, sh);
-    }
-  }
-}
-function sGlitch(t) {
-  darkBG();
-  glitchText(t, "You won't see it coming", b(9.5), W / 2, H / 2 - 70, 96);
-  glitchText(t, "until they're gone.", b(10), W / 2, H / 2 + 70, 96);
+// ── 4 · dark beat: black and white, music muffled (see scripts/promo-audio.mjs) ─────────
+window.MUFFLE = [b(9.5), b(11)];
+function sDark(t) {
+  ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, W, H);
+  line(t, [["You won't see it coming", b(9.5), '#ffffff']], W / 2, H / 2 - 70, 96);
+  line(t, [["until they're gone.", b(10), '#ffffff']], W / 2, H / 2 + 70, 96);
 }
 
 // ── 5 · MsgHealth: logo lands centre, steps right, then sweeps left wiping the name in ──
 function sMeet(t) {
   lightBG();
-  const ls = 190, size = 160, ww = tw(BRAND.name, size, 700), gap = 40, full = ls + gap + ww;
+  const ls = 190, size = 160, ww = tw(BRAND.name, size, 700), gap = -12, full = ls + gap + ww;
   const lockX = W / 2 - full / 2 + ls / 2, y = H / 2 - 30;
   const right = ease.inOut(seg(t, b(11.5), b(11.5) + 0.28));
   const left = ease.inOut(seg(t, b(12), b(12) + 0.42));
@@ -216,7 +221,8 @@ function sMeet(t) {
   const wipeEdge = lerp(textX - 40, textX + ww + 20, ease.out(seg(t, b(12) + 0.1, b(12) + 0.55)));
   if (t >= b(12) + 0.1) {
     ctx.save();
-    ctx.beginPath(); ctx.rect(Math.max(lx + ls / 2 + 6, textX - 20), 0, Math.max(0, wipeEdge - Math.max(lx + ls / 2 + 6, textX - 20)), H); ctx.clip();
+    const edge = Math.max(lx + ls * 0.34, textX - 24); // trails the logo's visible right edge
+    ctx.beginPath(); ctx.rect(edge, 0, Math.max(0, wipeEdge - edge), H); ctx.clip();
     text(BRAND.name, textX, y + 6, size, 700, C.ink);
     ctx.restore();
   }
@@ -232,9 +238,10 @@ function sWhat(t) {
   const chips = [['Health scores', C.healthy], ['Churn alerts', C.risk], ['Automatic win-backs', C.primary]];
   const size = 30, ws = chips.map(([s]) => tw(s, size, 600) + size * 1.3), gap = 24;
   let x = W / 2 - (ws.reduce((a, c) => a + c, 0) + gap * 2) / 2;
+  const chipAt = hits(b(14.5), 3);
   chips.forEach(([s, col], i) => {
     const x0 = x;
-    snapIn(t, b(14.5) + (i * BEAT) / 16, x0 + ws[i] / 2, 700, () => { fillRR(x0, 674, ws[i], 52, 26, '#fff'); pill(x0, 700, s, col, size); });
+    snapIn(t, chipAt[i], x0 + ws[i] / 2, 700, () => { fillRR(x0, 674, ws[i], 52, 26, '#fff'); pill(x0, 700, s, col, size); });
     x += ws[i] + gap;
   });
 }
@@ -254,7 +261,7 @@ function sHealth(t) {
   const x = 1000, w = 780, rh = 116, y0 = 250;
   snapIn(t, b(16), x + w / 2, H / 2, () => card(x, y0 - 40, w, rh * 5 + 80, 32));
   ROWS.forEach((r, i) => {
-    const ry = y0 + 30 + i * rh, at = b(16) + (i * BEAT) / 16, jordan = i === 2, flag = b(16.5);
+    const ry = y0 + 30 + i * rh, at = hits(b(16), 5)[i], jordan = i === 2, flag = b(16.5);
     snapIn(t, at, x + w / 2, ry, () => {
       if (jordan && t >= flag) { const p = snapP(t, flag); fillRR(x + 16, ry - 50, w - 32, 100, 20, rgba(C.risk, 0.08 * p)); }
       avatar(x + 66, ry, 30, r.i, r.c);
@@ -275,7 +282,7 @@ function sWinBack(t) {
   const nodes = [['At risk detected', C.risk, 'alert'], ['SMS sent', C.primary, 'chat'], ['Email follow-up', '#0891b2', 'mail'], ['Invite to book', C.healthy, 'cal']];
   const nw = 330, nh = 130, gap = 70, x0 = W / 2 - (4 * nw + 3 * gap) / 2, ny = 330;
   nodes.forEach(([label, col, icon], i) => {
-    const x = x0 + i * (nw + gap), at = b(21.5) + (i * BEAT) / 8;
+    const x = x0 + i * (nw + gap), at = hits(b(21.5), 4)[i];
     if (i > 0 && t >= at) { // connector draws in with the node
       const p = snapP(t, at);
       ctx.strokeStyle = rgba(C.primary, 0.5); ctx.lineWidth = 4; ctx.lineCap = 'round';
@@ -326,6 +333,7 @@ function glyph(kind, x, y, col) { // small line icons
 // A large pointer so viewers can always see where it is. path: [[arrive time, x, y], …] in
 // world space; each move takes 0.38s and lands on its time. clicks: times of presses.
 function pointer(t, path, clicks, z) {
+  path = path.map(([at, px, py]) => [hit(at), px, py]); clicks = clicks.map(hit);
   let [x, y] = [path[0][1], path[0][2]];
   for (let i = 1; i < path.length; i++) {
     const [at, nx, ny] = path[i], p = ease.inOut(seg(t, at - 0.38, at));
@@ -493,7 +501,7 @@ function sAnalyst(t) {
         text('Based on today’s date, these clients haven’t booked in 60+ days, the ones most worth reaching out to:', x + 40, y + 176, 13.5, 500, '#e4e4ee');
         AI_ROWS.forEach(([n, d, days], i) => {
           const ry = y + 210 + i * 34;
-          snapIn(t, ans + (i * BEAT) / 16, x + 200, ry, () => {
+          snapIn(t, hits(ans, 9)[i], x + 200, ry, () => {
             ctx.beginPath(); ctx.arc(x + 48, ry, 2.5, 0, 7); ctx.fillStyle = '#e4e4ee'; ctx.fill();
             text(n, x + 60, ry, 14, 700, '#ffffff');
             text(`· last booked ${d} (${days} days ago)`, x + 66 + tw(n, 14, 700), ry, 14, 400, '#c9c9d9');
@@ -664,7 +672,7 @@ function sToolkit(t) {
   ];
   const tw0 = 470, th = 170, gx = 36, gy = 36, x0 = W / 2 - (3 * tw0 + 2 * gx) / 2, y0 = 360;
   tiles.forEach(([name, desc, ic, col], i) => {
-    const x = x0 + (i % 3) * (tw0 + gx), y = y0 + Math.floor(i / 3) * (th + gy), at = b(31.5) + (i * BEAT) / 16;
+    const x = x0 + (i % 3) * (tw0 + gx), y = y0 + Math.floor(i / 3) * (th + gy), at = hits(b(31.5), 6)[i];
     snapIn(t, at, x + tw0 / 2, y + th / 2, () => {
       card(x, y, tw0, th, 28);
       fillRR(x + 34, y + th / 2 - 38, 76, 76, 20, rgba(col, 0.13));
@@ -711,7 +719,7 @@ function appSidebar(bh, active) {
   const L = LAYOUT;
   ctx.fillStyle = '#fbfbfd'; ctx.fillRect(0, 0, L.side, H);
   ctx.fillStyle = '#ececf2'; ctx.fillRect(L.side, 0, 1, H);
-  logoMark(36, 34, 30); text(BRAND.name, 58, 35, 19, 700, '#1a1a33');
+  logoMark(36, 34, 30); text(BRAND.name, 52, 35, 19, 700, '#1a1a33');
   text('Business health', 18, 80, 13, 500, MUTED);
   text(`${bh}`, 236, 80, 13, 700, '#16162a', 'right'); text('/100', 266, 80, 13, 500, FAINT, 'right');
   fillRR(18, 94, 264, 5, 3, LINE); fillRR(18, 94, (264 * bh) / 100, 5, 3, bh > 70 ? '#22c55e' : bh > 50 ? C.attention : C.risk);
@@ -846,14 +854,14 @@ function cardCohort(t) {
   });
 }
 function dashboardWorld(t) {
-  const at = b(33), step = BEAT / 16;
+  const at = b(33), cardAt = hits(b(33) + 0.05, 5);
   ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = '#fafafc'; ctx.fillRect(LAYOUT.side, 0, W - LAYOUT.side, H);
   snapIn(t, at, 150, H / 2, () => dashSidebar(t), { dy: 0, from: 0.98 });
   snapIn(t, at, W / 2, 80, () => dashHeader(), { dy: 0, from: 0.98 });
   [['health', cardHealth], ['rebook', cardRebook], ['revenue', cardRevenue], ['forecast', cardForecast], ['cohort', cardCohort]].forEach(([k, fn], i) => {
     const [x, y, w, h] = cardBox[k];
-    snapIn(t, at + step * (i + 1), x + w / 2, y + h / 2, () => fn(t), { dy: 18 });
+    snapIn(t, cardAt[i], x + w / 2, y + h / 2, () => fn(t), { dy: 18 });
   });
 }
 // Camera keys: [time, centre x, centre y, zoom]. Moves start on a beat and settle in 0.4s.
@@ -895,10 +903,10 @@ function sTagline(t) {
 // ── 13 · end card ────────────────────────────────────────────────────────────
 function sEnd(t) {
   lightBG();
-  const ls = 200, ww = tw(BRAND.name, 150, 700), gap = 40, full = ls + gap + ww;
+  const ls = 200, ww = tw(BRAND.name, 150, 700), gap = -12, full = ls + gap + ww;
   const lx = W / 2 - full / 2 + ls / 2, y = H / 2 - 50;
   snapIn(t, b(44), lx, y, () => logoMark(lx, y, ls), { from: 0.7 });
-  snapIn(t, b(44) + BEAT / 8, lx + ls / 2 + gap + ww / 2, y, () => text(BRAND.name, lx + ls / 2 + gap, y + 6, 150, 700, C.ink), { dy: 0 });
+  snapIn(t, hits(b(44), 2)[1], lx + ls / 2 + gap + ww / 2, y, () => text(BRAND.name, lx + ls / 2 + gap, y + 6, 150, 700, C.ink), { dy: 0 });
   line(t, [[BRAND.url, b(44.5), MUTED]], W / 2, H / 2 + 100, 46, { weight: 500 });
   snapIn(t, b(45), W / 2, H / 2 + 210, () => {
     const s = 'Start now · 50% off your first month', w = tw(s, 30, 600) + 64;
@@ -913,7 +921,7 @@ const SCENES = [
   [0, b(5), sHook],            // intro: slower, before the bass comes in
   [b(5), b(7), sRegulars],
   [b(7), b(9.5), sStops],
-  [b(9.5), b(11), sGlitch],
+  [b(9.5), b(11), sDark],
   [b(11), b(13.5), sMeet],
   [b(13.5), b(15.5), sWhat],
   [b(15.5), b(17.5), sHealth],

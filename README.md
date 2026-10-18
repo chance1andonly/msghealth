@@ -117,6 +117,10 @@ beats, half-beats or quarter-beats, and every scene cuts on a beat.
 - Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top, and all timing is written in beats (`b(k)`).
 - Music: `assets/audio/promo-track.m4a`, the supplied song looped three times on its 8-beat phrase (beats 6–14) so the beat holds for the whole video.
   Check you have the rights to the song before running it as a paid ad.
+- Sound: `scripts/promo-audio.mjs` mixes the track with a message chime for each hook bubble (synthesised, not Apple's sound) and
+  low-passes the music across the black slide. Cues come from `window.SFX` and `window.MUFFLE` in `src/promo.js`.
+- Sync: `src/promo-onsets.js` lists every hit in the track (`python3 scripts/promo-onsets.py` regenerates it). Each entrance snaps onto
+  the nearest hit, and things that land one after another each take the next hit.
 - Render: `npm run render:promo`
 - On-screen "today" is Sunday, October 18, 2026, and every date shown is recent relative to it.
 
@@ -125,10 +129,10 @@ and every scene holds for at least about a second after its last element lands.
 
 | Beats | Time | What's on screen |
 |---|---|---|
-| 0–5 | 0–5.4s | "I don't know how salon owners could live without this.", with "this" underlined in a hand-drawn stroke |
+| 0–5 | 0–5.4s | Incoming text bubbles, each with a chime: "I don't know how" / "salon owners could live" / "without this.", then "this" gets a hand-drawn brand-colour underline |
 | 5–7 | 5.4–7.3s | "Repeat clients are the business." (bass drops) |
 | 7–9.5 | 7.3–9.6s | "But when a regular stops booking…": Jan, Feb, Mar booked, April empty |
-| 9.5–11 | 9.6–11s | Dark glitch: "You won't see it coming until they're gone." |
+| 9.5–11 | 9.6–11s | Black and white: "You won't see it coming until they're gone." The music is muffled. |
 | 11–13.5 | 11–13.3s | Logo lands centre, steps right, then sweeps left as MsgHealth wipes in |
 | 13.5–15.5 | 13.3–15.1s | "It tells you who's drifting and brings them back." |
 | 15.5–17.5 | 15.1–17s | Health scores. Jordan is flagged At risk. |

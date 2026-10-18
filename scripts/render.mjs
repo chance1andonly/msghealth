@@ -12,9 +12,9 @@ import { openFilm, ROOT } from './lib.mjs';
 const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const ENTRY = process.env.ENTRY || 'index.html';
 const IS_AD = ENTRY === 'ad.html';
-const IS_PROMO = ENTRY === 'promo.html'; // uses a recorded music track instead of the synthesised score
+const IS_PROMO = ENTRY === 'promo.html'; // recorded music track + chimes instead of the synthesised score
 const OUT_NAME = IS_PROMO ? 'msghealth-promo' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
-const AUDIO_SCRIPT = IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
+const AUDIO_SCRIPT = IS_PROMO ? 'scripts/promo-audio.mjs' : IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
 const FPS = IS_PROMO ? 60 : 24;
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
 const DIST = path.join(ROOT, 'dist');
@@ -52,12 +52,8 @@ const parts = await Promise.all(Array.from({ length: WORKERS }, (_, k) => worker
 
 const list = path.join(TMP, 'list.txt');
 fs.writeFileSync(list, parts.map((p) => `file '${p}'`).join('\n'));
-let wav;
-if (IS_PROMO) wav = path.join(ROOT, 'assets/audio/promo-track.m4a');
-else {
-  wav = path.join(DIST, IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
-  execFileSync('node', [path.join(ROOT, AUDIO_SCRIPT), wav], { stdio: 'inherit' });
-}
+const wav = path.join(DIST, IS_PROMO ? 'promo-audio.wav' : IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
+execFileSync('node', [path.join(ROOT, AUDIO_SCRIPT), wav], { stdio: 'inherit' });
 const mp4 = path.join(DIST, `${OUT_NAME}.mp4`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', list, '-i', wav,
   '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', mp4], { stdio: 'inherit' });
