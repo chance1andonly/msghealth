@@ -1,11 +1,11 @@
-// MsgHealth · 36.5s kinetic product promo (1920 × 1080, 60 fps)
+// MsgHealth · 44s kinetic product promo (1920 × 1080, 60 fps)
 // Clean motion-graphics style: big type that snaps in word by word, product cards, one dark
 // glitch beat, then the Analytics & Predictions dashboard with its numbers rising one at a time.
 // Nothing pulses or drifts: things appear on the beat, hold, and scenes cut on the beat.
 'use strict';
 
 const W = 1920, H = 1080, FPS = 60;
-const DURATION = 36.54;
+const DURATION = 43.92;
 const C = BRAND.colors;
 const FONT = 'Inter';
 const IND = '#5b50e8';        // dashboard chart indigo
@@ -268,39 +268,14 @@ function sHealth(t) {
   });
 }
 
-// ── 8 · who is about to leave, and why ───────────────────────────────────────
-function sChurn(t) {
-  lightBG();
-  line(t, [['See who’s about to leave,', b(17.5)], ['and why.', b(17.75), C.primary]], W / 2, 210, 80);
-  const y = 330, h = 560, w = 680;
-  const cards = [
-    { x: 250, at: b(18), title: 'Top churn risks', sub: 'The clients most likely to leave',
-      rows: [['Jordan Lee', 72, '72%', C.risk], ['Priya Shah', 58, '58%', C.attention], ['Morgan Diaz', 44, '44%', C.attention], ['Alex Kim', 12, '12%', C.healthy]] },
-    { x: 990, at: b(18.125), title: 'Churn risk drivers', sub: 'What is pushing risk up, by clients affected',
-      rows: [['Overdue 60+ days', 100, '13', IND], ['Low visit frequency', 54, '7', IND], ['No-show streak', 23, '3', IND], ['Low ratings', 15, '2', IND]] },
-  ];
-  cards.forEach((c) => snapIn(t, c.at, c.x + w / 2, y + h / 2, () => {
-    card(c.x, y, w, h, 28);
-    text(c.title, c.x + 44, y + 64, 34, 700, C.ink);
-    text(c.sub, c.x + 44, y + 106, 22, 500, FAINT);
-    c.rows.forEach(([n, pct, val, col], i) => {
-      const ry = y + 190 + i * 92, fill = ease.out(seg(t, c.at + 0.08 + i * 0.04, c.at + 0.4 + i * 0.04));
-      text(n, c.x + 44, ry, 26, 600, C.ink);
-      text(val, c.x + w - 44, ry, 26, 700, col, 'right');
-      fillRR(c.x + 44, ry + 26, w - 88, 12, 6, LINE);
-      fillRR(c.x + 44, ry + 26, ((w - 88) * pct * fill) / 100, 12, 6, col);
-    });
-  }));
-}
-
 // ── 9 · win them back on autopilot ───────────────────────────────────────────
 function sWinBack(t) {
   lightBG('#7c3aed');
-  line(t, [['Win them back', b(19.5)], ['on autopilot.', b(19.5), C.primary]], W / 2, 190, 88);
+  line(t, [['Win them back', b(21)], ['on autopilot.', b(21), C.primary]], W / 2, 190, 88);
   const nodes = [['At risk detected', C.risk, 'alert'], ['SMS sent', C.primary, 'chat'], ['Email follow-up', '#0891b2', 'mail'], ['Invite to book', C.healthy, 'cal']];
   const nw = 330, nh = 130, gap = 70, x0 = W / 2 - (4 * nw + 3 * gap) / 2, ny = 330;
   nodes.forEach(([label, col, icon], i) => {
-    const x = x0 + i * (nw + gap), at = b(20) + (i * BEAT) / 8;
+    const x = x0 + i * (nw + gap), at = b(21.5) + (i * BEAT) / 8;
     if (i > 0 && t >= at) { // connector draws in with the node
       const p = snapP(t, at);
       ctx.strokeStyle = rgba(C.primary, 0.5); ctx.lineWidth = 4; ctx.lineCap = 'round';
@@ -316,18 +291,18 @@ function sWinBack(t) {
   });
   // the conversation it starts
   const by = 560;
-  snapIn(t, b(20.5), 640, by + 80, () => {
+  snapIn(t, b(22), 640, by + 80, () => {
     avatar(470, by + 60, 30, 'S', C.primary);
     fillRR(520, by, 640, 140, 30, '#ececf4');
     text("Hi Jordan! We miss you. Want your usual", 556, by + 50, 28, 500, C.ink);
     text('Thursday at 10:00?', 556, by + 92, 28, 500, C.ink);
   });
-  snapIn(t, b(20.75), 1300, by + 230, () => {
+  snapIn(t, b(22.25), 1300, by + 230, () => {
     fillRR(1060, by + 175, 400, 100, 30, C.primary);
     text('Yes please! See you then.', 1094, by + 226, 28, 600, '#fff');
     avatar(1510, by + 225, 30, 'JL', C.primary);
   });
-  snapIn(t, b(21), W / 2, by + 360, () => {
+  snapIn(t, b(22.5), W / 2, by + 360, () => {
     fillRR(W / 2 - 230, by + 322, 460, 76, 38, rgba(C.healthy, 0.16));
     ctx.beginPath(); ctx.arc(W / 2 - 180, by + 360, 20, 0, Math.PI * 2); ctx.fillStyle = C.healthy; ctx.fill();
     check(W / 2 - 180, by + 360, 20, '#fff', 4);
@@ -347,10 +322,341 @@ function glyph(kind, x, y, col) { // small line icons
   ctx.restore();
 }
 
+// ── product demos, rebuilt from the screen recordings ────────────────────────
+// A large pointer so viewers can always see where it is. path: [[arrive time, x, y], …] in
+// world space; each move takes 0.38s and lands on its time. clicks: times of presses.
+function pointer(t, path, clicks, z) {
+  let [x, y] = [path[0][1], path[0][2]];
+  for (let i = 1; i < path.length; i++) {
+    const [at, nx, ny] = path[i], p = ease.inOut(seg(t, at - 0.38, at));
+    if (p <= 0) break;
+    x = lerp(x, nx, p); y = lerp(y, ny, p);
+  }
+  const s = 2.1 / z;
+  const c = clicks.find((ct) => t >= ct && t < ct + 0.32);
+  ctx.save();
+  if (c != null) { // one ring per click, expanding once
+    const k = (t - c) / 0.32;
+    ctx.beginPath(); ctx.arc(x, y, (8 + 26 * ease.out(k)) * s, 0, Math.PI * 2);
+    ctx.strokeStyle = rgba(C.primary, 0.55 * (1 - k)); ctx.lineWidth = 3 * s; ctx.stroke();
+  }
+  const press = c != null && t < c + 0.12 ? 0.84 : 1;
+  ctx.translate(x, y); ctx.scale(s * press, s * press);
+  ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2;
+  ctx.beginPath();
+  [[0, 0], [0, 25], [6.5, 19.5], [11, 29], [15, 27.2], [10.6, 18], [18.5, 18]].forEach(([px, py], i) => (i ? ctx.lineTo(px, py) : ctx.moveTo(px, py)));
+  ctx.closePath();
+  ctx.fillStyle = '#111118'; ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
+  ctx.restore();
+}
+// Feature name, top left in screen space, so each demo is labelled.
+function featureTag(t, at, label) {
+  snapIn(t, at, 160, 70, () => {
+    const w = tw(label, 26, 600) + 64;
+    fillRR(48, 42, w, 56, 28, 'rgba(17,17,28,0.88)');
+    ctx.beginPath(); ctx.arc(80, 70, 7, 0, 7); ctx.fillStyle = '#8b83ff'; ctx.fill();
+    text(label, 98, 71, 26, 600, '#fff');
+  }, { dy: 0 });
+}
+function withCam(t, keys, fn) {
+  const [cx, cy, z] = camAt(t, keys);
+  ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.translate(-cx, -cy);
+  fn(z);
+  ctx.restore();
+}
+function stars(x, y, n, size = 12) {
+  for (let i = 0; i < 5; i++) {
+    ctx.beginPath();
+    for (let k = 0; k < 10; k++) { const rr0 = k % 2 ? size * 0.42 : size, a = -Math.PI / 2 + (k * Math.PI) / 5; ctx.lineTo(x + i * size * 2.2 + rr0 * Math.cos(a), y + rr0 * Math.sin(a)); }
+    ctx.closePath(); ctx.fillStyle = i < n ? '#f5b301' : '#dcdce6'; ctx.fill();
+  }
+}
+const box = (x, y, w, h, r = 10) => { fillRR(x, y, w, h, r, '#fff'); rr(x, y, w, h, r); ctx.strokeStyle = '#e6e6ee'; ctx.lineWidth = 1.2; ctx.stroke(); };
+
+// Home: KPI tiles, the October calendar and the Today panel.
+// Sunday 18 October 2026 is "today"; 1 October 2026 falls on a Thursday.
+const CAL = { x: 330, w: 1225, gx: 345, gw: 1195, top: 440, rh: 97 };
+const cellOf = (d) => { const i = d + 3; return [CAL.gx + (i % 7) * (CAL.gw / 7), CAL.top + Math.floor(i / 7) * CAL.rh]; };
+const BASE_EVENTS = [
+  [1, '10a', 'Melissa Grant', 'Brow Shape'], [2, '2:30p', 'Isabella Rossi', 'Gel Color'], [6, '11a', 'Drew Bianchi', 'Deep Tissue'],
+  [8, '10:30a', 'Jordan Ellis', 'Signature Facial'], [9, '1:30p', 'Maya Sandoval', 'Signature Facial'], [13, '12p', 'Marcus Bell', 'Signature Facial'],
+  [15, '2p', 'Jordan Ellis', 'Classic Mani-Pedi'], [16, '3:30p', 'Avery Whitfield', 'Deluxe Spa Pedi'], [17, '11a', 'Simone Archer', 'Gel Color'],
+  [29, '11a', 'Jordan Ellis', 'Signature Facial'],
+];
+function homeWorld(t, o = {}) {
+  const added = (o.added ?? []).filter((e) => t >= e[4]);
+  ctx.fillStyle = '#fafafc'; ctx.fillRect(0, 0, W, H);
+  appSidebar(74, 'Dashboard');
+  appTopBar('Home', 'Sunday, October 18, 2026 · What needs your attention right now, nothing to dig for.');
+  const kx = LAYOUT.x0, kw = (1890 - kx) / 4;
+  box(kx, 92, 1890 - kx, 112, 10);
+  [['Booked this week', String(added.length), added.length ? `${added.length} new since this morning` : 'None today'],
+    ['Revenue, last 7 days', '$1,284', 'Up 12% on the week before'], ['Avg health score', '74', 'Out of 100'], ['Revenue at risk', '$1,315', 'Down $278 over 30 days']].forEach(([l, v, sub], i) => {
+    const x = kx + i * kw + 20;
+    if (i) { ctx.fillStyle = '#ececf2'; ctx.fillRect(kx + i * kw, 92, 1, 112); }
+    text(l, x, 118, 12, 500, '#3a3a55');
+    if (i === 0 && added.length) snapIn(t, added[added.length - 1][4], x + 10, 148, () => text(v, x, 148, 24, 700, C.primary), { dy: 0, from: 0.7 });
+    else text(v, x, 148, 24, 700, '#16162a');
+    text(sub, x, 178, 12, 400, i === 0 && added.length ? '#1f9d5c' : MUTED);
+  });
+  // calendar
+  box(CAL.x, 222, CAL.w, 50, 10);
+  text('Calendar', CAL.x + 44, 247, 14, 600, '#16162a'); fillRR(CAL.x + 18, 239, 14, 16, 3, rgba(C.primary, 0.25));
+  [['Status', 1], ['Pipeline', 0], ['Waitlist', 0], ['Scheduling', 0]].forEach(([s, on], i) => {
+    const bx = CAL.x + 840 + i * 92;
+    if (on) fillRR(bx, 233, 80, 28, 5, C.primary); else { rr(bx, 233, 80, 28, 5); ctx.strokeStyle = '#e3e3ec'; ctx.stroke(); }
+    text(s, bx + 40, 248, 12, 600, on ? '#fff' : '#3a3a55', 'center');
+  });
+  box(CAL.x, 286, CAL.w, 660, 10);
+  [['‹', 0], ['›', 1]].forEach(([s, i]) => { rr(CAL.x + 16 + i * 34, 302, 34, 30, 5); ctx.strokeStyle = '#e3e3ec'; ctx.stroke(); text(s, CAL.x + 33 + i * 34, 316, 16, 600, '#3a3a55', 'center'); });
+  rr(CAL.x + 92, 302, 60, 30, 5); ctx.strokeStyle = '#e3e3ec'; ctx.stroke(); text('Today', CAL.x + 122, 317, 12, 500, '#55556f', 'center');
+  text('October 2026', CAL.x + CAL.w / 2, 317, 17, 700, '#16162a', 'center');
+  ['Month', 'Week', 'Day', 'Agenda'].forEach((s, i) => {
+    const bx = CAL.x + CAL.w - 290 + i * 70;
+    if (!i) fillRR(bx, 302, 66, 30, 5, C.primary);
+    text(s, bx + 33, 317, 12, 600, i ? '#3a3a55' : '#fff', 'center');
+  });
+  const cw = CAL.gw / 7;
+  ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].forEach((d, i) => text(d, CAL.gx + i * cw + cw / 2, 424, 11, 600, '#55556f', 'center'));
+  ctx.strokeStyle = '#ececf2'; ctx.lineWidth = 1;
+  for (let i = 0; i <= 7; i++) { ctx.beginPath(); ctx.moveTo(CAL.gx + i * cw, 408); ctx.lineTo(CAL.gx + i * cw, CAL.top + 5 * CAL.rh); ctx.stroke(); }
+  for (let j = 0; j <= 5; j++) { ctx.beginPath(); ctx.moveTo(CAL.gx, CAL.top + j * CAL.rh); ctx.lineTo(CAL.gx + CAL.gw, CAL.top + j * CAL.rh); ctx.stroke(); }
+  for (let i = 0; i < 35; i++) {
+    const d = i - 3, x = CAL.gx + (i % 7) * cw, y = CAL.top + Math.floor(i / 7) * CAL.rh;
+    const label = d < 1 ? [27, 28, 29, 30][i] : d; // Sep 27–30 lead into the month
+    if (d === 18) { ctx.fillStyle = rgba(C.primary, 0.07); ctx.fillRect(x + 1, y + 1, cw - 2, CAL.rh - 2); }
+    text(String(label), x + cw - 12, y + 16, 12, 600, d < 1 ? '#b5b5c8' : '#22223a', 'right');
+  }
+  const events = BASE_EVENTS.map((e) => [...e, -1]).concat(added);
+  const perDay = {};
+  events.forEach((e) => {
+    const [d, tm, n, svc, at] = e, [x, y] = cellOf(d), k = (perDay[d] = (perDay[d] ?? 0) + 1) - 1;
+    const draw = () => {
+      ctx.save(); ctx.beginPath(); ctx.rect(x + 4, y, cw - 8, CAL.rh); ctx.clip();
+      if (at > 0) fillRR(x + 5, y + 30 + k * 20, cw - 10, 19, 4, rgba(C.primary, 0.12));
+      ctx.beginPath(); ctx.arc(x + 14, y + 40 + k * 20, 3.5, 0, 7); ctx.fillStyle = at > 0 ? C.primary : '#8b83ff'; ctx.fill();
+      text(tm, x + 22, y + 40 + k * 20, 11, 500, '#6b6b85');
+      text(`${n} · ${svc}`, x + 24 + tw(tm, 11, 500), y + 40 + k * 20, 11, at > 0 ? 600 : 500, '#22223a');
+      ctx.restore();
+    };
+    if (at > 0) snapIn(t, at, x + cw / 2, y + 40, draw, { dy: 0, from: 0.85 }); else draw();
+  });
+  // Today + Needs attention
+  box(1573, 222, 315, 190, 10);
+  text('Today', 1591, 246, 14, 600, '#16162a'); text('Sunday, Oct 18', 1591, 266, 12, 400, MUTED);
+  text('Nothing booked today', 1730, 330, 13, 600, '#16162a', 'center');
+  const next = added.find((e) => e[0] === 21) ? 'Next: Wed, Oct 21 at 11:00 AM, Chloe Bergeron' : 'Next: Thu, Oct 29 at 11:00 AM, Jordan Ellis';
+  text(next, 1730, 356, 11.5, 400, MUTED, 'center');
+  box(1573, 426, 315, 520, 10);
+  text('Needs attention', 1591, 452, 14, 600, '#16162a'); text('5 open items, most urgent first', 1591, 472, 11.5, 400, MUTED);
+  [['Camille Duval', 'Invoice INV-0011 is 12 days overdue', '$75.78'], ['Melissa Grant', 'Invoice INV-0009 is 9 days overdue', '$108.25'],
+    ['Jordan Marsh', 'Overdue for a repeat visit, last seen 43 days ago', ''], ['Riley Delgado', 'No booking in 69 days', '']].forEach(([n, s2, v], i) => {
+    const y = 510 + i * 92;
+    ctx.beginPath(); ctx.arc(1595, y, 4, 0, 7); ctx.fillStyle = i < 2 ? C.risk : '#b5b5c8'; ctx.fill();
+    text(n, 1607, y, 13, 600, '#16162a'); if (v) text(v, 1872, y, 13, 600, '#16162a', 'right');
+    text(s2, 1607, y + 20, 11, 400, MUTED);
+    rr(1607, y + 36, 110, 26, 5); ctx.strokeStyle = '#e3e3ec'; ctx.stroke(); text(i < 2 ? 'Resend invoice' : 'Text client', 1662, y + 49, 11.5, 500, '#22223a', 'center');
+  });
+}
+
+// AI Business Analyst · "which clients haven't booked in 60 days?"
+const AI_Q = 'Which clients haven’t booked in 60 days?';
+const AI_ROWS = [
+  ['Chloe Bergeron', 'Jul 29', '81'], ['Renee Calloway', 'Jul 31', '79'], ['Reese Abara', 'Aug 2', '77'], ['Lauren Kowalczyk', 'Aug 4', '75'],
+  ['Hannah McAllister', 'Aug 7', '72'], ['Riley Delgado', 'Aug 10', '69'], ['Charlotte Reddick', 'Aug 11', '68'], ['Nina Petrossian', 'Aug 13', '66'], ['Dominic Ferraro', 'Aug 14', '65'],
+];
+function sAnalyst(t) {
+  const t0 = b(17.5), ans = b(19.25), send = b(20.25);
+  const keys = [[t0, 960, 300, 1.6], [ans, 960, 455, 1.32]];
+  withCam(t, keys, (z) => {
+    homeWorld(t);
+    ctx.fillStyle = 'rgba(10,10,22,0.55)'; ctx.fillRect(0, 0, W, H);
+    const x = 530, w = 860, y = 120;
+    snapIn(t, t0, x + w / 2, y + 40, () => {
+      const h = t >= ans ? 690 : 80;
+      fillRR(x, y, w, h, 12, '#12121c'); rr(x, y, w, h, 12); ctx.strokeStyle = 'rgba(139,131,255,0.35)'; ctx.lineWidth = 1.5; ctx.stroke();
+      glyph('bolt', x + 28, y + 28, '#a59cff');
+      const n = Math.floor(AI_Q.length * seg(t, b(18), b(18.875)));
+      const typed = AI_Q.slice(0, n);
+      text(typed || 'Ask anything about your business…', x + 54, y + 28, 15, 500, typed ? '#f1f1f7' : '#6b6b85');
+      if (t >= b(17.75) && t < b(19)) { ctx.fillStyle = '#a59cff'; ctx.fillRect(x + 56 + tw(typed, 15, 500), y + 18, 2, 21); }
+      fillRR(x + w - 74, y + 13, 58, 30, 6, C.primary); text('Run', x + w - 45, y + 28, 13, 600, '#fff', 'center');
+      ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fillRect(x, y + 56, w, 1);
+      text('Navigates the dashboard or answers from your data', x + 18, y + 68, 11, 400, '#6b6b85');
+      if (t < ans) return;
+      snapIn(t, ans, x + w / 2, y + 380, () => {
+        text('Here’s what I found', x + 20, y + 104, 16, 700, '#f1f1f7');
+        rr(x + 18, y + 124, w - 36, 470, 10); ctx.strokeStyle = 'rgba(139,131,255,0.7)'; ctx.lineWidth = 1.5; ctx.stroke();
+        fillRR(x + 19, y + 125, w - 38, 468, 10, 'rgba(91,80,232,0.08)');
+        text('AI GENERATED', x + 40, y + 148, 10.5, 700, '#a59cff', 'left', 0.08);
+        text('Based on today’s date, these clients haven’t booked in 60+ days, the ones most worth reaching out to:', x + 40, y + 176, 13.5, 500, '#e4e4ee');
+        AI_ROWS.forEach(([n, d, days], i) => {
+          const ry = y + 210 + i * 34;
+          snapIn(t, ans + (i * BEAT) / 16, x + 200, ry, () => {
+            ctx.beginPath(); ctx.arc(x + 48, ry, 2.5, 0, 7); ctx.fillStyle = '#e4e4ee'; ctx.fill();
+            text(n, x + 60, ry, 14, 700, '#ffffff');
+            text(`· last booked ${d} (${days} days ago)`, x + 66 + tw(n, 14, 700), ry, 14, 400, '#c9c9d9');
+          }, { dy: 8, blur: 6 });
+        });
+        text('The top 3 haven’t been in for over 11 weeks. Great candidates for a win-back offer.', x + 40, y + 530, 13.5, 500, '#e4e4ee');
+        const bw = 330, bx = x + 20, by = y + 618;
+        if (t < send) { fillRR(bx, by, bw, 40, 8, C.primary); text('Send win-back offer to all 9', bx + bw / 2, by + 20, 14, 600, '#fff', 'center'); }
+        else snapIn(t, send, bx + bw / 2, by + 20, () => { fillRR(bx, by, bw, 40, 8, '#16a34a'); check(bx + 30, by + 20, 14, '#fff', 3); text('Win-back sent to 9 clients', bx + bw / 2 + 14, by + 20, 14, 600, '#fff', 'center'); }, { dy: 0, from: 0.9, blur: 4 });
+      }, { dy: 14 });
+    }, { dy: 20 });
+    pointer(t, [[t0, 1210, 560], [b(17.75), 980, 152], [b(19), 1345, 150], [send, 560, 760]], [b(17.75), b(19), send], z);
+  });
+  featureTag(t, t0, 'AI Business Analyst');
+}
+
+// Booking calendar · October, in use
+const CAL_ADDED = [
+  [21, '11a', 'Chloe Bergeron', 'Signature Facial', b(25.25)],
+  [22, '2:30p', 'Renee Calloway', 'Gel Color', b(25.75)],
+  [23, '10a', 'Reese Abara', 'Brow Shape', b(26)],
+  [20, '4p', 'Hannah McAllister', 'Deluxe Spa Pedi', b(26.25)],
+  [24, '1p', 'Lauren Kowalczyk', 'Deep Tissue', b(26.5)],
+];
+function sCalendar(t) {
+  const t0 = b(23.5), open = b(24.5), book = b(25.25);
+  const keys = [[t0, 960, 540, 1], [b(24.25), 960, 700, 1.75], [b(25.5), 1010, 610, 1.32]];
+  withCam(t, keys, (z) => {
+    snapIn(t, t0, W / 2, H / 2, () => homeWorld(t, { added: CAL_ADDED }), { dy: 0, from: 0.97 });
+    // the booking popover on Wed 21
+    if (t >= open && t < book + 0.12) {
+      const out = ease.out(seg(t, book, book + 0.12));
+      ctx.save(); ctx.globalAlpha = 1 - out;
+      snapIn(t, open, 1000, 620, () => {
+        const x = 850, y = 506, w = 340, h = 214;
+        card(x, y, w, h, 12, { shadow: 30, shadowColor: 'rgba(20,20,50,0.22)' });
+        text('New appointment', x + 18, y + 26, 15, 700, '#16162a');
+        [['Client', 'Chloe Bergeron'], ['Service', 'Signature Facial · 60 min'], ['When', 'Wed, Oct 21 · 11:00 AM']].forEach(([l, v], i) => {
+          text(l, x + 18, y + 60 + i * 30, 12, 500, MUTED); text(v, x + 92, y + 60 + i * 30, 12.5, 600, '#16162a');
+        });
+        fillRR(x + 18, y + 142, 14, 14, 3, C.primary); check(x + 25, y + 149, 9, '#fff', 2); text('Send SMS reminder the day before', x + 40, y + 149, 12, 500, '#2a2a44');
+        fillRR(x + 18, y + 170, w - 36, 32, 7, C.primary); text('Book appointment', x + w / 2, y + 186, 13, 600, '#fff', 'center');
+      }, { dy: 10 });
+      ctx.restore();
+    }
+    // toast for each online booking
+    const last = CAL_ADDED.filter((e) => e[0] !== 21 && t >= e[4]).pop();
+    if (last) snapIn(t, last[4], 1730, 900, () => {
+      card(1580, 858, 300, 78, 12, { shadow: 30, shadowColor: 'rgba(20,20,50,0.2)' });
+      ctx.beginPath(); ctx.arc(1608, 897, 13, 0, 7); ctx.fillStyle = C.healthy; ctx.fill(); check(1608, 897, 11, '#fff', 2.5);
+      text('Booked online', 1630, 884, 13, 700, '#16162a');
+      text(`${last[2]} · ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][(last[0] + 3) % 7]} ${last[1]}`, 1630, 904, 11.5, 500, MUTED);
+      text('Reminder scheduled', 1630, 922, 11, 500, '#1f9d5c');
+    }, { dy: 12 });
+    pointer(t, [[t0, 1320, 300], [open, 950, 800], [book, 1030, 690], [b(26), 1330, 610]], [open, book], z);
+  });
+  featureTag(t, t0, 'Booking calendar');
+}
+
+// Review requests · send, then the review lands
+const REQ_ROWS = [['Simone Archer', 'Visited yesterday'], ['Isabella Rossi', 'Visited Oct 16'], ['Danielle Whitmore', 'Last asked 63 days ago'], ['Priya Raman', 'Last asked 94 days ago'],
+  ['Sofia Camacho', 'Last asked 120 days ago'], ['Grace Liu', 'Last asked 79 days ago'], ['Nina Petrossian', 'Last asked 99 days ago'], ['Blake Petrov', 'Last asked 75 days ago']];
+const FEED = [
+  ['Simone Archer', 5, 'Felt like a regular again. Booked my next visit before I left.', 'Oct 17, 2026'],
+  ['Isabella Rossi', 5, 'So easy to rebook, and the reminder text was perfect.', 'Oct 16, 2026'],
+  ['Dominic Ferraro', 5, 'They squeezed me in same-day before an event. So many compliments.', 'Oct 14, 2026'],
+  ['Charlotte Reddick', 5, 'So easy to book, zero wait, and the results speak for themselves.', 'Oct 11, 2026'],
+  ['Amara Diallo', 4, 'Lovely team. Will be back next month.', 'Oct 9, 2026'],
+  ['Avery Whitfield', 5, 'Rating only, no comment', 'Oct 7, 2026'],
+  ['Taylor Fontaine', 4, 'Great results. Parking was tricky.', 'Oct 5, 2026'],
+];
+function reviewsWorld(t, mode, sent) {
+  ctx.fillStyle = '#fafafc'; ctx.fillRect(0, 0, W, H);
+  appSidebar(74, 'Reviews');
+  appTopBar('Reviews', 'Sunday, October 18, 2026 · Manage and respond to client reviews.');
+  appTabs(['Feedback', 'Requests', 'Insights', 'Google'], mode === 'feed' ? 'Feedback' : 'Requests');
+  const kx = LAYOUT.x0, kw = (1890 - kx) / 4;
+  box(kx, 152, 1890 - kx, 98, 10);
+  const fresh = mode === 'feed' && t >= b(29.75);
+  const kpis = mode === 'feed'
+    ? [['Average rating', fresh ? '4.7' : '4.6', `from ${fresh ? 47 : 46} ratings`], ['Response rate', '100%', 'all requests answered'], ['Net promoter score', '+31', 'Good'], ['Low ratings, 30 days', '0', '1 to 3 stars']]
+    : [['Requests, 30 days', String(12 + sent), 'Automatic requests are on'], ['Answered', '10', 'in the last 30 days'], ['Average rating', '4.6', 'from requested reviews'], ['Queued to send', String(sent), 'Go out within 15 minutes']];
+  kpis.forEach(([l, v, sub], i) => {
+    const x = kx + i * kw + 20;
+    if (i) { ctx.fillStyle = '#ececf2'; ctx.fillRect(kx + i * kw, 152, 1, 98); }
+    text(l, x, 176, 12, 500, '#3a3a55');
+    const hot = (mode === 'feed' && i === 0 && fresh) || (mode !== 'feed' && (i === 0 || i === 3) && sent);
+    text(v, x, 204, 24, 700, hot ? C.primary : '#16162a');
+    text(sub, x, 230, 12, 400, MUTED);
+  });
+  box(kx, 268, 1003, 680, 10); box(1351, 268, 537, 680, 10);
+  if (mode === 'feed') {
+    text('Client feedback', kx + 20, 292, 14, 600, '#16162a'); text('Newest first', kx + 20, 311, 11.5, 400, MUTED);
+    const rows = fresh ? FEED : FEED.slice(1);
+    rows.forEach(([n, st, c, d], i) => {
+      const y = 360 + i * 66;
+      const draw = () => {
+        if (i === 0 && fresh) fillRR(kx + 8, y - 26, 987, 60, 8, rgba(C.healthy, 0.08));
+        stars(kx + 28, y - 6, st, 7); text(n, kx + 112, y - 6, 13, 600, '#16162a'); text(d, kx + 983, y - 6, 12, 500, '#55556f', 'right');
+        text(c, kx + 20, y + 16, 12.5, 400, '#2a2a44');
+      };
+      if (i === 0 && fresh) snapIn(t, b(29.75), kx + 500, y, draw, { dy: -16 }); else draw();
+      ctx.fillStyle = '#ececf2'; ctx.fillRect(kx, y + 38, 1003, 1);
+    });
+    text('Rating distribution', 1370, 292, 14, 600, '#16162a');
+    text(fresh ? '4.7' : '4.6', 1370, 350, 32, 700, '#16162a'); stars(1374, 384, 5, 7);
+    [[5, 31], [4, 12], [3, 3], [2, 1], [1, 0]].forEach(([k, n], i) => {
+      const y = 340 + i * 28, v = k === 5 && fresh ? n + 1 : n;
+      text(`${k} ★`, 1470, y, 12, 500, '#3a3a55'); fillRR(1505, y - 4, 300, 8, 4, LINE); fillRR(1505, y - 4, (300 * v) / 32, 8, 4, '#f5b301'); text(String(v), 1868, y, 12, 600, '#16162a', 'right');
+    });
+    return;
+  }
+  text('Requests', kx + 20, 292, 14, 600, '#16162a'); text('Queued first, then newest', kx + 20, 311, 11.5, 400, MUTED);
+  fillRR(kx + 860, 283, 125, 30, 6, C.primary); text('Send a request', kx + 922, 298, 12.5, 600, '#fff', 'center');
+  FEED.slice(2).concat(FEED.slice(2, 4)).forEach(([n, st], i) => {
+    const y = 360 + i * 56;
+    text(n, kx + 20, y - 8, 13, 600, '#16162a'); text(`Asked ${8 + i * 3} days ago`, kx + 20, y + 10, 11.5, 400, MUTED);
+    stars(kx + 860, y, st, 6); pill(kx + 985, y, 'Answered', '#1f9d5c', 11, 'right');
+    ctx.fillStyle = '#ececf2'; ctx.fillRect(kx, y + 28, 1003, 1);
+  });
+  text('Settings', 1370, 292, 14, 600, '#16162a'); text('Applies to requests from here on', 1370, 311, 11.5, 400, MUTED);
+  fillRR(1834, 282, 38, 20, 10, C.primary); ctx.beginPath(); ctx.arc(1862, 292, 7, 0, 7); ctx.fillStyle = '#fff'; ctx.fill();
+  text('Wait this many minutes', 1370, 350, 12, 500, '#2a2a44'); box(1370, 362, 500, 34, 6); text('30', 1384, 379, 12.5, 500, '#16162a');
+  text('Message', 1370, 424, 12, 500, '#2a2a44'); box(1370, 436, 500, 70, 6);
+  text('Hi {firstName}! Thanks for visiting today. We’d love your', 1384, 458, 12, 400, '#16162a'); text('feedback, it only takes 30 seconds: {link}', 1384, 478, 12, 400, '#16162a');
+}
+function sReviews(t) {
+  const t0 = b(27.5), openAt = b(28), s1 = b(28.5), s2 = b(29), feed = b(29.5);
+  const sent = (t >= s1) + (t >= s2);
+  const isFeed = t >= feed;
+  const keys = isFeed ? [[feed, 800, 420, 1.55]] : [[t0, 960, 540, 1], [openAt, 955, 470, 1.45]];
+  withCam(t, keys, (z) => {
+    if (isFeed) { snapIn(t, feed, W / 2, H / 2, () => reviewsWorld(t, 'feed', 2), { dy: 0, from: 0.97 }); return; }
+    snapIn(t, t0, W / 2, H / 2, () => reviewsWorld(t, 'req', sent), { dy: 0, from: 0.97 });
+    if (t >= openAt) {
+      ctx.fillStyle = 'rgba(30,30,45,0.45)'; ctx.fillRect(0, 0, W, H);
+      snapIn(t, openAt, 955, 477, () => {
+        const x = 731, y = 127, w = 448;
+        card(x, y, w, 700, 12, { shadow: 40, shadowColor: 'rgba(20,20,50,0.25)' });
+        text('Send a review request', x + 20, y + 28, 15, 700, '#16162a');
+        text('The client gets the same text as an automatic request,', x + 20, y + 52, 12, 400, MUTED);
+        text('within about 15 minutes.', x + 20, y + 70, 12, 400, MUTED);
+        ctx.fillStyle = '#ececf2'; ctx.fillRect(x, y + 98, w, 1);
+        box(x + 20, y + 115, w - 40, 32, 6); text('Search clients by name or phone', x + 46, y + 131, 12, 400, FAINT);
+        REQ_ROWS.forEach(([n, sub], i) => {
+          const ry = y + 180 + i * 58, isSent = (i === 0 && t >= s1) || (i === 1 && t >= s2), at = i === 0 ? s1 : s2;
+          text(n, x + 20, ry - 8, 13, 600, '#16162a'); text(sub, x + 20, ry + 10, 11.5, 400, MUTED);
+          if (!isSent) { rr(x + w - 66, ry - 14, 46, 28, 5); ctx.strokeStyle = '#e3e3ec'; ctx.stroke(); text('Send', x + w - 43, ry, 11.5, 500, '#3a3a55', 'center'); }
+          else snapIn(t, at, x + w - 48, ry, () => { fillRR(x + w - 92, ry - 14, 72, 28, 14, rgba(C.healthy, 0.16)); check(x + w - 76, ry, 10, '#1f9d5c', 2.2); text('Sent', x + w - 50, ry, 11.5, 600, '#1f9d5c', 'center'); }, { dy: 0, from: 0.8, blur: 4 });
+          ctx.fillStyle = '#ececf2'; ctx.fillRect(x, ry + 28, w, 1);
+        });
+        rr(x + w - 80, y + 655, 60, 30, 6); ctx.strokeStyle = '#e3e3ec'; ctx.stroke(); text('Done', x + w - 50, y + 670, 12.5, 500, '#16162a', 'center');
+      }, { dy: 14 });
+    }
+    pointer(t, [[t0, 900, 640], [openAt, 1258, 300], [s1, 1137, 309], [s2, 1137, 367]], [openAt, s1, s2], z);
+  });
+  featureTag(t, t0, 'Review requests');
+}
+
 // ── 10 · everything else a salon runs on ─────────────────────────────────────
 function sToolkit(t) {
   lightBG();
-  line(t, [['Everything else,', b(22)], ['in one place.', b(22), C.primary]], W / 2, 220, 88);
+  line(t, [['Everything else,', b(31)], ['in one place.', b(31), C.primary]], W / 2, 220, 88);
   const tiles = [
     ['Online booking', 'Clients book 24/7', 'cal', C.primary], ['Review requests', 'Sent after every visit', 'star', C.attention],
     ['Loyalty rewards', 'Points that bring them back', 'gift', '#db2777'], ['Payments', 'Invoices and card payments', 'card', C.healthy],
@@ -358,7 +664,7 @@ function sToolkit(t) {
   ];
   const tw0 = 470, th = 170, gx = 36, gy = 36, x0 = W / 2 - (3 * tw0 + 2 * gx) / 2, y0 = 360;
   tiles.forEach(([name, desc, ic, col], i) => {
-    const x = x0 + (i % 3) * (tw0 + gx), y = y0 + Math.floor(i / 3) * (th + gy), at = b(22.5) + (i * BEAT) / 16;
+    const x = x0 + (i % 3) * (tw0 + gx), y = y0 + Math.floor(i / 3) * (th + gy), at = b(31.5) + (i * BEAT) / 16;
     snapIn(t, at, x + tw0 / 2, y + th / 2, () => {
       card(x, y, tw0, th, 28);
       fillRR(x + 34, y + th / 2 - 38, 76, 76, 20, rgba(col, 0.13));
@@ -372,11 +678,11 @@ function sToolkit(t) {
 // ── 11 · Analytics & Predictions (rebuilt from the product) ──────────────────
 // Rises happen one at a time; the camera moves onto each card on the beat before it climbs.
 const RISE = {
-  health: [b(25.5), b(26.25)],
-  rebook: [b(27), b(27.75)],
-  forecast: [b(28.5), b(29.25)],
-  revenue: [b(30), b(30.75)],
-  cohort: [b(31.75), b(32.5)],
+  health: [b(34.5), b(35.25)],
+  rebook: [b(36), b(36.75)],
+  forecast: [b(37.5), b(38.25)],
+  revenue: [b(39), b(39.75)],
+  cohort: [b(40.75), b(41.5)],
 };
 const r = (t, k) => ease.inOut(seg(t, RISE[k][0], RISE[k][1]));
 const LAYOUT = { // world coordinates of the dashboard page (1920 × 1080)
@@ -400,43 +706,55 @@ function dcard(key, title, sub) {
 function delta(t, key, x, y, label) { // "+46 pts" tag snaps in as the rise finishes
   snapIn(t, RISE[key][1] - 0.05, x, y, () => pill(x, y, label, '#1f9d5c', 12, 'left'), { from: 0.7, dy: 0, blur: 6 });
 }
-function dashSidebar(t) {
+// The product chrome, shared by every screen rebuilt from the recordings.
+function appSidebar(bh, active) {
   const L = LAYOUT;
   ctx.fillStyle = '#fbfbfd'; ctx.fillRect(0, 0, L.side, H);
   ctx.fillStyle = '#ececf2'; ctx.fillRect(L.side, 0, 1, H);
   logoMark(36, 34, 30); text(BRAND.name, 58, 35, 19, 700, '#1a1a33');
-  const bh = Math.round(lerp(41, 88, r(t, 'cohort')));
   text('Business health', 18, 80, 13, 500, MUTED);
   text(`${bh}`, 236, 80, 13, 700, '#16162a', 'right'); text('/100', 266, 80, 13, 500, FAINT, 'right');
   fillRR(18, 94, 264, 5, 3, LINE); fillRR(18, 94, (264 * bh) / 100, 5, 3, bh > 70 ? '#22c55e' : bh > 50 ? C.attention : C.risk);
-  fillRR(14, 114, 272, 34, 6, '#fff'); rr(14, 114, 272, 34, 6); ctx.strokeStyle = '#e6e6ee'; ctx.stroke();
+  fillRR(14, 114, 272, 34, 6, '#fff'); rr(14, 114, 272, 34, 6); ctx.strokeStyle = '#e6e6ee'; ctx.lineWidth = 1.2; ctx.stroke();
   text('Ask AI Analyst', 46, 131, 13, 500, '#3a3a55');
-  const nav = [['Dashboard', 0, 1], ['Dashboard', 1], ['Action Center', 1], ['Analytics & Predictions', 1, 2], ['At-Risk Clients', 1], ['Custom Reports', 1], ['Marketing Sources', 1],
-    ['Finance', 0], ['Customers', 0], ['Messages', 0], ['Calls & Video', 0], ['Marketing', 0], ['Scheduling & Jobs', 0], ['Team & Tools', 0]];
+  const nav = [['Dashboard', 0], ['Dashboard', 1], ['Action Center', 1], ['Analytics & Predictions', 1], ['At-Risk Clients', 1], ['Custom Reports', 1],
+    ['Finance', 0], ['Customers', 0], ['Messages', 0], ['Calls & Video', 0], ['Marketing', 0], ['Reviews', 1], ['Campaigns', 1], ['Scheduling & Jobs', 0], ['Team & Tools', 0]];
   let y = 180;
-  nav.forEach(([n, sub, on]) => {
-    if (on === 2) fillRR(34, y - 13, 248, 27, 5, rgba(C.primary, 0.09));
-    if (!sub) { fillRR(20, y - 7, 14, 14, 3, '#c5c5d6'); }
-    text(n, sub ? 42 : 44, y + 1, 13.5, on ? 600 : 500, on === 2 ? C.primary : sub ? '#4a4a66' : '#22223a');
+  nav.forEach(([n, sub], i) => {
+    const on = sub && n === active && !(n === 'Dashboard' && i === 0);
+    if (on) fillRR(34, y - 13, 248, 27, 5, rgba(C.primary, 0.09));
+    if (!sub) fillRR(20, y - 7, 14, 14, 3, '#c5c5d6');
+    text(n, sub ? 42 : 44, y + 1, 13.5, on || !sub ? 600 : 500, on ? C.primary : sub ? '#4a4a66' : '#22223a');
     y += sub ? 29 : 34;
   });
   avatar(30, H - 34, 14, 'S', '#16162a');
   text('Support', 54, H - 41, 13, 600, '#22223a'); text('Owner', 54, H - 25, 11, 500, FAINT);
 }
-function dashHeader() {
+function appTopBar(title, sub) {
   const x = LAYOUT.x0;
-  text('Analytics & Predictions', x, 32, 19, 700, '#16162a');
-  text('Your business at a glance: health, revenue, activity and forecasts that update automatically.', x, 54, 12, 400, MUTED);
+  text(title, x, 32, 19, 700, '#16162a');
+  text(sub, x, 54, 12, 400, MUTED);
   [['AI Analyst', 1290, 100], ['Search anything…', 1404, 190], ['My Dashboard', 1608, 128]].forEach(([s, bx, bw]) => {
     rr(bx, 20, bw, 32, 6); ctx.strokeStyle = '#e3e3ec'; ctx.lineWidth = 1.2; ctx.stroke(); text(s, bx + 14, 36, 12, 500, '#3a3a55');
   });
   fillRR(1750, 20, 140, 32, 6, C.primary); text('+ Add Client', 1820, 36, 12.5, 600, '#fff', 'center');
-  ['Overview', 'Revenue', 'Retention', 'Economics', 'Growth'].forEach((s, i) => {
-    const tx = x + 10 + i * 86;
-    text(s, tx, 114, 12.5, i === 2 ? 600 : 500, i === 2 ? '#16162a' : '#55556f');
-    if (i === 2) { ctx.fillStyle = '#16162a'; ctx.fillRect(tx - 10, 131, tw(s, 12.5, 600) + 20, 2); }
+}
+function appTabs(tabs, active, y = 114) {
+  const x = LAYOUT.x0;
+  let tx = x + 10;
+  tabs.forEach((s) => {
+    const on = s === active, w = tw(s, 12.5, on ? 600 : 500);
+    text(s, tx, y, 12.5, on ? 600 : 500, on ? '#16162a' : '#55556f');
+    if (on) { ctx.fillStyle = '#16162a'; ctx.fillRect(tx - 10, y + 17, w + 20, 2); }
+    tx += w + 50;
   });
-  ctx.fillStyle = '#ececf2'; ctx.fillRect(x, 133, 1560, 1);
+  ctx.fillStyle = '#ececf2'; ctx.fillRect(x, y + 19, 1560, 1);
+}
+function dashSidebar(t) { appSidebar(Math.round(lerp(41, 88, r(t, 'cohort'))), 'Analytics & Predictions'); }
+function dashHeader() {
+  const x = LAYOUT.x0;
+  appTopBar('Analytics & Predictions', 'Sunday, October 18, 2026 · Your business at a glance: health, revenue, activity and forecasts that update automatically.');
+  appTabs(['Overview', 'Revenue', 'Retention', 'Economics', 'Growth'], 'Retention');
   text('Where clients stand', x, 252, 14.5, 600, '#16162a'); text('Risk and health across your whole client list today', x, 271, 12, 400, MUTED);
   text('Forecast and engagement', x, 632, 14.5, 600, '#16162a'); text('Where retention is heading, and how each month’s clients stick', x, 651, 12, 400, MUTED);
 }
@@ -528,7 +846,7 @@ function cardCohort(t) {
   });
 }
 function dashboardWorld(t) {
-  const at = b(24), step = BEAT / 16;
+  const at = b(33), step = BEAT / 16;
   ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = '#fafafc'; ctx.fillRect(LAYOUT.side, 0, W - LAYOUT.side, H);
   snapIn(t, at, 150, H / 2, () => dashSidebar(t), { dy: 0, from: 0.98 });
@@ -541,17 +859,17 @@ function dashboardWorld(t) {
 // Camera keys: [time, centre x, centre y, zoom]. Moves start on a beat and settle in 0.4s.
 const focus = (k, z) => { const [x, y, w, h] = cardBox[k]; return [x + w / 2, y + h / 2, z]; };
 const CAM = [
-  [b(24), W / 2, H / 2, 1],
-  [b(25), ...focus('health', 2.6)],
-  [b(26.5), ...focus('rebook', 2.6)],
-  [b(28), ...focus('forecast', 1.95)],
-  [b(29.5), ...focus('revenue', 2.6)],
-  [b(31.25), W / 2, H / 2, 1],
+  [b(33), W / 2, H / 2, 1],
+  [b(34), ...focus('health', 2.6)],
+  [b(35.5), ...focus('rebook', 2.6)],
+  [b(37), ...focus('forecast', 1.95)],
+  [b(38.5), ...focus('revenue', 2.6)],
+  [b(40.25), W / 2, H / 2, 1],
 ];
-function camAt(t) {
-  let c = CAM[0].slice(1);
-  for (let i = 1; i < CAM.length; i++) {
-    const [at, ...to] = CAM[i];
+function camAt(t, keys = CAM) {
+  let c = keys[0].slice(1);
+  for (let i = 1; i < keys.length; i++) {
+    const [at, ...to] = keys[i];
     const p = ease.inOut(seg(t, at, at + 0.42));
     if (p <= 0) break;
     // interpolate in log-zoom so the push feels even
@@ -570,8 +888,8 @@ function sDashboard(t) {
 // ── 12 · tagline ─────────────────────────────────────────────────────────────
 function sTagline(t) {
   lightBG();
-  line(t, [['Know your customers.', b(33)]], W / 2, H / 2 - 75, 124);
-  line(t, [['Keep', b(33.75), C.primary], ['your customers.', b(33.75)]], W / 2, H / 2 + 75, 124);
+  line(t, [['Know your customers.', b(42)]], W / 2, H / 2 - 75, 124);
+  line(t, [['Keep', b(42.75), C.primary], ['your customers.', b(42.75)]], W / 2, H / 2 + 75, 124);
 }
 
 // ── 13 · end card ────────────────────────────────────────────────────────────
@@ -579,10 +897,10 @@ function sEnd(t) {
   lightBG();
   const ls = 200, ww = tw(BRAND.name, 150, 700), gap = 40, full = ls + gap + ww;
   const lx = W / 2 - full / 2 + ls / 2, y = H / 2 - 50;
-  snapIn(t, b(35), lx, y, () => logoMark(lx, y, ls), { from: 0.7 });
-  snapIn(t, b(35) + BEAT / 8, lx + ls / 2 + gap + ww / 2, y, () => text(BRAND.name, lx + ls / 2 + gap, y + 6, 150, 700, C.ink), { dy: 0 });
-  line(t, [[BRAND.url, b(35.5), MUTED]], W / 2, H / 2 + 100, 46, { weight: 500 });
-  snapIn(t, b(36), W / 2, H / 2 + 210, () => {
+  snapIn(t, b(44), lx, y, () => logoMark(lx, y, ls), { from: 0.7 });
+  snapIn(t, b(44) + BEAT / 8, lx + ls / 2 + gap + ww / 2, y, () => text(BRAND.name, lx + ls / 2 + gap, y + 6, 150, 700, C.ink), { dy: 0 });
+  line(t, [[BRAND.url, b(44.5), MUTED]], W / 2, H / 2 + 100, 46, { weight: 500 });
+  snapIn(t, b(45), W / 2, H / 2 + 210, () => {
     const s = 'Start now · 50% off your first month', w = tw(s, 30, 600) + 64;
     fillRR(W / 2 - w / 2, H / 2 + 178, w, 64, 32, C.primary);
     text(s, W / 2, H / 2 + 211, 30, 600, '#fff', 'center');
@@ -599,12 +917,14 @@ const SCENES = [
   [b(11), b(13.5), sMeet],
   [b(13.5), b(15.5), sWhat],
   [b(15.5), b(17.5), sHealth],
-  [b(17.5), b(19.5), sChurn],
-  [b(19.5), b(22), sWinBack],
-  [b(22), b(24), sToolkit],
-  [b(24), b(33), sDashboard],
-  [b(33), b(35), sTagline],
-  [b(35), DURATION + 1, sEnd],
+  [b(17.5), b(21), sAnalyst],     // recording: AI Business Analyst
+  [b(21), b(23.5), sWinBack],
+  [b(23.5), b(27.5), sCalendar],  // recording: booking calendar (October)
+  [b(27.5), b(31), sReviews],     // recording: review requests
+  [b(31), b(33), sToolkit],
+  [b(33), b(42), sDashboard],
+  [b(42), b(44), sTagline],
+  [b(44), DURATION + 1, sEnd],
 ];
 
 function renderFrame(t) {
