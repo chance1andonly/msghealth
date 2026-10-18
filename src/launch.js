@@ -136,11 +136,11 @@ const PULSE_BW = 300, PULSE_SP = 780;
 const pulseOff = (x, t, speed) => { const ph = (((x - t * speed) % PULSE_SP) + PULSE_SP) % PULSE_SP; return ph < PULSE_BW ? ecg(ph / PULSE_BW) : 0; };
 // y of the pulse line at x = CX (where the dot sits), so the dot rides the line
 const pulseDotY = (y, half, amp, t, speed = 520) => { let o = 0; for (let k = -3; k <= 3; k++) o += pulseOff(CX + k * 7, t, speed); return y + (o / 7) * amp * clamp(half / 180); };
-function pulseLine(y, half, amp, t, lw = 5, speed = 480) {
+function pulseLine(y, half, amp, t, lw = 5, speed = 480, step = 1) {
   if (half <= 0) return;
   ctx.save(); ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.strokeStyle = C.accent; ctx.beginPath();
   let first = true;
-  for (let x = CX - half; x <= CX + half + 0.5; x += 1) {
+  for (let x = CX - half; x <= CX + half + 0.5; x += step) {
     const tap = clamp(Math.min(x - (CX - half), CX + half - x) / 180);
     const yy = y + pulseOff(x, t, speed) * amp * tap;
     if (first) { ctx.moveTo(x, yy); first = false; } else ctx.lineTo(x, yy);
@@ -161,13 +161,19 @@ function cell(i, j) {
   // the opening view (3 columns × 12 rows) keeps its layout; everything beyond it is scattered, with gaps,
   // mixed read states and late arrivals that keep popping in while the camera pulls back
   const inner = i >= -1 && i <= 3 && j >= -1 && j <= 12;
-  c = { x: GX + i * COLP + (((j % 2) + 2) % 2) * 20 + (inner ? 0 : (hsh(i, j, 5) - 0.5) * 70),
-    y: -40 + j * ROWP + (((i % 2) + 2) % 2) * 36 + (inner ? 0 : (hsh(i, j, 6) - 0.5) * 50),
+  c = { x: GX + i * COLP + (((j % 2) + 2) % 2) * 20 + (inner ? 0 : (hsh(i, j, 5) - 0.5) * 170),
+    y: -40 + j * ROWP + (((i % 2) + 2) % 2) * 36 + (inner ? 0 : (hsh(i, j, 6) - 0.5) * 110),
     n: NAMES[Math.floor(hsh(i, j, 2) * NAMES.length)], p: PREVIEWS[Math.floor(hsh(i, j, 3) * PREVIEWS.length)],
     tint: TINTS[Math.floor(hsh(i, j, 4) * 4)],
     ta: inner ? 1.1 + 3.4 * Math.pow(hsh(i, j, 1), 1.5) : 1.1 + 4.5 * Math.pow(hsh(i, j, 1), 1.2),
-    skip: !inner && hsh(i, j, 7) < 0.14, deadA: lerp(0.3, 0.75, hsh(i, j, 8)),
+    skip: false, deadA: lerp(0.3, 0.75, hsh(i, j, 8)),
     nw: 90 + hsh(i, j, 9) * 70, pw: 110 + hsh(i, j, 10) * 80 };
+  // a vignette made of cards: the further out toward the edge of the final zoomed-out frame, the fewer cards
+  // (and the lighter they are), so the field thins into the paper instead of darkening the corners
+  const ZEND = 0.07, r = Math.hypot((c.x + 146 - CX) / (CX / ZEND), (c.y + 48 - CY) / (CY / ZEND));
+  const edge = clamp((r - 0.22) / 0.7), fall = edge * edge * (3 - 2 * edge);
+  c.skip = !inner && hsh(i, j, 7) > lerp(0.88, 0.03, fall);
+  c.edgeA = lerp(1, 0.5, fall);
   CELLS.set(key, c); return c;
 }
 function drawCard(c, t, s) {
@@ -177,13 +183,13 @@ function drawCard(c, t, s) {
   const cy = c.y - t * 8;
   ctx.save();
   const dist = Math.hypot(c.x + 146 - CX, cy + 48 - CY), quiet = lerp(1, lerp(0.12, 1, clamp((dist - 330) / 450)), P(t, 1.4, 2.0));
-  ctx.globalAlpha *= clamp(p * 2) * lerp(1, c.deadA, dead) * quiet;
+  ctx.globalAlpha *= clamp(p * 2) * lerp(1, c.deadA, dead) * quiet * c.edgeA;
   ctx.translate(c.x + 146, cy + 48 + (1 - e) * 30); ctx.scale(sc, sc); ctx.translate(-146, -48);
   if (s < 0.35) { // far out: the same card, with its text drawn as bars (too small to read anyway)
-    box(0, 0, 292, 96, 20, '#fff', { stroke: C.line, lw: Math.min(6, 1.2 / s) });
-    dot(48, 48, 26, c.tint);
-    box(88, 26, c.nw, 18, 9, '#d3d0ee'); box(88, 58, c.pw, 14, 7, '#e6e4f5');
-    box(226, 18, 48, 10, 5, t > c.ta + 1.0 ? '#ecebf7' : '#dedcf1');
+    box(0, 0, 292, 96, 20, '#efedfc', { stroke: '#d9d6f3', lw: Math.min(6, 1.4 / s) });
+    dot(48, 48, 26, '#cdc9f3');
+    box(88, 24, c.nw, 20, 10, '#c4bfec'); box(88, 58, c.pw, 16, 8, '#dad6f3');
+    box(226, 18, 48, 10, 5, t > c.ta + 1.0 ? '#e4e1f6' : '#d3cff0');
     ctx.restore(); return;
   }
   box(0, 0, 292, 96, 20, '#fff', s < 0.6 ? { stroke: C.line, lw: 3 } : { shadow: 24, sa: 0.1 });
@@ -220,7 +226,9 @@ function drawHook(t) {
     ctx.restore();
   }
   // pulse line with fading heartbeat
-  pulseLine(baseY, half, amp, t, 5, 520);
+  // as the camera pulls back, the line keeps spanning the whole frame at the same 5 px weight
+  if (zo > 0) pulseLine(baseY, Math.max(half, (CX + 40) / s), amp, t, 5 / s, 520, Math.max(1, 0.75 / s));
+  else pulseLine(baseY, half, amp, t, 5, 520);
   ctx.restore();
   // the dot owns the frame: it rides the line (following every beat), then settles at the centre
   const wy = pulseDotY(baseY, half, amp, t);
