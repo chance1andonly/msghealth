@@ -38,11 +38,13 @@ const tick = (f = 1800) => (t) => Math.exp(-t * 90) * Math.sin(2 * Math.PI * f *
 const thud = (f) => (t) => Math.exp(-t * 14) * Math.sin(2 * Math.PI * f * t) * Math.min(1, t / 0.006);
 const lubdub = (t, g = 1) => { add(X, t, 0.35, thud(58), 0.5 * g); add(X, t + 0.2, 0.35, thud(50), 0.36 * g); };
 
-// hook 0–6 s: a heartbeat that fades out, the slam, then the song's own silence
-[1.0, 2.0, 3.0].forEach((t, i) => lubdub(t, 1 - i * 0.28));
-add(X, 4.0, 1.2, (t) => Math.exp(-t * 4) * Math.sin(2 * Math.PI * (44 + 60 * Math.exp(-t * 20)) * t) * 1.1, 0.55);
-add(X, 4.0, 0.25, (t) => Math.exp(-t * 30) * rnd(), 0.3);
-for (let k = 0; k < 42; k++) { const ta = 1.1 + 3.4 * Math.pow(k / 42, 1.5); add(X, ta, 0.08, tick(2400 - k * 15), 0.05, ((k * 37) % 20) / 10 - 1); }
+// hook (0 → drop): a heartbeat that fades out, the slam, then the song's own silence.
+// Designed on a 6 s clock and played TM.HOOK× faster, exactly like the picture.
+const hk = (x) => x / TM.HOOK;
+[1.0, 2.0, 3.0].forEach((t, i) => lubdub(hk(t), 1 - i * 0.28));
+add(X, hk(4.0), 1.2, (t) => Math.exp(-t * 4) * Math.sin(2 * Math.PI * (44 + 60 * Math.exp(-t * 20)) * t) * 1.1, 0.55);
+add(X, hk(4.0), 0.25, (t) => Math.exp(-t * 30) * rnd(), 0.3);
+for (let k = 0; k < 42; k++) { const ta = hk(1.1 + 3.4 * Math.pow(k / 42, 1.5)); add(X, ta, 0.08, tick(2400 - k * 15), 0.05, ((k * 37) % 20) / 10 - 1); }
 
 // From the drop on, the song carries everything: no sound effects while it plays.
 // The only one left is the closing heartbeat, after the song has faded — the loop point.

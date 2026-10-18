@@ -81,22 +81,26 @@ function check(x, y, s, color, lw = 4) {
   ctx.beginPath(); ctx.moveTo(x - s * 0.5, y); ctx.lineTo(x - s * 0.12, y + s * 0.4); ctx.lineTo(x + s * 0.55, y - s * 0.42); ctx.stroke(); ctx.restore();
 }
 
-// ── music: the picture moves with the song (data from scripts/analyse-song.mjs) ──
-const MU = globalThis.MUSIC;
-// 0 before the drop and after the song fades, so the hook and the loop frame stay untouched
-const alive = (t) => P(t, TM.D - 0.04, TM.D) * (1 - P(t, TM.end.urlOut, TM.end.foldEnd - 0.05));
-function impulse(list, t, decay) { // fast attack, exponential release, strongest recent hit wins
-  let v = 0;
-  for (let i = list.length - 1; i >= 0; i--) {
-    const d = t - list[i][0];
-    if (d < -0.02) continue; if (d > 1) break;
-    v = Math.max(v, list[i][1] * (d < 0 ? 1 + d / 0.02 : Math.exp(-d * decay)));
-  }
-  return v;
+// ── music: things appear on the song's percussion hits (data from scripts/analyse-song.mjs) ──
+const HITS = globalThis.MUSIC.hits.map((h) => h[0]);
+// the hits in [a, b); if the song leaves a gap, pad on the half-beat so a cue never goes missing
+function hitsIn(a, b, n) {
+  const out = HITS.filter((x) => x >= a && x < b);
+  let last = out.length ? out[out.length - 1] : a;
+  while (out.length < n) { last += TM.B / 2; out.push(last); }
+  return out;
 }
-const kick = (t) => impulse(MU.kicks, t, 7) * alive(t);   // the 808 hits: big punches
-const hit = (t) => impulse(MU.hits, t, 11) * alive(t);    // the percussion on every beat: light pulse
-const bass = (t) => { const i = Math.min(MU.low.length - 1, Math.max(0, Math.round(t * MU.rate))); return (MU.low[i] / 100) * alive(t); };
+const CUE = (() => {
+  const c = {};
+  const mh = hitsIn(TM.D + 0.2, TM.iris[0], 6);                 // logo: the wordmark, then the tagline word by word
+  c.word = mh[0]; c.tag = mh.slice(1, 6);
+  const ph = hitsIn(TM.prompt.t0 + 0.2, TM.prompt.end - 0.6, 7); // prompt: one word per hit, then the click
+  c.words = ph.slice(0, 6); c.click = ph[6];
+  const ah = hitsIn(TM.app.t0 + 1.0, TM.app.out - 0.3, 13);      // client health: a row per hit, then each change
+  c.rows = ah.slice(0, 7); c.hl = ah[7]; c.sms = ah[8]; c.replies = ah.slice(9, 12); c.toast = ah[12];
+  c.feat = TM.feat.map((t0) => { const h = hitsIn(t0 + 0.15, t0 + TM.featDur - 0.25, 6); return { line2: h[0], ks: h.slice(1).map((x) => x - t0) }; });
+  return c;
+})();
 
 // ── the pulse line ───────────────────────────────────────────────────────────
 const ECG = [[0, 0], [.1, 0], [.17, -.1], [.25, 0], [.36, 0], [.42, .16], [.5, -1], [.58, .5], [.66, 0], [.78, 0], [.86, -.22], [.95, 0], [1, 0]];
@@ -213,7 +217,7 @@ function lockup(t, t0, o) {
   ctx.save(); ctx.translate(cx, cy); ctx.scale(scale, scale); ctx.translate(-cx, -cy);
   const fm = lerp(mx, cx, io(fold)), fy = lerp(cy, foldY, io(fold)), ms = lerp(1, 0.14, io(fold)) * pop;
   logo(fm, fy, mark * ms, c1, (o.markA ?? 1) * (1 - P(fold, 0.7, 1)));
-  const wp = io(P(t, t0 + 0.35, t0 + 0.95)) * (1 - io(clamp(fold * 1.6)));
+  const wT = o.wordT ?? t0 + 0.35, wp = io(P(t, wT, wT + (o.wordT ? 0.32 : 0.6))) * (1 - io(clamp(fold * 1.6)));
   if (wp > 0.002) { ctx.save(); ctx.beginPath(); ctx.rect(x0 + glyph + 22, cy - word, gw * wp, word * 1.6); ctx.clip();
   txt('MsgHealth', x0 + glyph + 28, cy + word * 0.36, { size: word, w: 700, ls, color: c2 });
   ctx.restore(); }
@@ -222,23 +226,25 @@ function lockup(t, t0, o) {
 }
 const lockupMx = () => { const gw = tw('MsgHealth', LK.word, 700, LK.ls), glyph = LK.mark * 0.73; return CX - (glyph + 28 + gw) / 2 + glyph / 2; };
 function drawMark(t) {
-  const flood = 2400 * expo(P(t, 6.0, 6.7));
+  const D = TM.D, flood = 2400 * expo(P(t, D, D + 0.7));
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
   ctx.save(); ctx.beginPath(); ctx.arc(CX, CY, flood, 0, 7); ctx.clip();
   // the flood is born from the dot: the expanding circle is exactly the dot's indigo (no edge between the dot and
   // the colour spreading out of it), then it settles into the deep ink gradient over the next two beats
-  const k = io(P(t, 6.15, 6.0 + 2 * TM.B)), g = ctx.createRadialGradient(CX, lerp(CY, CY - 60, k), 100, CX, CY, 1300);
-  const centre = mixHex('#2c2778', '#463dbd', clamp(bass(t) * 0.8));
-  g.addColorStop(0, mixc(C.accent, centre, k)); g.addColorStop(1, mixc(C.accent, C.deep, k));
+  const k = io(P(t, D + 0.15, D + 2 * TM.B)), g = ctx.createRadialGradient(CX, lerp(CY, CY - 60, k), 100, CX, CY, 1300);
+  g.addColorStop(0, mixc(C.accent, '#2c2778', k)); g.addColorStop(1, mixc(C.accent, C.deep, k));
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   ctx.restore();
-  if (t < 6.2) dot(CX, CY, 14 + 10 * P(t, 6.0, 6.2));
-  for (const [h, st] of MU.hits) { // a soft ring leaves the logo on every beat
-    const q = (t - h) / 0.9; if (h < 6.1 || q < 0 || q > 1) continue;
-    ring(CX, LKY, 260 + eo(q) * 520, 2.5, '#ffffff', (1 - q) * 0.16 * st);
-  }
-  if (t >= 6.1) lockup(t, 6.1, { c1: '#ffffff', c2: '#ffffff', scale: 1 + 0.04 * kick(t) + 0.015 * hit(t) });
-  txt('Know who’s about to leave.', CX, LKY + 150, { size: 42, w: 500, color: '#a9a6e0', align: 'center', a: eo(P(t, 7.3, 7.9)), ls: -0.5 });
+  if (t < D + 0.2) dot(CX, CY, 14 + 10 * P(t, D, D + 0.2));
+  // the mark lands on the drop, the wordmark wipes in on the next hit, the tagline arrives a word per hit
+  if (t >= D + 0.02) lockup(t, D + 0.02, { c1: '#ffffff', c2: '#ffffff', wordT: CUE.word });
+  const TAG = 'Know who’s about to leave.'.split(' '), tagW = tw(TAG.join(' '), 42, 500, -0.5);
+  let x = CX - tagW / 2;
+  TAG.forEach((w, i) => {
+    const p = eo(P(t, CUE.tag[i] - 0.02, CUE.tag[i] + 0.22));
+    if (p > 0) txt(w, x, LKY + 150 + (1 - p) * 18, { size: 42, w: 500, color: '#a9a6e0', a: p, ls: -0.5 });
+    x += tw(w + ' ', 42, 500, -0.5);
+  });
 }
 
 // ── 2 · Prompt (10–14 s) ─────────────────────────────────────────────────────
@@ -257,13 +263,18 @@ const GHOST = (() => {
   return c;
 })();
 const PROMPT = 'Win back clients who’ve gone quiet.';
-const typeT = (i) => TM.prompt.typeStart + TM.prompt.typeDur * (i / (PROMPT.length - 1)) + 0.03 * Math.sin(i * 12.9898);
+const TYPE_AT = (() => { // each word lands on a hit; its letters ripple in right behind it
+  const out = []; let w = 0, j = 0;
+  for (let i = 0; i < PROMPT.length; i++) { out.push(CUE.words[Math.min(w, 5)] + j * 0.018); j++; if (PROMPT[i] === ' ') { w++; j = 0; } }
+  return out;
+})();
+const typeT = (i) => TYPE_AT[i];
 function drawPrompt(t) {
-  const s = 1 + 0.1 * eo(P(t, TM.prompt.t0, TM.prompt.click));
+  const s = 1 + 0.1 * eo(P(t, TM.prompt.t0, CUE.click));
   ctx.save(); ctx.translate(CX, CY); ctx.scale(s, s); ctx.translate(-CX, -CY);
   ctx.fillStyle = C.mist; ctx.fillRect(-100, -100, W + 200, H + 200);
   ctx.globalAlpha = 0.9; ctx.drawImage(GHOST, 0, 0); ctx.globalAlpha = 1;
-  const bp = back(P(t, TM.prompt.t0 + 0.1, TM.prompt.t0 + 0.65), 1.2), K = TM.prompt.click, press = P(t, K - 0.1, K) * (1 - P(t, K + 0.02, K + 0.12));
+  const bp = back(P(t, TM.prompt.t0, TM.prompt.t0 + 0.4), 1.2), K = CUE.click, press = P(t, K - 0.1, K) * (1 - P(t, K + 0.02, K + 0.12));
   ctx.save(); ctx.globalAlpha = clamp(bp * 2); ctx.translate(CX, CY + (1 - bp) * 24);
   box(-480, -56, 960, 112, 56, '#fff', { shadow: 60, sa: 0.18, sy: 24 });
   logo(-425, 0, 64, C.accent);
@@ -274,25 +285,25 @@ function drawPrompt(t) {
   for (let i = 0; i < PROMPT.length; i++) {
     const ti = typeT(i); if (t < ti) break;
     const pre = ctx.measureText(PROMPT.slice(0, i)).width;
-    txt(PROMPT[i], x0 + pre, 13, { size: 36, w: 500, ls: -0.4, color: mixc(C.accent, C.ink, P(t, ti, ti + 0.45)) });
+    txt(PROMPT[i], x0 + pre, 13 + (1 - eo(P(t, ti, ti + 0.12))) * 10, { size: 36, w: 500, ls: -0.4, color: mixc(C.accent, C.ink, P(t, ti, ti + 0.45)) });
     end = x0 + ctx.measureText(PROMPT.slice(0, i + 1)).width;
   }
-  if (t > TM.prompt.typeStart - 0.4 && t < TM.prompt.click - 0.05 && Math.floor(t * 2) % 2 === 0) { ctx.fillStyle = C.accent; ctx.fillRect(end + 3, -24, 3, 48); }
-  dot(412, 0, 40 * (1 + 0.12 * hit(t)) - press * 5, C.accent);
+  if (t > TM.prompt.t0 + 0.3 && t < CUE.click - 0.05 && Math.floor(t * 2) % 2 === 0) { ctx.fillStyle = C.accent; ctx.fillRect(end + 3, -24, 3, 48); }
+  dot(412, 0, 40 - press * 5, C.accent);
   ctx.save(); ctx.translate(412, 0); ctx.strokeStyle = '#fff'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   ctx.beginPath(); ctx.moveTo(0, 14); ctx.lineTo(0, -14); ctx.moveTo(-12, -2); ctx.lineTo(0, -14); ctx.lineTo(12, -2); ctx.stroke(); ctx.restore();
   ctx.restore(); ctx.restore();
-  if (t >= TM.prompt.flood) { // indigo flood grows out of the send button
+  if (t >= CUE.click + 0.1) { // indigo flood grows out of the send button
     const bx = CX + 412 * s;
-    ctx.fillStyle = C.accent; ctx.beginPath(); ctx.arc(bx, CY, 2400 * expo(P(t, TM.prompt.flood, TM.prompt.end)), 0, 7); ctx.fill();
+    ctx.fillStyle = C.accent; ctx.beginPath(); ctx.arc(bx, CY, 2400 * expo(P(t, CUE.click + 0.1, TM.prompt.end)), 0, 7); ctx.fill();
   }
 }
 
 // ── 3 · Product: Client Health (14–18.5 s) ───────────────────────────────────
 const CLIENTS = [
-  { n: 'Jordan Reyes', v: '6 weeks ago', s: 38, up: 86, rep: TM.app.replies[0] },
-  { n: 'Priya Shah', v: '7 weeks ago', s: 31, up: 82, rep: TM.app.replies[1] },
-  { n: 'Morgan Ellis', v: '5 weeks ago', s: 44, up: 79, rep: TM.app.replies[2] },
+  { n: 'Jordan Reyes', v: '6 weeks ago', s: 38, up: 86, rep: CUE.replies[0] },
+  { n: 'Priya Shah', v: '7 weeks ago', s: 31, up: 82, rep: CUE.replies[1] },
+  { n: 'Morgan Ellis', v: '5 weeks ago', s: 44, up: 79, rep: CUE.replies[2] },
   { n: 'Alex Chen', v: '3 weeks ago', s: 58 },
   { n: 'Dana Okafor', v: '1 week ago', s: 91 },
   { n: 'Sam Patel', v: '2 days ago', s: 88 },
@@ -308,14 +319,14 @@ function drawApp(t) {
 
   // header + counters
   txt('Client health', 80, 340, { size: 66, w: 700, ls: -2 });
-  const rep3 = (i) => eo(P(t, CLIENTS[i].rep, CLIENTS[i].rep + 0.6));
+  const rep3 = (i) => eo(P(t, CLIENTS[i].rep, CLIENTS[i].rep + 0.3));
   const nReplied = rep3(0) + rep3(1) + rep3(2);
   const stats = [['Healthy', Math.round(41 + nReplied), C.ok], ['Needs attention', 12, C.warn], ['At risk', Math.round(5 - nReplied), C.risk]];
   let sx = 80;
-  const sIn = eo(P(t, TM.app.stats, TM.app.stats + 0.45));
+  const sIn = eo(P(t, TM.app.t0 + 0.9, TM.app.t0 + 1.2));
   stats.forEach(([l, v, col]) => {
     const w = tw(l, 24, 600) + tw(String(v), 28, 700) + 86;
-    ctx.save(); ctx.globalAlpha = sIn; ctx.translate(0, -5 * hit(t));
+    ctx.save(); ctx.globalAlpha = sIn;
     box(sx, 384, w, 58, 29, '#fff', { stroke: C.line });
     dot(sx + 30, 413, 9, col); txt(l, sx + 50, 422, { size: 24, w: 600, color: C.mute });
     txt(String(v), sx + w - 20, 423, { size: 28, w: 700, align: 'right' });
@@ -323,13 +334,13 @@ function drawApp(t) {
   });
 
   CLIENTS.forEach((c, i) => {
-    const y = 490 + i * 170, ti = TM.app.rows + i * 0.07, p = eo(P(t, ti, ti + 0.45));
+    const y = 490 + i * 170, ti = CUE.rows[i], p = eo(P(t, ti - 0.02, ti + 0.26));
     if (p <= 0) return;
     const risky = i < 3, rep = risky ? rep3(i) : 0;
-    const g = eo(P(t, ti + 0.1, ti + 0.75));
+    const g = eo(P(t, ti + 0.04, ti + 0.4));
     const sc = risky ? lerp(c.s, c.up, rep) * g : c.s * g;
-    ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 22 - 7 * hit(t - i * 0.035) - 4 * kick(t - i * 0.035));
-    box(70, y, 940, 150, 26, risky && rep < 1 ? mixc('#ffffff', '#fdecea', clamp(P(t, TM.app.hl, TM.app.hl + 0.4) * (1 - rep))) : '#fff', { stroke: C.line, lw: 1.5 });
+    ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 26);
+    box(70, y, 940, 150, 26, risky && rep < 1 ? mixc('#ffffff', '#fdecea', clamp(P(t, CUE.hl, CUE.hl + 0.15) * (1 - rep))) : '#fff', { stroke: C.line, lw: 1.5 });
     dot(130, y + 48, 30, TINTS[i % 4]); txt(c.n.split(' ').map((w) => w[0]).join(''), 130, y + 57, { size: 24, w: 700, color: C.accent, align: 'center' });
     txt(c.n, 182, y + 58, { size: 34, w: 650 });
     // win-back rows flip straight from At risk to Healthy as the reply lands (no wide "Needs attention" chip under the pill)
@@ -342,7 +353,7 @@ function drawApp(t) {
     box(290, y + 107, 270, 12, 6, C.line); box(290, y + 107, 270 * sc / 100, 12, 6, scoreColor(sc));
     txt(String(Math.round(sc)), 582, y + 122, { size: 34, w: 700, color: scoreColor(sc) });
     if (risky) {
-      const so = P(t, TM.app.sms + i * 0.2, TM.app.sms + 0.35 + i * 0.2);
+      const so = P(t, CUE.sms + i * 0.04, CUE.sms + 0.18 + i * 0.04);
       if (rep > 0.02) {
         box(710, y + 92, 276, 44, 22, mixc('#ffffff', C.ok, 0.14)); check(738, y + 114, 20, C.ok, 3.5);
         txt('Replied · booked', 762, y + 122, { size: 22, w: 700, color: C.ok });
@@ -354,7 +365,7 @@ function drawApp(t) {
     ctx.restore();
   });
   // toast
-  const tp = back(P(t, TM.app.toast, TM.app.toast + 0.4), 1.3);
+  const tp = back(P(t, CUE.toast, CUE.toast + 0.3), 1.3);
   if (tp > 0) {
     ctx.save(); ctx.globalAlpha = clamp(tp * 2); ctx.translate(0, (1 - tp) * 30);
     box(70, 1700, 600, 76, 38, C.ink, { shadow: 30, sa: 0.3 });
@@ -387,30 +398,31 @@ const FEATS = [
   { l: ['Bookings back', 'on the calendar.'], t0: TM.feat[2] },
 ];
 const NODE_X = [80, CX, 1000], PROG_Y = 1760;
-function featCard(k, tt) { // drawn in a 700×640 card space; the caller scales it up to fit the portrait frame
+function featCard(k, tt, ks) { // ks: the hits (relative to the feature) that drive each change // drawn in a 700×640 card space; the caller scales it up to fit the portrait frame
   const cx = 0, cy = 0, cw = 700, ch = 640;
   box(cx, cy, cw, ch, 36, '#fff', { shadow: 70, sa: 0.16, sy: 28, stroke: C.line, lw: 1.5 });
   if (k === 0) {
     dot(cx + 64, cy + 64, 30, C.tint); txt('JR', cx + 64, cy + 73, { size: 22, w: 700, color: C.accent, align: 'center' });
     txt('Jordan Reyes', cx + 112, cy + 62, { size: 32, w: 700, ls: -0.6 }); txt('Regular since 2023', cx + 112, cy + 92, { size: 21, w: 500, color: C.mute });
-    const s = lerp(78, 38, io(P(tt, 0.5, 1.35))), col = scoreColor(s), x = cx + cw / 2, y = cy + 290;
+    const s = 78 - 16 * eo(P(tt, ks[0], ks[0] + 0.16)) - 12 * eo(P(tt, ks[1], ks[1] + 0.16)) - 12 * eo(P(tt, ks[2], ks[2] + 0.16)), col = scoreColor(s), // the score drops a step on each hit
+      x = cx + cw / 2, y = cy + 290;
     ctx.save(); ctx.lineWidth = 26; ctx.lineCap = 'round';
     ctx.strokeStyle = C.line; ctx.beginPath(); ctx.arc(x, y, 130, 0, 7); ctx.stroke();
     ctx.strokeStyle = col; ctx.beginPath(); ctx.arc(x, y, 130, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * s / 100); ctx.stroke(); ctx.restore();
     txt(String(Math.round(s)), x, y + 34, { size: 96, w: 800, ls: -3, align: 'center', color: col });
     txt('Health score', x, y + 190, { size: 22, w: 600, color: C.mute, align: 'center' });
-    const cp = back(P(tt, 1.25, 1.55), 1.8);
+    const cp = back(P(tt, ks[3] - 0.02, ks[3] + 0.25), 1.8);
     if (cp > 0) { ctx.save(); ctx.translate(cx + cw - 64, cy + 62); ctx.scale(cp, cp); box(-84, -22, 84, 44, 22, mixc('#ffffff', C.risk, 0.14)); txt('At risk', -42, 8, { size: 21, w: 700, color: C.risk, align: 'center' }); ctx.restore(); }
-    [['Visit overdue · 6 weeks', 1.3], ['No reply · 3 messages', 1.5]].forEach(([s2, ts], i) => {
-      const p = eo(P(tt, ts, ts + 0.3)); ctx.save(); ctx.globalAlpha = p; ctx.translate((1 - p) * 20, 0);
+    [['Visit overdue · 6 weeks', ks[3]], ['No reply · 3 messages', ks[4]]].forEach(([s2, ts], i) => {
+      const p = eo(P(tt, ts - 0.02, ts + 0.22)); ctx.save(); ctx.globalAlpha = p; ctx.translate((1 - p) * 20, 0);
       dot(cx + 70, cy + 520 + i * 56, 9, C.risk); txt(s2, cx + 96, cy + 530 + i * 56, { size: 26, w: 600 }); ctx.restore();
     });
   } else if (k === 1) {
     txt('Win-back automation', cx + 48, cy + 74, { size: 32, w: 700, ls: -0.6 });
-    const on = P(tt, 1.5, 1.7); box(cx + cw - 128, cy + 42, 80, 44, 22, mixc(C.line, C.accent, on)); dot(cx + cw - 106 + 36 * eo(on), cy + 64, 17, '#fff');
+    const on = P(tt, ks[4] - 0.02, ks[4] + 0.15); box(cx + cw - 128, cy + 42, 80, 44, 22, mixc(C.line, C.accent, on)); dot(cx + cw - 106 + 36 * eo(on), cy + 64, 17, '#fff');
     const nodes = [['When a client is at risk', 0], ['Send SMS', 1], ['Send email', 2], ['Invite to book', 3]];
     nodes.forEach(([lab, i]) => {
-      const y = cy + 140 + i * 118, p = eo(P(tt, 0.3 + i * 0.22, 0.65 + i * 0.22));
+      const y = cy + 140 + i * 118, p = eo(P(tt, ks[i] - 0.02, ks[i] + 0.24)); // a step per hit
       if (i > 0) { ctx.fillStyle = C.accent; ctx.fillRect(cx + 346, y - 22, 4, 22 * p); }
       ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 20);
       const trig = i === 0; box(cx + 60, y, 580, 84, 22, trig ? C.accent : '#fff', { stroke: trig ? null : C.line, lw: 2 });
@@ -425,10 +437,10 @@ function featCard(k, tt) { // drawn in a 700×640 card space; the caller scales 
     [[0, 0], [1, 2], [2, 1], [4, 0], [4, 3], [0, 3], [2, 3]].forEach(([c, r], i) => { const p = eo(P(tt, 0.1 + i * 0.05, 0.4 + i * 0.05)); box(gx + c * colw, cy + 196 + r * 108 + (1 - p) * 10, colw - 14, 94, 14, '#f2f1fb', { }); });
     const sx = gx + 3 * colw, sy = cy + 196 + 108;
     box(sx, sy, colw - 14, 94, 14, null, { stroke: C.soft, lw: 2.5, dash: [8, 8] });
-    const fp = back(P(tt, 0.9, 1.25), 1.5);
+    const fp = back(P(tt, ks[0] - 0.02, ks[0] + 0.25), 1.5);
     if (fp > 0) { ctx.save(); ctx.translate(sx + 49, sy + 47); ctx.scale(fp, fp); box(-49, -47, 98, 94, 14, C.accent, { shadow: 30, sa: 0.35 });
       txt('Jordan', 0, -2, { size: 22, w: 700, color: '#fff', align: 'center' }); txt('10:00', 0, 26, { size: 18, w: 500, color: 'rgba(255,255,255,.75)', align: 'center' }); ctx.restore(); }
-    const bp = back(P(tt, 1.4, 1.75), 1.3);
+    const bp = back(P(tt, ks[1] - 0.02, ks[1] + 0.28), 1.3);
     if (bp > 0) { ctx.save(); ctx.globalAlpha = clamp(bp * 2); ctx.translate(0, (1 - bp) * 16);
       box(cx + 48, cy + 560, 604, 54, 27, mixc('#ffffff', C.ok, 0.13)); check(cx + 84, cy + 587, 18, C.ok, 3.5);
       txt('Booked · health score 86', cx + 112, cy + 596, { size: 25, w: 650, color: C.ok }); ctx.restore(); }
@@ -441,9 +453,10 @@ function drawFeatures(t) {
     const ex = k === 2 ? 0 : P(tt, TM.featDur - 0.3, TM.featDur);
     ctx.save(); ctx.globalAlpha = 1 - ex; ctx.translate(-40 * ex, 0);
     txt(`0${k + 1}`, 80, 270, { size: 28, w: 700, color: C.accent, ls: 2, a: eo(P(tt, 0, 0.3)) });
-    f.l.forEach((s, i) => rise(s, 80, 430 + i * 118, P(tt, 0.05 + i * 0.15, 0.6 + i * 0.15), { size: 100, w: 700, ls: -4.5 }));
-    const cp = eo(P(tt, 0.1, 0.65));
-    ctx.save(); ctx.globalAlpha *= cp; ctx.translate(85, 700 + (1 - cp) * 40 - 12 * kick(t) - 5 * hit(t)); ctx.scale(1.3, 1.3); featCard(k, tt); ctx.restore();
+    const l2 = CUE.feat[k].line2 - f.t0; // line 1 lands on the beat, line 2 and the card on the next hit
+    f.l.forEach((s, i) => { const a = i ? l2 - 0.02 : 0; rise(s, 80, 430 + i * 118, P(tt, a, a + 0.32), { size: 100, w: 700, ls: -4.5 }); });
+    const cp = eo(P(tt, l2 - 0.02, l2 + 0.3));
+    ctx.save(); ctx.globalAlpha *= cp; ctx.translate(85, 700 + (1 - cp) * 40); ctx.scale(1.3, 1.3); featCard(k, tt, CUE.feat[k].ks); ctx.restore();
     ctx.restore();
   });
   // the progress line — the dot is handed from feature to feature
@@ -454,7 +467,7 @@ function drawFeatures(t) {
   const px = k === 0 ? 80 : lerp(NODE_X[k - 1], NODE_X[k], io(P(t, FEATS[k].t0, FEATS[k].t0 + 0.6)));
   ctx.fillStyle = C.accent; ctx.fillRect(80, PROG_Y - 2, px - 80, 4);
   NODE_X.forEach((x) => dot(x, PROG_Y, 9, px >= x - 1 ? C.accent : C.line));
-  dot(px, PROG_Y, 15 * (1 + 0.45 * hit(t) + 0.3 * kick(t))); ctx.restore();
+  dot(px, PROG_Y, 15); ctx.restore();
 }
 
 // ── 5 · Finale: "Keep your customers." → logo → the opening frame again (seamless loop) ──────
@@ -463,7 +476,7 @@ function drawEnd(t) {
   const E = TM.end;
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
   const half = CX * expo(P(t, E.line[0], E.line[1])) + 20;
-  const amp = (t) => 100 * (0.55 + 0.5 * clamp(bass(t) * 1.4) + 0.45 * kick(t)); // the line beats with the music
+  const amp = () => 100;
   // dot: from the last node to the line, then hops into the period
   const w2 = tw('customers', END.size, 800, -8), total = w2 + 40, px0 = CX - total / 2;
   const perX = px0 + w2 + 26, perY = END.y2 - 14;
@@ -472,20 +485,15 @@ function drawEnd(t) {
   else if (t < E.hop[0]) d = [CX, pulseDotY(END.lineY, half, amp(t), t)];
   else if (t < E.hop[1]) { const k = io(P(t, E.hop[0], E.hop[1])); d = [lerp(CX, perX, k), lerp(pulseDotY(END.lineY, CX, amp(E.hop[0]), E.hop[0]), perY, k) - Math.sin(k * Math.PI) * 220]; }
   else d = [perX, perY];
-  // once it is the period, it pumps with the words around it
-  const zz = 1 + 0.025 * kick(t) + 0.01 * hit(t), my = (END.y1 + END.y2) / 2;
-  if (t >= E.hop[1] && t < E.exit) d = [CX + (d[0] - CX) * zz, my + (d[1] - my) * zz];
   const exit = E.exit, ex = P(t, exit, exit + 0.5);
   if (t < exit) { // headline + heartbeat
     pulseLine(END.lineY, half, amp(t), t, 5, 520);
-    ctx.save(); ctx.translate(CX, my); ctx.scale(zz, zz); ctx.translate(-CX, -my);
     rise('Keep your', CX, END.y1, P(t, E.keep, E.keep + 0.55), { size: END.size, w: 800, ls: -8, align: 'center' });
     if (t >= E.customers) {
       const sl = P(t, E.customers, E.customers + 0.32), z = lerp(1.16, 1, eo(sl));
       ctx.save(); ctx.translate(CX, END.y2); ctx.scale(z, z); ctx.translate(-CX, -END.y2);
       txt('customers', px0, END.y2, { size: END.size, w: 800, ls: -8, a: clamp(sl * 4) }); ctx.restore();
     }
-    ctx.restore();
     if (t > E.ring) { const q = P(t, E.ring, E.ring + 0.7); ring(d[0], d[1], 15 + q * 80, 3, C.accent, (1 - q) * 0.6); }
   }
   // text exits as the dot becomes the mark
@@ -504,7 +512,7 @@ function drawEnd(t) {
   }
   if (t >= E.logo - 0.15) {
     const fold = io(P(t, E.fold, E.foldEnd));
-    lockup(t, E.logo, { c1: C.accent, c2: C.ink, fold, foldY: CY, scale: 1 + 0.035 * kick(t) + 0.012 * hit(t), markK: lerp(0.22, 1, back(mk, 1.3)), markA: clamp(mk * 2.5) });
+    lockup(t, E.logo, { c1: C.accent, c2: C.ink, fold, foldY: CY, markK: lerp(0.22, 1, back(mk, 1.3)), markA: clamp(mk * 2.5) });
     const up = eo(P(t, E.url, E.url + 0.5)) * (1 - P(t, E.urlOut, E.urlOut + 0.3));
     if (up > 0) {
       const u = 'msghealth.net', uw = tw(u, 46, 650, -1);
@@ -535,11 +543,7 @@ function renderFrame(t) {
 function drawScene(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
-  if (t >= TM.D) { // the whole frame breathes with the song: a punch on every 808, a nudge on every beat
-    const z = 1 + 0.02 * kick(t) + 0.007 * hit(t);
-    ctx.translate(CX, CY); ctx.scale(z, z); ctx.translate(-CX, -CY);
-  }
-  if (t < TM.D) { drawHook(t); }
+  if (t < TM.D) { drawHook(t * TM.HOOK); } // the hook was designed for 6 s; it now plays in 4.5
   else if (t < TM.iris[0]) { drawMark(t); }
   else if (t < TM.iris[1]) {
     drawMark(t);
