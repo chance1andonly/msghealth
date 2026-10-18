@@ -115,10 +115,11 @@ deep-indigo ink, the official logo mark and Inter type. It runs the length of it
   This is the only version rendered.
 - Source: `launch.html` + `src/launch.js` (all scenes on one canvas, laid out on a 1080×1920 grid, `renderFrame(t)`);
   sound: `scripts/launch-audio.mjs`.
-- Timing: every cue lives in `src/launch-timing.js`. The song (145 BPM) goes in `assets/audio/song.mp3` (not
-  committed). The opening plays over its intro and the indigo flood lands on its first 808 at 4.93 s; each act starts
-  on a beat and, inside it, things appear on the song's hi-hat hits, measured by `scripts/analyse-song.mjs` into
-  `src/launch-music.js` (re-run it after changing the song or the cut). No sound effects play over the song.
+- Timing: every cue lives in `src/launch-timing.js`. The song (144.7 BPM) goes in `assets/audio/song.mp3` (not
+  committed). It is built in two-bar phrases, each opened by an 808 (4.93, 8.24, 11.57, 14.88, 18.20 s), and the outro
+  puts an 808 every beat and a half (18.20, 18.83, 19.45, 20.08, 20.70 s). Every scene change lands on one of those, and
+  everything inside a scene lands on a beat or an eighth note of the grid fitted to them. The opening is mapped onto
+  the intro so "go quiet." hits its accent at 2.99 s. No sound effects play over the song.
 - Render: `FFMPEG=ffmpeg npm run render:launch` (≈2.5 min).
 - Device: one indigo pulse dot. It rides the heartbeat line, floods into the logo, rides the demo, lands as the period of
   "Keep your customers." and then draws the logo: it traces the mark along its strokes (left bar → loop → diagonal →

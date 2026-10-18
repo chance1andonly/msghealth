@@ -144,26 +144,13 @@ function check(x, y, s, color, lw = 4) {
   ctx.beginPath(); ctx.moveTo(x - s * 0.5, y); ctx.lineTo(x - s * 0.12, y + s * 0.4); ctx.lineTo(x + s * 0.55, y - s * 0.42); ctx.stroke(); ctx.restore();
 }
 
-// ── music: things appear on the song's percussion hits (data from scripts/analyse-song.mjs) ──
-const HITS = globalThis.MUSIC.hits.map((h) => h[0]);
-// the hits in [a, b); if the song leaves a gap, pad on the half-beat so a cue never goes missing
-function hitsIn(a, b, n) {
-  const out = HITS.filter((x) => x >= a && x < b);
-  let last = out.length ? out[out.length - 1] : a;
-  while (out.length < n) { last += TM.B / 2; out.push(last); }
-  return out;
-}
-const CUE = (() => {
-  const c = {};
-  const mh = hitsIn(TM.D + 0.12, TM.iris[0], 6);                // logo: the wordmark, then the tagline word by word
-  c.word = mh[0]; c.tag = mh.slice(1, 6);
-  const ph = hitsIn(TM.prompt.t0 + 0.15, TM.prompt.end - 0.5, 7); // prompt: one word per hit, then the click
-  c.words = ph.slice(0, 6); c.click = ph[6];
-  const ah = hitsIn(TM.app.t0 + 0.6, TM.app.out - 0.2, 10);     // client health: a row per hit, then each change
-  c.rows = ah[0]; c.sms = ah.slice(1, 5); c.replies = ah.slice(5, 9); c.toast = ah[9]; // cards together; pills on the beat
-  c.feat = TM.feat.map((t0, k) => { const l2 = t0 + TM.B / 2, h = hitsIn(l2 + 0.12, TM.featEnd[k] - 0.2, 5); return { line2: l2, ks: h.map((x) => x - t0) }; });
-  return c;
-})();
+// ── beat cues (all from src/launch-timing.js, on the song's beat grid) ──────────
+const CUE = {
+  word: TM.logo.word, tag: TM.logo.tag,
+  words: TM.prompt.words, click: TM.prompt.click,
+  rows: TM.app.rows, sms: TM.app.sms, replies: TM.app.replies, toast: TM.app.toast,
+  feat: TM.feat.map((t0, k) => ({ line2: t0 + TM.B / 2, ks: TM.featCues[k] })),
+};
 
 // ── the pulse line ───────────────────────────────────────────────────────────
 // One heartbeat over u ∈ [0, 1], built from smooth Gaussian bumps (P, Q, R, S, T waves) so the line has no
@@ -639,7 +626,7 @@ function renderFrame(t) {
 function drawScene(t) {
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
-  if (t < TM.D) { drawHook(t * TM.HOOK); } // the hook was designed for 6 s; it now plays in 4.5
+  if (t < TM.D) { drawHook(TM.hookWarp(t)); } // the opening is mapped onto the song's intro
   else if (t < TM.iris[0]) { drawMark(t); }
   else if (t < TM.iris[1]) {
     drawMark(t);

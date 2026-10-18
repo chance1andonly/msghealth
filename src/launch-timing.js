@@ -1,28 +1,36 @@
-// Single source of truth for every cue in the launch film, shared by the picture (src/launch.js), the
-// soundtrack (scripts/launch-audio.mjs) and the beat analysis (scripts/analyse-song.mjs). Seconds into the film.
+// Single source of truth for every cue in the launch film, shared by the picture (src/launch.js) and the
+// soundtrack (scripts/launch-audio.mjs). Seconds into the film; the film runs the song's length.
 //
-// The film is cut to the song: it runs the song's length, the opening plays over its intro, and the logo flood
-// lands on its first 808 (4.93 s). The song is 145 BPM, so a beat is 0.414 s; every act starts on a beat, and
-// inside each act things appear on the song's actual hi-hat/percussion hits (src/launch-music.js).
+// The song (144.7 BPM) is built in two-bar phrases, each opened by an 808: 4.93, 8.24, 11.57, 14.88, 18.20 s;
+// the outro then puts an 808 every beat and a half (18.20, 18.83, 19.45, 20.08, 20.70). Every scene change lands on
+// one of those 808s or a bar line, and everything inside a scene lands on a beat or an eighth note of that grid.
 globalThis.TIMING = (() => {
-  const B = 60 / 145, D = 4.93, SONG_START = 0;
-  const at = (n) => D + n * B; // time of beat n after the drop
-  const T = { B, D, SONG_START, at, DURATION: 20.9, HOOK: 6.0 / D }; // the hook was designed on a 6 s clock
-  T.iris = [at(3.4), at(4)];                               // logo → prompt
-  T.prompt = { t0: at(4), end: at(9) };
-  T.app = { t0: at(9), out: at(16.15), end: at(17) };
-  T.feat = [at(17), at(21), at(26)];                       // "Win-backs sent for you" gets the longest slot
-  const E0 = at(29);
-  T.featEnd = [T.feat[1], T.feat[2], E0];
-  const e = (n) => E0 + n * B;
+  const D = 4.93, B = (18.2 - D) / 32, SONG_START = 0; // B: one beat, fitted to the 808s
+  const at = (n) => D + n * B;                          // beat n after the drop (bar k starts at beat 4k)
+  const T = { B, D, SONG_START, at, DURATION: 20.9 };
+  // the opening plays over the intro: [real time, time on the hook's original 6 s design clock]
+  T.hookMap = [[0, 0], [0.75, 0.3], [1.6, 1.5], [2.985, 4.0], [3.35, 4.9], [4.5, 5.8], [D, 6.0]];
+  T.hookWarp = (t) => { const m = T.hookMap; for (let i = 1; i < m.length; i++) if (t <= m[i][0]) return m[i - 1][1] + (m[i][1] - m[i - 1][1]) * (t - m[i - 1][0]) / (m[i][0] - m[i - 1][0]); return m[m.length - 1][1]; };
+  // bar 1 (808): logo — wordmark on beat 2, tagline on the eighths after it
+  T.logo = { word: at(1), tag: [at(1.5), at(2), at(2.5), at(2.75), at(3)] };
+  T.iris = [at(3.4), at(4)];
+  // bar 2: the request is typed a word per eighth note; the click lands on beat 4 and the flood fills by the 808
+  T.prompt = { t0: at(4), words: [4.5, 5, 5.5, 6, 6.25, 6.5].map(at), click: at(7), end: at(8) };
+  // bars 3–4 (808): Client Health — cards on beat 2, outreach on the eighths of beat 3–4, replies the same in bar 4
+  T.app = { t0: at(8), rows: at(9), sms: [10, 10.5, 11, 11.5].map(at), replies: [12, 12.5, 13, 13.5].map(at), toast: at(14), out: at(15.3), end: at(16) };
+  // bar 5 (808): at-risk card · bars 6–7: win-backs, switched on by the 808 at 14.88 · then bookings
+  T.feat = [at(16), at(20), at(26)];
+  T.featEnd = [at(20), at(26), at(29)];
+  T.featCues = [[1, 1.5, 2.5, 3], [1, 2, 3, 4], [1, 1.75]].map((ks) => ks.map((n) => n * B)); // beats after each feature starts
+  // "Keep your customers." then the logo, on the outro's 808s
   T.end = {
-    t0: E0, hopLine: [E0, e(0.5)], line: [e(0.25), e(1.25)],
-    keep: e(0.5), customers: e(1.25), hop: [e(1.75), e(2.25)], ring: e(2.25),
-    exit: e(2.5),                      // headline leaves (0.3 s); the dot glides to where the mark will start
-    draw: [e(3.25), e(5)],             // the dot draws the mark along its strokes
-    right: [e(5) + 0.03, e(5.5)],      // the finished mark slides right, to where the wordmark ends
-    left: [e(5.75), e(6.75)],          // …then back left into place, wiping the wordmark in behind it
-    url: e(7),                         // then the lockup and URL hold to the end
+    t0: at(29), hopLine: [at(29), at(29.5)], line: [at(29.2), at(30)],
+    keep: at(29.5), customers: at(30.25), hop: [at(30.75), at(31.25)], ring: at(31.25),
+    exit: at(31.4),                    // headline leaves; the dot glides to where the mark starts
+    draw: [at(32), at(33.5)],          // 808 → 808: the dot draws the mark
+    right: [at(33.5), at(34.2)],       // 808: the finished mark slides right
+    left: [at(35), at(36)],            // 808: back left, wiping the wordmark in
+    url: at(36.5),                     // 808: the URL
   };
   return T;
 })();
