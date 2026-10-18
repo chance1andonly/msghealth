@@ -7,7 +7,6 @@ globalThis.TIMING = (() => {
   const B = 0.787, D = 6.0, SONG_START = 10.345 - 6.0;
   const at = (n) => D + n * B; // time of beat n after the drop
   const T = { B, D, SONG_START, at, DURATION: 33 };
-  T.punches = [at(1), at(2), at(3)];
   T.iris = [at(3.25), at(4)]; // logo → prompt
   T.prompt = { t0: at(4), typeStart: at(5.1), typeDur: 1.55, click: at(7.2) };
   T.prompt.flood = T.prompt.click + 0.1; T.prompt.end = at(8);

@@ -116,7 +116,10 @@ the MsgHealth brand: indigo `#4F46E5` on a cool paper stage with deep-indigo ink
 - Source: `launch.html` + `src/launch.js` (all scenes, one canvas, `renderFrame(t)`); sound: `scripts/launch-audio.mjs`
 - Timing: every cue lives in `src/launch-timing.js`, shared by picture and sound. The music bed is an instrumental
   (place it at `assets/audio/song.mp3`, not committed) cut at 4.345 s so its first kick lands on the 6.0 s drop;
-  each act starts on a beat of its 76.2 BPM grid, and the effects are pitched to its key (F♯ minor pentatonic).
+  each act starts on a beat of its 76.2 BPM grid. No sound effects play over the song.
+- Moves with the music: `scripts/analyse-song.mjs` measures the song's 808 hits, beat percussion and bass into
+  `src/launch-music.js`; the frame punches on each 808, nudges on each beat, and the logo, rows, cards, words and
+  heartbeat line pump with them (all of it switched off before the drop and after the fade, so the loop frame is unchanged).
 - Loops seamlessly: the last frame is pixel-identical to the first (the dot on its 40 px of line), and the audio
   ends in silence that runs into the song's silent opening.
 - Render: `FFMPEG=ffmpeg npm run render:launch` (≈2 min; 4 motion-blur samples per frame). Open `launch.html` through a static server to scrub it.

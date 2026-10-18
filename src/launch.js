@@ -24,6 +24,7 @@ const io = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const expo = (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
 const back = (x, s = 1.6) => { const y = x - 1; return 1 + (s + 1) * y * y * y + s * y * y; };
 const rgb = (h) => { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
+const mixHex = (a, b, k) => { const A = rgb(a), B = rgb(b); return '#' + A.map((v, i) => Math.round(lerp(v, B[i], clamp(k))).toString(16).padStart(2, '0')).join(''); };
 const mixc = (a, b, k) => { const A = rgb(a), B = rgb(b); return `rgb(${A.map((v, i) => Math.round(lerp(v, B[i], clamp(k)))).join(',')})`; };
 const rng = (seed) => { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; };
 const scoreColor = (s) => (s >= 72 ? C.ok : s >= 55 ? mixc(C.warn, C.ok, (s - 55) / 17) : s >= 40 ? mixc(C.risk, C.warn, (s - 40) / 15) : C.risk);
@@ -79,6 +80,23 @@ function check(x, y, s, color, lw = 4) {
   ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   ctx.beginPath(); ctx.moveTo(x - s * 0.5, y); ctx.lineTo(x - s * 0.12, y + s * 0.4); ctx.lineTo(x + s * 0.55, y - s * 0.42); ctx.stroke(); ctx.restore();
 }
+
+// ── music: the picture moves with the song (data from scripts/analyse-song.mjs) ──
+const MU = globalThis.MUSIC;
+// 0 before the drop and after the song fades, so the hook and the loop frame stay untouched
+const alive = (t) => P(t, TM.D - 0.04, TM.D) * (1 - P(t, TM.end.urlOut, TM.end.foldEnd - 0.05));
+function impulse(list, t, decay) { // fast attack, exponential release, strongest recent hit wins
+  let v = 0;
+  for (let i = list.length - 1; i >= 0; i--) {
+    const d = t - list[i][0];
+    if (d < -0.02) continue; if (d > 1) break;
+    v = Math.max(v, list[i][1] * (d < 0 ? 1 + d / 0.02 : Math.exp(-d * decay)));
+  }
+  return v;
+}
+const kick = (t) => impulse(MU.kicks, t, 7) * alive(t);   // the 808 hits: big punches
+const hit = (t) => impulse(MU.hits, t, 11) * alive(t);    // the percussion on every beat: light pulse
+const bass = (t) => { const i = Math.min(MU.low.length - 1, Math.max(0, Math.round(t * MU.rate))); return (MU.low[i] / 100) * alive(t); };
 
 // ── the pulse line ───────────────────────────────────────────────────────────
 const ECG = [[0, 0], [.1, 0], [.17, -.1], [.25, 0], [.36, 0], [.42, .16], [.5, -1], [.58, .5], [.66, 0], [.78, 0], [.86, -.22], [.95, 0], [1, 0]];
@@ -207,12 +225,19 @@ function drawMark(t) {
   const flood = 2400 * expo(P(t, 6.0, 6.7));
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
   ctx.save(); ctx.beginPath(); ctx.arc(CX, CY, flood, 0, 7); ctx.clip();
-  const g = ctx.createRadialGradient(CX, CY - 60, 100, CX, CY, 1300);
-  g.addColorStop(0, '#2c2778'); g.addColorStop(1, C.deep); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // the flood is born from the dot: the expanding circle is exactly the dot's indigo (no edge between the dot and
+  // the colour spreading out of it), then it settles into the deep ink gradient over the next two beats
+  const k = io(P(t, 6.15, 6.0 + 2 * TM.B)), g = ctx.createRadialGradient(CX, lerp(CY, CY - 60, k), 100, CX, CY, 1300);
+  const centre = mixHex('#2c2778', '#463dbd', clamp(bass(t) * 0.8));
+  g.addColorStop(0, mixc(C.accent, centre, k)); g.addColorStop(1, mixc(C.accent, C.deep, k));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   ctx.restore();
   if (t < 6.2) dot(CX, CY, 14 + 10 * P(t, 6.0, 6.2));
-  const punch = TM.punches.reduce((a, b) => a + (t > b ? Math.exp(-(t - b) * 14) * 0.022 : 0), 0);
-  if (t >= 6.1) lockup(t, 6.1, { c1: '#ffffff', c2: '#ffffff', scale: 1 + punch });
+  for (const [h, st] of MU.hits) { // a soft ring leaves the logo on every beat
+    const q = (t - h) / 0.9; if (h < 6.1 || q < 0 || q > 1) continue;
+    ring(CX, LKY, 260 + eo(q) * 520, 2.5, '#ffffff', (1 - q) * 0.16 * st);
+  }
+  if (t >= 6.1) lockup(t, 6.1, { c1: '#ffffff', c2: '#ffffff', scale: 1 + 0.04 * kick(t) + 0.015 * hit(t) });
   txt('Know who’s about to leave.', CX, LKY + 150, { size: 42, w: 500, color: '#a9a6e0', align: 'center', a: eo(P(t, 7.3, 7.9)), ls: -0.5 });
 }
 
@@ -253,7 +278,7 @@ function drawPrompt(t) {
     end = x0 + ctx.measureText(PROMPT.slice(0, i + 1)).width;
   }
   if (t > TM.prompt.typeStart - 0.4 && t < TM.prompt.click - 0.05 && Math.floor(t * 2) % 2 === 0) { ctx.fillStyle = C.accent; ctx.fillRect(end + 3, -24, 3, 48); }
-  dot(412, 0, 40 - press * 5, C.accent);
+  dot(412, 0, 40 * (1 + 0.12 * hit(t)) - press * 5, C.accent);
   ctx.save(); ctx.translate(412, 0); ctx.strokeStyle = '#fff'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   ctx.beginPath(); ctx.moveTo(0, 14); ctx.lineTo(0, -14); ctx.moveTo(-12, -2); ctx.lineTo(0, -14); ctx.lineTo(12, -2); ctx.stroke(); ctx.restore();
   ctx.restore(); ctx.restore();
@@ -290,7 +315,7 @@ function drawApp(t) {
   const sIn = eo(P(t, TM.app.stats, TM.app.stats + 0.45));
   stats.forEach(([l, v, col]) => {
     const w = tw(l, 24, 600) + tw(String(v), 28, 700) + 86;
-    ctx.save(); ctx.globalAlpha = sIn;
+    ctx.save(); ctx.globalAlpha = sIn; ctx.translate(0, -5 * hit(t));
     box(sx, 384, w, 58, 29, '#fff', { stroke: C.line });
     dot(sx + 30, 413, 9, col); txt(l, sx + 50, 422, { size: 24, w: 600, color: C.mute });
     txt(String(v), sx + w - 20, 423, { size: 28, w: 700, align: 'right' });
@@ -303,7 +328,7 @@ function drawApp(t) {
     const risky = i < 3, rep = risky ? rep3(i) : 0;
     const g = eo(P(t, ti + 0.1, ti + 0.75));
     const sc = risky ? lerp(c.s, c.up, rep) * g : c.s * g;
-    ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 22);
+    ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * 22 - 7 * hit(t - i * 0.035) - 4 * kick(t - i * 0.035));
     box(70, y, 940, 150, 26, risky && rep < 1 ? mixc('#ffffff', '#fdecea', clamp(P(t, TM.app.hl, TM.app.hl + 0.4) * (1 - rep))) : '#fff', { stroke: C.line, lw: 1.5 });
     dot(130, y + 48, 30, TINTS[i % 4]); txt(c.n.split(' ').map((w) => w[0]).join(''), 130, y + 57, { size: 24, w: 700, color: C.accent, align: 'center' });
     txt(c.n, 182, y + 58, { size: 34, w: 650 });
@@ -418,7 +443,7 @@ function drawFeatures(t) {
     txt(`0${k + 1}`, 80, 270, { size: 28, w: 700, color: C.accent, ls: 2, a: eo(P(tt, 0, 0.3)) });
     f.l.forEach((s, i) => rise(s, 80, 430 + i * 118, P(tt, 0.05 + i * 0.15, 0.6 + i * 0.15), { size: 100, w: 700, ls: -4.5 }));
     const cp = eo(P(tt, 0.1, 0.65));
-    ctx.save(); ctx.globalAlpha *= cp; ctx.translate(85, 700 + (1 - cp) * 40); ctx.scale(1.3, 1.3); featCard(k, tt); ctx.restore();
+    ctx.save(); ctx.globalAlpha *= cp; ctx.translate(85, 700 + (1 - cp) * 40 - 12 * kick(t) - 5 * hit(t)); ctx.scale(1.3, 1.3); featCard(k, tt); ctx.restore();
     ctx.restore();
   });
   // the progress line — the dot is handed from feature to feature
@@ -429,7 +454,7 @@ function drawFeatures(t) {
   const px = k === 0 ? 80 : lerp(NODE_X[k - 1], NODE_X[k], io(P(t, FEATS[k].t0, FEATS[k].t0 + 0.6)));
   ctx.fillStyle = C.accent; ctx.fillRect(80, PROG_Y - 2, px - 80, 4);
   NODE_X.forEach((x) => dot(x, PROG_Y, 9, px >= x - 1 ? C.accent : C.line));
-  dot(px, PROG_Y, 15); ctx.restore();
+  dot(px, PROG_Y, 15 * (1 + 0.45 * hit(t) + 0.3 * kick(t))); ctx.restore();
 }
 
 // ── 5 · Finale: "Keep your customers." → logo → the opening frame again (seamless loop) ──────
@@ -438,24 +463,30 @@ function drawEnd(t) {
   const E = TM.end;
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
   const half = CX * expo(P(t, E.line[0], E.line[1])) + 20;
+  const amp = (t) => 100 * (0.55 + 0.5 * clamp(bass(t) * 1.4) + 0.45 * kick(t)); // the line beats with the music
   // dot: from the last node to the line, then hops into the period
   const w2 = tw('customers', END.size, 800, -8), total = w2 + 40, px0 = CX - total / 2;
   const perX = px0 + w2 + 26, perY = END.y2 - 14;
   let d = null;
   if (t < E.hopLine[1]) { const k = io(P(t, E.hopLine[0], E.hopLine[1])); d = [lerp(1000, CX, k), lerp(PROG_Y, END.lineY, k) - Math.sin(k * Math.PI) * 80]; }
-  else if (t < E.hop[0]) d = [CX, pulseDotY(END.lineY, half, 100, t)];
-  else if (t < E.hop[1]) { const k = io(P(t, E.hop[0], E.hop[1])); d = [lerp(CX, perX, k), lerp(pulseDotY(END.lineY, CX, 100, E.hop[0]), perY, k) - Math.sin(k * Math.PI) * 220]; }
+  else if (t < E.hop[0]) d = [CX, pulseDotY(END.lineY, half, amp(t), t)];
+  else if (t < E.hop[1]) { const k = io(P(t, E.hop[0], E.hop[1])); d = [lerp(CX, perX, k), lerp(pulseDotY(END.lineY, CX, amp(E.hop[0]), E.hop[0]), perY, k) - Math.sin(k * Math.PI) * 220]; }
   else d = [perX, perY];
+  // once it is the period, it pumps with the words around it
+  const zz = 1 + 0.025 * kick(t) + 0.01 * hit(t), my = (END.y1 + END.y2) / 2;
+  if (t >= E.hop[1] && t < E.exit) d = [CX + (d[0] - CX) * zz, my + (d[1] - my) * zz];
   const exit = E.exit, ex = P(t, exit, exit + 0.5);
   if (t < exit) { // headline + heartbeat
-    pulseLine(END.lineY, half, 100, t, 5, 520);
+    pulseLine(END.lineY, half, amp(t), t, 5, 520);
+    ctx.save(); ctx.translate(CX, my); ctx.scale(zz, zz); ctx.translate(-CX, -my);
     rise('Keep your', CX, END.y1, P(t, E.keep, E.keep + 0.55), { size: END.size, w: 800, ls: -8, align: 'center' });
     if (t >= E.customers) {
       const sl = P(t, E.customers, E.customers + 0.32), z = lerp(1.16, 1, eo(sl));
       ctx.save(); ctx.translate(CX, END.y2); ctx.scale(z, z); ctx.translate(-CX, -END.y2);
       txt('customers', px0, END.y2, { size: END.size, w: 800, ls: -8, a: clamp(sl * 4) }); ctx.restore();
     }
-    if (t > E.ring) { const q = P(t, E.ring, E.ring + 0.7); ring(perX, perY, 15 + q * 80, 3, C.accent, (1 - q) * 0.6); }
+    ctx.restore();
+    if (t > E.ring) { const q = P(t, E.ring, E.ring + 0.7); ring(d[0], d[1], 15 + q * 80, 3, C.accent, (1 - q) * 0.6); }
   }
   // text exits as the dot becomes the mark
   if (t >= exit && t < exit + 0.5) {
@@ -473,7 +504,7 @@ function drawEnd(t) {
   }
   if (t >= E.logo - 0.15) {
     const fold = io(P(t, E.fold, E.foldEnd));
-    lockup(t, E.logo, { c1: C.accent, c2: C.ink, fold, foldY: CY, markK: lerp(0.22, 1, back(mk, 1.3)), markA: clamp(mk * 2.5) });
+    lockup(t, E.logo, { c1: C.accent, c2: C.ink, fold, foldY: CY, scale: 1 + 0.035 * kick(t) + 0.012 * hit(t), markK: lerp(0.22, 1, back(mk, 1.3)), markA: clamp(mk * 2.5) });
     const up = eo(P(t, E.url, E.url + 0.5)) * (1 - P(t, E.urlOut, E.urlOut + 0.3));
     if (up > 0) {
       const u = 'msghealth.net', uw = tw(u, 46, 650, -1);
@@ -504,6 +535,10 @@ function renderFrame(t) {
 function drawScene(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
+  if (t >= TM.D) { // the whole frame breathes with the song: a punch on every 808, a nudge on every beat
+    const z = 1 + 0.02 * kick(t) + 0.007 * hit(t);
+    ctx.translate(CX, CY); ctx.scale(z, z); ctx.translate(-CX, -CY);
+  }
   if (t < TM.D) { drawHook(t); }
   else if (t < TM.iris[0]) { drawMark(t); }
   else if (t < TM.iris[1]) {
