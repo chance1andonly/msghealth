@@ -7,6 +7,7 @@
     "snap": "node scripts/snap.mjs",
     "audio": "node scripts/audio.mjs dist/score.wav",
     "render:ad": "ENTRY=ad.html node scripts/render.mjs",
+    "render:promo": "ENTRY=promo.html node scripts/render.mjs",
     "audit:ad": "ENTRY=ad.html node scripts/audit-text.mjs"
   },
   "repository": {

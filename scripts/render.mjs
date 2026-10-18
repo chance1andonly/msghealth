@@ -1,6 +1,7 @@
 // Renders a film to MP4 (24 fps, H.264 + AAC).
 //   npm run render            → dist/msghealth-demo.mp4        (16:9 film, index.html)
 //   npm run render:ad         → dist/msghealth-ad-9x16.mp4     (9:16 social ad, ad.html)
+//   npm run render:promo      → dist/msghealth-promo.mp4       (16:9 kinetic promo, promo.html)
 // Env: FFMPEG (path to an ffmpeg with libx264), WORKERS (parallel browser pages, default 3)
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,7 +12,8 @@ import { openFilm, ROOT } from './lib.mjs';
 const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const ENTRY = process.env.ENTRY || 'index.html';
 const IS_AD = ENTRY === 'ad.html';
-const OUT_NAME = IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
+const IS_PROMO = ENTRY === 'promo.html'; // uses a recorded music track instead of the synthesised score
+const OUT_NAME = IS_PROMO ? 'msghealth-promo' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
 const AUDIO_SCRIPT = IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
 const FPS = 24;
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
@@ -50,8 +52,12 @@ const parts = await Promise.all(Array.from({ length: WORKERS }, (_, k) => worker
 
 const list = path.join(TMP, 'list.txt');
 fs.writeFileSync(list, parts.map((p) => `file '${p}'`).join('\n'));
-const wav = path.join(DIST, IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
-execFileSync('node', [path.join(ROOT, AUDIO_SCRIPT), wav], { stdio: 'inherit' });
+let wav;
+if (IS_PROMO) wav = path.join(ROOT, 'assets/audio/promo-track.m4a');
+else {
+  wav = path.join(DIST, IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
+  execFileSync('node', [path.join(ROOT, AUDIO_SCRIPT), wav], { stdio: 'inherit' });
+}
 const mp4 = path.join(DIST, `${OUT_NAME}.mp4`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', list, '-i', wav,
   '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', mp4], { stdio: 'inherit' });

@@ -103,3 +103,27 @@ Each line needs to fit its window. The two on-camera lines are lip-synced to the
 
 Keep the delivery natural and conversational, as if one business owner were talking to another.
 0:01.85–0:02.00 is deliberately silent, right before line 1.
+
+---
+
+# 14-second kinetic promo (16:9)
+
+A short motion-graphics promo in the style of SaaS launch edits: big type revealed word by word out of a blur,
+soft gradient light, product cards gliding in and one dark glitch beat. Every cut lands on a beat of the track.
+
+- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 24 fps, 14.4 s)
+- Source: `promo.html`, `src/promo.js`. The beat grid is set at the top of that file (`BEAT`, `B0`).
+- Music: `assets/audio/promo-track.m4a`, cut from a supplied reference clip. Check you have the rights to the song before running it as a paid ad.
+- Render: `npm run render:promo`
+
+| Time | Beat |
+|---|---|
+| 0–1.8s | "Your customers don't say goodbye." |
+| 1.8–3.6s | Quiet signals float in (no visit in 62 days, no reply, didn't rebook, cancelled twice), then "They just go quiet." |
+| 3.6–4.5s | Dark glitch: "Then they're gone." |
+| 4.5–6.4s | "Meet…" → the MsgHealth logo and wordmark |
+| 6.4–8.2s | A tilted Client Health dashboard flattens. Jordan drops from 78 to 38 and is flagged At risk, with the reasons shown. |
+| 8.2–10s | The automation runs (Detecting → Writing → Sending → Inviting) while Jordan's phone gets the text and Jordan replies "Yes please!" |
+| 10–11s | Booked: Thursday 10:00. The health score climbs back up. |
+| 11–12.8s | "Know your customers. Keep your customers." |
+| 12.8–14.4s | Logo, MsgHealth, msghealth.net |
