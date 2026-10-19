@@ -1212,7 +1212,7 @@ function sWinBack(t) {
       text(label, x + 104, ny + 76, 26, 700, '#fff');
     }, { dy: 18 });
   });
-  const size = 30, sx1 = VERT ? 1345 : 1450, sy = VERT ? 880 : 500, rx = VERT ? 590 : 470, ry = VERT ? 1040 : 650, by = VERT ? 1190 : 860;
+  const size = 30, sx1 = VERT ? 1310 : 1450, sy = VERT ? 880 : 500, rx = VERT ? 620 : 470, ry = VERT ? 1040 : 650, by = VERT ? 1190 : 860;
   snapIn(t, b(60.5), sx1 - 250, sy + 60, () => { sentBubble(sx1, sy, ['Hi Jordan! We miss you. Want your', 'usual Thursday at 10:00?'], size, true); text('Delivered', sx1, sy + 118, 17, 500, 'rgba(235,235,245,0.45)', 'right', 0); }, { from: 0.6, dy: 50, blur: 0 });
   snapIn(t, b(61.5), rx + 130, ry + 40, () => recvBubble(rx, ry, ['Yes please! See you then.'], size, true, true), { from: 0.6, dy: 30, blur: 0 });
   snapIn(t, b(62.5), W / 2, by, () => {
@@ -1345,12 +1345,12 @@ const SCENES = [
 // 9:16 framing: [focus x, focus y, scale] of the 16:9 stage, per scene. The laptop scenes push closer
 // while the camera is in on a feature, so the UI fills the phone's width.
 const fixed = (fx, fy, sc) => () => [fx, fy, sc];
-const lapFrame = (keys) => (t) => { const k = clamp((camAt(t, keys)[2] - 1) / 0.6); return [960, lerp(560, 540, k), lerp(0.8, 0.95, k)]; };
+const lapFrame = (keys) => (t) => { const k = clamp((camAt(t, keys)[2] - 1) / 0.6); return [960, lerp(560, 540, k), lerp(0.62, 0.95, k)]; }; // zoomed out, the whole MacBook fits
 const FRAMING = new Map([
-  [sHook, fixed(960, 540, 1.75)], [sRegulars, fixed(960, 540, 0.82)], [sStops, fixed(960, 525, 1.25)], [sDark, fixed(960, 540, 0.85)],
-  [sMeet, fixed(960, 560, 0.95)], [sWhat, fixed(960, 500, 0.76)], [sHealth, fixed(960, 410, 1.15)],
-  [sAnalyst, lapFrame(AI_CAM)], [sWinBack, fixed(960, 620, 1.3)], [sCalendar, lapFrame(CAL_CAM)], [sReviews, lapFrame(REV_CAM)],
-  [sDashboard, lapFrame(CAM)], [sTagline, fixed(960, 540, 0.8)], [sEnd, fixed(960, 560, 1.0)],
+  [sHook, fixed(960, 540, 1.75)], [sRegulars, fixed(960, 540, 0.82)], [sStops, fixed(960, 525, 1.08)], [sDark, fixed(960, 540, 0.78)],
+  [sMeet, fixed(960, 560, 0.84)], [sWhat, fixed(960, 500, 0.72)], [sHealth, fixed(960, 410, 1.04)],
+  [sAnalyst, lapFrame(AI_CAM)], [sWinBack, fixed(960, 620, 1.2)], [sCalendar, lapFrame(CAL_CAM)], [sReviews, lapFrame(REV_CAM)],
+  [sDashboard, lapFrame(CAM)], [sTagline, fixed(960, 540, 0.66)], [sEnd, fixed(960, 560, 0.9)],
 ]);
 // The whoosh peaks at the fastest point of each move that brings the laptop in.
 SCENES.filter(([, , fn, type]) => type && [sDashboard, sAnalyst, sCalendar].includes(fn)).forEach(([st, , , , dur]) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh' }));
