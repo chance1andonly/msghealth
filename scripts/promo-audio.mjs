@@ -16,6 +16,7 @@ const SOUNDS = {
   flash: { file: 'camera-flash.wav', anchor: 0.01, gain: 0.9 },   // anchor = the shutter's attack
   snap: { file: 'snap.wav', anchor: 0.01, gain: 0.9 },            // anchor = the snap's attack
   whoosh: { file: 'whoosh.wav', anchor: 0.339, gain: 0.7 },       // anchor = the whoosh's peak (trimmed to its core)
+  riser: { file: 'riser.wav', anchor: 1.665, gain: 0.8 },         // anchor = the end of the build, where it peaks
 };
 
 const film = await openFilm('promo.html');

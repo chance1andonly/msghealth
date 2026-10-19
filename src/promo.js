@@ -4,7 +4,7 @@
 'use strict';
 
 const W = 1920, H = 1080, FPS = 60;
-const DURATION = 50.4;
+const DURATION = 44.9; // the end card (beat 84, 42.2s) holds, then fades
 const C = BRAND.colors;
 const FONT = 'Inter';
 const IND = '#5b50e8';        // dashboard chart indigo
@@ -690,11 +690,11 @@ function reviewsWorld(t, mode, sent) {
 
 // ── Analytics & Predictions ──────────────────────────────────────────────────
 const RISE = { // beat-locked: the camera arrives on a card, then it climbs
-  health: [b(81.5), b(83)],
-  rebook: [b(84), b(85.5)],
-  forecast: [b(86.5), b(88)],
-  revenue: [b(89), b(90.5)],
-  cohort: [b(90.75), b(91.75)],
+  health: [b(69.5), b(71)],
+  rebook: [b(72), b(73.5)],
+  forecast: [b(74.5), b(76)],
+  revenue: [b(77), b(78.5)],
+  cohort: [b(78.75), b(79.75)],
 };
 const r = (t, k) => ease.inOut(seg(t, RISE[k][0], RISE[k][1]));
 const LAYOUT = { // world coordinates of the dashboard page (1920 × 1080)
@@ -858,7 +858,7 @@ function cardCohort(t) {
   });
 }
 function dashboardWorld(t) {
-  const at = b(80), cardAt = hits(b(80) + 0.05, 5);
+  const at = b(68), cardAt = hits(b(68) + 0.05, 5);
   ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = '#fafafc'; ctx.fillRect(LAYOUT.side, 0, W - LAYOUT.side, H);
   snapIn(t, at, 150, H / 2, () => dashSidebar(t), { dy: 0, from: 0.98 });
@@ -871,12 +871,12 @@ function dashboardWorld(t) {
 // Camera keys: [time, centre x, centre y, zoom]. Moves start on a beat and settle in 0.4s.
 const focus = (k, z) => { const [x, y, w, h] = cardBox[k]; return [x + w / 2, y + h / 2, z]; };
 const CAM = [
-  [b(80), W / 2, H / 2, 1],
-  [b(81), ...focus('health', 2.4)],
-  [b(83.5), ...focus('rebook', 2.4)],
-  [b(86), ...focus('forecast', 1.8)],
-  [b(88.5), ...focus('revenue', 2.4)],
-  [b(90.5), W / 2, H / 2, 1],
+  [b(68), W / 2, H / 2, 1],
+  [b(69), ...focus('health', 2.4)],
+  [b(71.5), ...focus('rebook', 2.4)],
+  [b(74), ...focus('forecast', 1.8)],
+  [b(76.5), ...focus('revenue', 2.4)],
+  [b(78.5), W / 2, H / 2, 1],
 ];
 function camAt(t, keys = CAM) {
   let c = keys[0].slice(1);
@@ -1037,9 +1037,9 @@ function sMeet(t) {
 function sWhat(t) {
   stage();
   headline(t, [['It tells you', b(24)], ['who’s drifting', b(24.5), true]], W / 2, 400, 104);
-  headline(t, [['and brings them', b(26)], ['back.', b(26), true]], W / 2, 540, 104);
+  headline(t, [['and brings them', b(25)], ['back.', b(25), true]], W / 2, 540, 104);
   const chips = ['Health scores', 'Churn alerts', 'Automatic win-backs'], size = 28;
-  const ws = chips.map((s) => tw(s, size, 600) + 56), gap = 20, at = hits(b(27), 3);
+  const ws = chips.map((s) => tw(s, size, 600) + 56), gap = 20, at = hits(b(26), 3);
   let x = W / 2 - (ws.reduce((a, c) => a + c, 0) + gap * 2) / 2;
   chips.forEach((s, i) => { const x0 = x; snapIn(t, at[i], x0 + ws[i] / 2, 700, () => { glass(x0, 672, ws[i], 56, 28); text(s, x0 + ws[i] / 2, 701, size, 600, '#fff', 'center'); }, { dy: 14 }); x += ws[i] + gap; });
 }
@@ -1082,7 +1082,7 @@ const ROWS = [
 ];
 
 // AI Business Analyst on the MacBook
-const AI = { open: b(37.5), click: b(38), typeA: b(38), typeB: b(39.5), run: b(40), ans: b(40.5), send: b(43.5), out: b(45) };
+const AI = { open: b(37.5), click: b(38), typeA: b(38), typeB: b(39.5), run: b(40), ans: b(40.5), send: b(43.5), out: b(44.75) };
 [AI.click, AI.run, AI.send].forEach((t) => window.SFX.push({ t, kind: 'click' }));
 function analystWorld(t, z) {
   homeWorld(t);
@@ -1132,9 +1132,9 @@ function sAnalyst(t) {
 // Win them back
 function sWinBack(t) {
   stage(0.14, '#7c3aed');
-  headline(t, [['Win them back', b(48)], ['on autopilot.', b(48.5), true]], W / 2, 170, 84);
+  headline(t, [['Win them back', b(46)], ['on autopilot.', b(46.5), true]], W / 2, 170, 84);
   const nodes = [['At risk detected', '#ff7a6b', 'alert'], ['Text sent', '#818cf8', 'chat'], ['Email follow-up', '#38bdf8', 'mail'], ['Invite to book', '#4ade80', 'cal']];
-  const nw = 330, nh = 120, gap = 66, x0 = W / 2 - (4 * nw + 3 * gap) / 2, ny = 290, at = hits(b(49), 4);
+  const nw = 330, nh = 120, gap = 66, x0 = W / 2 - (4 * nw + 3 * gap) / 2, ny = 290, at = hits(b(47), 4);
   nodes.forEach(([label, col, icon], i) => {
     const x = x0 + i * (nw + gap);
     if (i > 0 && t >= at[i]) {
@@ -1150,9 +1150,9 @@ function sWinBack(t) {
     }, { dy: 18 });
   });
   const size = 30;
-  snapIn(t, b(50.5), 1200, 560, () => { sentBubble(1450, 500, ['Hi Jordan! We miss you. Want your', 'usual Thursday at 10:00?'], size, true); text('Delivered', 1450, 618, 17, 500, 'rgba(235,235,245,0.45)', 'right', 0); }, { from: 0.6, dy: 50, blur: 0 });
-  snapIn(t, b(51.5), 600, 690, () => recvBubble(470, 650, ['Yes please! See you then.'], size, true, true), { from: 0.6, dy: 30, blur: 0 });
-  snapIn(t, b(52.5), W / 2, 860, () => {
+  snapIn(t, b(48.5), 1200, 560, () => { sentBubble(1450, 500, ['Hi Jordan! We miss you. Want your', 'usual Thursday at 10:00?'], size, true); text('Delivered', 1450, 618, 17, 500, 'rgba(235,235,245,0.45)', 'right', 0); }, { from: 0.6, dy: 50, blur: 0 });
+  snapIn(t, b(49.5), 600, 690, () => recvBubble(470, 650, ['Yes please! See you then.'], size, true, true), { from: 0.6, dy: 30, blur: 0 });
+  snapIn(t, b(50.5), W / 2, 860, () => {
     glass(W / 2 - 230, 822, 460, 76, 38, { fill: 'rgba(74,222,128,0.12)', stroke: 'rgba(74,222,128,0.4)' });
     ctx.beginPath(); ctx.arc(W / 2 - 180, 860, 19, 0, 7); ctx.fillStyle = '#4ade80'; ctx.fill(); check(W / 2 - 180, 860, 19, '#0b2e17', 4);
     text('Booked · Thu 10:00', W / 2 - 146, 861, 30, 700, '#bbf7d0');
@@ -1160,14 +1160,14 @@ function sWinBack(t) {
 }
 
 // ── E · beats 64–80 · booking and reviews ────────────────────────────────────
-const CALT = { open: b(58), book: b(59.5) };
+const CALT = { open: b(54), book: b(55.5) };
 [CALT.open, CALT.book].forEach((t) => window.SFX.push({ t, kind: 'click' }));
 const CAL_ADDED = [
-  [21, '11a', 'Chloe Bergeron', 'Signature Facial', b(59.5)],
-  [22, '2:30p', 'Renee Calloway', 'Gel Color', b(60.5)],
-  [23, '10a', 'Reese Abara', 'Brow Shape', b(61)],
-  [20, '4p', 'Hannah McAllister', 'Deluxe Spa Pedi', b(61.5)],
-  [24, '1p', 'Lauren Kowalczyk', 'Deep Tissue', b(62)],
+  [21, '11a', 'Chloe Bergeron', 'Signature Facial', b(55.5)],
+  [22, '2:30p', 'Renee Calloway', 'Gel Color', b(56.5)],
+  [23, '10a', 'Reese Abara', 'Brow Shape', b(57)],
+  [20, '4p', 'Hannah McAllister', 'Deluxe Spa Pedi', b(57.5)],
+  [24, '1p', 'Lauren Kowalczyk', 'Deep Tissue', b(58)],
 ];
 function calendarWorld(t, z) {
   homeWorld(t, { added: CAL_ADDED });
@@ -1194,15 +1194,15 @@ function calendarWorld(t, z) {
     text(`${last[2]} · ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][(last[0] + 3) % 7]} ${last[1]}`, 1630, 904, 11.5, 500, MUTED);
     text('Reminder scheduled', 1630, 922, 11, 500, '#1f9d5c');
   }, { dy: 12 });
-  pointer(t, [[b(56), 1320, 300], [open, 950, 800], [book, 1030, 690], [b(60.5), 1330, 610]], [open, book], z);
+  pointer(t, [[b(52), 1320, 300], [open, 950, 800], [book, 1030, 690], [b(56.5), 1330, 610]], [open, book], z);
 }
 function sCalendar(t) {
   stage(0.1);
-  const cam = camAt(t, [[b(56), 960, 540, 1], [b(57.5), 960, 700, 1.9], [b(60), 1010, 610, 1.3], [b(64), 960, 540, 1]]);
+  const cam = camAt(t, [[b(52), 960, 540, 1], [b(53.5), 960, 700, 1.9], [b(56), 1010, 610, 1.3], [b(58.25), 960, 540, 1]]);
   laptop(t, cam, (z) => calendarWorld(t, z));
-  featureTag(t, b(56), 'Booking calendar', 'Clients book themselves. Reminders go out on their own.', cam[2]);
+  featureTag(t, b(52), 'Booking calendar', 'Clients book themselves. Reminders go out on their own.', cam[2]);
 }
-const REV = { open: b(69.5), s1: b(70.5), s2: b(71.5), feed: b(72.5), review: b(73.5) };
+const REV = { open: b(61.5), s1: b(62.5), s2: b(63.5), feed: b(64.5), review: b(65.5) };
 [REV.open, REV.s1, REV.s2, REV.feed].forEach((t) => window.SFX.push({ t, kind: 'click' }));
 function reviewsContent(t, z) {
   const { open, s1, s2, feed } = REV;
@@ -1231,13 +1231,13 @@ function reviewsContent(t, z) {
       }, { dy: 14 });
     }
   }
-  pointer(t, [[b(68), 900, 640], [open, 1258, 300], [s1, 1137, 309], [s2, 1137, 367], [feed, 352, 118], [b(74), 1240, 560]], [open, s1, s2, feed], z);
+  pointer(t, [[b(60), 900, 640], [open, 1258, 300], [s1, 1137, 309], [s2, 1137, 367], [feed, 352, 118], [b(66), 1240, 560]], [open, s1, s2, feed], z);
 }
 function sReviews(t) {
   stage(0.1);
-  const cam = camAt(t, [[b(68), 960, 540, 1], [b(69), 955, 470, 1.5], [REV.feed, 800, 420, 1.6], [b(77), 960, 540, 1]]);
+  const cam = camAt(t, [[b(60), 960, 540, 1], [b(61), 955, 470, 1.5], [REV.feed, 800, 420, 1.6], [b(66.25), 960, 540, 1]]);
   laptop(t, cam, (z) => reviewsContent(t, z));
-  featureTag(t, b(68), 'Review requests', 'Every visit ends with a request. Five stars follow.', cam[2]);
+  featureTag(t, b(60), 'Review requests', 'Every visit ends with a request. Five stars follow.', cam[2]);
 }
 
 // ── F · beats 80–100 · results and close ─────────────────────────────────────
@@ -1245,19 +1245,19 @@ function sDashboard(t) {
   stage(0.1);
   const cam = camAt(t);
   laptop(t, cam, () => dashboardWorld(t));
-  featureTag(t, b(80), 'Analytics & Predictions', 'Watch retention climb, one number at a time.', cam[2]);
+  featureTag(t, b(68), 'Analytics & Predictions', 'Watch retention climb, one number at a time.', cam[2]);
 }
 function sTagline(t) {
   stage(0.1);
-  headline(t, [['Know your customers.', b(92)]], W / 2, H / 2 - 76, 124);
-  headline(t, [['Keep', b(94), true], ['your customers.', b(94)]], W / 2, H / 2 + 76, 124);
+  headline(t, [['Know your customers.', b(80)]], W / 2, H / 2 - 76, 124);
+  headline(t, [['Keep', b(82), true], ['your customers.', b(82)]], W / 2, H / 2 + 76, 124);
 }
-window.SFX.push({ t: b(96), kind: 'snap' }); // MsgHealth lands on the end card
+window.SFX.push({ t: b(84), kind: 'snap' }, { t: b(84), kind: 'riser' }); // the riser peaks as MsgHealth lands on the end card, with the snap
 function sEnd(t) {
   stage(0.18, C.primary, 0.45);
-  lockup(t, b(96), H / 2 - 70, 190, 150, { static: true });
-  headline(t, [[BRAND.url, b(97)]], W / 2, H / 2 + 80, 44, { color: SOFT, weight: 500 });
-  riseIn(t, b(98), () => {
+  lockup(t, b(84), H / 2 - 70, 190, 150, { static: true });
+  headline(t, [[BRAND.url, b(85)]], W / 2, H / 2 + 80, 44, { color: SOFT, weight: 500 });
+  riseIn(t, b(86), () => {
     const s = 'Start now · 50% off your first month', w = tw(s, 28, 600) + 72;
     fillRR(W / 2 - w / 2, H / 2 + 160, w, 66, 33, '#ffffff');
     text(s, W / 2, H / 2 + 194, 28, 600, '#000', 'center');
@@ -1276,13 +1276,13 @@ const SCENES = [
   [b(24), b(28), sWhat, 'orbit', 0.7],
   [b(28), b(32), sReveal, 'rise', 0.6],
   [b(32), b(36), sHealth, 'settle', 0.7],
-  [b(36), b(48), sAnalyst, 'swing', 0.65],
-  [b(48), b(56), sWinBack, 'push', 0.6],
-  [b(56), b(68), sCalendar, 'stack', 0.7],
-  [b(68), b(80), sReviews],                    // laptop to laptop: straight cut
-  [b(80), b(92), sDashboard],                  // laptop to laptop: straight cut
-  [b(92), b(96), sTagline, 'fall', 0.7],
-  [b(96), DURATION + 1, sEnd],                 // straight cut to the end card
+  [b(36), b(46), sAnalyst, 'swing', 0.65],     // each laptop demo cuts ~0.5s after it zooms back out
+  [b(46), b(52), sWinBack, 'push', 0.6],
+  [b(52), b(60), sCalendar, 'stack', 0.7],
+  [b(60), b(68), sReviews],                    // laptop to laptop: straight cut
+  [b(68), b(80), sDashboard],                  // laptop to laptop: straight cut
+  [b(80), b(84), sTagline, 'fall', 0.7],       // on a phrase start
+  [b(84), DURATION + 1, sEnd],                 // straight cut to the end card
 ];
 // The whoosh peaks at the fastest point of each move that brings the laptop in.
 SCENES.filter(([, , fn, type]) => type && [sReveal, sAnalyst, sCalendar].includes(fn)).forEach(([st, , , , dur]) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh' }));
