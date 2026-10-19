@@ -106,41 +106,37 @@ Keep the delivery natural and conversational, as if one business owner were talk
 
 ---
 
-# 44-second kinetic promo (16:9, 60 fps)
+# 50-second product film (16:9, 60 fps)
 
-A motion-graphics promo in the style of SaaS launch edits: big type that snaps in phrase by phrase, product screens
-rebuilt from MsgHealth screen recordings (with a large pointer so the viewer can follow it), one dark glitch beat, and the
-Analytics & Predictions dashboard with its numbers rising one at a time. Nothing pulses or drifts. Elements appear on
-beats, half-beats or quarter-beats, and every scene cuts on a beat.
+A keynote-style product film cut to "keep steady" (120 BPM). It has a black stage, large gradient type that fades up out of a
+soft blur, an iPhone for the opening text, and a MacBook that opens on the product. The product screens are rebuilt from
+MsgHealth screen recordings, with a large pointer. Transitions (blur, zoom-through, rise, push, soft wipe, fade) land on the
+downbeats, and nothing pulses.
 
-- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 43.9 s)
-- Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top, and all timing is written in beats (`b(k)`).
-- Music: `assets/audio/promo-track.m4a`, the supplied song looped three times on its 8-beat phrase (beats 6–14) so the beat holds for the whole video.
-  Check you have the rights to the song before running it as a paid ad.
-- Sound: `scripts/promo-audio.mjs` mixes the track with a message chime for each hook bubble (synthesised, not Apple's sound) and
-  low-passes the music across the black slide. Cues come from `window.SFX` and `window.MUFFLE` in `src/promo.js`.
-- Sync: `src/promo-onsets.js` lists every hit in the track (`python3 scripts/promo-onsets.py` regenerates it). Each entrance snaps onto
-  the nearest hit, and things that land one after another each take the next hit.
+- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 50.4 s)
+- Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top (120 BPM, first downbeat 0.348 s), and all timing is written in beats (`b(k)`).
+  Scenes start on bar downbeats and are grouped into 4-bar phrases.
+- Music: `assets/audio/promo-track.m4a` (from the supplied screen recording). Check you have the rights before running it as a paid ad.
+- Sound: `scripts/promo-audio.mjs` adds the supplied iPhone "sent" sound (`assets/audio/message-sent.wav`) with its peak on each hook bubble,
+  muffles the music for the bar before the logo, and fades out over the last 1.9 s.
+- Sync: `src/promo-onsets.js` lists every hit in the track (`python3 scripts/promo-onsets.py` regenerates it). Entrances snap onto the nearest hit.
 - Render: `npm run render:promo`
 - On-screen "today" is Sunday, October 18, 2026, and every date shown is recent relative to it.
 
-Pacing: the song's intro (to beat 5) carries the hook. After the bass comes in, scenes cut every 1.5–4 beats,
-and every scene holds for at least about a second after its last element lands.
-
 | Beats | Time | What's on screen |
 |---|---|---|
-| 0–5 | 0–5.4s | Incoming text bubbles, each with a chime: "I don't know how" / "salon owners could live" / "without this.", then "this" gets a hand-drawn brand-colour underline |
-| 5–7 | 5.4–7.3s | "Repeat clients are the business." (bass drops) |
-| 7–9.5 | 7.3–9.6s | "But when a regular stops booking…": Jan, Feb, Mar booked, April empty |
-| 9.5–11 | 9.6–11s | Black and white: "You won't see it coming until they're gone." The music is muffled. |
-| 11–13.5 | 11–13.3s | Logo lands centre, steps right, then sweeps left as MsgHealth wipes in |
-| 13.5–15.5 | 13.3–15.1s | "It tells you who's drifting and brings them back." |
-| 15.5–17.5 | 15.1–17s | Health scores. Jordan is flagged At risk. |
-| 17.5–21 | 17–20.2s | **AI Business Analyst** (from recording): "Which clients haven't booked in 60 days?" → 9 clients → "Send win-back offer" |
-| 21–23.5 | 20.2–22.5s | The win-back runs, the client replies, and the visit is booked |
-| 23.5–27.5 | 22.5–26.2s | **Booking calendar** (from recording), October 2026: Chloe is booked for Wed Oct 21, then four online bookings land in the same week |
-| 27.5–31 | 26.2–29.4s | **Review requests** (from recording): requests sent to Simone and Isabella, then Simone's 5★ review lands and the rating ticks up to 4.7 |
-| 31–33 | 29.4–31.3s | Booking, reviews, loyalty, payments, inbox, automations |
-| 33–42 | 31.3–39.6s | Analytics & Predictions: each card rises in turn as the camera moves onto it, then the pull-back shows the cohort grid and business health rising |
-| 42–44 | 39.6–41.4s | "Know your customers. Keep your customers." |
-| 44–end | 41.4–43.9s | Logo, msghealth.net, "Start now · 50% off your first month" |
+| 0–16 | 0.3–8.3s | An iPhone glides up. Three blue iMessages are sent on the beat, each with the sent sound: "I don't know how" / "salon owners could live" / "without this 👀", then "Delivered". The camera pushes in. |
+| 16–20 | 8.3–10.3s | Zoom-through: "Repeat clients are the business." |
+| 20–28 | 10.3–14.3s | "But when a regular stops booking…": Jan, Feb, Mar on glass cards, April empty. Focus pulls to April: "No reply. No warning." |
+| 28–32 | 14.3–16.3s | Black and white: "You won't see it coming until they're gone." The music is muffled. |
+| 32–36 | 16.3–18.3s | Music back. The logo lands, steps right, then sweeps left as MsgHealth wipes in, and a light sweep crosses the name |
+| 36–44 | 18.3–22.3s | "Client retention, reimagined for salons." / "It tells you who's drifting and brings them back." |
+| 44–48 | 22.3–24.3s | A MacBook opens on the Home screen |
+| 48–52 | 24.3–26.3s | Health scores on glass. Jordan is flagged At risk. |
+| 52–58 | 26.3–29.3s | MacBook: AI Business Analyst answers "Which clients haven't booked in 60 days?" → "Send win-back offer" |
+| 58–64 | 29.3–32.3s | "Win them back on autopilot.": the flow, the text, the reply, booked |
+| 64–72 | 32.3–36.2s | MacBook: October booking calendar. Chloe is booked for Wed Oct 21, then four online bookings land |
+| 72–80 | 36.2–40.2s | MacBook: review requests sent, then a new 5★ review and the rating ticks to 4.7 |
+| 80–92 | 40.2–46.2s | MacBook: Analytics & Predictions. Each card rises in turn as the camera arrives on it |
+| 92–96 | 46.2–48.2s | "Know your customers. Keep your customers." |
+| 96–end | 48.2–50.4s | Logo, msghealth.net, "Start now · 50% off your first month", fade to black |
