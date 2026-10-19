@@ -3,7 +3,11 @@
 // MacBook presenting the product, and cinematic transitions on the downbeats. Nothing pulses.
 'use strict';
 
-const W = 1920, H = 1080, FPS = 60;
+const W = 1920, H = 1080, FPS = 60; // scenes are laid out on this 16:9 stage
+// Output frame: 16:9 (promo.html) or 9:16 (promo-vertical.html sets window.FORMAT.vertical). In 9:16 each
+// scene gets its own framing (see FRAMING) and a few scenes switch to stacked layouts.
+const VERT = !!(window.FORMAT && window.FORMAT.vertical);
+const OUT = VERT ? { w: 1080, h: 1920 } : { w: W, h: H };
 const DURATION = 44.9; // the end card (beat 84, 42.2s) holds, then fades
 const C = BRAND.colors;
 const FONT = 'Inter';
@@ -110,11 +114,11 @@ function line(t, chunks, x, y, size, o = {}) {
 
 // ── the stage: black, with an optional soft glow behind the subject ──────────
 function stage(glow = 0, col = C.primary, gy = 0.55) {
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#000'; ctx.fillRect(-2 * W, -3 * H, 5 * W, 7 * H);
   if (glow <= 0) return;
   const g = ctx.createRadialGradient(W / 2, H * gy, 0, W / 2, H * gy, 950);
   g.addColorStop(0, rgba(col, glow)); g.addColorStop(1, rgba(col, 0));
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = g; ctx.fillRect(-2 * W, -3 * H, 5 * W, 7 * H);
 }
 function glass(x, y, w, h, r, o = {}) {
   fillRR(x, y, w, h, r, o.fill ?? 'rgba(255,255,255,0.065)');
@@ -282,14 +286,19 @@ function lidOpening(p, content) {
 // ── transitions (3D, each starts on its scene's first beat) ──────────────────
 let BUF = [];
 function buffer(i) {
-  if (!BUF[i]) { const c = document.createElement('canvas'); c.width = W; c.height = H; BUF[i] = c.getContext('2d'); }
+  if (!BUF[i]) { const c = document.createElement('canvas'); c.width = OUT.w; c.height = OUT.h; BUF[i] = c.getContext('2d'); }
   return BUF[i];
+}
+// Draw a scene into the current context, framed for the output (identity in 16:9).
+function shoot(fn, t) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, OUT.w, OUT.h);
+  if (VERT) { const [fx, fy, s] = FRAMING.get(fn)(t); ctx.translate(OUT.w / 2, OUT.h / 2); ctx.scale(s, s); ctx.translate(-fx, -fy); }
+  fn(t);
 }
 function renderInto(i, fn, t) {
   const prev = ctx; ctx = buffer(i);
-  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
-  fn(t);
+  shoot(fn, t);
   ctx = prev;
   return buffer(i).canvas;
 }
@@ -297,7 +306,7 @@ function renderInto(i, fn, t) {
 // whips, orbits, cranes and pushes between them, and every frame is motion-blurred by averaging sub-frames
 // across a short shutter. Moves only ever travel toward their resting place: no overshoot, no snap-back.
 // Cuts between the laptop demos, onto the logo and onto the end card are straight cuts.
-const FOV = 0.7, CAM_D = (H / 2) / Math.tan(FOV / 2); // at z = 0 a W × H plane fills the frame exactly
+const FOV = 0.7, CAM_D = (OUT.h / 2) / Math.tan(FOV / 2); // at z = 0 a plane the size of the output frame fills it exactly
 const M4 = {
   mul(a, b) { const o = new Array(16); for (let c = 0; c < 4; c++) for (let r = 0; r < 4; r++) { let s = 0; for (let k = 0; k < 4; k++) s += a[k * 4 + r] * b[c * 4 + k]; o[c * 4 + r] = s; } return o; },
   t: (x, y, z) => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1],
@@ -310,7 +319,7 @@ const M4 = {
 };
 let GL = null;
 function initGL() {
-  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const c = document.createElement('canvas'); c.width = OUT.w; c.height = OUT.h;
   const gl = c.getContext('webgl', { preserveDrawingBuffer: true, antialias: true, premultipliedAlpha: false });
   const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
   const prog = gl.createProgram();
@@ -325,7 +334,7 @@ function initGL() {
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   const u = (n) => gl.getUniformLocation(prog, n);
   const ftex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, ftex); // one sub-frame renders here before it is averaged in
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, H, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, OUT.w, OUT.h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
   [gl.TEXTURE_MIN_FILTER, gl.TEXTURE_MAG_FILTER].forEach((f) => gl.texParameteri(gl.TEXTURE_2D, f, gl.NEAREST)); [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach((f) => gl.texParameteri(gl.TEXTURE_2D, f, gl.CLAMP_TO_EDGE));
   const fbo = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fbo); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, ftex, 0); gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   GL = { gl, canvas: c, tex, fbo, ftex, m: u('m'), r: u('r'), shade: u('shade'), alpha: u('alpha'), lift: u('lift') };
@@ -343,11 +352,11 @@ function uploadShots(A, B, defocus = [0, 0]) {
 // A plane: w × h pixels centred at (x, y, z) (y up, z toward the viewer), rotated about a pivot given
 // relative to its centre; sx/sy stretch it. uv: [left, top, width, height] of the source shot in pixels.
 function plane(tex, o) {
-  const { w = W, h = H, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, px = 0, py = 0, pz = 0, a = 1, sx = 1, sy = 1, lift = 0 } = o;
+  const { w = OUT.w, h = OUT.h, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, px = 0, py = 0, pz = 0, a = 1, sx = 1, sy = 1, lift = 0 } = o;
   const R = M4.mul(M4.rz(rz), M4.mul(M4.ry(ry), M4.rx(rx)));
   const M = M4.mul(M4.t(x, y, z), M4.mul(M4.t(px, py, pz), M4.mul(R, M4.mul(M4.t(-px, -py, -pz), M4.s(w * sx, h * sy, 1)))));
-  const uv = o.uv ?? [0, 0, W, H];
-  return { tex, M, R, a, lift, layer: o.layer ?? 0, uv: [uv[0] / W, 1 - (uv[1] + uv[3]) / H, uv[2] / W, uv[3] / H] };
+  const uv = o.uv ?? [0, 0, OUT.w, OUT.h];
+  return { tex, M, R, a, lift, layer: o.layer ?? 0, uv: [uv[0] / OUT.w, 1 - (uv[1] + uv[3]) / OUT.h, uv[2] / OUT.w, uv[3] / OUT.h] };
 }
 const LIGHT = (() => { const l = [-0.28, 0.36, 1], n = Math.hypot(...l); return l.map((v) => v / n); })();
 // cam: x, y, z (offsets from the default position), yaw, pitch, roll (radians).
@@ -355,7 +364,7 @@ function glScene({ planes, cam = {} }) {
   const { gl } = GL;
   const eye = [cam.x ?? 0, cam.y ?? 0, CAM_D + (cam.z ?? 0)];
   const V = M4.mul(M4.rz(-(cam.roll ?? 0)), M4.mul(M4.rx(-(cam.pitch ?? 0)), M4.mul(M4.ry(-(cam.yaw ?? 0)), M4.t(-eye[0], -eye[1], -eye[2]))));
-  const PV = M4.mul(M4.persp(FOV, W / H, 4, 30000), V);
+  const PV = M4.mul(M4.persp(FOV, OUT.w / OUT.h, 4, 30000), V);
   planes.filter((q) => q && q.a > 0.003).map((q) => {
     const c = M4.apply(q.M, [0, 0, 0]), n = M4.apply(q.R, [0, 0, 1]);
     return { ...q, n, facing: n[0] * (eye[0] - c[0]) + n[1] * (eye[1] - c[1]) + n[2] * (eye[2] - c[2]), d: Math.hypot(eye[0] - c[0], eye[1] - c[1], eye[2] - c[2]) };
@@ -380,7 +389,7 @@ const TRANSITIONS = {
   dive: { scene(p) {
     const e = xio(clamp(p / 0.62)), k = qn(clamp((p - 0.4) / 0.6));
     return one([plane('A', { a: 1 - clamp((p - 0.42) / 0.2) }), plane('B', { z: lerp(CAM_D * 0.5, 0, k), a: clamp((p - 0.4) / 0.2), layer: 1 })],
-      { x: (HOOK_LAST.x - W / 2) * e * (1 - k), y: (H / 2 - HOOK_LAST.y) * e * (1 - k), z: -CAM_D * 0.9 * e * (1 - k) });
+      { x: (HOOK_LAST.x - OUT.w / 2) * e * (1 - k), y: (OUT.h / 2 - HOOK_LAST.y) * e * (1 - k), z: -CAM_D * 0.9 * e * (1 - k) });
   } },
   // → "But when a regular…": a whip pan to the right
   whip: { scene(p) {
@@ -389,8 +398,8 @@ const TRANSITIONS = {
   } },
   // → black slide: the camera cranes straight up as the cards tip back under it
   crane: { scene(p) {
-    const e = xio(p), Y = H * 1.15;
-    return one([plane('A', { rx: -0.5 * e, py: -H / 2 }), plane('B', { y: Y })], { y: Y * e });
+    const e = xio(p), Y = OUT.h * 1.15;
+    return one([plane('A', { rx: -0.5 * e, py: -OUT.h / 2 }), plane('B', { y: Y })], { y: Y * e });
   } },
   // → "It tells you…": the camera orbits around the words to find the next line on the far side
   orbit: { scene(p) {
@@ -400,19 +409,19 @@ const TRANSITIONS = {
   // → laptop opens: the laptop shot rises up from below, tilted, as the words float off the top
   rise: { scene(p) {
     const e = xio(p);
-    return one([plane('A', { y: H * 0.9 * e, rx: -0.45 * e, z: -300 * e, a: 1 - clamp((p - 0.6) / 0.4) }), plane('B', { y: -H * 1.1 * (1 - e), rx: 0.5 * (1 - e), z: -300 * (1 - e) })]);
+    return one([plane('A', { y: OUT.h * 0.9 * e, rx: -0.45 * e, z: -300 * e, a: 1 - clamp((p - 0.6) / 0.4) }), plane('B', { y: -OUT.h * 1.1 * (1 - e), rx: 0.5 * (1 - e), z: -300 * (1 - e) })]);
   } },
   // → health scores: the laptop eases back and down out of shot while the next shot comes forward to rest
   settle: { scene(p) {
     const e = xio(p), k = qn(clamp((p - 0.2) / 0.8));
-    return one([plane('A', { rx: -0.45 * e, py: -H / 2, y: -H * 0.3 * e, z: -900 * e, a: 1 - clamp((p - 0.45) / 0.4) }), plane('B', { z: -1300 * (1 - k), a: clamp(k * 1.6), layer: 1 })]);
+    return one([plane('A', { rx: -0.45 * e, py: -OUT.h / 2, y: -OUT.h * 0.3 * e, z: -900 * e, a: 1 - clamp((p - 0.45) / 0.4) }), plane('B', { z: -1300 * (1 - k), a: clamp(k * 1.6), layer: 1 })]);
   } },
   // → AI Analyst: the laptop swings in from the right like a floating panel as the old shot drifts back out of focus
   swing: {
     defocus: (p) => [16 * xio(p), 0],
     scene(p) {
       const e = xio(p), k = qn(clamp((p - 0.1) / 0.9));
-      return one([plane('A', { x: -W * 0.45 * e, z: -900 * e, ry: 0.55 * e, a: 1 - clamp((p - 0.5) / 0.5) * 0.85 }), plane('B', { x: W * 0.95 * (1 - k), z: -700 * (1 - k), ry: -1.0 * (1 - k) })]);
+      return one([plane('A', { x: -OUT.w * 0.45 * e, z: -900 * e, ry: 0.55 * e, a: 1 - clamp((p - 0.5) / 0.5) * 0.85 }), plane('B', { x: OUT.w * 0.95 * (1 - k), z: -700 * (1 - k), ry: -1.0 * (1 - k) })]);
     },
   },
   // → win-back: the laptop drifts toward the camera and out of focus while the next shot comes up from depth
@@ -427,15 +436,15 @@ const TRANSITIONS = {
   stack: {
     defocus: (p) => [14 * xio(p), 0],
     scene(p) {
-      const e = xio(p), planes = [plane('A', { y: -H * 0.25 * e, z: -800 * e, a: 1 - clamp((p - 0.45) / 0.4) })];
-      for (let i = 3; i >= 0; i--) { const k = qn(clamp((p - 0.12 - i * 0.07) / 0.6)); planes.push(plane('B', { y: -H * (1 - k) * (0.9 + i * 0.12), z: -i * 160 * (1 - k), rx: 0.35 * (1 - k), a: (i ? 0.35 * (1 - k) : 1) * clamp(k * 2) })); }
+      const e = xio(p), planes = [plane('A', { y: -OUT.h * 0.25 * e, z: -800 * e, a: 1 - clamp((p - 0.45) / 0.4) })];
+      for (let i = 3; i >= 0; i--) { const k = qn(clamp((p - 0.12 - i * 0.07) / 0.6)); planes.push(plane('B', { y: -OUT.h * (1 - k) * (0.9 + i * 0.12), z: -i * 160 * (1 - k), rx: 0.35 * (1 - k), a: (i ? 0.35 * (1 - k) : 1) * clamp(k * 2) })); }
       return one(planes);
     },
   },
   // → tagline: the laptop falls back into the dark as the words drop in from above
   fall: { scene(p) {
     const e = xio(p), k = qn(clamp((p - 0.25) / 0.75));
-    return one([plane('A', { rx: -0.9 * e, z: -2600 * e * e, y: -150 * e, a: 1 - clamp((p - 0.55) / 0.35) }), plane('B', { y: H * 0.85 * (1 - k), rx: -0.4 * (1 - k), a: clamp(k * 1.6) })]);
+    return one([plane('A', { rx: -0.9 * e, z: -2600 * e * e, y: -150 * e, a: 1 - clamp((p - 0.55) / 0.35) }), plane('B', { y: OUT.h * 0.85 * (1 - k), rx: -0.4 * (1 - k), a: clamp(k * 1.6) })]);
   } },
 };
 // Motion blur: every frame averages sub-frames spread across the shutter, on the GPU. Fast moves
@@ -445,7 +454,7 @@ function transition(type, p, A, B, dur) {
   const T = TRANSITIONS[type];
   uploadShots(A, B, T.defocus ? T.defocus(clamp(p)) : [0, 0]);
   const { gl } = GL, ID = [2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-  gl.viewport(0, 0, W, H);
+  gl.viewport(0, 0, OUT.w, OUT.h);
   gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
   for (let s = 0; s < SAMPLES; s++) {
     const ps = clamp(p + (s / (SAMPLES - 1) - 0.5) * SHUTTER / dur);
@@ -460,7 +469,7 @@ function transition(type, p, A, B, dur) {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, OUT.w, OUT.h);
   ctx.drawImage(GL.canvas, 0, 0);
 }
 
@@ -509,7 +518,10 @@ function featureTag(t, at, label, sub, zoom = 1) {
   const a = 1 - clamp((zoom - 1) / 0.25); // steps aside while the camera is pushed in
   if (a <= 0) return;
   ctx.save(); ctx.globalAlpha = a;
-  riseIn(t, at, () => {
+  if (VERT) { ctx.setTransform(1, 0, 0, 1, 0, 0); riseIn(t, at, () => { // centred above the laptop
+    text(label, OUT.w / 2, 470, 52, 700, '#ffffff', 'center', -0.02);
+    if (sub) wrapText(sub, 30, 500, 900).forEach((l, i) => text(l, OUT.w / 2, 540 + i * 40, 30, 500, 'rgba(235,235,245,0.6)', 'center', 0));
+  }, { dy: 14, blur: 8 }); } else riseIn(t, at, () => {
     text(label, 72, 74, 30, 700, '#ffffff', 'left', -0.02);
     if (sub) text(sub, 72, 110, 20, 500, 'rgba(235,235,245,0.6)', 'left', 0);
   }, { dy: 14, blur: 8 });
@@ -1054,9 +1066,14 @@ function sReveal(t) { // the MacBook opens on the product
 // ── D · beats 48–64 · how it works (the song's breakdown) ────────────────────
 function sHealth(t) {
   stage(0.12);
-  headline(t, [['Every client', b(32)]], 150, 440, 92, { align: 'left' });
-  headline(t, [['gets a', b(32.5)], ['health score.', b(32.5), true]], 150, 550, 92, { align: 'left' });
-  const x = 1010, w = 770, rh = 112, y0 = 250, flag = b(34.5), at = hits(b(33), 5);
+  if (VERT) { // stacked: the headline sits over the card
+    headline(t, [['Every client', b(32)]], W / 2, 20, 92);
+    headline(t, [['gets a', b(32.5)], ['health score.', b(32.5), true]], W / 2, 125, 92);
+  } else {
+    headline(t, [['Every client', b(32)]], 150, 440, 92, { align: 'left' });
+    headline(t, [['gets a', b(32.5)], ['health score.', b(32.5), true]], 150, 550, 92, { align: 'left' });
+  }
+  const w = 770, x = VERT ? W / 2 - w / 2 : 1010, rh = 112, y0 = 250, flag = b(34.5), at = hits(b(33), 5);
   snapIn(t, b(33), x + w / 2, H / 2, () => glass(x, y0 - 40, w, rh * 5 + 80, 34), { dy: 20 });
   ROWS.forEach((r, i) => {
     const ry = y0 + 30 + i * rh, jordan = i === 2;
@@ -1084,6 +1101,7 @@ const ROWS = [
 // AI Business Analyst on the MacBook
 const AI = { open: b(37.5), click: b(38), typeA: b(38), typeB: b(39.5), run: b(40), ans: b(40.5), send: b(43.5), out: b(44.75) };
 [AI.click, AI.run, AI.send].forEach((t) => window.SFX.push({ t, kind: 'click' }));
+const AI_CAM = [[b(36), 960, 540, 1], [b(37), 960, 300, 2.0], [AI.ans, 960, 470, 1.6], [AI.out, 960, 540, 1]];
 function analystWorld(t, z) {
   homeWorld(t);
   if (t >= AI.open) { ctx.fillStyle = `rgba(10,10,22,${0.55 * snapP(t, AI.open)})`; ctx.fillRect(0, 0, W, H); }
@@ -1124,7 +1142,7 @@ function analystWorld(t, z) {
 }
 function sAnalyst(t) {
   stage(0.1);
-  const cam = camAt(t, [[b(36), 960, 540, 1], [b(37), 960, 300, 2.0], [AI.ans, 960, 470, 1.6], [AI.out, 960, 540, 1]]);
+  const cam = camAt(t, AI_CAM);
   laptop(t, cam, (z) => analystWorld(t, z));
   featureTag(t, b(36), 'AI Business Analyst', 'Ask in plain words. Get an answer from your data.', cam[2]);
 }
@@ -1132,12 +1150,14 @@ function sAnalyst(t) {
 // Win them back
 function sWinBack(t) {
   stage(0.14, '#7c3aed');
-  headline(t, [['Win them back', b(46)], ['on autopilot.', b(46.5), true]], W / 2, 170, 84);
+  if (VERT) { headline(t, [['Win them back', b(46)]], W / 2, 60, 84); headline(t, [['on autopilot.', b(46.5), true]], W / 2, 160, 84); }
+  else headline(t, [['Win them back', b(46)], ['on autopilot.', b(46.5), true]], W / 2, 170, 84);
   const nodes = [['At risk detected', '#ff7a6b', 'alert'], ['Text sent', '#818cf8', 'chat'], ['Email follow-up', '#38bdf8', 'mail'], ['Invite to book', '#4ade80', 'cal']];
-  const nw = 330, nh = 120, gap = 66, x0 = W / 2 - (4 * nw + 3 * gap) / 2, ny = 290, at = hits(b(47), 4);
+  const nw = 330, nh = 120, gap = VERT ? 40 : 66, at = hits(b(47), 4);
+  const cols = VERT ? 2 : 4, x0 = W / 2 - (cols * nw + (cols - 1) * gap) / 2;
   nodes.forEach(([label, col, icon], i) => {
-    const x = x0 + i * (nw + gap);
-    if (i > 0 && t >= at[i]) {
+    const x = x0 + (i % cols) * (nw + gap), ny = VERT ? 250 + Math.floor(i / cols) * (nh + 30) : 290;
+    if (i % cols > 0 && t >= at[i]) {
       const p = snapP(t, at[i]); ctx.strokeStyle = 'rgba(165,156,255,0.5)'; ctx.lineWidth = 3; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(x - gap + 10, ny + nh / 2); ctx.lineTo(x - gap + 10 + (gap - 20) * p, ny + nh / 2); ctx.stroke();
     }
@@ -1149,13 +1169,13 @@ function sWinBack(t) {
       text(label, x + 104, ny + 76, 26, 700, '#fff');
     }, { dy: 18 });
   });
-  const size = 30;
-  snapIn(t, b(48.5), 1200, 560, () => { sentBubble(1450, 500, ['Hi Jordan! We miss you. Want your', 'usual Thursday at 10:00?'], size, true); text('Delivered', 1450, 618, 17, 500, 'rgba(235,235,245,0.45)', 'right', 0); }, { from: 0.6, dy: 50, blur: 0 });
-  snapIn(t, b(49.5), 600, 690, () => recvBubble(470, 650, ['Yes please! See you then.'], size, true, true), { from: 0.6, dy: 30, blur: 0 });
-  snapIn(t, b(50.5), W / 2, 860, () => {
-    glass(W / 2 - 230, 822, 460, 76, 38, { fill: 'rgba(74,222,128,0.12)', stroke: 'rgba(74,222,128,0.4)' });
-    ctx.beginPath(); ctx.arc(W / 2 - 180, 860, 19, 0, 7); ctx.fillStyle = '#4ade80'; ctx.fill(); check(W / 2 - 180, 860, 19, '#0b2e17', 4);
-    text('Booked · Thu 10:00', W / 2 - 146, 861, 30, 700, '#bbf7d0');
+  const size = 30, sx1 = VERT ? x0 + 2 * nw + gap : 1450, sy = VERT ? 590 : 500, rx = VERT ? x0 + 12 : 470, ry = VERT ? 760 : 650, by = VERT ? 940 : 860;
+  snapIn(t, b(48.5), sx1 - 250, sy + 60, () => { sentBubble(sx1, sy, ['Hi Jordan! We miss you. Want your', 'usual Thursday at 10:00?'], size, true); text('Delivered', sx1, sy + 118, 17, 500, 'rgba(235,235,245,0.45)', 'right', 0); }, { from: 0.6, dy: 50, blur: 0 });
+  snapIn(t, b(49.5), rx + 130, ry + 40, () => recvBubble(rx, ry, ['Yes please! See you then.'], size, true, true), { from: 0.6, dy: 30, blur: 0 });
+  snapIn(t, b(50.5), W / 2, by, () => {
+    glass(W / 2 - 230, by - 38, 460, 76, 38, { fill: 'rgba(74,222,128,0.12)', stroke: 'rgba(74,222,128,0.4)' });
+    ctx.beginPath(); ctx.arc(W / 2 - 180, by, 19, 0, 7); ctx.fillStyle = '#4ade80'; ctx.fill(); check(W / 2 - 180, by, 19, '#0b2e17', 4);
+    text('Booked · Thu 10:00', W / 2 - 146, by + 1, 30, 700, '#bbf7d0');
   }, { from: 0.85 });
 }
 
@@ -1169,6 +1189,7 @@ const CAL_ADDED = [
   [20, '4p', 'Hannah McAllister', 'Hot Towel Shave', b(57.5)],
   [24, '1p', 'Lauren Kowalczyk', 'Cut & Beard', b(58)],
 ];
+const CAL_CAM = [[b(52), 960, 540, 1], [b(53.5), 960, 700, 1.9], [b(56), 1010, 610, 1.3], [b(58.25), 960, 540, 1]];
 function calendarWorld(t, z) {
   homeWorld(t, { added: CAL_ADDED });
   const { open, book } = CALT;
@@ -1198,12 +1219,13 @@ function calendarWorld(t, z) {
 }
 function sCalendar(t) {
   stage(0.1);
-  const cam = camAt(t, [[b(52), 960, 540, 1], [b(53.5), 960, 700, 1.9], [b(56), 1010, 610, 1.3], [b(58.25), 960, 540, 1]]);
+  const cam = camAt(t, CAL_CAM);
   laptop(t, cam, (z) => calendarWorld(t, z));
   featureTag(t, b(52), 'Booking calendar', 'Clients book themselves. Reminders go out on their own.', cam[2]);
 }
 const REV = { open: b(61.5), s1: b(62.5), s2: b(63.5), feed: b(64.5), review: b(65.5) };
 [REV.open, REV.s1, REV.s2, REV.feed].forEach((t) => window.SFX.push({ t, kind: 'click' }));
+const REV_CAM = [[b(60), 960, 540, 1], [b(61), 955, 470, 1.5], [REV.feed, 800, 420, 1.6], [b(66.25), 960, 540, 1]];
 function reviewsContent(t, z) {
   const { open, s1, s2, feed } = REV;
   if (t >= feed) reviewsWorld(t, 'feed', 2);
@@ -1235,7 +1257,7 @@ function reviewsContent(t, z) {
 }
 function sReviews(t) {
   stage(0.1);
-  const cam = camAt(t, [[b(60), 960, 540, 1], [b(61), 955, 470, 1.5], [REV.feed, 800, 420, 1.6], [b(66.25), 960, 540, 1]]);
+  const cam = camAt(t, REV_CAM);
   laptop(t, cam, (z) => reviewsContent(t, z));
   featureTag(t, b(60), 'Review requests', 'Every visit ends with a request. Five stars follow.', cam[2]);
 }
@@ -1284,6 +1306,16 @@ const SCENES = [
   [b(80), b(84), sTagline, 'fall', 0.7],       // on a phrase start
   [b(84), DURATION + 1, sEnd],                 // straight cut to the end card
 ];
+// 9:16 framing: [focus x, focus y, scale] of the 16:9 stage, per scene. The laptop scenes push closer
+// while the camera is in on a feature, so the UI fills the phone's width.
+const fixed = (fx, fy, sc) => () => [fx, fy, sc];
+const lapFrame = (keys) => (t) => { const k = clamp((camAt(t, keys)[2] - 1) / 0.6); return [960, lerp(560, 540, k), lerp(0.8, 0.95, k)]; };
+const FRAMING = new Map([
+  [sHook, fixed(960, 540, 1.75)], [sRegulars, fixed(960, 540, 0.82)], [sStops, fixed(960, 560, 0.78)], [sDark, fixed(960, 540, 0.85)],
+  [sMeet, fixed(960, 560, 0.95)], [sWhat, fixed(960, 500, 0.76)], [sReveal, fixed(960, 560, 0.8)], [sHealth, fixed(960, 410, 1.15)],
+  [sAnalyst, lapFrame(AI_CAM)], [sWinBack, fixed(960, 500, 1.3)], [sCalendar, lapFrame(CAL_CAM)], [sReviews, lapFrame(REV_CAM)],
+  [sDashboard, lapFrame(CAM)], [sTagline, fixed(960, 540, 0.8)], [sEnd, fixed(960, 560, 1.0)],
+]);
 // The whoosh peaks at the fastest point of each move that brings the laptop in.
 SCENES.filter(([, , fn, type]) => type && [sReveal, sAnalyst, sCalendar].includes(fn)).forEach(([st, , , , dur]) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh' }));
 
@@ -1291,12 +1323,13 @@ function renderFrame(t) {
   ctx = MAIN;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, OUT.w, OUT.h);
   const i = Math.max(0, SCENES.findIndex(([s, e]) => t >= s && t < e));
   const [start, , fn, type, dur] = SCENES[i];
   if (i > 0 && type && t < start + dur) {
     const A = renderInto(0, SCENES[i - 1][2], t), B = renderInto(1, fn, t);
     ctx = MAIN; transition(type, (t - start) / dur, A, B, dur);
-  } else fn(t);
+  } else shoot(fn, t);
 }
 
 window.DURATION = DURATION;

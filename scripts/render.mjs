@@ -1,7 +1,8 @@
 // Renders a film to MP4 (H.264 + AAC; 24 fps, the promo at 60 fps).
 //   npm run render            → dist/msghealth-demo.mp4        (16:9 film, index.html)
 //   npm run render:ad         → dist/msghealth-ad-9x16.mp4     (9:16 social ad, ad.html)
-//   npm run render:promo      → dist/msghealth-promo.mp4       (16:9 kinetic promo, promo.html)
+//   npm run render:promo      → dist/msghealth-promo.mp4       (16:9 promo, promo.html)
+//   npm run render:promo:9x16 → dist/msghealth-promo-9x16.mp4  (9:16 promo, promo-vertical.html)
 // Env: FFMPEG (path to an ffmpeg with libx264), WORKERS (parallel browser pages, default 3)
 import fs from 'node:fs';
 import path from 'node:path';
@@ -12,8 +13,8 @@ import { openFilm, ROOT } from './lib.mjs';
 const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const ENTRY = process.env.ENTRY || 'index.html';
 const IS_AD = ENTRY === 'ad.html';
-const IS_PROMO = ENTRY === 'promo.html'; // recorded music track + chimes instead of the synthesised score
-const OUT_NAME = IS_PROMO ? 'msghealth-promo' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
+const IS_PROMO = /^promo/.test(ENTRY); // recorded music track + sound effects instead of the synthesised score
+const OUT_NAME = IS_PROMO ? (/vertical/.test(ENTRY) ? 'msghealth-promo-9x16' : 'msghealth-promo') : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
 const AUDIO_SCRIPT = IS_PROMO ? 'scripts/promo-audio.mjs' : IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
 const FPS = IS_PROMO ? 60 : 24;
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
