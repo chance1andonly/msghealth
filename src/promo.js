@@ -136,17 +136,17 @@ function riseIn(t, at, fn, o = {}) {
   fn();
   ctx.restore();
 }
-// A line of large type; chunks: [text, time, accent?]. Accent chunks take the brand gradient.
+// A line of large type; chunks: [text, time, accent?, colour?]. Accent chunks take the brand gradient.
 function headline(t, chunks, x, y, size, o = {}) {
   const weight = o.weight ?? 700, tr = -0.035;
   const gap = tw(' ', size, weight, tr), ws = chunks.map(([s]) => tw(s, size, weight, tr));
   const total = ws.reduce((p, w) => p + w, 0) + gap * (chunks.length - 1);
   let cx = o.align === 'left' ? x : x - total / 2;
-  chunks.forEach(([s, at, acc], i) => {
+  chunks.forEach(([s, at, acc, col], i) => {
     const x0 = cx, w = ws[i];
     riseIn(t, at, () => {
       font(size, weight, tr); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-      ctx.fillStyle = acc ? brandGrad(x0, x0 + w) : (o.color ?? silver(y, size));
+      ctx.fillStyle = acc ? brandGrad(x0, x0 + w) : (col ?? o.color ?? silver(y, size));
       ctx.fillText(s, x0, y);
     }, { dy: size * 0.32 });
     cx += w + gap;
@@ -294,8 +294,9 @@ function renderInto(i, fn, t) {
   return buffer(i).canvas;
 }
 // Scene changes are camera moves in a real 3D scene (WebGL): both shots are textured planes, the camera
-// whips, orbits, cranes and dives between them, and every frame is motion-blurred by averaging sub-frames
-// across a short shutter, with light blooms and focus pulls where they belong. Each move is used once.
+// whips, orbits, cranes and pushes between them, and every frame is motion-blurred by averaging sub-frames
+// across a short shutter. Moves only ever travel toward their resting place: no overshoot, no snap-back.
+// Cuts between the laptop demos, onto the logo and onto the end card are straight cuts.
 const FOV = 0.7, CAM_D = (H / 2) / Math.tan(FOV / 2); // at z = 0 a W × H plane fills the frame exactly
 const M4 = {
   mul(a, b) { const o = new Array(16); for (let c = 0; c < 4; c++) for (let r = 0; r < 4; r++) { let s = 0; for (let k = 0; k < 4; k++) s += a[k * 4 + r] * b[c * 4 + k]; o[c * 4 + r] = s; } return o; },
@@ -369,63 +370,44 @@ function glScene({ planes, cam = {} }) {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   });
 }
-function bloom(x, y, r, col, a) { // additive light
-  if (a <= 0.003) return;
-  ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, rgba(col, a)); g.addColorStop(0.45, rgba(col, a * 0.35)); g.addColorStop(1, rgba(col, 0));
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore();
-}
 const xio = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2); // fast through the middle
 const qn = ease.quint;
-const bump = (p, at = 0.5, w = 0.5) => Math.max(0, 1 - Math.abs(p - at) / w); // 0 → 1 → 0 around `at`
 let HOOK_LAST = { x: 1080, y: 470 }; // the "without this 👀" bubble on screen, set while the hook draws
-// Each entry: scene(p) → { planes, cam } for time p; optional defocus(p) → [blurA, blurB] and over(p) for light on top.
+// Each entry: scene(p) → { planes, cam } for time p; optional defocus(p) → [blurA, blurB]. Every move travels one way and lands.
 const one = (planes, cam) => ({ planes, cam });
 const TRANSITIONS = {
-  // 1 · texts → "Repeat clients": the camera dives into the last blue bubble, its blue floods the frame,
-  //     and the next shot pulls back out of the light
-  dive: {
-    scene(p) {
-      if (p < 0.5) { const e = xio(p); return one([plane('A', {})], { x: (HOOK_LAST.x - W / 2) * e, y: (H / 2 - HOOK_LAST.y) * e, z: -CAM_D * 0.965 * e }); }
-      return one([plane('B', { z: lerp(CAM_D * 0.55, 0, qn((p - 0.5) * 2)) })]);
-    },
-    over: (p) => bloom(W / 2, H / 2, 1400, '#2b8cff', 0.95 * bump(p, 0.5, 0.22)),
-  },
-  // 2 · → "But when a regular…": a whip pan to the right
+  // texts → "Repeat clients": the camera pushes into the last bubble and the next shot settles out of it
+  dive: { scene(p) {
+    const e = xio(clamp(p / 0.62)), k = qn(clamp((p - 0.4) / 0.6));
+    return one([plane('A', { a: 1 - clamp((p - 0.42) / 0.2) }), plane('B', { z: lerp(CAM_D * 0.5, 0, k), a: clamp((p - 0.4) / 0.2), layer: 1 })],
+      { x: (HOOK_LAST.x - W / 2) * e * (1 - k), y: (H / 2 - HOOK_LAST.y) * e * (1 - k), z: -CAM_D * 0.9 * e * (1 - k) });
+  } },
+  // → "But when a regular…": a whip pan to the right
   whip: { scene(p) {
     const th = 1.05;
     return one([plane('A', {}), plane('B', { x: CAM_D * Math.sin(th), z: CAM_D * (1 - Math.cos(th)), ry: -th })], { yaw: -th * xio(p) });
   } },
-  // 3 · → black slide: the camera cranes up as the cards tip back under it
+  // → black slide: the camera cranes straight up as the cards tip back under it
   crane: { scene(p) {
     const e = xio(p), Y = H * 1.15;
-    return one([plane('A', { rx: -0.55 * e, py: -H / 2 }), plane('B', { y: Y })], { y: Y * e, pitch: 0.22 * Math.sin(Math.PI * p) });
+    return one([plane('A', { rx: -0.5 * e, py: -H / 2 }), plane('B', { y: Y })], { y: Y * e });
   } },
-  // 4 · → logo (music returns): the dark rushes past into a burst of light, and the logo settles out of it
-  flare: {
-    defocus: (p) => [0, 28 * (1 - qn(clamp((p - 0.45) / 0.55)))],
-    scene(p) {
-      if (p < 0.5) return one([plane('A', { z: CAM_D * 0.6 * xio(p), a: 1 - clamp((p - 0.3) / 0.2) })]);
-      const k = qn((p - 0.5) * 2); return one([plane('B', { z: lerp(500, 0, k), lift: 0.45 * (1 - k) })]);
-    },
-    over(p) { bloom(W / 2, H / 2 - 30, 1100, '#a5b4fc', 1.1 * bump(p, 0.5, 0.3)); bloom(W / 2, H / 2 - 30, 380, '#ffffff', 0.9 * bump(p, 0.5, 0.18)); },
-  },
-  // 5 · → "It tells you…": the camera orbits around the words to find the next line on the far side
+  // → "It tells you…": the camera orbits around the words to find the next line on the far side
   orbit: { scene(p) {
     const R0 = 1700, R = CAM_D + R0, ph1 = 1.15, ph = ph1 * xio(p);
     return one([plane('A', {}), plane('B', { x: R0 * Math.sin(ph1), z: -R0 + R0 * Math.cos(ph1), ry: ph1 })], { x: R * Math.sin(ph), z: -R0 + R * Math.cos(ph) - CAM_D, yaw: ph });
   } },
-  // 6 · → laptop opens: the laptop shot rises up from below, tilted, as the words float off the top
+  // → laptop opens: the laptop shot rises up from below, tilted, as the words float off the top
   rise: { scene(p) {
     const e = xio(p);
     return one([plane('A', { y: H * 0.9 * e, rx: -0.45 * e, z: -300 * e, a: 1 - clamp((p - 0.6) / 0.4) }), plane('B', { y: -H * 1.1 * (1 - e), rx: 0.5 * (1 - e), z: -300 * (1 - e) })]);
   } },
-  // 7 · → health scores: the laptop tips back flat and the camera sails over it to the next shot standing beyond
-  sailover: { scene(p) {
-    const e = xio(p), sp = Math.sin(Math.PI * p);
-    return one([plane('A', { rx: -1.45 * e, py: -H / 2 }), plane('B', { z: -1800 * (1 - e), y: -200 * (1 - e), rx: 0.8 * (1 - e), py: -H / 2 })], { y: 260 * sp, pitch: -0.28 * sp, z: -700 * e });
+  // → health scores: the laptop eases back and down out of shot while the next shot comes forward to rest
+  settle: { scene(p) {
+    const e = xio(p), k = qn(clamp((p - 0.2) / 0.8));
+    return one([plane('A', { rx: -0.45 * e, py: -H / 2, y: -H * 0.3 * e, z: -900 * e, a: 1 - clamp((p - 0.45) / 0.4) }), plane('B', { z: -1300 * (1 - k), a: clamp(k * 1.6), layer: 1 })]);
   } },
-  // 8 · → AI Analyst: the laptop swings in from the right like a floating panel as the old shot drifts back out of focus
+  // → AI Analyst: the laptop swings in from the right like a floating panel as the old shot drifts back out of focus
   swing: {
     defocus: (p) => [16 * xio(p), 0],
     scene(p) {
@@ -433,16 +415,15 @@ const TRANSITIONS = {
       return one([plane('A', { x: -W * 0.45 * e, z: -900 * e, ry: 0.55 * e, a: 1 - clamp((p - 0.5) / 0.5) * 0.85 }), plane('B', { x: W * 0.95 * (1 - k), z: -700 * (1 - k), ry: -1.0 * (1 - k) })]);
     },
   },
-  // 9 · → win-back: a barrel roll — the camera twists in and unwinds on the next shot
-  roll: {
+  // → win-back: the laptop drifts toward the camera and out of focus while the next shot comes up from depth
+  push: {
+    defocus: (p) => [18 * xio(p), 0],
     scene(p) {
-      const e = xio(p);
-      if (p < 0.5) { const k = e * 2; return one([plane('A', {})], { roll: 0.75 * k, z: -CAM_D * 0.3 * k }); }
-      const k = 2 - e * 2; return one([plane('B', {})], { roll: -0.75 * k, z: CAM_D * 0.3 * k });
+      const e = xio(p), k = qn(clamp((p - 0.25) / 0.75));
+      return one([plane('A', { z: CAM_D * 0.3 * e, a: 1 - clamp((p - 0.3) / 0.4) }), plane('B', { z: -900 * (1 - k), a: clamp((p - 0.25) / 0.45), layer: 1 })]);
     },
-    over: (p) => bloom(W / 2, H / 2, 900, '#8b5cf6', 0.35 * bump(p, 0.5, 0.25)),
   },
-  // 10 · → calendar: the next shot slides up as a stack of layered panes that settle into one
+  // → calendar: the next shot slides up as a stack of layered panes that settle into one
   stack: {
     defocus: (p) => [14 * xio(p), 0],
     scene(p) {
@@ -451,43 +432,11 @@ const TRANSITIONS = {
       return one(planes);
     },
   },
-  // 11 · → reviews: the camera trucks sideways along a row of laptops to the next one
-  truck: { scene(p) {
-    const e = xio(p), X = W * 1.3, sp = Math.sin(Math.PI * p);
-    return one([plane('A', { ry: 0.12 * e }), plane('B', { x: X, ry: -0.12 * (1 - e) })], { x: X * e, z: 900 * sp, yaw: -0.08 * sp });
-  } },
-  // 12 · → analytics: a ring of light opens in the middle of the screen and the next shot pours out of it
-  portal: {
-    scene(p) {
-      const e = xio(p), R = e * Math.hypot(W, H) * 0.56, za = 520 * e, planes = [plane('A', { z: za })];
-      // the next shot, cut into a disc of 48 slices that grows from the centre, drawn over the old shot
-      const n = 48, s = lerp(1.35, 1, qn(p));
-      for (let i = 0; i < n && R > 2; i++) {
-        const y0 = -R + (2 * R * i) / n, y1 = -R + (2 * R * (i + 1)) / n, yc = (y0 + y1) / 2, half = Math.sqrt(Math.max(0, R * R - yc * yc));
-        const top = H / 2 - y1, hgt = y1 - y0, l = W / 2 - half;
-        planes.push(plane('B', { w: 2 * half, h: hgt + 0.8, x: 0, y: yc, z: 0, layer: 1, uv: [W / 2 + (l - W / 2) / s, H / 2 + (top - H / 2) / s, (2 * half) / s, hgt / s] }));
-      }
-      return one(planes);
-    },
-    over(p) {
-      const R = xio(p) * Math.hypot(W, H) * 0.56;
-      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineWidth = 18; ctx.strokeStyle = rgba('#93c5fd', 0.7 * bump(p, 0.45, 0.45));
-      ctx.filter = 'blur(10px)'; ctx.beginPath(); ctx.arc(W / 2, H / 2, Math.max(1, R), 0, Math.PI * 2); ctx.stroke(); ctx.restore();
-    },
-  },
-  // 13 · → tagline: the laptop falls back into the dark as the words drop in from above
+  // → tagline: the laptop falls back into the dark as the words drop in from above
   fall: { scene(p) {
     const e = xio(p), k = qn(clamp((p - 0.25) / 0.75));
     return one([plane('A', { rx: -0.9 * e, z: -2600 * e * e, y: -150 * e, a: 1 - clamp((p - 0.55) / 0.35) }), plane('B', { y: H * 0.85 * (1 - k), rx: -0.4 * (1 - k), a: clamp(k * 1.6) })]);
   } },
-  // 14 · → end card: the words smear into streaks of light and the logo un-smears out of them
-  smear: {
-    scene(p) {
-      if (p < 0.5) { const e = Math.pow(p * 2, 2.2); return one([plane('A', { sy: 1 + 9 * e, sx: 1 - 0.15 * e, a: 1 - e * 0.8, lift: 0.3 * e })]); }
-      const k = qn((p - 0.5) * 2); return one([plane('B', { sy: 1 + 9 * (1 - k) * (1 - k), lift: 0.25 * (1 - k) })]);
-    },
-    over: (p) => bloom(W / 2, H / 2, 900, '#c7d2fe', 0.5 * bump(p, 0.5, 0.2)),
-  },
 };
 // Motion blur: every frame averages sub-frames spread across the shutter, on the GPU. Fast moves
 // streak; anything still stays crisp.
@@ -513,7 +462,6 @@ function transition(type, p, A, B, dur) {
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   ctx.drawImage(GL.canvas, 0, 0);
-  if (T.over) T.over(clamp(p));
 }
 
 // ── shared product UI (rebuilt from the screen recordings) ───────────────────
@@ -947,7 +895,9 @@ function camAt(t, keys = CAM) {
 
 // ── A · beats 0–16 · the text ────────────────────────────────────────────────
 const HOOK = [["I don't know how", 0], ['salon owners could live', 1.5], ['without this', 2.5, true]]; // all sent before the drop at beat 4
-window.SFX = HOOK.map(([, k]) => ({ t: b(k), kind: 'sent' })); // iPhone "sent" sound, peaking on each bubble
+// Sound cues (scripts/promo-audio.mjs places each sound's attack or peak on its time).
+// The sent swoosh peaks as each bubble lands (~0.11s after it starts to pop up).
+window.SFX = HOOK.map(([, k]) => ({ t: b(k) + 0.11, kind: 'sent' }));
 const PHONE = { w: 500, h: 1010 };
 function messages(t, sx, sy, sw, sh) {
   ctx.fillStyle = '#ffffff'; ctx.fillRect(sx, sy, sw, sh);
@@ -1039,11 +989,15 @@ function sStops(t) {
   ctx.restore();
   headline(t, [['No reply.', b(13)], ['No warning.', b(13.5)]], W / 2, 900, 46, { color: SOFT, weight: 600 });
 }
-window.MUFFLE = [b(16), b(20)]; // the music goes underwater for this bar, then the logo lands
+window.MUFFLE = [b(16), b(20)];
+const GONE = { from: b(18.5), at: b(19) };
+window.SFX.push({ t: GONE.at, kind: 'flash' });
+function mixHex(a, c, k) { const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)); const x = p(a), y = p(c); return `rgb(${x.map((v, i) => Math.round(lerp(v, y[i], k))).join(',')})`; } // the music goes underwater for this bar, then the logo lands
 function sDark(t) {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   headline(t, [["You won't see it coming", b(16)]], W / 2, H / 2 - 70, 100, { color: '#ffffff' });
-  headline(t, [["until they're gone.", b(18)]], W / 2, H / 2 + 70, 100, { color: '#ffffff' });
+  const red = ease.inOut(seg(t, GONE.from, GONE.at)); // "gone." turns red, finishing exactly on the camera flash
+  headline(t, [["until they're", b(18)], ['gone.', b(18), false, mixHex('#ffffff', '#ff3b30', red)]], W / 2, H / 2 + 70, 100, { color: '#ffffff' });
 }
 
 // ── C · beats 32–48 · MsgHealth ──────────────────────────────────────────────
@@ -1054,8 +1008,8 @@ function lockup(t, at, y, ls, size, o = {}) {
   const right = o.static ? 1 : ease.inOut(seg(t, at + BEAT, at + BEAT + 0.4));
   const left = o.static ? 1 : ease.inOut(seg(t, at + 2 * BEAT, at + 2 * BEAT + 0.5));
   const lx = lerp(lerp(W / 2, W / 2 + 150, right), lockX, left);
-  const wipeAt = o.static ? at + 0.1 : at + 2 * BEAT + 0.08;
-  const wipe = lerp(textX - 40, textX + ww + 30, ease.out(seg(t, wipeAt, wipeAt + 0.5)));
+  const wipeAt = o.static ? at : at + 2 * BEAT + 0.08;
+  const wipe = lerp(textX - 40, textX + ww + 30, ease.out(seg(t, wipeAt, wipeAt + (o.static ? 0.22 : 0.5)))); // static: lands with the snap
   if (t >= wipeAt) {
     ctx.save();
     const edge = o.static ? textX - 40 : Math.max(lx + ls * 0.34, textX - 24); // trails the logo's visible edge
@@ -1073,7 +1027,7 @@ function lockup(t, at, y, ls, size, o = {}) {
     gl.addColorStop(0, 'rgba(99,102,241,0.35)'); gl.addColorStop(1, 'rgba(99,102,241,0)');
     ctx.fillStyle = gl; ctx.fillRect(lx - ls * 1.5, y - ls * 1.5, ls * 3, ls * 3);
     logoMark(lx, y, ls);
-  }, { dy: 0, d: 0.8, blur: 20 });
+  }, o.static ? { dy: 0, d: 0.2, blur: 6 } : { dy: 0, d: 0.8, blur: 20 });
 }
 function sMeet(t) {
   stage(0.16 * ease.quint(seg(t, b(20), b(21))), C.primary, 0.48);
@@ -1129,6 +1083,7 @@ const ROWS = [
 
 // AI Business Analyst on the MacBook
 const AI = { open: b(37.5), click: b(38), typeA: b(38), typeB: b(39.5), run: b(40), ans: b(40.5), send: b(43.5), out: b(45) };
+[AI.click, AI.run, AI.send].forEach((t) => window.SFX.push({ t, kind: 'click' }));
 function analystWorld(t, z) {
   homeWorld(t);
   if (t >= AI.open) { ctx.fillStyle = `rgba(10,10,22,${0.55 * snapP(t, AI.open)})`; ctx.fillRect(0, 0, W, H); }
@@ -1206,6 +1161,7 @@ function sWinBack(t) {
 
 // ── E · beats 64–80 · booking and reviews ────────────────────────────────────
 const CALT = { open: b(58), book: b(59.5) };
+[CALT.open, CALT.book].forEach((t) => window.SFX.push({ t, kind: 'click' }));
 const CAL_ADDED = [
   [21, '11a', 'Chloe Bergeron', 'Signature Facial', b(59.5)],
   [22, '2:30p', 'Renee Calloway', 'Gel Color', b(60.5)],
@@ -1247,6 +1203,7 @@ function sCalendar(t) {
   featureTag(t, b(56), 'Booking calendar', 'Clients book themselves. Reminders go out on their own.', cam[2]);
 }
 const REV = { open: b(69.5), s1: b(70.5), s2: b(71.5), feed: b(72.5), review: b(73.5) };
+[REV.open, REV.s1, REV.s2, REV.feed].forEach((t) => window.SFX.push({ t, kind: 'click' }));
 function reviewsContent(t, z) {
   const { open, s1, s2, feed } = REV;
   if (t >= feed) reviewsWorld(t, 'feed', 2);
@@ -1295,6 +1252,7 @@ function sTagline(t) {
   headline(t, [['Know your customers.', b(92)]], W / 2, H / 2 - 76, 124);
   headline(t, [['Keep', b(94), true], ['your customers.', b(94)]], W / 2, H / 2 + 76, 124);
 }
+window.SFX.push({ t: b(96), kind: 'snap' }); // MsgHealth lands on the end card
 function sEnd(t) {
   stage(0.18, C.primary, 0.45);
   lockup(t, b(96), H / 2 - 70, 190, 150, { static: true });
@@ -1308,24 +1266,26 @@ function sEnd(t) {
   if (out > 0) { ctx.fillStyle = `rgba(0,0,0,${out})`; ctx.fillRect(0, 0, W, H); }
 }
 
-// [start, end, scene, 3D transition into it, its length in seconds]. Every transition is used once.
+// [start, end, scene, 3D transition into it, its length in seconds]. No transition means a straight cut.
 const SCENES = [
   [0, b(4), sHook],
   [b(4), b(8), sRegulars, 'dive', 0.7],
   [b(8), b(16), sStops, 'whip', 0.5],
   [b(16), b(20), sDark, 'crane', 0.6],
-  [b(20), b(24), sMeet, 'flare', 0.75],
+  [b(20), b(24), sMeet],                       // straight cut: the logo lands as the music returns
   [b(24), b(28), sWhat, 'orbit', 0.7],
   [b(28), b(32), sReveal, 'rise', 0.6],
-  [b(32), b(36), sHealth, 'sailover', 0.75],
+  [b(32), b(36), sHealth, 'settle', 0.7],
   [b(36), b(48), sAnalyst, 'swing', 0.65],
-  [b(48), b(56), sWinBack, 'roll', 0.6],
+  [b(48), b(56), sWinBack, 'push', 0.6],
   [b(56), b(68), sCalendar, 'stack', 0.7],
-  [b(68), b(80), sReviews, 'truck', 0.7],
-  [b(80), b(92), sDashboard, 'portal', 0.7],
+  [b(68), b(80), sReviews],                    // laptop to laptop: straight cut
+  [b(80), b(92), sDashboard],                  // laptop to laptop: straight cut
   [b(92), b(96), sTagline, 'fall', 0.7],
-  [b(96), DURATION + 1, sEnd, 'smear', 0.7],
+  [b(96), DURATION + 1, sEnd],                 // straight cut to the end card
 ];
+// The whoosh peaks at the fastest point of each move that brings the laptop in.
+SCENES.filter(([, , fn, type]) => type && [sReveal, sAnalyst, sCalendar].includes(fn)).forEach(([st, , , , dur]) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh' }));
 
 function renderFrame(t) {
   ctx = MAIN;
