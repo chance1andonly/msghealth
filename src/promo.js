@@ -1017,7 +1017,7 @@ function goneRays(t, x, y, xl, wordAt, col) {
   // the wash: a red gradient that grows from the word across the frame
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
   const R = lerp(160, 1500, grow), g = ctx.createRadialGradient(x, y, 0, x, y, R);
-  g.addColorStop(0, `rgba(255,59,48,${0.22 * build})`); g.addColorStop(0.45, `rgba(200,30,30,${0.1 * build})`); g.addColorStop(1, 'rgba(120,10,10,0)');
+  g.addColorStop(0, `rgba(255,59,48,${0.11 * build})`); g.addColorStop(0.45, `rgba(200,30,30,${0.045 * build})`); g.addColorStop(1, 'rgba(120,10,10,0)');
   ctx.fillStyle = g; ctx.fillRect(-2 * W, -3 * H, 5 * W, 7 * H);
   ctx.restore();
   const bw = Math.round(RAY.w * RAY.s), bh = Math.round(RAY.h * RAY.s);
@@ -1028,17 +1028,13 @@ function goneRays(t, x, y, xl, wordAt, col) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, bw, bh);
   ctx.scale(RAY.s, RAY.s); ctx.translate(RAY.w / 2 - x, RAY.h / 2 - y);
-  ctx.globalAlpha = 0.34;
-  const word = (edge = 0) => riseIn(t, wordAt, () => {
-    font(100, 700, -0.035); ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = col; ctx.fillText('gone.', xl, y);
-    if (edge) { ctx.strokeStyle = col; ctx.lineWidth = edge; ctx.lineJoin = 'round'; ctx.strokeText('gone.', xl, y); }
-  }, { dy: 32 });
-  word();
+  ctx.globalAlpha = 0.24;
+  riseIn(t, wordAt, () => { font(100, 700, -0.035); ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = col; ctx.fillText('gone.', xl, y); }, { dy: 32 });
   ctx = prev;
   // the light sits just under the word, so the rays fan up and out, and drifts left to right
-  const drift = ease.inOut(seg(t, GONE.from, b(36))), lx = (RAY.w / 2 + lerp(-110, 110, drift)) * RAY.s, ly = (RAY.h / 2 + 70) * RAY.s;
+  const drift = ease.inOut(seg(t, GONE.from, b(36))), lx = (RAY.w / 2 + lerp(-90, 90, drift)) * RAY.s, ly = (RAY.h / 2 + 40) * RAY.s;
   // radial blur by repeated doubling: 5 passes = 32 copies, each scaled a step further from the light
-  const F = 1 + 0.4 * build + 0.8 * burst + 0.25 * grow, N = 32, decay = 0.9;
+  const F = 1 + 0.3 * build + 0.35 * burst + 0.1 * grow, N = 32, decay = 0.9; // short rays that stay around the word
   for (let k = 0; k < 5; k++) {
     const sc = Math.pow(F, Math.pow(2, k) / N);
     B.setTransform(1, 0, 0, 1, 0, 0); B.globalAlpha = 1; B.globalCompositeOperation = 'source-over';
@@ -1048,11 +1044,7 @@ function goneRays(t, x, y, xl, wordAt, col) {
     B.drawImage(A.canvas, 0, 0);
     [A, B] = [B, A];
   }
-  // cut the letters, and a thin dark edge around them, out of the light so the word stays crisp
-  ctx = A; ctx.setTransform(RAY.s, 0, 0, RAY.s, (RAY.w / 2 - x) * RAY.s, (RAY.h / 2 - y) * RAY.s); ctx.globalAlpha = 1;
-  ctx.globalCompositeOperation = 'destination-out'; word(10); ctx.globalCompositeOperation = 'source-over';
-  ctx = prev;
-  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.55 * build + 0.45 * burst;
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.4 * build + 0.2 * burst;
   ctx.filter = 'blur(2px)';
   ctx.drawImage(A.canvas, x - RAY.w / 2, y - RAY.h / 2, RAY.w, RAY.h);
   ctx.restore();
@@ -1061,8 +1053,8 @@ function sDark(t) {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   const y2 = H / 2 + 70, tr = -0.035, w1 = tw("until they're", 100, 700, tr), gap = tw(' ', 100, 700, tr), w2 = tw('gone.', 100, 700, tr);
   const xl = W / 2 - (w1 + gap + w2) / 2 + w1 + gap; // where "gone." starts
-  const red = ease.inOut(seg(t, GONE.from, GONE.at)), col = mixHex('#ffffff', '#ff453a', red); // "gone." turns red, finishing exactly on the camera flash
-  goneRays(t, xl + w2 / 2, y2, xl, b(34), '#d81e18'); // the rays run a deeper red than the word
+  const red = ease.inOut(seg(t, GONE.from, GONE.at)), col = mixHex('#ffffff', '#ff5a4f', red); // "gone." turns red, finishing exactly on the camera flash
+  goneRays(t, xl + w2 / 2, y2, xl, b(34), '#c8161a'); // drawn first, so the glow sits behind every word
   headline(t, [["You won't see it coming", b(32)]], W / 2, H / 2 - 70, 100, { color: '#ffffff' });
   headline(t, [["until they're", b(34)], ['gone.', b(34), false, col]], W / 2, y2, 100, { color: '#ffffff' });
 }
