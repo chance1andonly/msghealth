@@ -123,20 +123,24 @@ downbeats, and nothing pulses.
 - Render: `npm run render:promo`
 - On-screen "today" is Sunday, October 18, 2026, and every date shown is recent relative to it.
 
-| Beats | Time | What's on screen |
-|---|---|---|
-| 0–16 | 0.3–8.3s | An iPhone glides up. Three blue iMessages are sent on the beat, each with the sent sound: "I don't know how" / "salon owners could live" / "without this 👀", then "Delivered". The camera pushes in. |
-| 16–20 | 8.3–10.3s | Zoom-through: "Repeat clients are the business." |
-| 20–28 | 10.3–14.3s | "But when a regular stops booking…": Jan, Feb, Mar on glass cards, April empty. Focus pulls to April: "No reply. No warning." |
-| 28–32 | 14.3–16.3s | Black and white: "You won't see it coming until they're gone." The music is muffled. |
-| 32–36 | 16.3–18.3s | Music back. The logo lands, steps right, then sweeps left as MsgHealth wipes in, and a light sweep crosses the name |
-| 36–44 | 18.3–22.3s | "Client retention, reimagined for salons." / "It tells you who's drifting and brings them back." |
-| 44–48 | 22.3–24.3s | A MacBook opens on the Home screen |
-| 48–52 | 24.3–26.3s | Health scores on glass. Jordan is flagged At risk. |
-| 52–58 | 26.3–29.3s | MacBook: AI Business Analyst answers "Which clients haven't booked in 60 days?" → "Send win-back offer" |
-| 58–64 | 29.3–32.3s | "Win them back on autopilot.": the flow, the text, the reply, booked |
-| 64–72 | 32.3–36.2s | MacBook: October booking calendar. Chloe is booked for Wed Oct 21, then four online bookings land |
-| 72–80 | 36.2–40.2s | MacBook: review requests sent, then a new 5★ review and the rating ticks to 4.7 |
-| 80–92 | 40.2–46.2s | MacBook: Analytics & Predictions. Each card rises in turn as the camera arrives on it |
-| 92–96 | 46.2–48.2s | "Know your customers. Keep your customers." |
-| 96–end | 48.2–50.4s | Logo, msghealth.net, "Start now · 50% off your first month", fade to black |
+The opening texts finish before the beat drops at beat 4 (2.3 s). From there, every scene starts on a downbeat, and each scene
+change has its own transition, used once. The laptop demos zoom in to show the feature in use, then zoom back out, and the
+feature's title shows only while the laptop is zoomed out.
+
+| Beats | Time | What's on screen | Transition in |
+|---|---|---|---|
+| 0–4 | 0–2.3s | iPhone: "I don't know how" / "salon owners could live" / "without this 👀" sent at 0.35, 1.1 and 1.6 s with the sent sound, "Delivered" at 2.0 s | — |
+| 4–8 | 2.3–4.3s | "Repeat clients are the business." | Flies into the last bubble |
+| 8–16 | 4.3–8.3s | "But when a regular stops booking…": Jan, Feb, Mar, then an empty April. "No reply. No warning." | Reel scroll |
+| 16–20 | 8.3–10.3s | Black and white: "You won't see it coming until they're gone." The music is muffled. | The April card grows into the frame |
+| 20–24 | 10.3–12.3s | The logo lands, steps right, then sweeps left as MsgHealth wipes in, with a light sweep | A ring of light opens |
+| 24–28 | 12.3–14.3s | "It tells you who's drifting and brings them back." + chips | The frame splits top and bottom |
+| 28–32 | 14.3–16.3s | The MacBook opens on Home | The words fold into the hinge |
+| 32–36 | 16.3–18.3s | Health scores on glass | Through the laptop screen |
+| 36–48 | 18.3–24.3s | MacBook: AI Business Analyst (zoom in → question → answer → send → zoom out) | The laptop slides over like a card |
+| 48–56 | 24.3–28.3s | "Win them back on autopilot.": the flow, the text, the reply, booked | Out through the "Win-back sent" button |
+| 56–68 | 28.3–34.2s | MacBook: October calendar (Chloe booked on Oct 21, four online bookings) | Staggered blinds |
+| 68–80 | 34.2–40.2s | MacBook: review requests and a new 5★ review | The screen swipes to the next app |
+| 80–92 | 40.2–46.2s | MacBook: Analytics & Predictions rising card by card | The next app opens from mid-screen |
+| 92–96 | 46.2–48.2s | "Know your customers. Keep your customers." | The laptop sinks away |
+| 96–end | 48.2–50.4s | Logo, msghealth.net, "Start now · 50% off your first month" | Folds to a line of light, then opens |
