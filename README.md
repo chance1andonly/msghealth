@@ -110,16 +110,18 @@ Keep the delivery natural and conversational, as if one business owner were talk
 
 A keynote-style product film cut to "keep steady" (120 BPM). It has a black stage, large gradient type that fades up out of a
 soft blur, an iPhone for the opening text, and a MacBook that opens on the product. The product screens are rebuilt from
-MsgHealth screen recordings, with a large pointer. Scene changes are 3D camera moves rendered in WebGL (both shots become
-lit planes in a perspective scene), with GPU motion blur (32 sub-frames per frame), light blooms and focus pulls. They land on
-the downbeats, and nothing pulses.
+MsgHealth screen recordings, with a large pointer. Scene changes are simple 3D camera moves rendered in WebGL with GPU motion
+blur. Each move travels one way and lands, with no overshoot and no snap-back. The laptop demos cut straight from one to the
+next, and the logo reveal and end card are straight cuts too.
 
 - **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 50.4 s)
 - Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top (120 BPM, first downbeat 0.348 s), and all timing is written in beats (`b(k)`).
   Scenes start on bar downbeats and are grouped into 4-bar phrases.
 - Music: `assets/audio/promo-track.m4a` (from the supplied screen recording). Check you have the rights before running it as a paid ad.
-- Sound: `scripts/promo-audio.mjs` adds the supplied iPhone "sent" sound (`assets/audio/message-sent.wav`) with its peak on each hook bubble,
-  muffles the music for the bar before the logo, and fades out over the last 1.9 s.
+- Sound: `scripts/promo-audio.mjs` places each effect so its attack (or peak) lands on its cue from `window.SFX`:
+  the iPhone sent swoosh peaks as each bubble lands, a camera flash as "gone" finishes turning red, a mouse click on every pointer click,
+  a whoosh (trimmed to its core) at the fastest point of each move that brings the laptop in, and a snap as MsgHealth lands on the end card.
+  The music is muffled for the bar before the logo and fades out over the last 1.9 s.
 - Sync: `src/promo-onsets.js` lists every hit in the track (`python3 scripts/promo-onsets.py` regenerates it). Entrances snap onto the nearest hit.
 - Render: `npm run render:promo`
 - On-screen "today" is Sunday, October 18, 2026, and every date shown is recent relative to it.
@@ -131,17 +133,17 @@ feature's title shows only while the laptop is zoomed out.
 | Beats | Time | What's on screen | 3D transition in |
 |---|---|---|---|
 | 0–4 | 0–2.3s | iPhone: "I don't know how" / "salon owners could live" / "without this 👀" sent at 0.35, 1.1 and 1.6 s with the sent sound, "Delivered" at 2.0 s | — |
-| 4–8 | 2.3–4.3s | "Repeat clients are the business." | Camera dives into the last bubble, then blue light |
+| 4–8 | 2.3–4.3s | "Repeat clients are the business." | Camera pushes into the last bubble |
 | 8–16 | 4.3–8.3s | "But when a regular stops booking…": Jan, Feb, Mar, then an empty April. "No reply. No warning." | Whip pan |
-| 16–20 | 8.3–10.3s | Black and white: "You won't see it coming until they're gone." The music is muffled. | Camera cranes up as the cards tip away |
-| 20–24 | 10.3–12.3s | The logo lands, steps right, then sweeps left as MsgHealth wipes in, with a light sweep | Rush into a light flare |
+| 16–20 | 8.3–10.3s | Black and white: "You won't see it coming until they're gone." The music is muffled, and "gone." fades to red, landing on a camera flash at 9.8 s | Camera cranes up as the cards tip away |
+| 20–24 | 10.3–12.3s | The logo lands, steps right, then sweeps left as MsgHealth wipes in, with a light sweep | Straight cut |
 | 24–28 | 12.3–14.3s | "It tells you who's drifting and brings them back." + chips | Camera orbits to the far side |
 | 28–32 | 14.3–16.3s | The MacBook opens on Home | The laptop rises from below, tilted |
-| 32–36 | 16.3–18.3s | Health scores on glass | The laptop tips flat; the camera sails over it |
+| 32–36 | 16.3–18.3s | Health scores on glass | The laptop eases back and down as the next shot comes forward |
 | 36–48 | 18.3–24.3s | MacBook: AI Business Analyst (zoom in → question → answer → send → zoom out) | The laptop swings in as the last shot defocuses |
-| 48–56 | 24.3–28.3s | "Win them back on autopilot.": the flow, the text, the reply, booked | Barrel roll |
+| 48–56 | 24.3–28.3s | "Win them back on autopilot.": the flow, the text, the reply, booked | The laptop drifts toward the camera, out of focus |
 | 56–68 | 28.3–34.2s | MacBook: October calendar (Chloe booked on Oct 21, four online bookings) | Layered panes slide up and settle |
-| 68–80 | 34.2–40.2s | MacBook: review requests and a new 5★ review | Camera trucks along a row of laptops |
-| 80–92 | 40.2–46.2s | MacBook: Analytics & Predictions rising card by card | A ring of light opens on the next screen |
+| 68–80 | 34.2–40.2s | MacBook: review requests and a new 5★ review | Straight cut |
+| 80–92 | 40.2–46.2s | MacBook: Analytics & Predictions rising card by card | Straight cut |
 | 92–96 | 46.2–48.2s | "Know your customers. Keep your customers." | The laptop falls back into the dark |
-| 96–end | 48.2–50.4s | Logo, msghealth.net, "Start now · 50% off your first month" | The words smear into light and un-smear as the logo |
+| 96–end | 48.2–50.4s | Logo, msghealth.net, "Start now · 50% off your first month" | Straight cut, with a snap |
