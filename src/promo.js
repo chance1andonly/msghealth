@@ -535,10 +535,10 @@ const box = (x, y, w, h, r = 10) => { fillRR(x, y, w, h, r, '#fff'); rr(x, y, w,
 const CAL = { x: 330, w: 1225, gx: 345, gw: 1195, top: 440, rh: 97 };
 const cellOf = (d) => { const i = d + 3; return [CAL.gx + (i % 7) * (CAL.gw / 7), CAL.top + Math.floor(i / 7) * CAL.rh]; };
 const BASE_EVENTS = [
-  [1, '10a', 'Melissa Grant', 'Brow Shape'], [2, '2:30p', 'Isabella Rossi', 'Gel Color'], [6, '11a', 'Drew Bianchi', 'Deep Tissue'],
-  [8, '10:30a', 'Jordan Ellis', 'Signature Facial'], [9, '1:30p', 'Maya Sandoval', 'Signature Facial'], [13, '12p', 'Marcus Bell', 'Signature Facial'],
-  [15, '2p', 'Jordan Ellis', 'Classic Mani-Pedi'], [16, '3:30p', 'Avery Whitfield', 'Deluxe Spa Pedi'], [17, '11a', 'Simone Archer', 'Gel Color'],
-  [29, '11a', 'Jordan Ellis', 'Signature Facial'],
+  [1, '10a', 'Melissa Grant', 'Beard Trim'], [2, '2:30p', 'Isabella Rossi', 'Skin Fade'], [6, '11a', 'Drew Bianchi', 'Cut & Beard'],
+  [8, '10:30a', 'Jordan Ellis', 'Signature Cut'], [9, '1:30p', 'Maya Sandoval', 'Signature Cut'], [13, '12p', 'Marcus Bell', 'Signature Cut'],
+  [15, '2p', 'Jordan Ellis', 'Lineup'], [16, '3:30p', 'Avery Whitfield', 'Hot Towel Shave'], [17, '11a', 'Simone Archer', 'Skin Fade'],
+  [29, '11a', 'Jordan Ellis', 'Signature Cut'],
 ];
 function homeWorld(t, o = {}) {
   const added = (o.added ?? []).filter((e) => t >= e[4]);
@@ -894,7 +894,7 @@ function camAt(t, keys = CAM) {
 // ═════════════════════════════════════════════════════════════════════════════
 
 // ── A · beats 0–16 · the text ────────────────────────────────────────────────
-const HOOK = [["I don't know how", 0], ['salon owners could live', 1.5], ['without this', 2.5, true]]; // all sent before the drop at beat 4
+const HOOK = [["I don't know how", 0], ['barbers could live', 1.5], ['without this', 2.5, true]]; // all sent before the drop at beat 4
 // Sound cues (scripts/promo-audio.mjs places each sound's attack or peak on its time).
 // The sent swoosh peaks as each bubble lands (~0.11s after it starts to pop up).
 window.SFX = HOOK.map(([, k]) => ({ t: b(k) + 0.11, kind: 'sent' }));
@@ -1032,7 +1032,7 @@ function lockup(t, at, y, ls, size, o = {}) {
 function sMeet(t) {
   stage(0.16 * ease.quint(seg(t, b(20), b(21))), C.primary, 0.48);
   lockup(t, b(20), H / 2 - 30, 200, 164);
-  headline(t, [['Client retention for salons.', b(23)]], W / 2, H / 2 + 150, 46, { color: SOFT, weight: 600 });
+  headline(t, [['Client retention for barbers.', b(23)]], W / 2, H / 2 + 150, 46, { color: SOFT, weight: 600 });
 }
 function sWhat(t) {
   stage();
@@ -1163,11 +1163,11 @@ function sWinBack(t) {
 const CALT = { open: b(54), book: b(55.5) };
 [CALT.open, CALT.book].forEach((t) => window.SFX.push({ t, kind: 'click' }));
 const CAL_ADDED = [
-  [21, '11a', 'Chloe Bergeron', 'Signature Facial', b(55.5)],
-  [22, '2:30p', 'Renee Calloway', 'Gel Color', b(56.5)],
-  [23, '10a', 'Reese Abara', 'Brow Shape', b(57)],
-  [20, '4p', 'Hannah McAllister', 'Deluxe Spa Pedi', b(57.5)],
-  [24, '1p', 'Lauren Kowalczyk', 'Deep Tissue', b(58)],
+  [21, '11a', 'Chloe Bergeron', 'Signature Cut', b(55.5)],
+  [22, '2:30p', 'Renee Calloway', 'Skin Fade', b(56.5)],
+  [23, '10a', 'Reese Abara', 'Beard Trim', b(57)],
+  [20, '4p', 'Hannah McAllister', 'Hot Towel Shave', b(57.5)],
+  [24, '1p', 'Lauren Kowalczyk', 'Cut & Beard', b(58)],
 ];
 function calendarWorld(t, z) {
   homeWorld(t, { added: CAL_ADDED });
@@ -1178,7 +1178,7 @@ function calendarWorld(t, z) {
       const x = 850, y = 506, w = 340, h = 214;
       card(x, y, w, h, 14, { shadow: 30, shadowColor: 'rgba(20,20,50,0.22)' });
       text('New appointment', x + 18, y + 26, 15, 700, '#16162a');
-      [['Client', 'Chloe Bergeron'], ['Service', 'Signature Facial · 60 min'], ['When', 'Wed, Oct 21 · 11:00 AM']].forEach(([l, v], i) => {
+      [['Client', 'Chloe Bergeron'], ['Service', 'Signature Cut · 45 min'], ['When', 'Wed, Oct 21 · 11:00 AM']].forEach(([l, v], i) => {
         text(l, x + 18, y + 60 + i * 30, 12, 500, MUTED); text(v, x + 92, y + 60 + i * 30, 12.5, 600, '#16162a');
       });
       fillRR(x + 18, y + 142, 14, 14, 3, C.primary); check(x + 25, y + 149, 9, '#fff', 2); text('Send SMS reminder the day before', x + 40, y + 149, 12, 500, '#2a2a44');
