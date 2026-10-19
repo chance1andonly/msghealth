@@ -114,10 +114,15 @@ MsgHealth screen recordings, with a large pointer. Scene changes are simple 3D c
 blur. Each move travels one way and lands, with no overshoot and no snap-back. The laptop demos cut straight from one to the
 next, and the logo reveal and end card are straight cuts too.
 
+Order: the texts, then straight into the analytics dashboard on the drop (the numbers climb one card at a time) so the viewer
+sees the product first. Then the problem (regulars who quietly stop booking, ending on a red "gone." with After Effects-style
+light rays streaming out of its letters), the logo, and the features explained one by one: health scores, the AI Business
+Analyst, automatic win-backs, the booking calendar and review requests. It ends on the tagline and the end card.
+
 - **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 44.9 s), and the vertical cut `dist/msghealth-promo-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
 - 9:16: `promo-vertical.html` renders the same film natively at 1080×1920 (`npm run render:promo:9x16`). Each scene has its own framing
   (`FRAMING` in `src/promo.js`). The iPhone fills the frame, the laptop fills the width and pushes closer while a feature is shown,
-  the feature titles sit above the laptop, and the health-score and win-back scenes use stacked layouts.
+  the feature titles sit above the laptop, the month cards sit in a 2 × 2 grid, the health-score scene is stacked and the win-back steps form one column.
 - Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top (120 BPM, first downbeat 0.348 s), and all timing is written in beats (`b(k)`).
   Scenes start on bar downbeats and are grouped into 4-bar phrases.
 - Music: `assets/audio/promo-track.m4a` (from the supplied screen recording). Check you have the rights before running it as a paid ad.

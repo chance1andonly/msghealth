@@ -30,7 +30,7 @@ function hits(from, n) {
   return Array.from({ length: n }, (_, i) => O[i] ?? from + i * 0.12);
 }
 
-let ctx = null, MAIN = null, LOGO = null;
+let ctx = null, MAIN = null, LOGO = null, EYES = null;
 
 // ── maths ────────────────────────────────────────────────────────────────────
 const clamp = (v, a = 0, c = 1) => Math.max(a, Math.min(c, v));
@@ -113,10 +113,10 @@ function line(t, chunks, x, y, size, o = {}) {
 }
 
 // ── the stage: black, with an optional soft glow behind the subject ──────────
-function stage(glow = 0, col = C.primary, gy = 0.55) {
+function stage(glow = 0, col = C.primary, gy = 0.55, R = 950) {
   ctx.fillStyle = '#000'; ctx.fillRect(-2 * W, -3 * H, 5 * W, 7 * H);
   if (glow <= 0) return;
-  const g = ctx.createRadialGradient(W / 2, H * gy, 0, W / 2, H * gy, 950);
+  const g = ctx.createRadialGradient(W / 2, H * gy, 0, W / 2, H * gy, R);
   g.addColorStop(0, rgba(col, glow)); g.addColorStop(1, rgba(col, 0));
   ctx.fillStyle = g; ctx.fillRect(-2 * W, -3 * H, 5 * W, 7 * H);
 }
@@ -157,18 +157,8 @@ function headline(t, chunks, x, y, size, o = {}) {
   });
   return total;
 }
-// Our own drawing in the style of the 👀 emoji: glossy eyes glancing to the side.
-function eyesEmoji(x, y, s) {
-  [-1, 1].forEach((side) => {
-    const ex = x + side * s * 0.19;
-    const g = ctx.createRadialGradient(ex - s * 0.05, y - s * 0.1, s * 0.02, ex, y, s * 0.3);
-    g.addColorStop(0, '#ffffff'); g.addColorStop(0.65, '#f2f2f5'); g.addColorStop(1, '#c4c4cc');
-    ctx.beginPath(); ctx.ellipse(ex, y, s * 0.165, s * 0.25, 0, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
-    ctx.strokeStyle = 'rgba(0,0,0,0.22)'; ctx.lineWidth = s * 0.014; ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(ex - s * 0.07, y + s * 0.03, s * 0.085, s * 0.13, 0, 0, Math.PI * 2); ctx.fillStyle = '#17171b'; ctx.fill();
-    ctx.beginPath(); ctx.arc(ex - s * 0.095, y - s * 0.035, s * 0.026, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.fill();
-  });
-}
+// The 👀 emoji (assets/eyes-emoji.png), h tall, centred on x, y.
+function eyesEmoji(x, y, h) { if (EYES) ctx.drawImage(EYES, x - (h * EYES.width) / EYES.height / 2, y - h / 2, (h * EYES.width) / EYES.height, h); }
 
 // ── iPhone + Messages ────────────────────────────────────────────────────────
 function iphone(x, y, w, h, screen) {
@@ -406,12 +396,12 @@ const TRANSITIONS = {
     const R0 = 1700, R = CAM_D + R0, ph1 = 1.15, ph = ph1 * xio(p);
     return one([plane('A', {}), plane('B', { x: R0 * Math.sin(ph1), z: -R0 + R0 * Math.cos(ph1), ry: ph1 })], { x: R * Math.sin(ph), z: -R0 + R * Math.cos(ph) - CAM_D, yaw: ph });
   } },
-  // → laptop opens: the laptop shot rises up from below, tilted, as the words float off the top
+  // → "Repeat clients": the laptop floats off the top, tilted, as the words rise up from below
   rise: { scene(p) {
     const e = xio(p);
     return one([plane('A', { y: OUT.h * 0.9 * e, rx: -0.45 * e, z: -300 * e, a: 1 - clamp((p - 0.6) / 0.4) }), plane('B', { y: -OUT.h * 1.1 * (1 - e), rx: 0.5 * (1 - e), z: -300 * (1 - e) })]);
   } },
-  // → health scores: the laptop eases back and down out of shot while the next shot comes forward to rest
+  // → health scores: the words ease back and down out of shot while the card comes forward to rest
   settle: { scene(p) {
     const e = xio(p), k = qn(clamp((p - 0.2) / 0.8));
     return one([plane('A', { rx: -0.45 * e, py: -OUT.h / 2, y: -OUT.h * 0.3 * e, z: -900 * e, a: 1 - clamp((p - 0.45) / 0.4) }), plane('B', { z: -1300 * (1 - k), a: clamp(k * 1.6), layer: 1 })]);
@@ -619,7 +609,7 @@ function homeWorld(t, o = {}) {
   box(1573, 426, 315, 520, 10);
   text('Needs attention', 1591, 452, 14, 600, '#16162a'); text('5 open items, most urgent first', 1591, 472, 11.5, 400, MUTED);
   [['Camille Duval', 'Invoice INV-0011 is 12 days overdue', '$75.78'], ['Melissa Grant', 'Invoice INV-0009 is 9 days overdue', '$108.25'],
-    ['Jordan Marsh', 'Overdue for a repeat visit, last seen 43 days ago', ''], ['Riley Delgado', 'No booking in 69 days', '']].forEach(([n, s2, v], i) => {
+    ['Jordan Marsh', 'Overdue for a repeat visit, 43 days', ''], ['Riley Delgado', 'No booking in 69 days', '']].forEach(([n, s2, v], i) => {
     const y = 510 + i * 92;
     ctx.beginPath(); ctx.arc(1595, y, 4, 0, 7); ctx.fillStyle = i < 2 ? C.risk : '#b5b5c8'; ctx.fill();
     text(n, 1607, y, 13, 600, '#16162a'); if (v) text(v, 1872, y, 13, 600, '#16162a', 'right');
@@ -701,12 +691,13 @@ function reviewsWorld(t, mode, sent) {
 }
 
 // ── Analytics & Predictions ──────────────────────────────────────────────────
+// Shown first, straight after the texts, so the viewer sees the product before it's explained.
 const RISE = { // beat-locked: the camera arrives on a card, then it climbs
-  health: [b(69.5), b(71)],
-  rebook: [b(72), b(73.5)],
-  forecast: [b(74.5), b(76)],
-  revenue: [b(77), b(78.5)],
-  cohort: [b(78.75), b(79.75)],
+  health: [b(8.5), b(10)],
+  rebook: [b(11), b(12.5)],
+  forecast: [b(13.5), b(15)],
+  revenue: [b(16), b(17.5)],
+  cohort: [b(17.75), b(18.75)],
 };
 const r = (t, k) => ease.inOut(seg(t, RISE[k][0], RISE[k][1]));
 const LAYOUT = { // world coordinates of the dashboard page (1920 × 1080)
@@ -870,7 +861,7 @@ function cardCohort(t) {
   });
 }
 function dashboardWorld(t) {
-  const at = b(68), cardAt = hits(b(68) + 0.05, 5);
+  const at = b(4), cardAt = hits(b(5.5), 5); // the frame is there as the lid opens; the cards land once it's up
   ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = '#fafafc'; ctx.fillRect(LAYOUT.side, 0, W - LAYOUT.side, H);
   snapIn(t, at, 150, H / 2, () => dashSidebar(t), { dy: 0, from: 0.98 });
@@ -883,13 +874,20 @@ function dashboardWorld(t) {
 // Camera keys: [time, centre x, centre y, zoom]. Moves start on a beat and settle in 0.4s.
 const focus = (k, z) => { const [x, y, w, h] = cardBox[k]; return [x + w / 2, y + h / 2, z]; };
 const CAM = [
-  [b(68), W / 2, H / 2, 1],
-  [b(69), ...focus('health', 2.4)],
-  [b(71.5), ...focus('rebook', 2.4)],
-  [b(74), ...focus('forecast', 1.8)],
-  [b(76.5), ...focus('revenue', 2.4)],
-  [b(78.5), W / 2, H / 2, 1],
+  [b(7), W / 2, H / 2, 1],
+  [b(8), ...focus('health', 2.4)],
+  [b(10.5), ...focus('rebook', 2.4)],
+  [b(13), ...focus('forecast', 1.8)],
+  [b(15.5), ...focus('revenue', 2.4)],
+  [b(17.5), W / 2, H / 2, 1],
 ];
+function sDashboard(t) { // the MacBook opens straight onto the numbers
+  stage(0.12, C.primary, 0.6);
+  const open = ease.inOut(seg(t, b(4), b(4) + 1.1)), lift = (1 - ease.quint(seg(t, b(4), b(4) + 1.4))) * 90;
+  const cam = camAt(t);
+  laptop(t, cam, () => dashboardWorld(t), { open, lift });
+  featureTag(t, b(5.5), 'Analytics & Predictions', 'Watch retention climb, one number at a time.', cam[2]);
+}
 function camAt(t, keys = CAM) {
   let c = keys[0].slice(1);
   for (let i = 1; i < keys.length; i++) {
@@ -905,7 +903,7 @@ function camAt(t, keys = CAM) {
 // The film. Phrases are 4 bars (16 beats, ~8s); scenes start on downbeats.
 // ═════════════════════════════════════════════════════════════════════════════
 
-// ── A · beats 0–16 · the text ────────────────────────────────────────────────
+// ── A · beats 0–4 · the text (the dashboard follows on the drop, beats 4–20) ───
 const HOOK = [["I don't know how", 0], ['barbers could live', 1.5], ['without this', 2.5, true]]; // all sent before the drop at beat 4
 // Sound cues (scripts/promo-audio.mjs places each sound's attack or peak on its time).
 // The sent swoosh peaks as each bubble lands (~0.11s after it starts to pop up).
@@ -929,13 +927,13 @@ function messages(t, sx, sy, sw, sh) {
   let y = sy + 286;
   const shown = HOOK.filter(([, k]) => t >= b(k));
   shown.forEach(([s, k, eyes], i) => {
-    const lines = wrapText(s, size, 400, maxW), last = i === shown.length - 1, es = 54;
+    const lines = wrapText(s, size, 400, maxW), last = i === shown.length - 1, es = 34, ew = EYES ? (es * EYES.width) / EYES.height : es * 1.3;
     const lh = size * 1.28, h = lines.length * lh + 26;
     const y0 = y;
     snapIn(t, b(k), x1 - 40, y0 + h, () => {
-      const bb = sentBubble(x1, y0, lines, size, last, eyes ? tw(' ', size, 400, 0) + es * 0.72 : 0);
+      const bb = sentBubble(x1, y0, lines, size, last, eyes ? tw(' ', size, 400, 0) + ew : 0);
       if (eyes) {
-        eyesEmoji(bb.x + bb.w - 22 - es * 0.36, y0 + h / 2 + 1, es); // "this 👀"
+        eyesEmoji(bb.x + bb.w - 22 - ew / 2, y0 + h / 2, es); // "this 👀"
         HOOK_LAST = ctx.getTransform().transformPoint(new DOMPoint(bb.x + bb.w / 2, y0 + h / 2)); // the dive aims here
       }
 
@@ -963,93 +961,113 @@ function sHook(t) {
   ctx.restore();
 }
 
-// ── B · beats 16–32 · the problem ────────────────────────────────────────────
+// ── B · beats 20–36 · the problem ────────────────────────────────────────────
 function sRegulars(t) {
   stage();
-  headline(t, [['Repeat clients', b(4)]], W / 2, H / 2 - 72, 128);
-  headline(t, [['are the', b(5)], ['business.', b(5), true]], W / 2, H / 2 + 72, 128);
+  headline(t, [['Repeat clients', b(20)]], W / 2, H / 2 - 72, 128);
+  headline(t, [['are the', b(21)], ['business.', b(21), true]], W / 2, H / 2 + 72, 128);
 }
 function sStops(t) {
   stage();
-  const focus = ease.inOut(seg(t, b(12), b(13)));
+  if (VERT) { headline(t, [['But when a regular', b(24)]], W / 2, 170, 84); headline(t, [['stops booking…', b(24.5)]], W / 2, 270, 84); }
+  else headline(t, [['But when a regular', b(24)], ['stops booking…', b(24.5)]], W / 2, 220, 84);
+  // four months in a 2 × 2 grid; the camera leans in on the empty one
+  const cw = 360, ch = 210, gx = 32, gy = 28, x0 = W / 2 - cw - gx / 2, y0 = VERT ? 360 : 318;
+  const focus = ease.inOut(seg(t, b(28), b(29))), fx = x0 + cw + gx + cw / 2, fy = y0 + ch + gy + ch / 2, z = 1 + 0.12 * focus;
   ctx.save();
-  const fx = 1385, fy = 600, z = 1 + 0.22 * focus;
-  ctx.translate(lerp(W / 2, fx, focus * 0.6), lerp(H / 2, fy, focus * 0.6)); ctx.scale(z, z); ctx.translate(-lerp(W / 2, fx, focus * 0.6), -lerp(H / 2, fy, focus * 0.6));
-  headline(t, [['But when a regular', b(8)], ['stops booking…', b(8.5)]], W / 2, 270, 84);
-  const months = ['Jan', 'Feb', 'Mar', 'Apr'], cw = 300, ch = 270, gap = 40, x0 = W / 2 - (4 * cw + 3 * gap) / 2, y0 = 440;
-  months.forEach((m, i) => {
-    const x = x0 + i * (cw + gap), empty = i === 3;
+  ctx.translate(fx, fy); ctx.scale(z, z); ctx.translate(-fx, -fy);
+  ['Jan', 'Feb', 'Mar', 'Apr'].forEach((m, i) => {
+    const x = x0 + (i % 2) * (cw + gx), y = y0 + Math.floor(i / 2) * (ch + gy), empty = i === 3;
     ctx.save(); if (!empty) ctx.globalAlpha = 1 - 0.65 * focus;
-    snapIn(t, b(9 + i * 0.5), x + cw / 2, y0 + ch / 2, () => {
+    snapIn(t, b(25 + i * 0.5), x + cw / 2, y + ch / 2, () => {
       if (empty) {
-        fillRR(x, y0, cw, ch, 30, 'rgba(236,95,79,0.06)');
-        ctx.setLineDash([12, 10]); rr(x, y0, cw, ch, 30); ctx.strokeStyle = 'rgba(236,95,79,0.75)'; ctx.lineWidth = 2.5; ctx.stroke(); ctx.setLineDash([]);
-        text(m, x + 34, y0 + 54, 34, 700, '#ff8a7a');
-        text('No booking', x + cw / 2, y0 + 165, 30, 600, '#ff8a7a', 'center');
+        fillRR(x, y, cw, ch, 30, 'rgba(236,95,79,0.06)');
+        ctx.setLineDash([12, 10]); rr(x, y, cw, ch, 30); ctx.strokeStyle = 'rgba(236,95,79,0.75)'; ctx.lineWidth = 2.5; ctx.stroke(); ctx.setLineDash([]);
+        text(m, x + 32, y + 48, 34, 700, '#ff8a7a');
+        text('No booking', x + cw / 2, y + 128, 30, 600, '#ff8a7a', 'center');
         return;
       }
-      glass(x, y0, cw, ch, 30);
-      text(m, x + 34, y0 + 54, 34, 700, '#ffffff');
-      fillRR(x + 26, y0 + 112, cw - 52, 110, 20, 'rgba(129,140,248,0.18)');
-      ctx.beginPath(); ctx.arc(x + 76, y0 + 167, 26, 0, 7); ctx.fillStyle = 'rgba(165,156,255,0.3)'; ctx.fill();
-      text('JL', x + 76, y0 + 168, 20, 700, '#d9d6ff', 'center');
-      text('Jordan', x + 116, y0 + 152, 26, 700, '#ffffff');
-      text('10:00 · Cut', x + 116, y0 + 184, 21, 500, SOFT);
+      glass(x, y, cw, ch, 30);
+      text(m, x + 32, y + 48, 34, 700, '#ffffff');
+      fillRR(x + 24, y + 86, cw - 48, 100, 20, 'rgba(129,140,248,0.18)');
+      ctx.beginPath(); ctx.arc(x + 76, y + 136, 26, 0, 7); ctx.fillStyle = 'rgba(165,156,255,0.3)'; ctx.fill();
+      text('JL', x + 76, y + 137, 20, 700, '#d9d6ff', 'center');
+      text('Jordan', x + 116, y + 121, 26, 700, '#ffffff');
+      text('10:00 · Cut', x + 116, y + 153, 21, 500, SOFT);
     }, { dy: 26, blur: 10 });
     ctx.restore();
   });
   ctx.restore();
-  headline(t, [['No reply.', b(13)], ['No warning.', b(13.5)]], W / 2, 900, 46, { color: SOFT, weight: 600 });
+  headline(t, [['No reply.', b(29)], ['No warning.', b(29.5)]], W / 2, VERT ? 900 : 860, 46, { color: SOFT, weight: 600 });
 }
-window.MUFFLE = [b(16), b(20)];
-const GONE = { from: b(18.5), at: b(19) };
+window.MUFFLE = [b(32), b(36)];
+const GONE = { from: b(34.5), at: b(35) };
 window.SFX.push({ t: GONE.at, kind: 'flash' });
 function mixHex(a, c, k) { const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)); const x = p(a), y = p(c); return `rgb(${x.map((v, i) => Math.round(lerp(v, y[i], k))).join(',')})`; } // the music goes underwater for this bar, then the logo lands
-// Sunrays and a red wash that come out of "gone.": they build as the word turns red, open fully on the
-// camera flash, then the wash keeps growing outward until the cut.
-function goneGlare(t, x, y) {
-  const build = ease.inOut(seg(t, GONE.from, GONE.at)), burst = ease.out(seg(t, GONE.at, GONE.at + 0.35));
-  const grow = ease.out(seg(t, GONE.at, b(20)));
+// Light rays (the After Effects "CC Light Rays" look): a light sits just behind "gone." and the
+// letters themselves stream out as soft rays, a radial blur of the word away from that light. They
+// build as the word turns red, open fully on the camera flash, and the light drifts across the word
+// while a red wash keeps growing outward until the cut.
+const RAY = { w: 1500, h: 1100, s: 0.5 }; // ray buffers: w × h stage px around the word, at scale s
+let RAYB = null;
+function goneRays(t, x, y, xl, wordAt, col) {
+  const build = ease.inOut(seg(t, GONE.from, GONE.at)), burst = ease.out(seg(t, GONE.at, GONE.at + 0.4));
+  const grow = ease.out(seg(t, GONE.at, b(36)));
   if (build <= 0) return;
-  ctx.save();
-  ctx.globalCompositeOperation = 'lighter';
   // the wash: a red gradient that grows from the word across the frame
-  const R = lerp(140, 1700, grow);
-  const g = ctx.createRadialGradient(x, y, 0, x, y, R);
-  g.addColorStop(0, 'rgba(255,59,48,0)'); g.addColorStop(Math.min(0.5, 170 / R), `rgba(255,59,48,${0.38 * build})`); g.addColorStop(Math.min(0.75, 170 / R + 0.3), `rgba(200,30,30,${0.16 * build})`); g.addColorStop(1, 'rgba(120,10,10,0)');
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  const R = lerp(160, 1500, grow), g = ctx.createRadialGradient(x, y, 0, x, y, R);
+  g.addColorStop(0, `rgba(255,59,48,${0.22 * build})`); g.addColorStop(0.45, `rgba(200,30,30,${0.1 * build})`); g.addColorStop(1, 'rgba(120,10,10,0)');
   ctx.fillStyle = g; ctx.fillRect(-2 * W, -3 * H, 5 * W, 7 * H);
-  // the rays: soft wedges turning slowly, reaching further after the flash
-  const n = 16, len = lerp(260, 1500, 0.35 * build + 0.65 * burst), turn = (t - GONE.from) * 0.18;
-  const rg = ctx.createRadialGradient(x, y, 150, x, y, len); // rays start just outside the word
-  rg.addColorStop(0, `rgba(255,120,100,${0.42 * build})`); rg.addColorStop(0.4, `rgba(255,59,48,${0.16 * build})`); rg.addColorStop(1, 'rgba(255,59,48,0)');
-  ctx.filter = 'blur(8px)'; ctx.fillStyle = rg; ctx.beginPath();
-  for (let i = 0; i < n; i++) {
-    const a = turn + (i / n) * Math.PI * 2, wdt = (i % 2 ? 0.05 : 0.09);
-    ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a - wdt) * len, y + Math.sin(a - wdt) * len); ctx.lineTo(x + Math.cos(a + wdt) * len, y + Math.sin(a + wdt) * len); ctx.closePath();
-  }
-  ctx.fill();
-  // a thin horizontal glare streak through the word
-  const sg = ctx.createLinearGradient(x - 900, 0, x + 900, 0);
-  sg.addColorStop(0, 'rgba(255,90,70,0)'); sg.addColorStop(0.5, `rgba(255,170,150,${0.6 * build})`); sg.addColorStop(1, 'rgba(255,90,70,0)');
-  ctx.filter = 'blur(4px)'; ctx.fillStyle = sg; ctx.fillRect(x - 900, y + 46, 1800, 5); // just under the word
   ctx.restore();
-  // a dark pocket around the word so it stays readable against the light
-  ctx.save(); const k = ctx.createRadialGradient(x, y, 0, x, y, 230);
-  k.addColorStop(0, `rgba(0,0,0,${0.75 * build})`); k.addColorStop(0.6, `rgba(0,0,0,${0.45 * build})`); k.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = k; ctx.fillRect(x - 240, y - 240, 480, 480); ctx.restore();
+  const bw = Math.round(RAY.w * RAY.s), bh = Math.round(RAY.h * RAY.s);
+  if (!RAYB) RAYB = [0, 1].map(() => { const c = document.createElement('canvas'); c.width = bw; c.height = bh; return c.getContext('2d'); });
+  let [A, B] = RAYB;
+  // the source: the word itself, dim, exactly where (and as) the headline draws it
+  const prev = ctx; ctx = A;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, bw, bh);
+  ctx.scale(RAY.s, RAY.s); ctx.translate(RAY.w / 2 - x, RAY.h / 2 - y);
+  ctx.globalAlpha = 0.34;
+  const word = (edge = 0) => riseIn(t, wordAt, () => {
+    font(100, 700, -0.035); ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = col; ctx.fillText('gone.', xl, y);
+    if (edge) { ctx.strokeStyle = col; ctx.lineWidth = edge; ctx.lineJoin = 'round'; ctx.strokeText('gone.', xl, y); }
+  }, { dy: 32 });
+  word();
+  ctx = prev;
+  // the light sits just under the word, so the rays fan up and out, and drifts left to right
+  const drift = ease.inOut(seg(t, GONE.from, b(36))), lx = (RAY.w / 2 + lerp(-110, 110, drift)) * RAY.s, ly = (RAY.h / 2 + 70) * RAY.s;
+  // radial blur by repeated doubling: 5 passes = 32 copies, each scaled a step further from the light
+  const F = 1 + 0.4 * build + 0.8 * burst + 0.25 * grow, N = 32, decay = 0.9;
+  for (let k = 0; k < 5; k++) {
+    const sc = Math.pow(F, Math.pow(2, k) / N);
+    B.setTransform(1, 0, 0, 1, 0, 0); B.globalAlpha = 1; B.globalCompositeOperation = 'source-over';
+    B.drawImage(A.canvas, 0, 0);
+    B.globalCompositeOperation = 'lighter'; B.globalAlpha = Math.pow(decay, Math.pow(2, k));
+    B.translate(lx, ly); B.scale(sc, sc); B.translate(-lx, -ly);
+    B.drawImage(A.canvas, 0, 0);
+    [A, B] = [B, A];
+  }
+  // cut the letters, and a thin dark edge around them, out of the light so the word stays crisp
+  ctx = A; ctx.setTransform(RAY.s, 0, 0, RAY.s, (RAY.w / 2 - x) * RAY.s, (RAY.h / 2 - y) * RAY.s); ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'destination-out'; word(10); ctx.globalCompositeOperation = 'source-over';
+  ctx = prev;
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.55 * build + 0.45 * burst;
+  ctx.filter = 'blur(2px)';
+  ctx.drawImage(A.canvas, x - RAY.w / 2, y - RAY.h / 2, RAY.w, RAY.h);
+  ctx.restore();
 }
 function sDark(t) {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   const y2 = H / 2 + 70, tr = -0.035, w1 = tw("until they're", 100, 700, tr), gap = tw(' ', 100, 700, tr), w2 = tw('gone.', 100, 700, tr);
-  goneGlare(t, W / 2 - (w1 + gap + w2) / 2 + w1 + gap + w2 / 2, y2); // centred on "gone."
-  headline(t, [["You won't see it coming", b(16)]], W / 2, H / 2 - 70, 100, { color: '#ffffff' });
-  const red = ease.inOut(seg(t, GONE.from, GONE.at)); // "gone." turns red, finishing exactly on the camera flash
-  if (red > 0) { ctx.save(); ctx.shadowColor = `rgba(255,59,48,${0.9 * red})`; ctx.shadowBlur = 40 * red; } // the red word glows
-  headline(t, [["until they're", b(18)], ['gone.', b(18), false, mixHex('#ffffff', '#ff453a', red)]], W / 2, y2, 100, { color: '#ffffff' });
-  if (red > 0) ctx.restore();
+  const xl = W / 2 - (w1 + gap + w2) / 2 + w1 + gap; // where "gone." starts
+  const red = ease.inOut(seg(t, GONE.from, GONE.at)), col = mixHex('#ffffff', '#ff453a', red); // "gone." turns red, finishing exactly on the camera flash
+  goneRays(t, xl + w2 / 2, y2, xl, b(34), '#d81e18'); // the rays run a deeper red than the word
+  headline(t, [["You won't see it coming", b(32)]], W / 2, H / 2 - 70, 100, { color: '#ffffff' });
+  headline(t, [["until they're", b(34)], ['gone.', b(34), false, col]], W / 2, y2, 100, { color: '#ffffff' });
 }
 
-// ── C · beats 32–48 · MsgHealth ──────────────────────────────────────────────
+// ── C · beats 36–44 · MsgHealth ──────────────────────────────────────────────
 // The logo lands in the middle, steps right, then sweeps left as the name wipes in behind it.
 function lockup(t, at, y, ls, size, o = {}) {
   const ww = tw(BRAND.name, size, 700, -0.035), gap = -0.06 * ls, full = ls + gap + ww;
@@ -1072,46 +1090,39 @@ function lockup(t, at, y, ls, size, o = {}) {
     ctx.restore();
   }
   riseIn(t, at, () => {
-    const gl = ctx.createRadialGradient(lx, y, 0, lx, y, ls * 1.4);
-    gl.addColorStop(0, 'rgba(99,102,241,0.35)'); gl.addColorStop(1, 'rgba(99,102,241,0)');
-    ctx.fillStyle = gl; ctx.fillRect(lx - ls * 1.5, y - ls * 1.5, ls * 3, ls * 3);
+    const gl = ctx.createRadialGradient(lx, y, 0, lx, y, ls * 0.8); // a tight glow, just behind the mark
+    gl.addColorStop(0, 'rgba(99,102,241,0.3)'); gl.addColorStop(1, 'rgba(99,102,241,0)');
+    ctx.fillStyle = gl; ctx.fillRect(lx - ls, y - ls, ls * 2, ls * 2);
     logoMark(lx, y, ls);
   }, o.static ? { dy: 0, d: 0.2, blur: 6 } : { dy: 0, d: 0.8, blur: 20 });
 }
 function sMeet(t) {
-  stage(0.16 * ease.quint(seg(t, b(20), b(21))), C.primary, 0.48);
-  lockup(t, b(20), H / 2 - 30, 200, 164);
-  headline(t, [['Client retention for barbers.', b(23)]], W / 2, H / 2 + 150, 46, { color: SOFT, weight: 600 });
+  stage(0.14 * ease.quint(seg(t, b(36), b(37))), C.primary, 0.48, 560);
+  lockup(t, b(36), H / 2 - 30, 200, 164);
+  headline(t, [['Client retention for barbers.', b(39)]], W / 2, H / 2 + 150, 46, { color: SOFT, weight: 600 });
 }
 function sWhat(t) {
   stage();
-  headline(t, [['It tells you', b(24)], ['who’s drifting', b(24.5), true]], W / 2, 400, 104);
-  headline(t, [['and brings them', b(25)], ['back.', b(25), true]], W / 2, 540, 104);
+  headline(t, [['It tells you', b(40)], ['who’s drifting', b(40.5), true]], W / 2, 400, 104);
+  headline(t, [['and brings them', b(41)], ['back.', b(41), true]], W / 2, 540, 104);
   const chips = ['Health scores', 'Churn alerts', 'Automatic win-backs'], size = 28;
-  const ws = chips.map((s) => tw(s, size, 600) + 56), gap = 20, at = hits(b(26), 3);
+  const ws = chips.map((s) => tw(s, size, 600) + 56), gap = 20, at = hits(b(42), 3);
   let x = W / 2 - (ws.reduce((a, c) => a + c, 0) + gap * 2) / 2;
   chips.forEach((s, i) => { const x0 = x; snapIn(t, at[i], x0 + ws[i] / 2, 700, () => { glass(x0, 672, ws[i], 56, 28); text(s, x0 + ws[i] / 2, 701, size, 600, '#fff', 'center'); }, { dy: 14 }); x += ws[i] + gap; });
 }
-function sReveal(t) { // the MacBook opens on the product
-  stage(0.12, C.primary, 0.6);
-  const open = ease.inOut(seg(t, b(28), b(28) + 1.1)), lift = (1 - ease.quint(seg(t, b(28), b(28) + 1.4))) * 90;
-  const z = 1 + 0.06 * ease.inOut(seg(t, b(29), b(32)));
-  laptop(t, [960, 560, z], () => homeWorld(t), { open, lift });
-  headline(t, [['Every client, every visit, in one calm view.', b(30)]], W / 2, 1010, 34, { color: SOFT, weight: 600 });
-}
 
-// ── D · beats 48–64 · how it works (the song's breakdown) ────────────────────
+// ── D · beats 44–64 · how it works ───────────────────────────────────────────
 function sHealth(t) {
   stage(0.12);
   if (VERT) { // stacked: the headline sits over the card
-    headline(t, [['Every client', b(32)]], W / 2, 20, 92);
-    headline(t, [['gets a', b(32.5)], ['health score.', b(32.5), true]], W / 2, 125, 92);
+    headline(t, [['Every client', b(44)]], W / 2, 20, 92);
+    headline(t, [['gets a', b(44.5)], ['health score.', b(44.5), true]], W / 2, 125, 92);
   } else {
-    headline(t, [['Every client', b(32)]], 150, 440, 92, { align: 'left' });
-    headline(t, [['gets a', b(32.5)], ['health score.', b(32.5), true]], 150, 550, 92, { align: 'left' });
+    headline(t, [['Every client', b(44)]], 150, 440, 92, { align: 'left' });
+    headline(t, [['gets a', b(44.5)], ['health score.', b(44.5), true]], 150, 550, 92, { align: 'left' });
   }
-  const w = 770, x = VERT ? W / 2 - w / 2 : 1010, rh = 112, y0 = 250, flag = b(34.5), at = hits(b(33), 5);
-  snapIn(t, b(33), x + w / 2, H / 2, () => glass(x, y0 - 40, w, rh * 5 + 80, 34), { dy: 20 });
+  const w = 770, x = VERT ? W / 2 - w / 2 : 1010, rh = 112, y0 = 250, flag = b(46.5), at = hits(b(45), 5);
+  snapIn(t, b(45), x + w / 2, H / 2, () => glass(x, y0 - 40, w, rh * 5 + 80, 34), { dy: 20 });
   ROWS.forEach((r, i) => {
     const ry = y0 + 30 + i * rh, jordan = i === 2;
     snapIn(t, at[i], x + w / 2, ry, () => {
@@ -1120,8 +1131,8 @@ function sHealth(t) {
       text(r.i, x + 62, ry + 1, 21, 700, '#ffffff', 'center');
       text(r.n, x + 108, ry - 13, 27, 600, '#ffffff');
       text(r.v, x + 108, ry + 19, 20, 500, jordan ? '#ff8a7a' : SOFT);
-      text(String(r.s), x + 460, ry + 1, 32, 700, r.sc, 'right');
-      fillRR(x + 478, ry - 5, 90, 10, 5, 'rgba(255,255,255,0.12)'); fillRR(x + 478, ry - 5, (90 * r.s) / 100, 10, 5, r.sc);
+      text(String(r.s), x + 395, ry + 1, 32, 700, r.sc, 'right'); // clear of the widest pill ("Needs attention")
+      fillRR(x + 413, ry - 5, 90, 10, 5, 'rgba(255,255,255,0.12)'); fillRR(x + 413, ry - 5, (90 * r.s) / 100, 10, 5, r.sc);
       if (!jordan) pill(x + w - 30, ry, r.st, r.sc, 20, 'right');
       else snapIn(t, flag, x + w - 90, ry, () => pill(x + w - 30, ry, r.st, r.sc, 20, 'right'), { from: 0.6, dy: 0 });
     }, { dy: 16 });
@@ -1136,9 +1147,9 @@ const ROWS = [
 ];
 
 // AI Business Analyst on the MacBook
-const AI = { open: b(37.5), click: b(38), typeA: b(38), typeB: b(39.5), run: b(40), ans: b(40.5), send: b(43.5), out: b(44.75) };
+const AI = { open: b(49.5), click: b(50), typeA: b(50), typeB: b(51.5), run: b(52), ans: b(52.5), send: b(55.5), out: b(56.75) };
 [AI.click, AI.run, AI.send].forEach((t) => window.SFX.push({ t, kind: 'click' }));
-const AI_CAM = [[b(36), 960, 540, 1], [b(37), 960, 300, 2.0], [AI.ans, 960, 470, 1.6], [AI.out, 960, 540, 1]];
+const AI_CAM = [[b(48), 960, 540, 1], [b(49), 960, 300, 2.0], [AI.ans, 960, 470, 1.6], [AI.out, 960, 540, 1]];
 function analystWorld(t, z) {
   homeWorld(t);
   if (t >= AI.open) { ctx.fillStyle = `rgba(10,10,22,${0.55 * snapP(t, AI.open)})`; ctx.fillRect(0, 0, W, H); }
@@ -1175,28 +1186,31 @@ function analystWorld(t, z) {
       else snapIn(t, send, bx + bw / 2, by + 20, () => { fillRR(bx, by, bw, 40, 9, '#16a34a'); check(bx + 30, by + 20, 14, '#fff', 3); text('Win-back sent to 9 clients', bx + bw / 2 + 14, by + 20, 14, 600, '#fff', 'center'); }, { dy: 0, from: 0.92, blur: 4 });
     }, { dy: 14 });
   }, { dy: 20 });
-  pointer(t, [[b(36), 1210, 620], [AI.click, 980, 152], [AI.run, 1345, 150], [send, 560, 760]], [AI.click, AI.run, send], z);
+  pointer(t, [[b(48), 1210, 620], [AI.click, 980, 152], [AI.run, 1345, 150], [send, 560, 760]], [AI.click, AI.run, send], z);
 }
 function sAnalyst(t) {
   stage(0.1);
   const cam = camAt(t, AI_CAM);
   laptop(t, cam, (z) => analystWorld(t, z));
-  featureTag(t, b(36), 'AI Business Analyst', 'Ask in plain words. Get an answer from your data.', cam[2]);
+  featureTag(t, b(48), 'AI Business Analyst', 'Ask in plain words. Get an answer from your data.', cam[2]);
 }
 
 // Win them back
 function sWinBack(t) {
   stage(0.14, '#7c3aed');
-  if (VERT) { headline(t, [['Win them back', b(46)]], W / 2, 60, 84); headline(t, [['on autopilot.', b(46.5), true]], W / 2, 160, 84); }
-  else headline(t, [['Win them back', b(46)], ['on autopilot.', b(46.5), true]], W / 2, 170, 84);
+  if (VERT) { headline(t, [['Win them back', b(58)]], W / 2, 60, 84); headline(t, [['on autopilot.', b(58.5), true]], W / 2, 160, 84); }
+  else headline(t, [['Win them back', b(58)], ['on autopilot.', b(58.5), true]], W / 2, 170, 84);
   const nodes = [['At risk detected', '#ff7a6b', 'alert'], ['Text sent', '#818cf8', 'chat'], ['Email follow-up', '#38bdf8', 'mail'], ['Invite to book', '#4ade80', 'cal']];
-  const nw = 330, nh = 120, gap = VERT ? 40 : 66, at = hits(b(47), 4);
-  const cols = VERT ? 2 : 4, x0 = W / 2 - (cols * nw + (cols - 1) * gap) / 2;
+  // 16:9: the four steps in a row; 9:16: one column, each step joined to the one above
+  const nw = VERT ? 430 : 330, nh = 120, gap = VERT ? 34 : 66, at = hits(b(59), 4);
+  const x0 = VERT ? W / 2 - nw / 2 : W / 2 - (4 * nw + 3 * gap) / 2;
   nodes.forEach(([label, col, icon], i) => {
-    const x = x0 + (i % cols) * (nw + gap), ny = VERT ? 250 + Math.floor(i / cols) * (nh + 30) : 290;
-    if (i % cols > 0 && t >= at[i]) {
-      const p = snapP(t, at[i]); ctx.strokeStyle = 'rgba(165,156,255,0.5)'; ctx.lineWidth = 3; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(x - gap + 10, ny + nh / 2); ctx.lineTo(x - gap + 10 + (gap - 20) * p, ny + nh / 2); ctx.stroke();
+    const x = VERT ? x0 : x0 + i * (nw + gap), ny = VERT ? 250 + i * (nh + gap) : 290;
+    if (i > 0 && t >= at[i]) {
+      const p = snapP(t, at[i]); ctx.strokeStyle = 'rgba(165,156,255,0.5)'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath();
+      if (VERT) { ctx.moveTo(x + 58, ny - gap + 8); ctx.lineTo(x + 58, ny - gap + 8 + (gap - 16) * p); }
+      else { ctx.moveTo(x - gap + 10, ny + nh / 2); ctx.lineTo(x - gap + 10 + (gap - 20) * p, ny + nh / 2); }
+      ctx.stroke();
     }
     snapIn(t, at[i], x + nw / 2, ny + nh / 2, () => {
       glass(x, ny, nw, nh, 26);
@@ -1206,10 +1220,10 @@ function sWinBack(t) {
       text(label, x + 104, ny + 76, 26, 700, '#fff');
     }, { dy: 18 });
   });
-  const size = 30, sx1 = VERT ? x0 + 2 * nw + gap : 1450, sy = VERT ? 590 : 500, rx = VERT ? x0 + 12 : 470, ry = VERT ? 760 : 650, by = VERT ? 940 : 860;
-  snapIn(t, b(48.5), sx1 - 250, sy + 60, () => { sentBubble(sx1, sy, ['Hi Jordan! We miss you. Want your', 'usual Thursday at 10:00?'], size, true); text('Delivered', sx1, sy + 118, 17, 500, 'rgba(235,235,245,0.45)', 'right', 0); }, { from: 0.6, dy: 50, blur: 0 });
-  snapIn(t, b(49.5), rx + 130, ry + 40, () => recvBubble(rx, ry, ['Yes please! See you then.'], size, true, true), { from: 0.6, dy: 30, blur: 0 });
-  snapIn(t, b(50.5), W / 2, by, () => {
+  const size = 30, sx1 = VERT ? 1345 : 1450, sy = VERT ? 880 : 500, rx = VERT ? 590 : 470, ry = VERT ? 1040 : 650, by = VERT ? 1190 : 860;
+  snapIn(t, b(60.5), sx1 - 250, sy + 60, () => { sentBubble(sx1, sy, ['Hi Jordan! We miss you. Want your', 'usual Thursday at 10:00?'], size, true); text('Delivered', sx1, sy + 118, 17, 500, 'rgba(235,235,245,0.45)', 'right', 0); }, { from: 0.6, dy: 50, blur: 0 });
+  snapIn(t, b(61.5), rx + 130, ry + 40, () => recvBubble(rx, ry, ['Yes please! See you then.'], size, true, true), { from: 0.6, dy: 30, blur: 0 });
+  snapIn(t, b(62.5), W / 2, by, () => {
     glass(W / 2 - 230, by - 38, 460, 76, 38, { fill: 'rgba(74,222,128,0.12)', stroke: 'rgba(74,222,128,0.4)' });
     ctx.beginPath(); ctx.arc(W / 2 - 180, by, 19, 0, 7); ctx.fillStyle = '#4ade80'; ctx.fill(); check(W / 2 - 180, by, 19, '#0b2e17', 4);
     text('Booked · Thu 10:00', W / 2 - 146, by + 1, 30, 700, '#bbf7d0');
@@ -1217,16 +1231,16 @@ function sWinBack(t) {
 }
 
 // ── E · beats 64–80 · booking and reviews ────────────────────────────────────
-const CALT = { open: b(54), book: b(55.5) };
+const CALT = { open: b(66), book: b(67.5) };
 [CALT.open, CALT.book].forEach((t) => window.SFX.push({ t, kind: 'click' }));
 const CAL_ADDED = [
-  [21, '11a', 'Chloe Bergeron', 'Signature Cut', b(55.5)],
-  [22, '2:30p', 'Renee Calloway', 'Skin Fade', b(56.5)],
-  [23, '10a', 'Reese Abara', 'Beard Trim', b(57)],
-  [20, '4p', 'Hannah McAllister', 'Hot Towel Shave', b(57.5)],
-  [24, '1p', 'Lauren Kowalczyk', 'Cut & Beard', b(58)],
+  [21, '11a', 'Chloe Bergeron', 'Signature Cut', b(67.5)],
+  [22, '2:30p', 'Renee Calloway', 'Skin Fade', b(68.5)],
+  [23, '10a', 'Reese Abara', 'Beard Trim', b(69)],
+  [20, '4p', 'Hannah McAllister', 'Hot Towel Shave', b(69.5)],
+  [24, '1p', 'Lauren Kowalczyk', 'Cut & Beard', b(70)],
 ];
-const CAL_CAM = [[b(52), 960, 540, 1], [b(53.5), 960, 700, 1.9], [b(56), 1010, 610, 1.3], [b(58.25), 960, 540, 1]];
+const CAL_CAM = [[b(64), 960, 540, 1], [b(65.5), 960, 700, 1.9], [b(68), 1010, 610, 1.3], [b(70.25), 960, 540, 1]];
 function calendarWorld(t, z) {
   homeWorld(t, { added: CAL_ADDED });
   const { open, book } = CALT;
@@ -1252,17 +1266,17 @@ function calendarWorld(t, z) {
     text(`${last[2]} · ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][(last[0] + 3) % 7]} ${last[1]}`, 1630, 904, 11.5, 500, MUTED);
     text('Reminder scheduled', 1630, 922, 11, 500, '#1f9d5c');
   }, { dy: 12 });
-  pointer(t, [[b(52), 1320, 300], [open, 950, 800], [book, 1030, 690], [b(56.5), 1330, 610]], [open, book], z);
+  pointer(t, [[b(64), 1320, 300], [open, 950, 800], [book, 1030, 690], [b(68.5), 1330, 610]], [open, book], z);
 }
 function sCalendar(t) {
   stage(0.1);
   const cam = camAt(t, CAL_CAM);
   laptop(t, cam, (z) => calendarWorld(t, z));
-  featureTag(t, b(52), 'Booking calendar', 'Clients book themselves. Reminders go out on their own.', cam[2]);
+  featureTag(t, b(64), 'Booking calendar', 'Clients book themselves. Reminders go out on their own.', cam[2]);
 }
-const REV = { open: b(61.5), s1: b(62.5), s2: b(63.5), feed: b(64.5), review: b(65.5) };
+const REV = { open: b(73.5), s1: b(74.5), s2: b(75.5), feed: b(76.5), review: b(77.5) };
 [REV.open, REV.s1, REV.s2, REV.feed].forEach((t) => window.SFX.push({ t, kind: 'click' }));
-const REV_CAM = [[b(60), 960, 540, 1], [b(61), 955, 470, 1.5], [REV.feed, 800, 420, 1.6], [b(66.25), 960, 540, 1]];
+const REV_CAM = [[b(72), 960, 540, 1], [b(73), 955, 470, 1.5], [REV.feed, 800, 420, 1.6], [b(78.25), 960, 540, 1]];
 function reviewsContent(t, z) {
   const { open, s1, s2, feed } = REV;
   if (t >= feed) reviewsWorld(t, 'feed', 2);
@@ -1290,22 +1304,16 @@ function reviewsContent(t, z) {
       }, { dy: 14 });
     }
   }
-  pointer(t, [[b(60), 900, 640], [open, 1258, 300], [s1, 1137, 309], [s2, 1137, 367], [feed, 352, 118], [b(66), 1240, 560]], [open, s1, s2, feed], z);
+  pointer(t, [[b(72), 900, 640], [open, 1258, 300], [s1, 1137, 309], [s2, 1137, 367], [feed, 352, 118], [b(78), 1240, 560]], [open, s1, s2, feed], z);
 }
 function sReviews(t) {
   stage(0.1);
   const cam = camAt(t, REV_CAM);
   laptop(t, cam, (z) => reviewsContent(t, z));
-  featureTag(t, b(60), 'Review requests', 'Every visit ends with a request. Five stars follow.', cam[2]);
+  featureTag(t, b(72), 'Review requests', 'Every visit ends with a request. Five stars follow.', cam[2]);
 }
 
-// ── F · beats 80–100 · results and close ─────────────────────────────────────
-function sDashboard(t) {
-  stage(0.1);
-  const cam = camAt(t);
-  laptop(t, cam, () => dashboardWorld(t));
-  featureTag(t, b(68), 'Analytics & Predictions', 'Watch retention climb, one number at a time.', cam[2]);
-}
+// ── F · beats 80–90 · close ──────────────────────────────────────────────────
 function sTagline(t) {
   stage(0.1);
   headline(t, [['Know your customers.', b(80)]], W / 2, H / 2 - 76, 124);
@@ -1313,7 +1321,7 @@ function sTagline(t) {
 }
 window.SFX.push({ t: b(84), kind: 'snap' }, { t: b(84), kind: 'riser' }); // the riser peaks as MsgHealth lands on the end card, with the snap
 function sEnd(t) {
-  stage(0.18, C.primary, 0.45);
+  stage(0.15, C.primary, 0.45, 580);
   lockup(t, b(84), H / 2 - 70, 190, 150, { static: true });
   headline(t, [[BRAND.url, b(85)]], W / 2, H / 2 + 80, 44, { color: SOFT, weight: 500 });
   riseIn(t, b(86), () => {
@@ -1328,18 +1336,17 @@ function sEnd(t) {
 // [start, end, scene, 3D transition into it, its length in seconds]. No transition means a straight cut.
 const SCENES = [
   [0, b(4), sHook],
-  [b(4), b(8), sRegulars, 'dive', 0.7],
-  [b(8), b(16), sStops, 'whip', 0.5],
-  [b(16), b(20), sDark, 'crane', 0.6],
-  [b(20), b(24), sMeet],                       // straight cut: the logo lands as the music returns
-  [b(24), b(28), sWhat, 'orbit', 0.7],
-  [b(28), b(32), sReveal, 'rise', 0.6],
-  [b(32), b(36), sHealth, 'settle', 0.7],
-  [b(36), b(46), sAnalyst, 'swing', 0.65],     // each laptop demo cuts ~0.5s after it zooms back out
-  [b(46), b(52), sWinBack, 'push', 0.6],
-  [b(52), b(60), sCalendar, 'stack', 0.7],
-  [b(60), b(68), sReviews],                    // laptop to laptop: straight cut
-  [b(68), b(80), sDashboard],                  // laptop to laptop: straight cut
+  [b(4), b(20), sDashboard, 'dive', 0.7],      // on the drop: the camera dives through the texts into the product
+  [b(20), b(24), sRegulars, 'rise', 0.6],
+  [b(24), b(32), sStops, 'whip', 0.5],
+  [b(32), b(36), sDark, 'crane', 0.6],
+  [b(36), b(40), sMeet],                       // straight cut: the logo lands as the music returns
+  [b(40), b(44), sWhat, 'orbit', 0.7],
+  [b(44), b(48), sHealth, 'settle', 0.7],
+  [b(48), b(58), sAnalyst, 'swing', 0.65],     // each laptop demo cuts ~0.5s after it zooms back out
+  [b(58), b(64), sWinBack, 'push', 0.6],
+  [b(64), b(72), sCalendar, 'stack', 0.7],
+  [b(72), b(80), sReviews],                    // laptop to laptop: straight cut
   [b(80), b(84), sTagline, 'fall', 0.7],       // on a phrase start
   [b(84), DURATION + 1, sEnd],                 // straight cut to the end card
 ];
@@ -1348,13 +1355,13 @@ const SCENES = [
 const fixed = (fx, fy, sc) => () => [fx, fy, sc];
 const lapFrame = (keys) => (t) => { const k = clamp((camAt(t, keys)[2] - 1) / 0.6); return [960, lerp(560, 540, k), lerp(0.8, 0.95, k)]; };
 const FRAMING = new Map([
-  [sHook, fixed(960, 540, 1.75)], [sRegulars, fixed(960, 540, 0.82)], [sStops, fixed(960, 560, 0.78)], [sDark, fixed(960, 540, 0.85)],
-  [sMeet, fixed(960, 560, 0.95)], [sWhat, fixed(960, 500, 0.76)], [sReveal, fixed(960, 560, 0.8)], [sHealth, fixed(960, 410, 1.15)],
-  [sAnalyst, lapFrame(AI_CAM)], [sWinBack, fixed(960, 500, 1.3)], [sCalendar, lapFrame(CAL_CAM)], [sReviews, lapFrame(REV_CAM)],
+  [sHook, fixed(960, 540, 1.75)], [sRegulars, fixed(960, 540, 0.82)], [sStops, fixed(960, 525, 1.25)], [sDark, fixed(960, 540, 0.85)],
+  [sMeet, fixed(960, 560, 0.95)], [sWhat, fixed(960, 500, 0.76)], [sHealth, fixed(960, 410, 1.15)],
+  [sAnalyst, lapFrame(AI_CAM)], [sWinBack, fixed(960, 620, 1.3)], [sCalendar, lapFrame(CAL_CAM)], [sReviews, lapFrame(REV_CAM)],
   [sDashboard, lapFrame(CAM)], [sTagline, fixed(960, 540, 0.8)], [sEnd, fixed(960, 560, 1.0)],
 ]);
 // The whoosh peaks at the fastest point of each move that brings the laptop in.
-SCENES.filter(([, , fn, type]) => type && [sReveal, sAnalyst, sCalendar].includes(fn)).forEach(([st, , , , dur]) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh' }));
+SCENES.filter(([, , fn, type]) => type && [sDashboard, sAnalyst, sCalendar].includes(fn)).forEach(([st, , , , dur]) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh' }));
 
 function renderFrame(t) {
   ctx = MAIN;
@@ -1375,7 +1382,8 @@ window.ready = (async () => {
   MAIN = document.getElementById('c').getContext('2d');
   ctx = MAIN;
   await Promise.all(['400', '500', '600', '700', '800'].map((w) => document.fonts.load(`${w} 40px ${FONT}`)));
-  LOGO = await new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = BRAND.logoFile; });
+  const load = (src) => new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+  [LOGO, EYES] = await Promise.all([load(BRAND.logoFile), load('assets/eyes-emoji.png')]);
   if (location.search.includes('render')) document.body.classList.add('render');
   renderFrame(0);
   return true;
