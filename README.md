@@ -108,13 +108,16 @@ Keep the delivery natural and conversational, as if one business owner were talk
 
 # 45-second product film (16:9, 60 fps)
 
-A keynote-style product film cut to "keep steady" (120 BPM). It has a black stage, large gradient type that fades up out of a
+A keynote-style product film for barbers, cut to "keep steady" (120 BPM). It has a black stage, large gradient type that fades up out of a
 soft blur, an iPhone for the opening text, and a MacBook that opens on the product. The product screens are rebuilt from
 MsgHealth screen recordings, with a large pointer. Scene changes are simple 3D camera moves rendered in WebGL with GPU motion
 blur. Each move travels one way and lands, with no overshoot and no snap-back. The laptop demos cut straight from one to the
 next, and the logo reveal and end card are straight cuts too.
 
-- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 44.9 s)
+- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 44.9 s), and the vertical cut `dist/msghealth-promo-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
+- 9:16: `promo-vertical.html` renders the same film natively at 1080×1920 (`npm run render:promo:9x16`). Each scene has its own framing
+  (`FRAMING` in `src/promo.js`). The iPhone fills the frame, the laptop fills the width and pushes closer while a feature is shown,
+  the feature titles sit above the laptop, and the health-score and win-back scenes use stacked layouts.
 - Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top (120 BPM, first downbeat 0.348 s), and all timing is written in beats (`b(k)`).
   Scenes start on bar downbeats and are grouped into 4-bar phrases.
 - Music: `assets/audio/promo-track.m4a` (from the supplied screen recording). Check you have the rights before running it as a paid ad.
