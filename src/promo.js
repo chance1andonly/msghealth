@@ -346,7 +346,7 @@ function plane(tex, o) {
   const R = M4.mul(M4.rz(rz), M4.mul(M4.ry(ry), M4.rx(rx)));
   const M = M4.mul(M4.t(x, y, z), M4.mul(M4.t(px, py, pz), M4.mul(R, M4.mul(M4.t(-px, -py, -pz), M4.s(w * sx, h * sy, 1)))));
   const uv = o.uv ?? [0, 0, W, H];
-  return { tex, M, R, a, lift, uv: [uv[0] / W, 1 - (uv[1] + uv[3]) / H, uv[2] / W, uv[3] / H] };
+  return { tex, M, R, a, lift, layer: o.layer ?? 0, uv: [uv[0] / W, 1 - (uv[1] + uv[3]) / H, uv[2] / W, uv[3] / H] };
 }
 const LIGHT = (() => { const l = [-0.28, 0.36, 1], n = Math.hypot(...l); return l.map((v) => v / n); })();
 // cam: x, y, z (offsets from the default position), yaw, pitch, roll (radians).
@@ -358,7 +358,7 @@ function glScene({ planes, cam = {} }) {
   planes.filter((q) => q && q.a > 0.003).map((q) => {
     const c = M4.apply(q.M, [0, 0, 0]), n = M4.apply(q.R, [0, 0, 1]);
     return { ...q, n, facing: n[0] * (eye[0] - c[0]) + n[1] * (eye[1] - c[1]) + n[2] * (eye[2] - c[2]), d: Math.hypot(eye[0] - c[0], eye[1] - c[1], eye[2] - c[2]) };
-  }).filter((q) => q.facing > 0).sort((p1, p2) => p2.d - p1.d).forEach((q) => { // painter's order, back faces hidden
+  }).filter((q) => q.facing > 0).sort((p1, p2) => p1.layer - p2.layer || p2.d - p1.d).forEach((q) => { // painter's order (layers first), back faces hidden
     const lit = (q.n[0] * LIGHT[0] + q.n[1] * LIGHT[1] + q.n[2] * LIGHT[2]) / LIGHT[2];
     gl.bindTexture(gl.TEXTURE_2D, GL.tex[q.tex === 'A' ? 0 : 1]);
     gl.uniformMatrix4fv(GL.m, false, new Float32Array(M4.mul(PV, q.M)));
@@ -460,12 +460,12 @@ const TRANSITIONS = {
   portal: {
     scene(p) {
       const e = xio(p), R = e * Math.hypot(W, H) * 0.56, za = 520 * e, planes = [plane('A', { z: za })];
-      // the next shot, cut into a disc of 48 slices that grows from the centre, just in front of the old shot
+      // the next shot, cut into a disc of 48 slices that grows from the centre, drawn over the old shot
       const n = 48, s = lerp(1.35, 1, qn(p));
       for (let i = 0; i < n && R > 2; i++) {
         const y0 = -R + (2 * R * i) / n, y1 = -R + (2 * R * (i + 1)) / n, yc = (y0 + y1) / 2, half = Math.sqrt(Math.max(0, R * R - yc * yc));
         const top = H / 2 - y1, hgt = y1 - y0, l = W / 2 - half;
-        planes.push(plane('B', { w: 2 * half, h: hgt + 0.8, x: 0, y: yc, z: za + 2, uv: [W / 2 + (l - W / 2) / s, H / 2 + (top - H / 2) / s, (2 * half) / s, hgt / s] }));
+        planes.push(plane('B', { w: 2 * half, h: hgt + 0.8, x: 0, y: yc, z: 0, layer: 1, uv: [W / 2 + (l - W / 2) / s, H / 2 + (top - H / 2) / s, (2 * half) / s, hgt / s] }));
       }
       return one(planes);
     },
