@@ -279,7 +279,7 @@ function lidOpening(p, content) {
   }
 }
 
-// ── transitions (each starts on its scene's first beat) ──────────────────────
+// ── transitions (3D, each starts on its scene's first beat) ──────────────────
 let BUF = [];
 function buffer(i) {
   if (!BUF[i]) { const c = document.createElement('canvas'); c.width = W; c.height = H; BUF[i] = c.getContext('2d'); }
@@ -293,132 +293,227 @@ function renderInto(i, fn, t) {
   ctx = prev;
   return buffer(i).canvas;
 }
-function put(img, { a = 1, blur = 0, s = 1, dx = 0, dy = 0 } = {}) {
-  if (a <= 0.002) return;
-  ctx.save(); ctx.globalAlpha = a;
-  if (blur > 0.3) ctx.filter = `blur(${blur.toFixed(1)}px)`;
-  ctx.translate(W / 2 + dx, H / 2 + dy); ctx.scale(s, s); ctx.drawImage(img, -W / 2, -H / 2);
-  ctx.restore();
+// Scene changes are camera moves in a real 3D scene (WebGL): both shots are textured planes, the camera
+// whips, orbits, cranes and dives between them, and every frame is motion-blurred by averaging sub-frames
+// across a short shutter, with light blooms and focus pulls where they belong. Each move is used once.
+const FOV = 0.7, CAM_D = (H / 2) / Math.tan(FOV / 2); // at z = 0 a W × H plane fills the frame exactly
+const M4 = {
+  mul(a, b) { const o = new Array(16); for (let c = 0; c < 4; c++) for (let r = 0; r < 4; r++) { let s = 0; for (let k = 0; k < 4; k++) s += a[k * 4 + r] * b[c * 4 + k]; o[c * 4 + r] = s; } return o; },
+  t: (x, y, z) => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1],
+  s: (x, y, z) => [x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1],
+  rx: (a) => { const c = Math.cos(a), s = Math.sin(a); return [1, 0, 0, 0, 0, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1]; },
+  ry: (a) => { const c = Math.cos(a), s = Math.sin(a); return [c, 0, -s, 0, 0, 1, 0, 0, s, 0, c, 0, 0, 0, 0, 1]; },
+  rz: (a) => { const c = Math.cos(a), s = Math.sin(a); return [c, s, 0, 0, -s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]; },
+  persp(f, asp, n, fa) { const k = 1 / Math.tan(f / 2); return [k / asp, 0, 0, 0, 0, k, 0, 0, 0, 0, (fa + n) / (n - fa), -1, 0, 0, (2 * fa * n) / (n - fa), 0]; },
+  apply: (m, [x, y, z]) => [m[0] * x + m[4] * y + m[8] * z + m[12], m[1] * x + m[5] * y + m[9] * z + m[13], m[2] * x + m[6] * y + m[10] * z + m[14]],
+};
+let GL = null;
+function initGL() {
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const gl = c.getContext('webgl', { preserveDrawingBuffer: true, antialias: true, premultipliedAlpha: false });
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+  const prog = gl.createProgram();
+  gl.attachShader(prog, sh(gl.VERTEX_SHADER, 'attribute vec2 a; uniform mat4 m; uniform vec4 r; varying vec2 v; void main(){ v = r.xy + (a + 0.5) * r.zw; gl_Position = m * vec4(a, 0.0, 1.0); }'));
+  gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, 'precision mediump float; uniform sampler2D tex; uniform float shade, alpha, lift; varying vec2 v; void main(){ vec3 c = texture2D(tex, v).rgb * shade + lift; gl_FragColor = vec4(c, alpha); }'));
+  gl.linkProgram(prog); gl.useProgram(prog);
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const tex = [0, 1].map(() => { const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t); [gl.TEXTURE_MIN_FILTER, gl.TEXTURE_MAG_FILTER].forEach((f) => gl.texParameteri(gl.TEXTURE_2D, f, gl.LINEAR)); [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach((f) => gl.texParameteri(gl.TEXTURE_2D, f, gl.CLAMP_TO_EDGE)); return t; });
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  const u = (n) => gl.getUniformLocation(prog, n);
+  const ftex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, ftex); // one sub-frame renders here before it is averaged in
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, H, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  [gl.TEXTURE_MIN_FILTER, gl.TEXTURE_MAG_FILTER].forEach((f) => gl.texParameteri(gl.TEXTURE_2D, f, gl.NEAREST)); [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach((f) => gl.texParameteri(gl.TEXTURE_2D, f, gl.CLAMP_TO_EDGE));
+  const fbo = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fbo); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, ftex, 0); gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  GL = { gl, canvas: c, tex, fbo, ftex, m: u('m'), r: u('r'), shade: u('shade'), alpha: u('alpha'), lift: u('lift') };
 }
-// Each scene change has its own move, built for the two shots it joins. p runs 0 → 1.
-const SCREEN = { x: LAP.x, y: LAP.y + (H / 2 - (LAP.y + 540 * LAP.s)), w: LAP.w, h: LAP.h }; // laptop screen on the output at zoom 1
-const WINBACK_BTN = { x: SCREEN.x + 715 * LAP.s, y: SCREEN.y + 758 * LAP.s };         // the "Win-back sent" button, zoomed out
-const TITLE = { x: 40, y: 30, w: 1000, h: 110 }; // where featureTag sits
-function swapTitles(q, A, B) { // the old feature name leaves before the new one arrives
-  ctx.fillStyle = '#000'; ctx.fillRect(TITLE.x, TITLE.y, TITLE.w, TITLE.h);
-  ctx.save(); ctx.globalAlpha = 1 - clamp(q * 2); region(A, TITLE, -30 * q); ctx.globalAlpha = clamp(q * 2 - 1); region(B, TITLE, 30 * (1 - q)); ctx.restore();
+// Upload both shots once per frame; `defocus` blurs a shot first (a focus pull).
+function uploadShots(A, B, defocus = [0, 0]) {
+  if (!GL) initGL();
+  const { gl } = GL;
+  [A, B].forEach((img, i) => {
+    let src = img;
+    if (defocus[i] > 0.5) { const c = buffer(3 + i); c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.filter = `blur(${defocus[i].toFixed(1)}px)`; c.drawImage(img, 0, 0); c.filter = 'none'; src = c.canvas; }
+    gl.bindTexture(gl.TEXTURE_2D, GL.tex[i]); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src);
+  });
 }
-function putAt(img, cx, cy, s, o = {}) { // scale an image about (cx, cy)
-  ctx.save(); ctx.globalAlpha = o.a ?? 1; if ((o.blur ?? 0) > 0.3) ctx.filter = `blur(${o.blur.toFixed(1)}px)`;
-  ctx.translate(cx, cy); ctx.scale(o.sx ?? s, o.sy ?? s); ctx.drawImage(img, -cx, -cy); ctx.restore();
+// A plane: w × h pixels centred at (x, y, z) (y up, z toward the viewer), rotated about a pivot given
+// relative to its centre; sx/sy stretch it. uv: [left, top, width, height] of the source shot in pixels.
+function plane(tex, o) {
+  const { w = W, h = H, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, px = 0, py = 0, pz = 0, a = 1, sx = 1, sy = 1, lift = 0 } = o;
+  const R = M4.mul(M4.rz(rz), M4.mul(M4.ry(ry), M4.rx(rx)));
+  const M = M4.mul(M4.t(x, y, z), M4.mul(M4.t(px, py, pz), M4.mul(R, M4.mul(M4.t(-px, -py, -pz), M4.s(w * sx, h * sy, 1)))));
+  const uv = o.uv ?? [0, 0, W, H];
+  return { tex, M, R, a, lift, uv: [uv[0] / W, 1 - (uv[1] + uv[3]) / H, uv[2] / W, uv[3] / H] };
 }
-function region(img, r, dx = 0, dy = 0, s = 1, cx = r.x + r.w / 2, cy = r.y + r.h / 2) { // part of a frame, moved/scaled
-  ctx.save(); ctx.translate(cx + dx, cy + dy); ctx.scale(s, s); ctx.translate(-cx, -cy);
-  ctx.drawImage(img, r.x, r.y, r.w, r.h, r.x, r.y, r.w, r.h); ctx.restore();
+const LIGHT = (() => { const l = [-0.28, 0.36, 1], n = Math.hypot(...l); return l.map((v) => v / n); })();
+// cam: x, y, z (offsets from the default position), yaw, pitch, roll (radians).
+function glScene({ planes, cam = {} }) {
+  const { gl } = GL;
+  const eye = [cam.x ?? 0, cam.y ?? 0, CAM_D + (cam.z ?? 0)];
+  const V = M4.mul(M4.rz(-(cam.roll ?? 0)), M4.mul(M4.rx(-(cam.pitch ?? 0)), M4.mul(M4.ry(-(cam.yaw ?? 0)), M4.t(-eye[0], -eye[1], -eye[2]))));
+  const PV = M4.mul(M4.persp(FOV, W / H, 4, 30000), V);
+  planes.filter((q) => q && q.a > 0.003).map((q) => {
+    const c = M4.apply(q.M, [0, 0, 0]), n = M4.apply(q.R, [0, 0, 1]);
+    return { ...q, n, facing: n[0] * (eye[0] - c[0]) + n[1] * (eye[1] - c[1]) + n[2] * (eye[2] - c[2]), d: Math.hypot(eye[0] - c[0], eye[1] - c[1], eye[2] - c[2]) };
+  }).filter((q) => q.facing > 0).sort((p1, p2) => p2.d - p1.d).forEach((q) => { // painter's order, back faces hidden
+    const lit = (q.n[0] * LIGHT[0] + q.n[1] * LIGHT[1] + q.n[2] * LIGHT[2]) / LIGHT[2];
+    gl.bindTexture(gl.TEXTURE_2D, GL.tex[q.tex === 'A' ? 0 : 1]);
+    gl.uniformMatrix4fv(GL.m, false, new Float32Array(M4.mul(PV, q.M)));
+    gl.uniform4fv(GL.r, q.uv);
+    gl.uniform1f(GL.shade, clamp(0.3 + 0.7 * lit, 0, 1));
+    gl.uniform1f(GL.lift, q.lift);
+    gl.uniform1f(GL.alpha, q.a);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  });
 }
+function bloom(x, y, r, col, a) { // additive light
+  if (a <= 0.003) return;
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, rgba(col, a)); g.addColorStop(0.45, rgba(col, a * 0.35)); g.addColorStop(1, rgba(col, 0));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore();
+}
+const xio = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2); // fast through the middle
+const qn = ease.quint;
+const bump = (p, at = 0.5, w = 0.5) => Math.max(0, 1 - Math.abs(p - at) / w); // 0 → 1 → 0 around `at`
+let HOOK_LAST = { x: 1080, y: 470 }; // the "without this 👀" bubble on screen, set while the hook draws
+// Each entry: scene(p) → { planes, cam } for time p; optional defocus(p) → [blurA, blurB] and over(p) for light on top.
+const one = (planes, cam) => ({ planes, cam });
 const TRANSITIONS = {
-  dive(p, A, B) { // the camera flies into the last bubble; its blue gives way to the black stage
-    const q = ease.inOut(p), { x, y } = HOOK_LAST;
-    putAt(A, x, y, 1 + 9 * q * q, { a: 1 - clamp((q - 0.5) / 0.35), blur: 22 * q * q });
-    putAt(B, W / 2, H / 2, 1.1 - 0.1 * q, { a: clamp((q - 0.45) / 0.55) });
+  // 1 · texts → "Repeat clients": the camera dives into the last blue bubble, its blue floods the frame,
+  //     and the next shot pulls back out of the light
+  dive: {
+    scene(p) {
+      if (p < 0.5) { const e = xio(p); return one([plane('A', {})], { x: (HOOK_LAST.x - W / 2) * e, y: (H / 2 - HOOK_LAST.y) * e, z: -CAM_D * 0.965 * e }); }
+      return one([plane('B', { z: lerp(CAM_D * 0.55, 0, qn((p - 0.5) * 2)) })]);
+    },
+    over: (p) => bloom(W / 2, H / 2, 1400, '#2b8cff', 0.95 * bump(p, 0.5, 0.22)),
   },
-  roll(p, A, B) { // a vertical reel: both frames travel together, motion-blurred mid-move
-    const q = ease.inOut(p), bl = 14 * Math.sin(Math.PI * q);
-    put(A, { dy: -H * q, blur: bl }); put(B, { dy: H * (1 - q), blur: bl });
+  // 2 · → "But when a regular…": a whip pan to the right
+  whip: { scene(p) {
+    const th = 1.05;
+    return one([plane('A', {}), plane('B', { x: CAM_D * Math.sin(th), z: CAM_D * (1 - Math.cos(th)), ry: -th })], { yaw: -th * xio(p) });
+  } },
+  // 3 · → black slide: the camera cranes up as the cards tip back under it
+  crane: { scene(p) {
+    const e = xio(p), Y = H * 1.15;
+    return one([plane('A', { rx: -0.55 * e, py: -H / 2 }), plane('B', { y: Y })], { y: Y * e, pitch: 0.22 * Math.sin(Math.PI * p) });
+  } },
+  // 4 · → logo (music returns): the dark rushes past into a burst of light, and the logo settles out of it
+  flare: {
+    defocus: (p) => [0, 28 * (1 - qn(clamp((p - 0.45) / 0.55)))],
+    scene(p) {
+      if (p < 0.5) return one([plane('A', { z: CAM_D * 0.6 * xio(p), a: 1 - clamp((p - 0.3) / 0.2) })]);
+      const k = qn((p - 0.5) * 2); return one([plane('B', { z: lerp(500, 0, k), lift: 0.45 * (1 - k) })]);
+    },
+    over(p) { bloom(W / 2, H / 2 - 30, 1100, '#a5b4fc', 1.1 * bump(p, 0.5, 0.3)); bloom(W / 2, H / 2 - 30, 380, '#ffffff', 0.9 * bump(p, 0.5, 0.18)); },
   },
-  expand(p, A, B) { // the empty April card grows to become the black frame
-    const q = ease.inOut(p), r = APRIL;
-    put(A, { a: 1 - clamp(q * 1.6) * 0.6 });
-    const x = lerp(r.x, 0, q), y = lerp(r.y, 0, q), w = lerp(r.w, W, q), h = lerp(r.h, H, q);
-    ctx.save(); rr(x, y, w, h, lerp(30, 0, q)); ctx.clip(); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
-    ctx.globalAlpha = clamp((q - 0.35) / 0.65); ctx.drawImage(B, 0, 0); ctx.restore();
-    ctx.save(); ctx.setLineDash([12, 10]); rr(x, y, w, h, lerp(30, 0, q)); ctx.strokeStyle = `rgba(236,95,79,${0.75 * (1 - q)})`; ctx.lineWidth = 2.5; ctx.stroke(); ctx.restore();
+  // 5 · → "It tells you…": the camera orbits around the words to find the next line on the far side
+  orbit: { scene(p) {
+    const R0 = 1700, R = CAM_D + R0, ph1 = 1.15, ph = ph1 * xio(p);
+    return one([plane('A', {}), plane('B', { x: R0 * Math.sin(ph1), z: -R0 + R0 * Math.cos(ph1), ry: ph1 })], { x: R * Math.sin(ph), z: -R0 + R * Math.cos(ph) - CAM_D, yaw: ph });
+  } },
+  // 6 · → laptop opens: the laptop shot rises up from below, tilted, as the words float off the top
+  rise: { scene(p) {
+    const e = xio(p);
+    return one([plane('A', { y: H * 0.9 * e, rx: -0.45 * e, z: -300 * e, a: 1 - clamp((p - 0.6) / 0.4) }), plane('B', { y: -H * 1.1 * (1 - e), rx: 0.5 * (1 - e), z: -300 * (1 - e) })]);
+  } },
+  // 7 · → health scores: the laptop tips back flat and the camera sails over it to the next shot standing beyond
+  sailover: { scene(p) {
+    const e = xio(p), sp = Math.sin(Math.PI * p);
+    return one([plane('A', { rx: -1.45 * e, py: -H / 2 }), plane('B', { z: -1800 * (1 - e), y: -200 * (1 - e), rx: 0.8 * (1 - e), py: -H / 2 })], { y: 260 * sp, pitch: -0.28 * sp, z: -700 * e });
+  } },
+  // 8 · → AI Analyst: the laptop swings in from the right like a floating panel as the old shot drifts back out of focus
+  swing: {
+    defocus: (p) => [16 * xio(p), 0],
+    scene(p) {
+      const e = xio(p), k = qn(clamp((p - 0.1) / 0.9));
+      return one([plane('A', { x: -W * 0.45 * e, z: -900 * e, ry: 0.55 * e, a: 1 - clamp((p - 0.5) / 0.5) * 0.85 }), plane('B', { x: W * 0.95 * (1 - k), z: -700 * (1 - k), ry: -1.0 * (1 - k) })]);
+    },
   },
-  iris(p, A, B) { // a ring of indigo light opens from the centre
-    const q = ease.out(p), R = q * Math.hypot(W, H) * 0.55;
-    put(A);
-    ctx.save(); ctx.beginPath(); ctx.arc(W / 2, H / 2, R, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(B, 0, 0); ctx.restore();
-    const g = ctx.createRadialGradient(W / 2, H / 2, Math.max(0, R - 60), W / 2, H / 2, R + 30);
-    g.addColorStop(0, 'rgba(129,140,248,0)'); g.addColorStop(0.7, `rgba(165,156,255,${0.55 * (1 - q)})`); g.addColorStop(1, 'rgba(129,140,248,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // 9 · → win-back: a barrel roll — the camera twists in and unwinds on the next shot
+  roll: {
+    scene(p) {
+      const e = xio(p);
+      if (p < 0.5) { const k = e * 2; return one([plane('A', {})], { roll: 0.75 * k, z: -CAM_D * 0.3 * k }); }
+      const k = 2 - e * 2; return one([plane('B', {})], { roll: -0.75 * k, z: CAM_D * 0.3 * k });
+    },
+    over: (p) => bloom(W / 2, H / 2, 900, '#8b5cf6', 0.35 * bump(p, 0.5, 0.25)),
   },
-  split(p, A, B) { // the frame parts along the middle; the next shot settles in behind
-    const q = ease.inOut(p);
-    putAt(B, W / 2, H / 2, 1.06 - 0.06 * q, { a: clamp(q * 1.5) });
-    region(A, { x: 0, y: 0, w: W, h: H / 2 }, 0, -H * 0.55 * q);
-    region(A, { x: 0, y: H / 2, w: W, h: H / 2 }, 0, H * 0.55 * q);
-    ctx.fillStyle = `rgba(200,195,255,${0.5 * Math.sin(Math.PI * clamp(q * 2))})`; ctx.fillRect(0, H / 2 - 1, W, 2);
+  // 10 · → calendar: the next shot slides up as a stack of layered panes that settle into one
+  stack: {
+    defocus: (p) => [14 * xio(p), 0],
+    scene(p) {
+      const e = xio(p), planes = [plane('A', { y: -H * 0.25 * e, z: -800 * e, a: 1 - clamp((p - 0.45) / 0.4) })];
+      for (let i = 3; i >= 0; i--) { const k = qn(clamp((p - 0.12 - i * 0.07) / 0.6)); planes.push(plane('B', { y: -H * (1 - k) * (0.9 + i * 0.12), z: -i * 160 * (1 - k), rx: 0.35 * (1 - k), a: (i ? 0.35 * (1 - k) : 1) * clamp(k * 2) })); }
+      return one(planes);
+    },
   },
-  hinge(p, A, B) { // the words fold down into the hinge as the lid comes up
-    const q = ease.inOut(p), hy = SCREEN.y + SCREEN.h + 26;
-    put(B);
-    putAt(A, W / 2, hy, 1, { sx: 1 - 0.1 * q, sy: 1 - q, a: 1 - q * 0.7 });
+  // 11 · → reviews: the camera trucks sideways along a row of laptops to the next one
+  truck: { scene(p) {
+    const e = xio(p), X = W * 1.3, sp = Math.sin(Math.PI * p);
+    return one([plane('A', { ry: 0.12 * e }), plane('B', { x: X, ry: -0.12 * (1 - e) })], { x: X * e, z: 900 * sp, yaw: -0.08 * sp });
+  } },
+  // 12 · → analytics: a ring of light opens in the middle of the screen and the next shot pours out of it
+  portal: {
+    scene(p) {
+      const e = xio(p), R = e * Math.hypot(W, H) * 0.56, za = 520 * e, planes = [plane('A', { z: za })];
+      // the next shot, cut into a disc of 48 slices that grows from the centre, just in front of the old shot
+      const n = 48, s = lerp(1.35, 1, qn(p));
+      for (let i = 0; i < n && R > 2; i++) {
+        const y0 = -R + (2 * R * i) / n, y1 = -R + (2 * R * (i + 1)) / n, yc = (y0 + y1) / 2, half = Math.sqrt(Math.max(0, R * R - yc * yc));
+        const top = H / 2 - y1, hgt = y1 - y0, l = W / 2 - half;
+        planes.push(plane('B', { w: 2 * half, h: hgt + 0.8, x: 0, y: yc, z: za + 2, uv: [W / 2 + (l - W / 2) / s, H / 2 + (top - H / 2) / s, (2 * half) / s, hgt / s] }));
+      }
+      return one(planes);
+    },
+    over(p) {
+      const R = xio(p) * Math.hypot(W, H) * 0.56;
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineWidth = 18; ctx.strokeStyle = rgba('#93c5fd', 0.7 * bump(p, 0.45, 0.45));
+      ctx.filter = 'blur(10px)'; ctx.beginPath(); ctx.arc(W / 2, H / 2, Math.max(1, R), 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+    },
   },
-  through(p, A, B) { // push through the laptop screen until it fills the frame, then into the next shot
-    const q = ease.inOut(p), cx = SCREEN.x + SCREEN.w / 2, cy = SCREEN.y + SCREEN.h / 2;
-    putAt(A, cx, cy, Math.exp(lerp(0, Math.log(1.7), clamp(q / 0.7))), { blur: 10 * clamp((q - 0.4) / 0.6) });
-    putAt(B, W / 2, H / 2, 1.04 - 0.04 * q, { a: clamp((q - 0.55) / 0.45) });
-  },
-  stack(p, A, B) { // the laptop slides over the last shot like a card on a stack
-    const q = ease.inOut(p);
-    put(A, { dx: -W * 0.28 * q, s: 1 - 0.06 * q });
-    ctx.fillStyle = `rgba(0,0,0,${0.65 * q})`; ctx.fillRect(0, 0, W, H);
-    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 80; ctx.shadowOffsetX = -30;
-    ctx.translate(W * (1 - q), 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.drawImage(B, 0, 0); ctx.restore();
-  },
-  portal(p, A, B) { // into the button just clicked: the next shot grows out of it
-    const q = ease.inOut(p), { x, y } = WINBACK_BTN;
-    putAt(A, x, y, 1 + 2.5 * q, { a: 1 - clamp((q - 0.3) / 0.5), blur: 14 * q });
-    const s = lerp(0.12, 1, q), w = W * s, h = H * s, cx = lerp(x, W / 2, q), cy = lerp(y, H / 2, q);
-    ctx.save(); rr(cx - w / 2, cy - h / 2, w, h, lerp(40, 0, q)); ctx.clip();
-    ctx.translate(cx, cy); ctx.scale(s, s); ctx.translate(-W / 2, -H / 2); ctx.drawImage(B, 0, 0); ctx.restore();
-  },
-  slats(p, A, B) { // eight horizontal blinds slide in, one after another
-    put(A, { a: 1 - clamp((p - 0.6) / 0.4) * 0.3 });
-    const n = 8, sh = H / n;
-    for (let i = 0; i < n; i++) {
-      const k = ease.quint(clamp((p - i * 0.045) / 0.6));
-      ctx.save(); ctx.beginPath(); ctx.rect(0, i * sh, W, sh + 1); ctx.clip();
-      ctx.globalAlpha = clamp(k * 1.4); ctx.drawImage(B, W * 0.35 * (1 - k) * (i % 2 ? -1 : 1), 0); ctx.restore();
-    }
-  },
-  swipe(p, A, B) { // like swiping between desktops: the laptop holds still, only its screen moves
-    const q = ease.inOut(p), r = SCREEN;
-    put(A); swapTitles(q, A, B);
-    ctx.save(); rr(r.x, r.y, r.w, r.h, 8); ctx.clip();
-    region(A, r, -r.w * q); region(B, r, r.w * (1 - q));
-    ctx.restore();
-  },
-  app(p, A, B) { // the next app opens from the middle of the screen
-    const q = ease.quint(p), r = SCREEN;
-    put(A); swapTitles(q, A, B);
-    ctx.save(); rr(r.x, r.y, r.w, r.h, 8); ctx.clip();
-    region(A, r); ctx.fillStyle = `rgba(0,0,0,${0.35 * q})`; ctx.fillRect(r.x, r.y, r.w, r.h);
-    const s = lerp(0.18, 1, q), w = r.w * s, h = r.h * s, cx = r.x + r.w / 2, cy = r.y + r.h / 2;
-    ctx.beginPath(); ctx.roundRect(cx - w / 2, cy - h / 2, w, h, lerp(24, 8, q)); ctx.clip();
-    ctx.globalAlpha = clamp(q * 2); region(B, r, 0, 0, s);
-    ctx.restore();
-  },
-  dolly(p, A, B) { // the camera pulls back: the laptop sinks and dims while the words come down from above
-    const q = ease.inOut(p);
-    putAt(A, W / 2, H, 1 - 0.3 * q, { a: 1 - q });
-    put(B, { a: q, dy: -90 * (1 - q), blur: 10 * (1 - q) });
-  },
-  collapse(p, A, B) { // the words fold to a bright line, which opens out on the logo
-    if (p < 0.5) {
-      const q = ease.inOut(p * 2);
-      putAt(A, W / 2, H / 2, 1, { sx: 1 + 0.1 * q, sy: Math.max(0.004, 1 - q) });
-      ctx.fillStyle = `rgba(210,205,255,${0.8 * q})`; ctx.fillRect(W * 0.2 * (1 - q), H / 2 - 1.5, W - W * 0.4 * (1 - q), 3);
-    } else {
-      const q = ease.inOut((p - 0.5) * 2);
-      putAt(B, W / 2, H / 2, 1, { sy: Math.max(0.004, q) });
-      ctx.fillStyle = `rgba(210,205,255,${0.8 * (1 - q)})`; ctx.fillRect(0, H / 2 - 1.5, W, 3);
-    }
+  // 13 · → tagline: the laptop falls back into the dark as the words drop in from above
+  fall: { scene(p) {
+    const e = xio(p), k = qn(clamp((p - 0.25) / 0.75));
+    return one([plane('A', { rx: -0.9 * e, z: -2600 * e * e, y: -150 * e, a: 1 - clamp((p - 0.55) / 0.35) }), plane('B', { y: H * 0.85 * (1 - k), rx: -0.4 * (1 - k), a: clamp(k * 1.6) })]);
+  } },
+  // 14 · → end card: the words smear into streaks of light and the logo un-smears out of them
+  smear: {
+    scene(p) {
+      if (p < 0.5) { const e = Math.pow(p * 2, 2.2); return one([plane('A', { sy: 1 + 9 * e, sx: 1 - 0.15 * e, a: 1 - e * 0.8, lift: 0.3 * e })]); }
+      const k = qn((p - 0.5) * 2); return one([plane('B', { sy: 1 + 9 * (1 - k) * (1 - k), lift: 0.25 * (1 - k) })]);
+    },
+    over: (p) => bloom(W / 2, H / 2, 900, '#c7d2fe', 0.5 * bump(p, 0.5, 0.2)),
   },
 };
-function transition(type, p, A, B) {
+// Motion blur: every frame averages sub-frames spread across the shutter, on the GPU. Fast moves
+// streak; anything still stays crisp.
+const SHUTTER = 0.045, SAMPLES = 32;
+function transition(type, p, A, B, dur) {
+  const T = TRANSITIONS[type];
+  uploadShots(A, B, T.defocus ? T.defocus(clamp(p)) : [0, 0]);
+  const { gl } = GL, ID = [2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+  gl.viewport(0, 0, W, H);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+  for (let s = 0; s < SAMPLES; s++) {
+    const ps = clamp(p + (s / (SAMPLES - 1) - 0.5) * SHUTTER / dur);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, GL.fbo); gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    glScene(T.scene(ps));
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null); // fold this sub-frame into the running average
+    gl.blendColor(0, 0, 0, 1 / (s + 1)); gl.blendFunc(gl.CONSTANT_ALPHA, gl.ONE_MINUS_CONSTANT_ALPHA);
+    gl.bindTexture(gl.TEXTURE_2D, GL.ftex);
+    gl.uniformMatrix4fv(GL.m, false, new Float32Array(ID)); gl.uniform4fv(GL.r, [0, 0, 1, 1]);
+    gl.uniform1f(GL.shade, 1); gl.uniform1f(GL.lift, 0); gl.uniform1f(GL.alpha, 1);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
-  TRANSITIONS[type](clamp(p), A, B);
+  ctx.drawImage(GL.canvas, 0, 0);
+  if (T.over) T.over(clamp(p));
 }
 
 // ── shared product UI (rebuilt from the screen recordings) ───────────────────
@@ -854,7 +949,6 @@ function camAt(t, keys = CAM) {
 const HOOK = [["I don't know how", 0], ['salon owners could live', 1.5], ['without this', 2.5, true]]; // all sent before the drop at beat 4
 window.SFX = HOOK.map(([, k]) => ({ t: b(k), kind: 'sent' })); // iPhone "sent" sound, peaking on each bubble
 const PHONE = { w: 500, h: 1010 };
-let HOOK_LAST = { x: 1080, y: 360 }, APRIL = { x: 1300, y: 420, w: 360, h: 330 };
 function messages(t, sx, sy, sw, sh) {
   ctx.fillStyle = '#ffffff'; ctx.fillRect(sx, sy, sw, sh);
   ctx.fillStyle = 'rgba(247,247,248,0.96)'; ctx.fillRect(sx, sy, sw, 190);
@@ -880,7 +974,7 @@ function messages(t, sx, sy, sw, sh) {
       const bb = sentBubble(x1, y0, lines, size, last, eyes ? tw(' ', size, 400, 0) + es * 0.72 : 0);
       if (eyes) {
         eyesEmoji(bb.x + bb.w - 22 - es * 0.36, y0 + h / 2 + 1, es); // "this 👀"
-        const m = ctx.getTransform(); HOOK_LAST = m.transformPoint(new DOMPoint(bb.x + bb.w / 2, y0 + h / 2)); // where the dive transition aims
+        HOOK_LAST = ctx.getTransform().transformPoint(new DOMPoint(bb.x + bb.w / 2, y0 + h / 2)); // the dive aims here
       }
 
     }, { from: 0.55, dy: 70, blur: 0 });
@@ -926,8 +1020,6 @@ function sStops(t) {
     ctx.save(); if (!empty) ctx.globalAlpha = 1 - 0.65 * focus;
     snapIn(t, b(9 + i * 0.5), x + cw / 2, y0 + ch / 2, () => {
       if (empty) {
-        const m = ctx.getTransform(), p0 = m.transformPoint(new DOMPoint(x, y0)), p1 = m.transformPoint(new DOMPoint(x + cw, y0 + ch));
-        APRIL = { x: p0.x, y: p0.y, w: p1.x - p0.x, h: p1.y - p0.y }; // the expand transition grows from here
         fillRR(x, y0, cw, ch, 30, 'rgba(236,95,79,0.06)');
         ctx.setLineDash([12, 10]); rr(x, y0, cw, ch, 30); ctx.strokeStyle = 'rgba(236,95,79,0.75)'; ctx.lineWidth = 2.5; ctx.stroke(); ctx.setLineDash([]);
         text(m, x + 34, y0 + 54, 34, 700, '#ff8a7a');
@@ -1216,23 +1308,23 @@ function sEnd(t) {
   if (out > 0) { ctx.fillStyle = `rgba(0,0,0,${out})`; ctx.fillRect(0, 0, W, H); }
 }
 
-// [start, end, scene, transition into it, transition length]. Every transition is used once.
+// [start, end, scene, 3D transition into it, its length in seconds]. Every transition is used once.
 const SCENES = [
   [0, b(4), sHook],
-  [b(4), b(8), sRegulars, 'dive', 0.62],      // flies into the last text bubble
-  [b(8), b(16), sStops, 'roll', 0.5],         // the frame scrolls up like a reel
-  [b(16), b(20), sDark, 'expand', 0.55],      // the empty April card grows into the black
-  [b(20), b(24), sMeet, 'iris', 0.6],         // a ring of light opens on the logo
-  [b(24), b(28), sWhat, 'split', 0.55],       // the frame parts top and bottom
-  [b(28), b(32), sReveal, 'hinge', 0.5],      // the words fold down into the laptop hinge
-  [b(32), b(36), sHealth, 'through', 0.65],   // the camera goes through the screen
-  [b(36), b(48), sAnalyst, 'stack', 0.55],    // the laptop slides over like a card
-  [b(48), b(56), sWinBack, 'portal', 0.6],    // out through the "Win-back sent" button
-  [b(56), b(68), sCalendar, 'slats', 0.6],    // staggered horizontal blinds
-  [b(68), b(80), sReviews, 'swipe', 0.55],    // the laptop stays; its screen swipes to the next app
-  [b(80), b(92), sDashboard, 'app', 0.55],    // the next app opens from the middle of the screen
-  [b(92), b(96), sTagline, 'dolly', 0.6],     // the laptop sinks away as the words come down
-  [b(96), DURATION + 1, sEnd, 'collapse', 0.6], // the words fold to a line of light, which opens on the logo
+  [b(4), b(8), sRegulars, 'dive', 0.7],
+  [b(8), b(16), sStops, 'whip', 0.5],
+  [b(16), b(20), sDark, 'crane', 0.6],
+  [b(20), b(24), sMeet, 'flare', 0.75],
+  [b(24), b(28), sWhat, 'orbit', 0.7],
+  [b(28), b(32), sReveal, 'rise', 0.6],
+  [b(32), b(36), sHealth, 'sailover', 0.75],
+  [b(36), b(48), sAnalyst, 'swing', 0.65],
+  [b(48), b(56), sWinBack, 'roll', 0.6],
+  [b(56), b(68), sCalendar, 'stack', 0.7],
+  [b(68), b(80), sReviews, 'truck', 0.7],
+  [b(80), b(92), sDashboard, 'portal', 0.7],
+  [b(92), b(96), sTagline, 'fall', 0.7],
+  [b(96), DURATION + 1, sEnd, 'smear', 0.7],
 ];
 
 function renderFrame(t) {
@@ -1243,7 +1335,7 @@ function renderFrame(t) {
   const [start, , fn, type, dur] = SCENES[i];
   if (i > 0 && type && t < start + dur) {
     const A = renderInto(0, SCENES[i - 1][2], t), B = renderInto(1, fn, t);
-    ctx = MAIN; transition(type, (t - start) / dur, A, B);
+    ctx = MAIN; transition(type, (t - start) / dur, A, B, dur);
   } else fn(t);
 }
 
