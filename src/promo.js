@@ -1005,11 +1005,48 @@ window.MUFFLE = [b(16), b(20)];
 const GONE = { from: b(18.5), at: b(19) };
 window.SFX.push({ t: GONE.at, kind: 'flash' });
 function mixHex(a, c, k) { const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)); const x = p(a), y = p(c); return `rgb(${x.map((v, i) => Math.round(lerp(v, y[i], k))).join(',')})`; } // the music goes underwater for this bar, then the logo lands
+// Sunrays and a red wash that come out of "gone.": they build as the word turns red, open fully on the
+// camera flash, then the wash keeps growing outward until the cut.
+function goneGlare(t, x, y) {
+  const build = ease.inOut(seg(t, GONE.from, GONE.at)), burst = ease.out(seg(t, GONE.at, GONE.at + 0.35));
+  const grow = ease.out(seg(t, GONE.at, b(20)));
+  if (build <= 0) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  // the wash: a red gradient that grows from the word across the frame
+  const R = lerp(140, 1700, grow);
+  const g = ctx.createRadialGradient(x, y, 0, x, y, R);
+  g.addColorStop(0, 'rgba(255,59,48,0)'); g.addColorStop(Math.min(0.5, 170 / R), `rgba(255,59,48,${0.38 * build})`); g.addColorStop(Math.min(0.75, 170 / R + 0.3), `rgba(200,30,30,${0.16 * build})`); g.addColorStop(1, 'rgba(120,10,10,0)');
+  ctx.fillStyle = g; ctx.fillRect(-2 * W, -3 * H, 5 * W, 7 * H);
+  // the rays: soft wedges turning slowly, reaching further after the flash
+  const n = 16, len = lerp(260, 1500, 0.35 * build + 0.65 * burst), turn = (t - GONE.from) * 0.18;
+  const rg = ctx.createRadialGradient(x, y, 150, x, y, len); // rays start just outside the word
+  rg.addColorStop(0, `rgba(255,120,100,${0.42 * build})`); rg.addColorStop(0.4, `rgba(255,59,48,${0.16 * build})`); rg.addColorStop(1, 'rgba(255,59,48,0)');
+  ctx.filter = 'blur(8px)'; ctx.fillStyle = rg; ctx.beginPath();
+  for (let i = 0; i < n; i++) {
+    const a = turn + (i / n) * Math.PI * 2, wdt = (i % 2 ? 0.05 : 0.09);
+    ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a - wdt) * len, y + Math.sin(a - wdt) * len); ctx.lineTo(x + Math.cos(a + wdt) * len, y + Math.sin(a + wdt) * len); ctx.closePath();
+  }
+  ctx.fill();
+  // a thin horizontal glare streak through the word
+  const sg = ctx.createLinearGradient(x - 900, 0, x + 900, 0);
+  sg.addColorStop(0, 'rgba(255,90,70,0)'); sg.addColorStop(0.5, `rgba(255,170,150,${0.6 * build})`); sg.addColorStop(1, 'rgba(255,90,70,0)');
+  ctx.filter = 'blur(4px)'; ctx.fillStyle = sg; ctx.fillRect(x - 900, y + 46, 1800, 5); // just under the word
+  ctx.restore();
+  // a dark pocket around the word so it stays readable against the light
+  ctx.save(); const k = ctx.createRadialGradient(x, y, 0, x, y, 230);
+  k.addColorStop(0, `rgba(0,0,0,${0.75 * build})`); k.addColorStop(0.6, `rgba(0,0,0,${0.45 * build})`); k.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = k; ctx.fillRect(x - 240, y - 240, 480, 480); ctx.restore();
+}
 function sDark(t) {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const y2 = H / 2 + 70, tr = -0.035, w1 = tw("until they're", 100, 700, tr), gap = tw(' ', 100, 700, tr), w2 = tw('gone.', 100, 700, tr);
+  goneGlare(t, W / 2 - (w1 + gap + w2) / 2 + w1 + gap + w2 / 2, y2); // centred on "gone."
   headline(t, [["You won't see it coming", b(16)]], W / 2, H / 2 - 70, 100, { color: '#ffffff' });
   const red = ease.inOut(seg(t, GONE.from, GONE.at)); // "gone." turns red, finishing exactly on the camera flash
-  headline(t, [["until they're", b(18)], ['gone.', b(18), false, mixHex('#ffffff', '#ff3b30', red)]], W / 2, H / 2 + 70, 100, { color: '#ffffff' });
+  if (red > 0) { ctx.save(); ctx.shadowColor = `rgba(255,59,48,${0.9 * red})`; ctx.shadowBlur = 40 * red; } // the red word glows
+  headline(t, [["until they're", b(18)], ['gone.', b(18), false, mixHex('#ffffff', '#ff453a', red)]], W / 2, y2, 100, { color: '#ffffff' });
+  if (red > 0) ctx.restore();
 }
 
 // ── C · beats 32–48 · MsgHealth ──────────────────────────────────────────────
