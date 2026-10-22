@@ -1,4 +1,4 @@
-// MsgHealth · "While you cut" · 23s film (1920 × 1080 or 1080 × 1920, 60 fps), cut to "keep steady" (120 BPM).
+// MsgHealth · "While you cut" · 24s film (1920 × 1080 or 1080 × 1920, 60 fps), cut to Pharrell Williams, "Freedom".
 // One Tuesday at a barbershop, told by the clock: the hook is the day's result, then the clock rolls
 // back to 9:02 AM and walks through what MsgHealth did while the barber was cutting. Brand indigo on
 // black, every change of hour a 3D roll on the downbeat. The hook is readable on the first frame and
@@ -10,7 +10,7 @@ const W = 1920, H = 1080, FPS = 60; // scenes are laid out on this 16:9 stage
 // scene gets its own framing (see FRAMING) and a few scenes switch to stacked layouts.
 const VERT = !!(window.FORMAT && window.FORMAT.vertical);
 const OUT = VERT ? { w: 1080, h: 1920 } : { w: W, h: H };
-const DURATION = 23.4; // the end card (beat 40, 20.3s) holds, then fades
+const DURATION = 24.2; // the end card (beat 32, 20.6s) holds, then fades before the recording's TikTok outro
 const C = BRAND.colors;
 const FONT = 'Inter';
 const MUTED = '#6b6b85', FAINT = '#9a9ab0', LINE = '#ececf3';
@@ -18,9 +18,10 @@ const SOFT = 'rgba(235,235,245,0.62)'; // secondary text on the black stage
 // The brand indigo (#4F46E5), with lighter tints that read on the black stage.
 const IN = { hi: '#dcd9ff', mid: '#a49dff', deep: '#7268ff', glow: C.primary };
 
-// Beat grid of assets/audio/promo-track.m4a: 120 BPM (0.4985s a beat), first downbeat 0.348s,
-// 4-beat bars, 4-bar phrases. Every entrance is snapped onto a real hit (src/promo-onsets.js).
-const BEAT = 0.4985, B0 = 0.348;
+// Beat grid of assets/audio/promo-track.m4a (27.78s–52.18s of the supplied recording): 94.7 BPM (0.6335s a
+// beat), beat 0 at 0.30s. The bass comes in on beat 4 and the chorus drops on beat 20. Every entrance is
+// snapped onto a real hit (src/promo-onsets.js).
+const BEAT = 0.6335, B0 = 0.30;
 function hit(t) { // nearest hit within 60 ms, else t unchanged
   let best = t, d = 0.06;
   for (const o of window.ONSETS || []) { const e = Math.abs(o - t); if (e < d) { d = e; best = o; } }
@@ -566,7 +567,7 @@ function head(t, clockKeys, subKeys) {
 // cover. Three bookings land as notifications while the intro plays muffled; on the drop the clock
 // rolls back to the morning.
 window.SFX = [];
-window.MUFFLE = [0, b(4)]; // the intro plays underwater and the music opens up on the drop
+window.MUFFLE = [0, b(4)]; // the intro plays underwater and the music opens up as the bass comes in
 const NOTES = [['11:47 AM', 'Marcus Bell booked Thursday, 2:00 PM'], ['12:20 PM', 'Devon Price booked Friday, 11:30 AM'], ['4:05 PM', 'Andre Silva booked Saturday, 10:00 AM']];
 const NOTE_AT = [b(1), b(2), b(3)];
 NOTE_AT.forEach((t, i) => window.SFX.push({ t: t + 0.11, kind: 'sent', gain: [1, 0.7, 0.7][i] }));
@@ -591,14 +592,14 @@ function sOpen(t) {
   });
 }
 
-// ── B · beats 4–12 · 9:02 AM: who's due, and a text to each ────────────────
+// ── B · beats 4–10 · 9:02 AM: who's due, and a text to each ────────────────
 const DUE = [
   ['Marcus Bell', 'MB', '#d97706', 'Every 3 weeks · last cut 23 days ago', 'Due', '#fbbf24'],
   ['Devon Price', 'DP', '#0891b2', 'Every 2 weeks · last cut 16 days ago', 'Due', '#fbbf24'],
   ['Andre Silva', 'AS', '#7c3aed', 'Every 4 weeks · last cut 33 days ago', 'Overdue', '#ff7a6b'],
   ['Chris Okafor', 'CO', '#db2777', 'Every 3 weeks · last cut 21 days ago', 'Due', '#fbbf24'],
 ];
-const TEXTED = [8.5, 9, 9.5, 10].map(b); // one text a half-beat
+const TEXTED = [8.81, 9.31, 9.6, 9.81].map(b); // each on a hit in the bar after the tick
 window.SFX.push({ t: b(8), kind: 'click' }, { t: TEXTED[0] + 0.11, kind: 'sent', gain: 0.7 });
 // A person's row inside a card: avatar, name and a detail line, all on the card's padding.
 function person(x, cy, ini, col, name, detail) {
@@ -610,8 +611,8 @@ function person(x, cy, ini, col, name, detail) {
 function sDue(t) {
   stage(0.14);
   head(t, [[-1, '9:02', 'AM'], [b(8), '9:03', 'AM']], [[b(5), 'MsgHealth spots who’s due back.'], [b(8), '…and texts each one for you.']]);
-  const { x, w } = COL, rh = 112, h = rh * 4 + 2 * (PAD - 14), y0 = cardY(h), land = [5.5, 6, 6.5, 7].map(b);
-  snapIn(t, b(5.5), x + w / 2, y0 + h / 2, () => glass(x, y0, w, h, 34), { dy: 20 });
+  const { x, w } = COL, rh = 112, h = rh * 4 + 2 * (PAD - 14), y0 = cardY(h), land = [5.33, 5.82, 6.33, 6.99].map(b);
+  snapIn(t, b(5.33), x + w / 2, y0 + h / 2, () => glass(x, y0, w, h, 34), { dy: 20 });
   DUE.forEach(([n, ini, c, sub, st, sc], i) => {
     const ry = y0 + PAD - 14 + rh / 2 + i * rh;
     snapIn(t, land[i], x + w / 2, ry, () => {
@@ -623,12 +624,12 @@ function sDue(t) {
   });
 }
 
-// ── C · beats 12–20 · 11:47 AM: Marcus books himself in ─────────────────────
-const REPLY = { at: b(14.5), booked: b(16) };
+// ── C · beats 10–16 · 11:47 AM: Marcus books himself in ─────────────────────
+const REPLY = { at: b(12), booked: b(14) };
 window.SFX.push({ t: REPLY.at + 0.11, kind: 'sent', gain: 0.8 }, { t: REPLY.booked, kind: 'click' });
 function sReply(t) { // the conversation, as a card: who it's with, the morning's text, his reply, the booking
   stage(0.14);
-  head(t, [[-1, '11:47', 'AM']], [[b(13), 'Marcus books himself in.']]);
+  head(t, [[-1, '11:47', 'AM']], [[b(11), 'Marcus books himself in.']]);
   const { x, w } = COL, h = 576, y = cardY(h), size = 28, cx = x + w / 2, stamp = 'rgba(235,235,245,0.45)';
   glass(x, y, w, h, 34);
   person(x, y + PAD + 30, 'MB', '#d97706', 'Marcus Bell', 'Text message');
@@ -648,8 +649,8 @@ function sReply(t) { // the conversation, as a card: who it's with, the morning'
   }, { from: 0.85 });
 }
 
-// ── D · beats 20–26 · 3:15 PM: Jay leaves five stars ───────────────────────
-const STARS = [21.5, 22, 22.5, 23, 23.5].map(b); // a star a half-beat
+// ── D · beats 16–20 · 3:15 PM: Jay leaves five stars ───────────────────────
+const STARS = [17.03, 17.29, 17.83, 18.21, 18.36].map(b); // a star on each hit
 STARS.forEach((t) => window.SFX.push({ t, kind: 'click', gain: 0.5 }));
 function star(x, y, R) {
   ctx.beginPath();
@@ -658,7 +659,7 @@ function star(x, y, R) {
 }
 function sReview(t) {
   stage(0.14);
-  head(t, [[-1, '3:15', 'PM']], [[b(21), 'Jay leaves you five stars.']]);
+  head(t, [[-1, '3:15', 'PM']], [[b(16.79), 'Jay leaves you five stars.']]);
   const { x, w } = COL, h = 400, y = cardY(h);
   glass(x, y, w, h, 34);
   person(x, y + PAD + 30, 'JO', '#0ea5e9', 'Jay Ortiz', 'Signature Cut · today, 1:00 PM');
@@ -667,27 +668,28 @@ function sReview(t) {
     star(sx, sy, 28); ctx.fillStyle = 'rgba(255,255,255,0.13)'; ctx.fill();
     snapIn(t, at, sx, sy, () => { star(sx, sy, 28); ctx.fillStyle = '#fbbf24'; ctx.fill(); }, { from: 0.5, dy: 0, blur: 6 });
   });
-  riseIn(t, b(24), () => text('“Cleanest fade I’ve had in years.”', x + PAD - 6, y + 256, 36, 600, '#ffffff', 'left', -0.015), { dy: 18, blur: 10 });
+  riseIn(t, b(18.5), () => text('“Cleanest fade I’ve had in years.”', x + PAD - 6, y + 256, 36, 600, '#ffffff', 'left', -0.015), { dy: 18, blur: 10 });
   ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fillRect(x, y + h - 80, w, 1.5);
   text('Review request sent automatically after his cut.', x + PAD, y + h - 40, 20, 500, SOFT, 'left', 0);
 }
 
-// ── E · beats 26–36 · 7:00 PM: the week, on the MacBook ─────────────────────
+// ── E · beats 20–28 · 7:00 PM: the week, on the MacBook (the chorus drops on beat 20) ──────────
 // Wide, the MacBook sits in the content column beside the clock like every other moment; as the camera
 // moves in on the week it grows to fill the frame and the clock steps aside. Six bookings land, then
-// the camera moves up to "Booked this week".
-const WEEK_AT = [28.5, 29, 29.5, 30, 30.5, 31].map(b);
+// the camera settles on "Booked this week: 6 new since this morning" and holds there.
+const WEEK_AT = [22.84, 23.19, 23.48, 23.95, 24.28, 24.71].map(b);
 const ADDED = [[21, '4p', 'Chris Okafor', 'Skin Fade'], [22, '2p', 'Marcus Bell', 'Signature Cut'], [23, '11:30a', 'Devon Price', 'Skin Fade'],
   [23, '3p', 'Sam Rivera', 'Beard Trim'], [24, '10a', 'Andre Silva', 'Cut & Beard'], [24, '1p', 'Nico Alvarez', 'Signature Cut']].map((e, i) => [...e, WEEK_AT[i]]);
 WEEK_AT.forEach((t) => window.SFX.push({ t, kind: 'click', gain: 0.35 }));
-const WEEK_CAM = [[b(26), 960, 540, 1], [b(27.5), 1110, 770, 1.9], [b(31.5), 560, 150, 2.3], [b(33.5), 960, 540, 1]];
+const KPI = VERT ? [525, 385, 3.6] : [537, 292, 2.6]; // the tile fills the width, high in the frame, with the screen's top edge just out of shot
+const WEEK_CAM = [[b(20), 960, 540, 1], [b(22), 1110, 770, 1.9], [b(25.26), ...KPI]];
 // The MacBook, wide: its scale and where its centre sits. (Drawn at scale 1 it centres 29px below the frame's middle.)
 const LAPW = VERT ? { s: 0.52, x: W / 2, y: 280 + 0.52 * 418 - 0.52 * 29 } : { s: 0.52, x: COL.x + COL.w / 2, y: H / 2 - 0.52 * 29 };
 const weekIn = (t) => clamp((camAt(t, WEEK_CAM)[2] - 1) / 0.5); // 0 wide, 1 once the camera is in
 function sWeek(t) {
   stage(0.12, IN.glow, 0.6);
   const cam = camAt(t, WEEK_CAM), k = ease.inOut(weekIn(t));
-  if (k < 1) { ctx.save(); ctx.globalAlpha *= 1 - k; head(t, [[-1, '7:00', 'PM']], [[b(27), 'Your week, booked while you worked.']]); ctx.restore(); }
+  if (k < 1) { ctx.save(); ctx.globalAlpha *= 1 - k; head(t, [[-1, '7:00', 'PM']], [[b(20.75), 'Your week, booked while you worked.']]); ctx.restore(); }
   ctx.save();
   const s = lerp(LAPW.s, 1, k);
   ctx.translate(lerp(LAPW.x, W / 2, k), lerp(LAPW.y, H / 2, k)); ctx.scale(s, s); ctx.translate(-W / 2, -H / 2);
@@ -726,24 +728,24 @@ function lockup(t, at, y, ls, size, o = {}) {
 }
 
 
-// ── F · beats 36–47 · close ──────────────────────────────────────────────────
+// ── F · beats 28–38 · close ──────────────────────────────────────────────────
 function sTagline(t) {
   stage(0.12);
   if (VERT) {
-    headline(t, [['You cut hair.', b(36)]], W / 2, 360, 118);
-    headline(t, [['MsgHealth', b(38)]], W / 2, 540, 118);
-    headline(t, [['fills the chair.', b(38), true]], W / 2, 670, 118);
+    headline(t, [['You cut hair.', b(28)]], W / 2, 360, 118);
+    headline(t, [['MsgHealth', b(30)]], W / 2, 540, 118);
+    headline(t, [['fills the chair.', b(30), true]], W / 2, 670, 118);
   } else {
-    headline(t, [['You cut hair.', b(36)]], W / 2, H / 2 - 76, 116);
-    headline(t, [['MsgHealth', b(38)], ['fills the chair.', b(38), true]], W / 2, H / 2 + 76, 116);
+    headline(t, [['You cut hair.', b(28)]], W / 2, H / 2 - 76, 116);
+    headline(t, [['MsgHealth', b(30)], ['fills the chair.', b(30), true]], W / 2, H / 2 + 76, 116);
   }
 }
-window.SFX.push({ t: b(40), kind: 'snap' }, { t: b(40), kind: 'riser' }); // the riser peaks as MsgHealth lands on the end card, with the snap
+window.SFX.push({ t: b(32), kind: 'snap' }, { t: b(32), kind: 'riser' }); // the riser peaks as MsgHealth lands on the end card, with the snap
 function sEnd(t) {
   stage(0.18, IN.glow, 0.45, 580);
-  lockup(t, b(40), H / 2 - 70, 190, 150, { static: true });
-  headline(t, [[BRAND.url, b(41)]], W / 2, H / 2 + 80, 44, { color: SOFT, weight: 500 });
-  riseIn(t, b(42), () => {
+  lockup(t, b(32), H / 2 - 70, 190, 150, { static: true });
+  headline(t, [[BRAND.url, b(33)]], W / 2, H / 2 + 80, 44, { color: SOFT, weight: 500 });
+  riseIn(t, b(34.21), () => {
     const s = 'Start now · 50% off your first month', w = tw(s, 28, 600) + 72;
     fillRR(W / 2 - w / 2, H / 2 + 160, w, 66, 33, '#ffffff');
     text(s, W / 2, H / 2 + 194, 28, 600, '#000', 'center');
@@ -755,12 +757,12 @@ function sEnd(t) {
 // [start, end, scene, 3D transition into it, its length in seconds]. No transition means a straight cut.
 const SCENES = [
   [0, b(4), sOpen],
-  [b(4), b(12), sDue, 'drum', 0.7],       // on the drop: the clock rolls back to the morning
-  [b(12), b(20), sReply, 'drum', 0.7],
-  [b(20), b(26), sReview, 'drum', 0.7],
-  [b(26), b(36), sWeek, 'drum', 0.75],
-  [b(36), b(40), sTagline, 'fall', 0.7],
-  [b(40), DURATION + 1, sEnd],            // straight cut to the end card
+  [b(4), b(10), sDue, 'drum', 0.7],       // as the bass comes in: the clock rolls back to the morning
+  [b(10), b(16), sReply, 'drum', 0.7],
+  [b(16), b(20), sReview, 'drum', 0.7],
+  [b(20), b(28), sWeek, 'drum', 0.75],    // on the chorus drop
+  [b(28), b(32), sTagline, 'fall', 0.7],
+  [b(32), DURATION + 1, sEnd],            // straight cut to the end card
 ];
 // 9:16 framing: [focus x, focus y, scale] of the 16:9 stage, per scene. The moments of the day share one
 // framing; the MacBook pushes closer while the camera is in on the calendar, so the UI fills the phone.
@@ -770,8 +772,8 @@ const FRAMING = new Map([
   [sOpen, fixed(960, 470, 1.0)], [sDue, DAY], [sReply, DAY], [sReview, DAY],
   [sWeek, (t) => { const k = ease.inOut(weekIn(t)); return [960, lerp(420, 540, k), lerp(1.08, 0.95, k)]; }], [sTagline, fixed(960, 510, 1.0)], [sEnd, fixed(960, 560, 0.9)],
 ]);
-// A whoosh peaks at the fastest point of every roll; the first, on the drop, sits a little louder.
-SCENES.filter(([, , , type]) => type === 'drum').forEach(([st, , , , dur], i) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh', gain: i === 0 ? 1 : 0.6 }));
+// A whoosh peaks at the fastest point of every roll; the two on the bass entry and the chorus drop sit louder.
+SCENES.filter(([, , , type]) => type === 'drum').forEach(([st, , , , dur], i) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh', gain: i === 0 || i === 3 ? 1 : 0.6 }));
 
 function renderFrame(t) {
   ctx = MAIN;

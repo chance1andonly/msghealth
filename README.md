@@ -106,43 +106,44 @@ Keep the delivery natural and conversational, as if one business owner were talk
 
 ---
 
-# "While you cut": 23-second product film (9:16 and 16:9, 60 fps)
+# "While you cut": 24-second product film (9:16 and 16:9, 60 fps)
 
-One Tuesday at a barbershop, told by the clock, in the MsgHealth brand indigo (#4F46E5) on black, cut to "keep steady"
-(120 BPM). The hook is the day's result: "6 regulars rebooked. You sent 0 texts." It is already on screen at 0:00, so the
-first frame works as the cover. Three booking notifications land while the intro plays muffled. On the drop (2.3 s) the clock
-rolls back to 9:02 AM and walks through what MsgHealth did while the barber was cutting.
+One Tuesday at a barbershop, told by the clock, in the MsgHealth brand indigo (#4F46E5) on black, cut to Pharrell Williams'
+"Freedom". The hook is the day's result: "6 regulars rebooked. You sent 0 texts." It is already on screen at 0:00, so the
+first frame works as the cover. Three booking notifications land while the intro plays muffled. As the bass comes in (2.8 s)
+the clock rolls back to 9:02 AM and walks through what MsgHealth did while the barber was cutting. The chorus drops (13.0 s)
+as the clock rolls to 7:00 PM and the week fills up.
 
 Every change of hour is the clock rolling over. Both shots are faces of one 3D cube that turns a quarter, upward, like a digit
 on a flip clock. It is rendered in WebGL with GPU motion blur, and each move travels one way and lands. Within a scene, a
 changed digit rolls in place (9:02 → 9:03).
 
-- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 23.4 s), and the vertical cut `dist/msghealth-promo-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
+- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 24.2 s), and the vertical cut `dist/msghealth-promo-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
 - 9:16: `promo-vertical.html` renders the same film natively at 1080×1920 (`npm run render:promo:9x16`). Each scene has its own framing
   (`FRAMING` in `src/promo.js`). Every moment of the day sits on one grid. In 16:9 the clock is on the left and the moment
   is on the right, both centred on the frame's middle line. In 9:16 the clock is on top with the moment a fixed gap below it.
   Every card shares the same inner padding.
-  The laptop fills the width while the camera is in on the calendar, and every scene keeps clear of the app's buttons.
-- Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top (120 BPM, first downbeat 0.348 s), and all timing is written in beats (`b(k)`).
-- Music: `assets/audio/promo-track.m4a` (from the supplied screen recording). Check you have the rights before running it as a paid ad.
+- Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top (94.7 BPM, beat 0 at 0.30 s), and all timing is written in beats (`b(k)`).
+- Music: `assets/audio/promo-track.m4a` is 27.78–52.18 s of the supplied TikTok recording of "Freedom". It stops before
+  TikTok's outro sound at 52.3 s. Check you have the rights before running it as a paid ad.
 - Sound: `scripts/promo-audio.mjs` places each effect so its attack (or peak) lands on its cue from `window.SFX`. A cue can carry
   its own `gain`. Sounds:
   - a soft swoosh as each notification lands, as the texts go out, and as Marcus replies
   - a click as the clock ticks over, as the booking confirms, on each star, and (quietly) on each booking added to the calendar
-  - a whoosh at the fastest point of every roll
+  - a whoosh at the fastest point of every roll, louder on the bass entry and the chorus drop
   - a snap and the peak of a metallic riser as MsgHealth lands on the end card
 
-  The intro plays muffled until the drop, and the music fades out over the last 1.9 s.
+  The intro plays muffled until the bass comes in, and the music fades out over the last 1.9 s.
 - Sync: `src/promo-onsets.js` lists every hit in the track (`python3 scripts/promo-onsets.py` regenerates it). Entrances snap onto the nearest hit.
 - Render: `npm run render:promo`
 - On-screen "today" is Tuesday, October 20, 2026.
 
 | Beats | Time | What's on screen | Transition in |
 |---|---|---|---|
-| 0–4 | 0–2.3s | "Tuesday, October 20 · 6 regulars rebooked. You sent 0 texts." Three booking notifications land on beats 1, 2 and 3 | — |
-| 4–12 | 2.3–6.3s | **9:02 AM** "MsgHealth spots who's due back.": four regulars, Due / Overdue. The clock ticks to **9:03**: "…and texts each one for you." Each turns "Text sent" | Clock roll |
-| 12–20 | 6.3–10.3s | **11:47 AM** "Marcus books himself in.": the morning's text, his reply, "Booked · Thu, Oct 22 · 2:00 PM" | Clock roll |
-| 20–26 | 10.3–13.3s | **3:15 PM** "Jay leaves you five stars.": the stars fill one per half-beat, then the review | Clock roll |
-| 26–36 | 13.3–18.3s | **7:00 PM** MacBook, Home: the camera moves in on this week as six bookings land, then up to "Booked this week: 6" | Clock roll |
-| 36–40 | 18.3–20.3s | "You cut hair. MsgHealth fills the chair." | The laptop falls back into the dark |
-| 40–end | 20.3–23.4s | Logo, msghealth.net, "Start now · 50% off your first month" | Straight cut, with a snap |
+| 0–4 | 0–2.8s | "Tuesday, October 20 · 6 regulars rebooked. You sent 0 texts." Three booking notifications land on beats 1, 2 and 3; music muffled | — |
+| 4–10 | 2.8–6.6s | **9:02 AM** "MsgHealth spots who's due back.": four regulars, Due / Overdue. The clock ticks to **9:03**: "…and texts each one for you." Each turns "Text sent" | Clock roll, as the bass comes in |
+| 10–16 | 6.6–10.4s | **11:47 AM** "Marcus books himself in.": the morning's text, his reply, "Booked · Thu, Oct 22 · 2:00 PM" | Clock roll |
+| 16–20 | 10.4–13.0s | **3:15 PM** "Jay leaves you five stars.": a star on each hit, then the review | Clock roll |
+| 20–28 | 13.0–18.0s | **7:00 PM** MacBook, Home: the camera moves in on this week as six bookings land, then settles on "Booked this week: 6 new since this morning" | Clock roll, on the chorus drop |
+| 28–32 | 18.0–20.6s | "You cut hair. MsgHealth fills the chair." | The laptop falls back into the dark |
+| 32–end | 20.6–24.2s | Logo, msghealth.net, "Start now · 50% off your first month" | Straight cut, with a snap |
