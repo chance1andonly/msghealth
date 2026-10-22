@@ -119,7 +119,9 @@ changed digit rolls in place (9:02 → 9:03).
 
 - **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 23.4 s), and the vertical cut `dist/msghealth-promo-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
 - 9:16: `promo-vertical.html` renders the same film natively at 1080×1920 (`npm run render:promo:9x16`). Each scene has its own framing
-  (`FRAMING` in `src/promo.js`). In 16:9 the clock sits to the left of each moment; in 9:16 it sits above it.
+  (`FRAMING` in `src/promo.js`). Every moment of the day sits on one grid. In 16:9 the clock is on the left and the moment
+  is on the right, both centred on the frame's middle line. In 9:16 the clock is on top with the moment a fixed gap below it.
+  Every card shares the same inner padding.
   The laptop fills the width while the camera is in on the calendar, and every scene keeps clear of the app's buttons.
 - Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top (120 BPM, first downbeat 0.348 s), and all timing is written in beats (`b(k)`).
 - Music: `assets/audio/promo-track.m4a` (from the supplied screen recording). Check you have the rights before running it as a paid ad.

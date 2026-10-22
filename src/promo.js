@@ -136,13 +136,6 @@ function headline(t, chunks, x, y, size, o = {}) {
   });
   return total;
 }
-function wrapText(s, size, weight, maxW) {
-  const words = s.split(' '), out = [];
-  let cur = '';
-  words.forEach((wd) => { const nx = cur ? cur + ' ' + wd : wd; if (tw(nx, size, weight, 0) > maxW && cur) { out.push(cur); cur = wd; } else cur = nx; });
-  if (cur) out.push(cur);
-  return out;
-}
 function sentBubble(x1, y, lines, size, tail, extra = 0) { // right-aligned blue iMessage bubble; x1 = right edge
   const lh = size * 1.28, padX = 22, padY = 13;
   const w = Math.max(...lines.map((l) => tw(l, size, 400, 0))) + extra + padX * 2, h = lines.length * lh + padY * 2;
@@ -372,20 +365,6 @@ function transition(type, p, A, B, dur) {
 }
 
 // ── shared product UI (rebuilt from the screen recordings) ───────────────────
-// Feature name, top left in screen space: a quiet glass label, so each demo is named.
-function featureTag(t, at, label, sub, zoom = 1) {
-  const a = 1 - clamp((zoom - 1) / 0.25); // steps aside while the camera is pushed in
-  if (a <= 0) return;
-  ctx.save(); ctx.globalAlpha = a;
-  if (VERT) { ctx.setTransform(1, 0, 0, 1, 0, 0); riseIn(t, at, () => { // centred above the laptop
-    text(label, OUT.w / 2, 470, 52, 700, '#ffffff', 'center', -0.02);
-    if (sub) wrapText(sub, 30, 500, 900).forEach((l, i) => text(l, OUT.w / 2, 540 + i * 40, 30, 500, 'rgba(235,235,245,0.6)', 'center', 0));
-  }, { dy: 14, blur: 8 }); } else riseIn(t, at, () => {
-    text(label, 72, 74, 30, 700, '#ffffff', 'left', -0.02);
-    if (sub) text(sub, 72, 110, 20, 500, 'rgba(235,235,245,0.6)', 'left', 0);
-  }, { dy: 14, blur: 8 });
-  ctx.restore();
-}
 
 const box = (x, y, w, h, r = 10) => { fillRR(x, y, w, h, r, '#fff'); rr(x, y, w, h, r); ctx.strokeStyle = '#e6e6ee'; ctx.lineWidth = 1.2; ctx.stroke(); };
 
@@ -531,14 +510,16 @@ function camAt(t, keys) {
 function clock(t, keys, x, y, size, align = 'left') {
   let cur = keys[0], prev = null, at = -1;
   keys.slice(1).forEach((k) => { if (t >= hit(k[0])) { prev = cur; cur = k; at = hit(k[0]); } });
-  const tr = -0.02, dw = Math.max(...'0123456789'.split('').map((d) => tw(d, size, 700, tr)));
-  const slot = (ch) => (ch === ':' ? tw(':', size, 700, tr) : dw);
+  const tr = -0.02, p = at < 0 ? 1 : ease.inOut(seg(t, at, at + 0.42));
+  const digits = cur[1].split(''), olds = digits.map((ch, i) => (prev && prev[1][i] !== ch ? prev[1][i] : null));
+  // each digit takes its own width (no gaps around a 1); a rolling digit's slot eases from the old width to the new
+  const slot = (ch, i) => (olds[i] && p < 1 ? lerp(tw(olds[i], size, 700, tr), tw(ch, size, 700, tr), p) : tw(ch, size, 700, tr));
   const ms = size * 0.36, gap = size * 0.16, mw = tw(cur[2], ms, 700, 0.02);
-  const digits = cur[1].split(''), total = digits.reduce((s, ch) => s + slot(ch), 0) + gap + mw;
+  const total = digits.reduce((s, ch, i) => s + slot(ch, i), 0) + gap + mw;
   let cx = align === 'center' ? x - total / 2 : x;
-  const by = y + size * 0.36, p = at < 0 ? 1 : ease.inOut(seg(t, at, at + 0.42));
+  const by = y + size * 0.36;
   digits.forEach((ch, i) => {
-    const w = slot(ch), old = prev && prev[1][i] !== ch ? prev[1][i] : null, x0 = cx;
+    const w = slot(ch, i), old = olds[i], x0 = cx;
     const draw = (c, dy, a) => {
       if (a <= 0.003) return;
       ctx.save(); ctx.globalAlpha *= a;
@@ -569,8 +550,12 @@ function subline(t, keys, x, y, size, align) {
   });
 }
 // Every scene of the day: the time, and what MsgHealth did then. 16:9: left of the content; 9:16: above it.
-const HEAD = VERT ? { x: W / 2, y: 30, sy: 170, size: 170, sub: 46, align: 'center' } : { x: 150, y: 410, sy: 540, size: 150, sub: 42, align: 'left' };
+// Layout grid. 16:9: two columns, the time on the left and the moment on the right, both centred on the
+// frame's middle line. 9:16: one column, the time on top and the moment a fixed gap below it.
+const HEAD = VERT ? { x: W / 2, y: 30, sy: 170, size: 170, sub: 46, align: 'center' } : { x: 150, y: 492, sy: 622, size: 150, sub: 42, align: 'left' };
 const COL = { x: VERT ? W / 2 - 390 : 1000, w: 780 }; // the content column
+const PAD = 40; // inner padding of every card
+const cardY = (h) => (VERT ? 280 : H / 2 - h / 2); // top of a card of height h
 function head(t, clockKeys, subKeys) {
   clock(t, clockKeys, HEAD.x, HEAD.y, HEAD.size, HEAD.align);
   subline(t, subKeys, HEAD.x, HEAD.sy, HEAD.sub, HEAD.align);
@@ -595,7 +580,7 @@ function notice(x, y, w, time, body) { // a banner from the MsgHealth app
 }
 const OPEN = VERT // stacked for the phone
   ? { eyebrow: -40, lines: [[['6 regulars', -1]], [['rebooked.', -1]], [['You sent', -1]], [['0 texts.', -1, true]]], ys: [90, 220, 390, 520], size: 124, notes: 680, nw: 820 }
-  : { eyebrow: 150, lines: [[['6 regulars rebooked.', -1]], [['You sent', -1], ['0 texts.', -1, true]]], ys: [262, 384], size: 104, notes: 520, nw: 780 };
+  : { eyebrow: 192, lines: [[['6 regulars rebooked.', -1]], [['You sent', -1], ['0 texts.', -1, true]]], ys: [304, 426], size: 104, notes: 562, nw: 780 };
 function sOpen(t) {
   stage(0.16, IN.glow, 0.42);
   text('TUESDAY, OCTOBER 20', W / 2, OPEN.eyebrow, 30, 700, IN.mid, 'center', 0.22);
@@ -615,20 +600,25 @@ const DUE = [
 ];
 const TEXTED = [8.5, 9, 9.5, 10].map(b); // one text a half-beat
 window.SFX.push({ t: b(8), kind: 'click' }, { t: TEXTED[0] + 0.11, kind: 'sent', gain: 0.7 });
+// A person's row inside a card: avatar, name and a detail line, all on the card's padding.
+function person(x, cy, ini, col, name, detail) {
+  ctx.beginPath(); ctx.arc(x + PAD + 30, cy, 30, 0, 7); ctx.fillStyle = rgba(col, 0.3); ctx.fill();
+  text(ini, x + PAD + 30, cy + 1, 21, 700, '#ffffff', 'center');
+  text(name, x + PAD + 76, cy - 15, 28, 600, '#ffffff');
+  text(detail, x + PAD + 76, cy + 20, 20, 500, SOFT);
+}
 function sDue(t) {
   stage(0.14);
   head(t, [[-1, '9:02', 'AM'], [b(8), '9:03', 'AM']], [[b(5), 'MsgHealth spots who’s due back.'], [b(8), '…and texts each one for you.']]);
-  const { x, w } = COL, rh = 118, y0 = 270, land = [5.5, 6, 6.5, 7].map(b);
-  snapIn(t, b(5.5), x + w / 2, y0 + 2 * rh, () => glass(x, y0, w, rh * 4 + 40, 34), { dy: 20 });
+  const { x, w } = COL, rh = 112, h = rh * 4 + 2 * (PAD - 14), y0 = cardY(h), land = [5.5, 6, 6.5, 7].map(b);
+  snapIn(t, b(5.5), x + w / 2, y0 + h / 2, () => glass(x, y0, w, h, 34), { dy: 20 });
   DUE.forEach(([n, ini, c, sub, st, sc], i) => {
-    const ry = y0 + 20 + rh / 2 + i * rh;
+    const ry = y0 + PAD - 14 + rh / 2 + i * rh;
     snapIn(t, land[i], x + w / 2, ry, () => {
-      ctx.beginPath(); ctx.arc(x + 64, ry, 30, 0, 7); ctx.fillStyle = rgba(c, 0.3); ctx.fill();
-      text(ini, x + 64, ry + 1, 21, 700, '#ffffff', 'center');
-      text(n, x + 112, ry - 15, 28, 600, '#ffffff');
-      text(sub, x + 112, ry + 20, 20, 500, SOFT);
-      if (t < TEXTED[i]) pill(x + w - 30, ry, st, sc, 20, 'right');
-      else snapIn(t, TEXTED[i], x + w - 90, ry, () => pill(x + w - 30, ry, 'Text sent', IN.mid, 20, 'right'), { from: 0.6, dy: 0 });
+      if (i) { ctx.fillStyle = 'rgba(255,255,255,0.07)'; ctx.fillRect(x + PAD + 76, ry - rh / 2, w - 2 * PAD - 76, 1.5); }
+      person(x, ry, ini, c, n, sub);
+      if (t < TEXTED[i]) pill(x + w - PAD, ry, st, sc, 20, 'right');
+      else snapIn(t, TEXTED[i], x + w - PAD - 60, ry, () => pill(x + w - PAD, ry, 'Text sent', IN.mid, 20, 'right'), { from: 0.6, dy: 0 });
     }, { dy: 16 });
   });
 }
@@ -636,22 +626,25 @@ function sDue(t) {
 // ── C · beats 12–20 · 11:47 AM: Marcus books himself in ─────────────────────
 const REPLY = { at: b(14.5), booked: b(16) };
 window.SFX.push({ t: REPLY.at + 0.11, kind: 'sent', gain: 0.8 }, { t: REPLY.booked, kind: 'click' });
-function sReply(t) {
+function sReply(t) { // the conversation, as a card: who it's with, the morning's text, his reply, the booking
   stage(0.14);
   head(t, [[-1, '11:47', 'AM']], [[b(13), 'Marcus books himself in.']]);
-  const { x, w } = COL, size = 30, cx = x + w / 2;
-  text('Today 9:03 AM', cx, 300, 19, 500, 'rgba(235,235,245,0.45)', 'center', 0);
-  sentBubble(x + w, 330, ['Hey Marcus, it’s been 3 weeks.', 'Want your usual, Thursday at 2?'], size, true); // sent this morning
-  snapIn(t, REPLY.at, x + 140, 545, () => {
-    text('11:47 AM', cx, 480, 19, 500, 'rgba(235,235,245,0.45)', 'center', 0);
-    recvBubble(x, 510, ['Bet. See you Thursday.'], size, true, true);
+  const { x, w } = COL, h = 576, y = cardY(h), size = 28, cx = x + w / 2, stamp = 'rgba(235,235,245,0.45)';
+  glass(x, y, w, h, 34);
+  person(x, y + PAD + 30, 'MB', '#d97706', 'Marcus Bell', 'Text message');
+  ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fillRect(x, y + 140, w, 1.5);
+  text('Today 9:03 AM', cx, y + 176, 18, 500, stamp, 'center', 0);
+  sentBubble(x + w - PAD, y + 200, ['Hey Marcus, it’s been 3 weeks.', 'Want your usual, Thursday at 2?'], size, true); // sent this morning
+  snapIn(t, REPLY.at, x + PAD + 140, y + 370, () => {
+    text('11:47 AM', cx, y + 324, 18, 500, stamp, 'center', 0);
+    recvBubble(x + PAD, y + 348, ['Bet. See you Thursday.'], size, true, true);
   }, { from: 0.6, dy: 30, blur: 0 });
-  const by = 690;
+  const by = y + h - PAD - 38;
   snapIn(t, REPLY.booked, cx, by, () => {
-    const pw = 600;
-    glass(cx - pw / 2, by - 38, pw, 76, 38, { fill: 'rgba(74,222,128,0.12)', stroke: 'rgba(74,222,128,0.4)' });
-    ctx.beginPath(); ctx.arc(cx - pw / 2 + 50, by, 19, 0, 7); ctx.fillStyle = '#4ade80'; ctx.fill(); check(cx - pw / 2 + 50, by, 19, '#0b2e17', 4);
-    text('Booked · Thu, Oct 22 · 2:00 PM', cx - pw / 2 + 84, by + 1, 28, 700, '#bbf7d0');
+    glass(x + PAD, by - 38, w - 2 * PAD, 76, 38, { fill: 'rgba(74,222,128,0.12)', stroke: 'rgba(74,222,128,0.4)' });
+    const s = 'Booked · Thu, Oct 22 · 2:00 PM', sw = tw(s, 26, 700) + 54, sx = cx - sw / 2;
+    ctx.beginPath(); ctx.arc(sx + 17, by, 17, 0, 7); ctx.fillStyle = '#4ade80'; ctx.fill(); check(sx + 17, by, 17, '#0b2e17', 4);
+    text(s, sx + 54, by + 1, 26, 700, '#bbf7d0');
   }, { from: 0.85 });
 }
 
@@ -666,34 +659,40 @@ function star(x, y, R) {
 function sReview(t) {
   stage(0.14);
   head(t, [[-1, '3:15', 'PM']], [[b(21), 'Jay leaves you five stars.']]);
-  const { x, w } = COL, y = 280, h = 420;
+  const { x, w } = COL, h = 400, y = cardY(h);
   glass(x, y, w, h, 34);
-  ctx.beginPath(); ctx.arc(x + 76, y + 80, 34, 0, 7); ctx.fillStyle = rgba('#0ea5e9', 0.3); ctx.fill();
-  text('JO', x + 76, y + 81, 24, 700, '#ffffff', 'center');
-  text('Jay Ortiz', x + 128, y + 64, 30, 700, '#ffffff');
-  text('Signature Cut · today, 1:00 PM', x + 128, y + 100, 21, 500, SOFT);
+  person(x, y + PAD + 30, 'JO', '#0ea5e9', 'Jay Ortiz', 'Signature Cut · today, 1:00 PM');
   STARS.forEach((at, i) => {
-    const sx = x + 76 + i * 72, sy = y + 190;
+    const sx = x + PAD + 28 + i * 70, sy = y + 176;
     star(sx, sy, 28); ctx.fillStyle = 'rgba(255,255,255,0.13)'; ctx.fill();
     snapIn(t, at, sx, sy, () => { star(sx, sy, 28); ctx.fillStyle = '#fbbf24'; ctx.fill(); }, { from: 0.5, dy: 0, blur: 6 });
   });
-  riseIn(t, b(24), () => text('“Cleanest fade I’ve had in years.”', x + 44, y + 280, 36, 600, '#ffffff', 'left', -0.015), { dy: 18, blur: 10 });
-  ctx.fillStyle = 'rgba(255,255,255,0.1)'; ctx.fillRect(x + 44, y + 336, w - 88, 1.5);
-  text('Asked automatically, after his cut.', x + 44, y + 376, 21, 500, 'rgba(235,235,245,0.5)', 'left', 0);
+  riseIn(t, b(24), () => text('“Cleanest fade I’ve had in years.”', x + PAD - 6, y + 256, 36, 600, '#ffffff', 'left', -0.015), { dy: 18, blur: 10 });
+  ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fillRect(x, y + h - 80, w, 1.5);
+  text('Review request sent automatically after his cut.', x + PAD, y + h - 40, 20, 500, SOFT, 'left', 0);
 }
 
 // ── E · beats 26–36 · 7:00 PM: the week, on the MacBook ─────────────────────
-// The calendar fills as the camera looks over the week, then it moves up to "Booked this week".
+// Wide, the MacBook sits in the content column beside the clock like every other moment; as the camera
+// moves in on the week it grows to fill the frame and the clock steps aside. Six bookings land, then
+// the camera moves up to "Booked this week".
 const WEEK_AT = [28.5, 29, 29.5, 30, 30.5, 31].map(b);
 const ADDED = [[21, '4p', 'Chris Okafor', 'Skin Fade'], [22, '2p', 'Marcus Bell', 'Signature Cut'], [23, '11:30a', 'Devon Price', 'Skin Fade'],
   [23, '3p', 'Sam Rivera', 'Beard Trim'], [24, '10a', 'Andre Silva', 'Cut & Beard'], [24, '1p', 'Nico Alvarez', 'Signature Cut']].map((e, i) => [...e, WEEK_AT[i]]);
 WEEK_AT.forEach((t) => window.SFX.push({ t, kind: 'click', gain: 0.35 }));
 const WEEK_CAM = [[b(26), 960, 540, 1], [b(27.5), 1110, 770, 1.9], [b(31.5), 560, 150, 2.3], [b(33.5), 960, 540, 1]];
+// The MacBook, wide: its scale and where its centre sits. (Drawn at scale 1 it centres 29px below the frame's middle.)
+const LAPW = VERT ? { s: 0.52, x: W / 2, y: 280 + 0.52 * 418 - 0.52 * 29 } : { s: 0.52, x: COL.x + COL.w / 2, y: H / 2 - 0.52 * 29 };
+const weekIn = (t) => clamp((camAt(t, WEEK_CAM)[2] - 1) / 0.5); // 0 wide, 1 once the camera is in
 function sWeek(t) {
   stage(0.12, IN.glow, 0.6);
-  const cam = camAt(t, WEEK_CAM);
+  const cam = camAt(t, WEEK_CAM), k = ease.inOut(weekIn(t));
+  if (k < 1) { ctx.save(); ctx.globalAlpha *= 1 - k; head(t, [[-1, '7:00', 'PM']], [[b(27), 'Your week, booked while you worked.']]); ctx.restore(); }
+  ctx.save();
+  const s = lerp(LAPW.s, 1, k);
+  ctx.translate(lerp(LAPW.x, W / 2, k), lerp(LAPW.y, H / 2, k)); ctx.scale(s, s); ctx.translate(-W / 2, -H / 2);
   laptop(t, cam, () => homeWorld(t, { added: ADDED }));
-  featureTag(t, b(26.5), '7:00 PM', 'Your week, booked while you worked.', cam[2]);
+  ctx.restore();
 }
 
 // ── the MsgHealth lockup (end card) ──────────────────────────────────────────
@@ -731,7 +730,7 @@ function lockup(t, at, y, ls, size, o = {}) {
 function sTagline(t) {
   stage(0.12);
   if (VERT) {
-    headline(t, [['You cut hair.', b(36)]], W / 2, 330, 118);
+    headline(t, [['You cut hair.', b(36)]], W / 2, 360, 118);
     headline(t, [['MsgHealth', b(38)]], W / 2, 540, 118);
     headline(t, [['fills the chair.', b(38), true]], W / 2, 670, 118);
   } else {
@@ -763,14 +762,13 @@ const SCENES = [
   [b(36), b(40), sTagline, 'fall', 0.7],
   [b(40), DURATION + 1, sEnd],            // straight cut to the end card
 ];
-// 9:16 framing: [focus x, focus y, scale] of the 16:9 stage, per scene. The laptop pushes closer
-// while the camera is in on the calendar, so the UI fills the phone's width.
+// 9:16 framing: [focus x, focus y, scale] of the 16:9 stage, per scene. The moments of the day share one
+// framing; the MacBook pushes closer while the camera is in on the calendar, so the UI fills the phone.
 const fixed = (fx, fy, sc) => () => [fx, fy, sc];
-const lapFrame = (keys) => (t) => { const k = clamp((camAt(t, keys)[2] - 1) / 0.6); return [960, lerp(560, 540, k), lerp(0.62, 0.95, k)]; }; // zoomed out, the whole MacBook fits
 const DAY = fixed(960, 420, 1.08);
 const FRAMING = new Map([
   [sOpen, fixed(960, 470, 1.0)], [sDue, DAY], [sReply, DAY], [sReview, DAY],
-  [sWeek, lapFrame(WEEK_CAM)], [sTagline, fixed(960, 510, 1.0)], [sEnd, fixed(960, 560, 0.9)],
+  [sWeek, (t) => { const k = ease.inOut(weekIn(t)); return [960, lerp(420, 540, k), lerp(1.08, 0.95, k)]; }], [sTagline, fixed(960, 510, 1.0)], [sEnd, fixed(960, 560, 0.9)],
 ]);
 // A whoosh peaks at the fastest point of every roll; the first, on the drop, sits a little louder.
 SCENES.filter(([, , , type]) => type === 'drum').forEach(([st, , , , dur], i) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh', gain: i === 0 ? 1 : 0.6 }));
