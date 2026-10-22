@@ -34,7 +34,7 @@ const SLICES = {
   gears: [6.80, 8.56], open: [8.70, 9.43], success: [9.68, 10.73], glitch1: [10.74, 11.56], glitch2: [11.62, 12.34], glitch3: [12.40, 13.56],
   ...Object.fromEntries([13.605, 13.985, 14.305, 14.530, 15.035, 15.500].map((t, i) => ['key' + i, [t - 0.004, t + 0.09]])),
 };
-const SFX_GAIN = 0.75;
+const SFX_GAIN = 0.42; // about 5 dB under the first mix, which read too loud
 for (const [name, time, gain] of TM.sfx) {
   const [a, b] = SLICES[name], s0 = Math.round(a * SR), len = Math.round((b - a) * SR), at0 = Math.round(time * SR);
   const fi = Math.round(0.003 * SR), fo = Math.round(0.012 * SR);

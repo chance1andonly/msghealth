@@ -1,5 +1,5 @@
 // MsgHealth reel — 15.7 s, 1080×1920 (9:16), cut to the track's beat grid (src/reel-timing.js).
-// Story: one regular is drifting away → MsgHealth flags her → texts her → she rebooks → every client, every day
+// Story: "Salon & barber owners: do you know who's not coming back?" → MsgHealth flags her → texts her → she rebooks → every client, every day
 // → the features → the address is typed into a search bar and the app icon lands. The hook is fully on screen from
 // the first frame (it's also the cover), and everything is centred inside TikTok's and Instagram's safe area.
 // Every scene change lands on a downbeat; everything inside a scene lands on a beat or the hat between beats.
@@ -119,7 +119,7 @@ function background() {
 
 // ── headlines ────────────────────────────────────────────────────────────────
 // Centred, two lines, the same place in every scene. Words blur into focus one after another (and blur away).
-const HL = { y: 318, lh: 94, size: 82, maxW: 860 };
+const HL = { y: 356, lh: 88, size: 78, maxW: 860 };
 function headline(lines, t, tIn = -1, tOut = 1e9) {
   const full = (l) => l.map((s) => s[0]).join('');
   let size = HL.size; for (const l of lines) size = Math.min(size, HL.size * HL.maxW / tw(full(l), HL.size, 800, -HL.size * 0.045));
@@ -149,8 +149,20 @@ function blurLine(s, y, p, o = {}) {
   ctx.restore();
 }
 
+// the small pill above the headline: who it's for in the hook, then the step being shown
+const TAG_Y = 252;
+function tag(s, t, tIn = -1, tOut = 1e9, o = {}) {
+  const p = tIn < 0 ? 1 : P(t, tIn, tIn + 0.4), q = P(t, tOut, tOut + 0.25), a = clamp(p * 1.6) * (1 - q);
+  if (a <= 0.003) return;
+  const size = 27, w = tw(s, size, 700, 2) + 60, b = (1 - eo(p)) * 14 + eo(q) * 14;
+  ctx.save(); if (b > 0.3) ctx.filter = `blur(${b * DPR}px)`; ctx.globalAlpha *= a; ctx.translate(0, (1 - eo(p)) * 14 - eo(q) * 12);
+  box(CX - w / 2, TAG_Y - 28, w, 56, 28, o.fill ?? mixc('#ffffff', C.accent, 0.12), { stroke: o.stroke ?? mixc('#ffffff', C.accent, 0.25), lw: 2 });
+  txt(s, CX, TAG_Y + 10, { size, w: 700, ls: 2, color: o.color ?? C.accent, align: 'center' });
+  ctx.restore();
+}
+
 // ── the panel (one white card, shared by the scenes) ─────────────────────────
-const PAN = { x: 140, y: 470, w: 800 };
+const PAN = { x: 140, y: 506, w: 800 };
 const panel = (h, a = 1) => { ctx.save(); ctx.globalAlpha *= a; box(PAN.x, PAN.y, PAN.w, h, 40, 'rgba(255,255,255,0.94)', { shadow: 70, sa: 0.12, sy: 26, stroke: 'rgba(255,255,255,1)', lw: 2 }); ctx.restore(); };
 
 // the pointer (macOS style), tip at x, y
@@ -162,7 +174,7 @@ function cursor(x, y, s = 1, a = 1) {
   ctx.fillStyle = '#111'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.2; ctx.lineJoin = 'round'; ctx.stroke(); ctx.fill(); ctx.restore();
 }
 
-// ── 1 · Hook (0 → drop): "Your best client is about to leave." ───────────────
+// ── 1 · Hook (0 → drop): "Salon & barber owners — do you know who’s not coming back?" ──
 // Sarah's card: her days-since-visit counter climbs and her health drains as the intro builds; she tips into
 // "At risk" on the last hat before the drop.
 const HOOK_END = TM.hats[3], HOOK_H = 790;
@@ -276,8 +288,11 @@ function sceneOpen(t) {
   }
   if (t >= D) dashboard(t, 'flag', D);
   ctx.restore();
-  headline([[['Your best client']], [['is about to '], ['leave.', C.risk]]], t, -1, D - 0.12);
-  headline([[['MsgHealth', C.accent], [' spots it']], [['before you do.']]], t, D + 0.1);
+  // the hook speaks to one audience with one question; the drop answers it
+  tag('SALON & BARBER OWNERS', t, -1, D - 0.12);
+  headline([[['Do you know who’s']], [['not coming back?', C.risk]]], t, -1, D - 0.12);
+  tag('STEP 1 · SPOT THEM', t, D + 0.1);
+  headline([[['MsgHealth', C.accent], [' knows.']], [['It flags them early.']]], t, D + 0.1);
 }
 
 // ── 3 · The text (bar 2) ─────────────────────────────────────────────────────
@@ -316,6 +331,7 @@ function sceneChat(t) {
     ctx.restore();
   }
   bubble(['Yes please!', 'See you Thursday'], x0 + 32, y0 + 420, false, P(t, b(7) - 0.02, b(7) + 0.34));
+  tag('STEP 2 · WIN THEM BACK', t);
   headline([[['It texts them']], [['back '], ['for you.', C.accent]]], t);
 }
 
@@ -357,7 +373,8 @@ function sceneBook(t) {
     ctx.save(); ctx.globalAlpha *= tp; ctx.translate((1 - tp) * 20, 0);
     check(xx + 10, hy + 157, 16, C.ok, 3.5); txt('Won back automatically', xx + 30, hy + 166, { size: 25, w: 650, color: mixc(C.ok, C.ink, 0.2) }); ctx.restore();
   }
-  headline([[['Back on the']], [['calendar.', C.accent]]], t);
+  tag('STEP 3 · REBOOK', t);
+  headline([[['Back on your']], [['calendar.', C.accent]]], t);
 }
 
 // ── 5 · Every client (bar 4): the cursor switches on auto win-backs, then they come back one per beat ──
@@ -373,7 +390,8 @@ function sceneAll(t) {
     cursor(x + away * 120, y + away * 260, 1 - 0.14 * press, clamp(P(t, t0 - 0.05, t0 + 0.15)) * (1 - away));
     if (t > c) { const q = P(t, c, c + 0.45); ctx.save(); ctx.globalAlpha = (1 - q) * 0.5; ctx.strokeStyle = C.accent; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(tx, ty, 20 + q * 40, 0, 7); ctx.stroke(); ctx.restore(); }
   }
-  headline([[['Now do that for']], [['every client.', C.accent]]], t);
+  tag('ON AUTOPILOT', t);
+  headline([[['Now it’s done for']], [['every client.', C.accent]]], t);
 }
 
 // ── 6 · Features (bar 5) on an indigo flood ──────────────────────────────────

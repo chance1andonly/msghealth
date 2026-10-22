@@ -131,7 +131,7 @@ deep-indigo ink, the official logo mark and Inter type. It runs the length of it
 # Reel (9:16, 15.7 s, cut to the track)
 
 A short, retention-first cut for TikTok and Instagram Reels. It was made after the launch film's analytics showed
-half of viewers leaving in the first ~2 seconds, so the hook ("Your best client is about to leave.") is fully on
+half of viewers leaving in the first ~2 seconds, so the hook (a "SALON & BARBER OWNERS" call-out and the question "Do you know who's not coming back?") is fully on
 screen from the first frame, and the first frame also works as the cover. The story is told in on-screen text,
 so it works muted.
 
@@ -146,11 +146,11 @@ focus, and the backdrop is frosted glass with soft indigo and sky-blue light.
 
 | Time | Music | What happens |
 |---|---|---|
-| 0–3.2 s | Intro hats | "Your best client is about to leave." Sarah's days-since-visit counter climbs and her health drains. She turns *Needs attention*, then two warning signs appear, then *At risk*, each on a hat. |
-| 3.21 s | The drop | Her card becomes the Client health list: "MsgHealth spots it before you do." Three more clients tip over, one per beat. |
-| 5.13 s | Bar 2 | "It texts them back for you." The win-back text lands, then "Sent automatically by MsgHealth", then her reply. |
-| 7.05 s | Bar 3 | "Back on the calendar." She drops into the open 10:00 slot, her health returns on the big hit (31 → 88), and "Won back automatically" follows. |
-| 8.97 s | Bar 4 | "Now do that for every client." A cursor switches on *Auto win-backs*, then the rest come back, one per beat. |
+| 0–3.2 s | Intro hats | "SALON & BARBER OWNERS · Do you know who's not coming back?" Sarah's days-since-visit counter climbs and her health drains. She turns *Needs attention*, then two warning signs appear, then *At risk*, each on a hat. |
+| 3.21 s | The drop | The answer. Her card becomes the Client health list: *Step 1 · Spot them*, "MsgHealth knows. It flags them early." Three more clients tip over, one per beat. |
+| 5.13 s | Bar 2 | *Step 2 · Win them back*: "It texts them back for you." The win-back text lands, then "Sent automatically by MsgHealth", then her reply. |
+| 7.05 s | Bar 3 | *Step 3 · Rebook*: "Back on your calendar." She drops into the open 10:00 slot, her health returns on the big hit (31 → 88), and "Won back automatically" follows. |
+| 8.97 s | Bar 4 | *On autopilot*: "Now it's done for every client." A cursor switches on *Auto win-backs*, then the rest come back, one per beat. |
 | 10.89 s | Bar 5 | An indigo flood: Health scores · Churn alerts · Win-back texts · Online booking, one per beat. |
 | 12.57 s | | The features blur away into a deep-indigo end card. |
 | 12.81 s | Bar 6 | A glass search bar types "msghealth.net", one keystroke per letter. |
