@@ -106,30 +106,27 @@ Keep the delivery natural and conversational, as if one business owner were talk
 
 ---
 
-# 45-second product film (16:9, 60 fps)
+# 23-second product film (9:16 and 16:9, 60 fps)
 
-A keynote-style product film for barbers, cut to "keep steady" (120 BPM). It has a black stage, large gradient type that fades up out of a
-soft blur, an iPhone for the opening text, and a MacBook that opens on the product. The product screens are rebuilt from
-MsgHealth screen recordings, with a large pointer. Scene changes are simple 3D camera moves rendered in WebGL with GPU motion
-blur. Each move travels one way and lands, with no overshoot and no snap-back. The laptop demos cut straight from one to the
-next, and the logo reveal and end card are straight cuts too.
+A keynote-style product film for barbers, cut to "keep steady" (120 BPM), in black and champagne gold (the product
+screens keep the app's real indigo). It is built for short-form feeds: the hook ("For barbers: Your regulars won't tell
+you they're leaving.") is already on screen at 0:00, so the first frame works as the cover. An at-risk alert lands on beat 1,
+"leaving." turns red with After Effects-style light rays, and on the drop (2.3 s) the camera dives through the word into the
+analytics dashboard. Then health scores, win-backs on autopilot, the AI Business Analyst, the tagline and the end card.
+Scene changes are 3D camera moves rendered in WebGL with GPU motion blur; each travels one way and lands.
 
-Order: the texts, then straight into the analytics dashboard on the drop (the numbers climb one card at a time) so the viewer
-sees the product first. Then the problem (regulars who quietly stop booking, ending on a red "gone." with After Effects-style
-light rays streaming out of its letters), the logo, and the features explained one by one: health scores, the AI Business
-Analyst, automatic win-backs, the booking calendar and review requests. It ends on the tagline and the end card.
-
-- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 44.9 s), and the vertical cut `dist/msghealth-promo-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
+- **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 23.4 s), and the vertical cut `dist/msghealth-promo-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
 - 9:16: `promo-vertical.html` renders the same film natively at 1080×1920 (`npm run render:promo:9x16`). Each scene has its own framing
-  (`FRAMING` in `src/promo.js`). The iPhone fills the frame, the laptop fills the width and pushes closer while a feature is shown,
-  the feature titles sit above the laptop, the month cards sit in a 2 × 2 grid, the health-score scene is stacked and the win-back steps form one column.
+  (`FRAMING` in `src/promo.js`). The laptop fills the width and pushes closer while a feature is shown,
+  the feature titles sit above the laptop, the hook and the health-score scene are stacked, the win-back steps form one column,
+  and every scene keeps clear of the screen edges and the app's buttons.
 - Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top (120 BPM, first downbeat 0.348 s), and all timing is written in beats (`b(k)`).
   Scenes start on bar downbeats and are grouped into 4-bar phrases.
 - Music: `assets/audio/promo-track.m4a` (from the supplied screen recording). Check you have the rights before running it as a paid ad.
 - Sound: `scripts/promo-audio.mjs` places each effect so its attack (or peak) lands on its cue from `window.SFX`:
-  the iPhone sent swoosh peaks as each bubble lands, a camera flash as "gone" finishes turning red, a mouse click on every pointer click,
+  a soft swoosh as the at-risk alert lands, a camera flash as "leaving." finishes turning red, a mouse click on every pointer click,
   a whoosh (trimmed to its core) at the fastest point of each move that brings the laptop in, and a snap as MsgHealth lands on the end card, together with the peak of a metallic riser that builds into it.
-  The music is muffled for the bar before the logo and fades out over the last 1.9 s.
+  The intro plays muffled until the drop, and the music fades out over the last 1.9 s.
 - Sync: `src/promo-onsets.js` lists every hit in the track (`python3 scripts/promo-onsets.py` regenerates it). Entrances snap onto the nearest hit.
 - Render: `npm run render:promo`
 - On-screen "today" is Sunday, October 18, 2026, and every date shown is recent relative to it.
