@@ -130,30 +130,46 @@ deep-indigo ink, the official logo mark and Inter type. It runs the length of it
 
 # Reel (9:16, 15.7 s, cut to the track)
 
-A short, retention-first cut for TikTok and Reels. It was made after the launch film's analytics showed half of
-viewers leaving in the first ~2 seconds, so the hook ("Your best client is about to leave.") is fully on screen
-from the first frame, and the first frame also works as the cover. The film is short, the story is told in
-on-screen text so it works muted, and every element stays inside TikTok's safe area (x 70–930, y 220–1500).
+A short, retention-first cut for TikTok and Instagram Reels. It was made after the launch film's analytics showed
+half of viewers leaving in the first ~2 seconds, so the hook ("Your best client is about to leave.") is fully on
+screen from the first frame, and the first frame also works as the cover. The story is told in on-screen text,
+so it works muted.
+
+Everything is centred on the frame's vertical midline and kept inside x 140–940, y 240–1300. That keeps it clear of
+the top tabs, the bottom caption and the right-hand button rail on both apps. Text and scene changes blur into
+focus, and the backdrop is frosted glass with soft indigo and sky-blue light.
 
 - **Final video:** `dist/msghealth-reel.mp4` (1440×2560, 60 fps, H.264 + AAC)
 - **Interactive player:** `reel.html` (it plays `dist/reel-score.wav` once that has been rendered)
-- **Render:** `npm run render:reel`. The track lives in `assets/audio/reel-track.wav`, which is not committed.
+- **Render:** `npm run render:reel`. It needs `assets/audio/reel-track.wav` (the music) and `assets/audio/sfx-pack.wav`
+  (the UI sound effects pack). Neither file is committed.
 
 | Time | Music | What happens |
 |---|---|---|
 | 0–3.2 s | Intro hats | "Your best client is about to leave." Sarah's days-since-visit counter climbs and her health drains. She turns *Needs attention*, then two warning signs appear, then *At risk*, each on a hat. |
 | 3.21 s | The drop | Her card becomes the Client health list: "MsgHealth spots it before you do." Three more clients tip over, one per beat. |
 | 5.13 s | Bar 2 | "It texts them back for you." The win-back text lands, then "Sent automatically by MsgHealth", then her reply. |
-| 7.05 s | Bar 3 | "Back on the calendar." She drops into the open 10:00 slot, and her health returns on the big hit (31 → 88). |
-| 8.97 s | Bar 4 | "Now do that for every client." The rest come back one per beat, and the *Won back* count rolls 1 → 4. |
+| 7.05 s | Bar 3 | "Back on the calendar." She drops into the open 10:00 slot, her health returns on the big hit (31 → 88), and "Won back automatically" follows. |
+| 8.97 s | Bar 4 | "Now do that for every client." A cursor switches on *Auto win-backs*, then the rest come back, one per beat. |
 | 10.89 s | Bar 5 | An indigo flood: Health scores · Churn alerts · Win-back texts · Online booking, one per beat. |
-| 12.57 s | | The flood drains into the ball. |
-| 12.81 s | Bar 6 | The ball draws the logo, which slides right, then back left uncovering the wordmark. |
-| 14.73 s | Bar 7 | msghealth.net, then "Know who's about to leave." |
+| 12.57 s | | The features blur away into a deep-indigo end card. |
+| 12.81 s | Bar 6 | A glass search bar types "msghealth.net", one keystroke per letter. |
+| 14.01 s | | Enter: the bar becomes the address pill. |
+| 14.25 s | | The app icon lands and "MsgHealth" blurs in. |
+| 14.73 s | Bar 7 | "Know who's about to leave." |
 
-The source track runs out at bar 7's downbeat. Under the end card, the soundtrack repeats the first two
-beats of bar 6 (spliced downbeat to downbeat) and fades out. There are no sound effects.
+The sound effects come from the UI pack and are cued in `TIMING.sfx`:
+- data loading and gears under the climbing counter
+- switches on the warning signs
+- negative glitches when a client tips into risk
+- a reverb hit on the drop and when the icon lands
+- zaps on the scene changes
+- Open UI and Success UI on the messages and rebookings
+- real key presses for the typing
 
-- `src/reel-timing.js`: the beat grid (125 BPM, drop at 3.21 s), shared by the picture and the soundtrack
+The source track runs out at bar 7's downbeat. Under the end card, the soundtrack repeats the first two beats of
+bar 6 (spliced downbeat to downbeat) and fades out.
+
+- `src/reel-timing.js`: the beat grid (125 BPM, drop at 3.21 s) and the sound-effect cues, shared by the picture and the soundtrack
 - `src/reel.js`: the scenes
-- `scripts/reel-audio.mjs`: the soundtrack
+- `scripts/reel-audio.mjs`: the soundtrack (music, plus effects sliced from the pack)

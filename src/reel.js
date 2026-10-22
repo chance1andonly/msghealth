@@ -1,6 +1,7 @@
 // MsgHealth reel — 15.7 s, 1080×1920 (9:16), cut to the track's beat grid (src/reel-timing.js).
 // Story: one regular is drifting away → MsgHealth flags her → texts her → she rebooks → every client, every day
-// → the features → the ball draws the logo. The hook is fully on screen from the first frame (it's also the cover).
+// → the features → the address is typed into a search bar and the app icon lands. The hook is fully on screen from
+// the first frame (it's also the cover), and everything is centred inside TikTok's and Instagram's safe area.
 // Every scene change lands on a downbeat; everything inside a scene lands on a beat or the hat between beats.
 // Everything is drawn from a single time value, so renderFrame(t) is deterministic.
 'use strict';
@@ -102,64 +103,96 @@ function roll(a, b, tc, t, x, y, o) {
   ctx.restore();
 }
 
+// ── layout: centred, inside the area TikTok and Instagram Reels leave clear ──
+// Both apps cover the top ~220 px (tabs / "Reels"), the bottom ~620 px (caption, audio, profile) and a right-hand
+// rail of buttons from about x 940 down. Everything that matters is centred on x 540 and sits within
+// x 140–940, y 240–1300.
+const SAFE = { x0: 140, x1: 940, y0: 240, y1: 1300 };
+function background() {
+  ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
+  // two soft, still light pools (a frosted-glass backdrop): indigo low left, sky blue low right
+  for (const [x, y, r, col] of [[160, 1720, 1000, 'rgba(165,160,255,0.30)'], [1000, 1500, 900, 'rgba(160,214,255,0.32)'], [540, -200, 900, 'rgba(214,211,255,0.30)']]) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(247,247,252,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+}
+
 // ── headlines ────────────────────────────────────────────────────────────────
-// Two lines, top-left, in the same place in every scene. Segments let one word take a colour.
-const HL = { x: 76, y: 318, lh: 100, size: 88, maxW: 900 };
+// Centred, two lines, the same place in every scene. Words blur into focus one after another (and blur away).
+const HL = { y: 318, lh: 94, size: 82, maxW: 860 };
 function headline(lines, t, tIn = -1, tOut = 1e9) {
   const full = (l) => l.map((s) => s[0]).join('');
   let size = HL.size; for (const l of lines) size = Math.min(size, HL.size * HL.maxW / tw(full(l), HL.size, 800, -HL.size * 0.045));
   const ls = -size * 0.045;
-  lines.forEach((l, i) => {
-    const pin = tIn < 0 ? 1 : P(t, tIn + i * 0.06, tIn + i * 0.06 + 0.42), pout = P(t, tOut + i * 0.03, tOut + i * 0.03 + 0.18);
-    if (pin <= 0 || pout >= 1) return;
-    const y = HL.y + i * HL.lh, width = tw(full(l), size, 800, ls);
-    ctx.save(); ctx.beginPath(); ctx.rect(HL.x - 30, y - size * 1.02, width + 60, size * 1.36); ctx.clip();
-    const dy = (1 - eo(pin)) * size * 1.05 - ei(pout) * size * 1.1;
-    let x = HL.x;
-    for (const [s, col] of l) { txt(s, x, y + dy, { size, w: 800, ls, color: col || C.ink }); x += tw(s, size, 800, ls); }
-    ctx.restore();
+  let wi = 0;
+  lines.forEach((l, li) => {
+    const words = []; for (const [s, col] of l) for (const w of s.split(/(?<= )/)) words.push([w, col]);
+    let x = CX - tw(full(l).trimEnd(), size, 800, ls) / 2;
+    const y = HL.y + li * HL.lh;
+    for (const [w, col] of words) {
+      const p = tIn < 0 ? 1 : P(t, tIn + wi * 0.055, tIn + wi * 0.055 + 0.42), q = P(t, tOut + wi * 0.025, tOut + wi * 0.025 + 0.26);
+      const a = clamp(p * 1.6) * (1 - q), blur = (1 - eo(p)) * 18 + eo(q) * 18;
+      if (a > 0.003) {
+        ctx.save(); if (blur > 0.3) ctx.filter = `blur(${blur * DPR}px)`;
+        txt(w, x, y + (1 - eo(p)) * 26 - eo(q) * 22, { size, w: 800, ls, color: col || C.ink, a });
+        ctx.restore();
+      }
+      x += tw(w, size, 800, ls); wi++;
+    }
   });
+}
+// a single centred line that blurs in
+function blurLine(s, y, p, o = {}) {
+  if (p <= 0) return;
+  ctx.save(); const b = (1 - eo(p)) * (o.blur ?? 16); if (b > 0.3) ctx.filter = `blur(${b * DPR}px)`;
+  txt(s, CX, y + (1 - eo(p)) * (o.dy ?? 20), { ...o, align: 'center', a: (o.a ?? 1) * clamp(p * 1.6) });
+  ctx.restore();
 }
 
 // ── the panel (one white card, shared by the scenes) ─────────────────────────
-// Everything that matters stays inside x 70–930, y 220–1500: clear of TikTok's buttons, caption and top bar.
-const PAN = { x: 70, y: 520, w: 860 };
-const panel = (h, a = 1) => { ctx.save(); ctx.globalAlpha *= a; box(PAN.x, PAN.y, PAN.w, h, 40, '#fff', { shadow: 60, sa: 0.1, sy: 22 }); ctx.restore(); };
+const PAN = { x: 140, y: 470, w: 800 };
+const panel = (h, a = 1) => { ctx.save(); ctx.globalAlpha *= a; box(PAN.x, PAN.y, PAN.w, h, 40, 'rgba(255,255,255,0.94)', { shadow: 70, sa: 0.12, sy: 26, stroke: 'rgba(255,255,255,1)', lw: 2 }); ctx.restore(); };
+
+// the pointer (macOS style), tip at x, y
+function cursor(x, y, s = 1, a = 1) {
+  if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha *= a; ctx.translate(x, y); ctx.scale(1.7 * s, 1.7 * s);
+  ctx.shadowColor = 'rgba(20,18,58,0.3)'; ctx.shadowBlur = 8 * DPR; ctx.shadowOffsetY = 3 * DPR;
+  ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, 30); ctx.lineTo(7.5, 23); ctx.lineTo(12.5, 34.5); ctx.lineTo(18, 32); ctx.lineTo(13, 21); ctx.lineTo(23, 21); ctx.closePath();
+  ctx.fillStyle = '#111'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.2; ctx.lineJoin = 'round'; ctx.stroke(); ctx.fill(); ctx.restore();
+}
 
 // ── 1 · Hook (0 → drop): "Your best client is about to leave." ───────────────
 // Sarah's card: her days-since-visit counter climbs and her health drains as the intro builds; she tips into
 // "At risk" on the last hat before the drop.
-const HOOK_END = TM.hats[3];
+const HOOK_END = TM.hats[3], HOOK_H = 790;
 const hookK = (t) => Math.pow(P(t, 0, HOOK_END), 1.7);
 function hookCard(t) {
   const x0 = PAN.x, y0 = PAN.y, w = PAN.w;
-  avatar(x0 + 112, y0 + 114, 58, 'Sarah Mitchell');
-  txt('Sarah Mitchell', x0 + 196, y0 + 106, { size: 48, w: 700, ls: -1 });
-  txt('Regular · books every 3 weeks', x0 + 196, y0 + 152, { size: 28, w: 500, color: C.mute });
-  ctx.fillStyle = C.line; ctx.fillRect(x0 + 48, y0 + 222, w - 96, 2);
-  // last visit, counting up
+  avatar(x0 + 100, y0 + 104, 54, 'Sarah Mitchell');
+  txt('Sarah Mitchell', x0 + 178, y0 + 98, { size: 44, w: 700, ls: -1 });
+  txt('Regular · books every 3 weeks', x0 + 178, y0 + 142, { size: 26, w: 500, color: C.mute });
+  ctx.fillStyle = C.line; ctx.fillRect(x0 + 44, y0 + 200, w - 88, 2);
   const k = hookK(t), days = Math.round(lerp(21, 47, k)), score = lerp(84, 31, k);
-  txt('Last visit', x0 + 52, y0 + 300, { size: 30, w: 600, color: C.mute });
+  txt('Last visit', x0 + 48, y0 + 272, { size: 28, w: 600, color: C.mute });
   const dcol = days < 30 ? C.ink : days < 40 ? mixc(C.ink, C.risk, 0.5) : C.risk;
-  txt(String(days), x0 + 46, y0 + 476, { size: 190, w: 800, ls: -9, color: dcol });
-  txt('days ago', x0 + 58 + tw(String(days), 190, 800, -9), y0 + 476, { size: 44, w: 700, ls: -1, color: dcol });
-  // health ring
-  const rx = x0 + w - 168, ry = y0 + 392, col = scoreColor(score);
-  ctx.save(); ctx.lineWidth = 22; ctx.lineCap = 'round';
-  ctx.strokeStyle = C.line; ctx.beginPath(); ctx.arc(rx, ry, 102, 0, 7); ctx.stroke();
-  ctx.strokeStyle = col; ctx.beginPath(); ctx.arc(rx, ry, 102, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * score / 100); ctx.stroke(); ctx.restore();
-  txt(String(Math.round(score)), rx, ry + 24, { size: 70, w: 800, ls: -3, align: 'center', color: col });
-  txt('Health', rx, ry + 150, { size: 24, w: 600, color: C.mute, align: 'center' });
-  ctx.fillStyle = C.line; ctx.fillRect(x0 + 48, y0 + 590, w - 96, 2);
-  // status, then the warning signs, one per hat
+  txt(String(days), x0 + 42, y0 + 436, { size: 176, w: 800, ls: -8, color: dcol });
+  txt('days ago', x0 + 54 + tw(String(days), 176, 800, -8), y0 + 436, { size: 40, w: 700, ls: -1, color: dcol });
+  const rx = x0 + w - 150, ry = y0 + 356, col = scoreColor(score);
+  ctx.save(); ctx.lineWidth = 20; ctx.lineCap = 'round';
+  ctx.strokeStyle = C.line; ctx.beginPath(); ctx.arc(rx, ry, 92, 0, 7); ctx.stroke();
+  ctx.strokeStyle = col; ctx.beginPath(); ctx.arc(rx, ry, 92, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * score / 100); ctx.stroke(); ctx.restore();
+  txt(String(Math.round(score)), rx, ry + 22, { size: 62, w: 800, ls: -3, align: 'center', color: col });
+  txt('Health', rx, ry + 136, { size: 22, w: 600, color: C.mute, align: 'center' });
+  ctx.fillStyle = C.line; ctx.fillRect(x0 + 44, y0 + 540, w - 88, 2);
   const [h0, h1, h2, h3] = TM.hats;
-  if (t < h0) chip('Healthy', x0 + 48, y0 + 664, { size: 28 });
-  else if (t < h3) statusSwap('Healthy', 'Needs attention', h0, t, x0 + 48, y0 + 664, { size: 28 });
-  else statusSwap('Needs attention', 'At risk', h3, t, x0 + 48, y0 + 664, { size: 28 });
+  if (t < h0) chip('Healthy', x0 + 44, y0 + 606, { size: 28 });
+  else if (t < h3) statusSwap('Healthy', 'Needs attention', h0, t, x0 + 44, y0 + 606, { size: 28 });
+  else statusSwap('Needs attention', 'At risk', h3, t, x0 + 44, y0 + 606, { size: 28 });
   [['Missed her usual booking', h1], ['No reply to her last 2 texts', h2]].forEach(([s, ts], i) => {
     const p = eo(P(t, ts - 0.02, ts + 0.3)); if (p <= 0) return;
     ctx.save(); ctx.globalAlpha *= p; ctx.translate((1 - p) * 26, 0);
-    dot(x0 + 62, y0 + 760 + i * 62, 9, C.risk); txt(s, x0 + 88, y0 + 771 + i * 62, { size: 32, w: 600 }); ctx.restore();
+    dot(x0 + 58, y0 + 686 + i * 56, 8, C.risk); txt(s, x0 + 82, y0 + 696 + i * 56, { size: 30, w: 600 }); ctx.restore();
   });
 }
 
@@ -168,13 +201,10 @@ const ROWS = [
   { n: 'Sarah Mitchell', v: 'Last visit 47 days ago' },
   { n: 'Jordan Reyes', v: 'Last visit 5 days ago' },
   { n: 'Priya Shah', v: 'Last visit 38 days ago', flag: [1, 'At risk'], win: 13 },
-  { n: 'Marcus Lee', v: 'Last visit 12 days ago' },
   { n: 'Ella Wright', v: 'Last visit 44 days ago', flag: [2, 'At risk'], win: 14 },
   { n: 'Theo Martin', v: 'Last visit 29 days ago', flag: [3, 'Needs attention'], win: 15 },
 ];
-const ROW_Y0 = PAN.y + 118, ROW_H = 130, DASH_H = 118 + ROWS.length * ROW_H;
-// mode 'flag': the drop — Sarah is at risk and three more tip over, one per beat.
-// mode 'win': bar 4 — Sarah is already rebooked and the others come back, one per beat.
+const HEAD_H = 108, ROW_H = 118, ROW_Y0 = PAN.y + HEAD_H, DASH_H = HEAD_H + ROWS.length * ROW_H;
 function rowState(i, mode, t) {
   const r = ROWS[i];
   if (mode === 'flag') {
@@ -186,41 +216,46 @@ function rowState(i, mode, t) {
   if (r.flag) return t >= at(r.win) ? { from: r.flag[1], lab: 'Healthy', tc: at(r.win), sub: 'Replied · booked' } : { from: null, lab: r.flag[1], tc: -1 };
   return { from: null, lab: 'Healthy', tc: -1 };
 }
+const tintOf = (l) => (l === 'At risk' ? mixc('#ffffff', C.risk, 0.07) : l === 'Needs attention' ? mixc('#ffffff', C.warn, 0.08) : '#ffffff');
 function dashboard(t, mode, inAt) {
   const x0 = PAN.x, y0 = PAN.y, w = PAN.w;
   const hin = inAt == null ? 1 : eo(P(t, inAt, inAt + 0.35));
   ctx.save(); ctx.globalAlpha *= hin; ctx.translate(0, (1 - hin) * 18);
-  logo(x0 + 70, y0 + 60, 64, C.accent); txt('Client health', x0 + 108, y0 + 72, { size: 36, w: 700, ls: -0.8 });
-  // header counter: at-risk clients while flagging, clients won back while winning back
-  const flagCount = (tt) => ROWS.reduce((n, r, i) => n + (rowState(i, 'flag', tt).lab === 'At risk'), 0);
-  const winCount = (tt) => ROWS.reduce((n, r, i) => n + (i === 0 || !!(r.flag && tt >= at(r.win))), 0);
-  const cnt = mode === 'flag' ? flagCount : winCount, lab = mode === 'flag' ? 'At risk' : 'Won back', col = mode === 'flag' ? C.risk : C.ok;
-  const now = cnt(t); let tc = -1; for (const r of ROWS) { const c = mode === 'flag' ? (r.flag && r.flag[1] === 'At risk' ? at(r.flag[0]) : -1) : (r.flag ? at(r.win) : -1); if (c >= 0 && c <= t) tc = Math.max(tc, c); }
-  const prev = tc < 0 ? now : cnt(tc - 1e-3), cw = tw(lab, 24, 700) + 110, cx0 = x0 + w - 36 - cw;
-  const fl = tc < 0 ? 0 : Math.sin(Math.PI * P(t, tc, tc + 0.4));
-  box(cx0, y0 + 36, cw, 50, 25, mixc('#ffffff', col, 0.13 + 0.1 * fl));
-  txt(lab, cx0 + 22, y0 + 70, { size: 24, w: 700, color: mixc(col, C.ink, 0.35) });
-  roll(prev, now, tc, t, cx0 + cw - 22, y0 + 71, { size: 28, w: 800, color: mixc(col, C.ink, 0.35) });
+  logo(x0 + 64, y0 + 55, 60, C.accent);
+  if (mode === 'flag') {
+    txt('Client health', x0 + 100, y0 + 67, { size: 34, w: 700, ls: -0.8 });
+    const cnt = (tt) => ROWS.reduce((n, r, i) => n + (rowState(i, 'flag', tt).lab === 'At risk'), 0);
+    const now = cnt(t); let tc = -1; for (const r of ROWS) if (r.flag && r.flag[1] === 'At risk' && at(r.flag[0]) <= t) tc = Math.max(tc, at(r.flag[0]));
+    const prev = tc < 0 ? now : cnt(tc - 1e-3), cw = tw('At risk', 24, 700) + 104, cx0 = x0 + w - 32 - cw;
+    box(cx0, y0 + 30, cw, 50, 25, mixc('#ffffff', C.risk, 0.13 + 0.1 * (tc < 0 ? 0 : Math.sin(Math.PI * P(t, tc, tc + 0.4)))));
+    txt('At risk', cx0 + 22, y0 + 64, { size: 24, w: 700, color: mixc(C.risk, C.ink, 0.35) });
+    roll(prev, now, tc, t, cx0 + cw - 22, y0 + 65, { size: 28, w: 800, color: mixc(C.risk, C.ink, 0.35) });
+  } else { // the switch the cursor turns on
+    txt('Auto win-backs', x0 + 100, y0 + 67, { size: 34, w: 700, ls: -0.8 });
+    const on = io(P(t, TM.click, TM.click + 0.22)), sx = x0 + w - 32 - 92;
+    box(sx, y0 + 31, 92, 50, 25, mixc('#dcdaf0', C.accent, on));
+    dot(sx + 25 + 42 * on, y0 + 56, 20, '#fff');
+  }
   ctx.restore();
-  ctx.fillStyle = C.line; ctx.fillRect(x0, y0 + 117, w, 2);
+  ctx.fillStyle = C.line; ctx.fillRect(x0, y0 + HEAD_H - 1, w, 2);
   ROWS.forEach((r, i) => {
-    const y = ROW_Y0 + i * ROW_H, ti = inAt == null ? -1 : inAt + 0.05 + i * 0.045, p = ti < 0 ? 1 : eo(P(t, ti, ti + 0.4));
+    const y = ROW_Y0 + i * ROW_H, ti = inAt == null ? -1 : inAt + 0.05 + i * 0.05, p = ti < 0 ? 1 : eo(P(t, ti, ti + 0.4));
     if (p <= 0) return;
     const st = rowState(i, mode, t), k = st.tc < 0 ? 1 : P(t, st.tc, st.tc + 0.35);
-    ctx.save(); ctx.globalAlpha *= p; ctx.translate(0, (1 - p) * 40);
-    const tintOf = (l) => (l === 'At risk' ? mixc('#ffffff', C.risk, 0.07) : l === 'Needs attention' ? mixc('#ffffff', C.warn, 0.08) : '#ffffff');
+    ctx.save(); ctx.globalAlpha *= p; ctx.translate(0, (1 - p) * 36);
     const bg = st.from ? mixc(tintOf(st.from), tintOf(st.lab), k) : tintOf(st.lab);
-    if (bg !== '#ffffff') { ctx.save(); ctx.beginPath(); ctx.rect(x0, y, w, ROW_H); ctx.clip(); box(x0, y - (i ? 0 : 0), w, ROW_H + (i === ROWS.length - 1 ? 0 : 0), i === ROWS.length - 1 ? [0, 0, 40, 40] : 0, bg); ctx.restore(); }
-    avatar(x0 + 82, y + 65, 34, r.n, i);
-    txt(r.n, x0 + 136, y + 58, { size: 34, w: 650, ls: -0.5 });
-    if (st.sub && (st.tc < 0 || k > 0)) {
+    if (bg !== '#ffffff') box(x0, y, w, ROW_H, i === ROWS.length - 1 ? [0, 0, 40, 40] : 0, bg);
+    avatar(x0 + 76, y + 59, 32, r.n, i);
+    txt(r.n, x0 + 126, y + 54, { size: 32, w: 650, ls: -0.5 });
+    if (st.sub) {
       const sk = st.tc < 0 ? 1 : k;
-      if (sk < 0.4) txt(r.v, x0 + 136, y + 98 - 10 * eo(sk / 0.4), { size: 24, w: 500, color: C.mute, a: 1 - sk / 0.4 }); // the old line leaves before the new one lands
+      if (sk < 0.4) txt(r.v, x0 + 126, y + 90 - 10 * eo(sk / 0.4), { size: 23, w: 500, color: C.mute, a: 1 - sk / 0.4 }); // the old line leaves before the new one lands
       const nk = eo(P(sk, 0.35, 1));
-      ctx.save(); ctx.globalAlpha *= nk; ctx.translate(0, (1 - nk) * 10); check(x0 + 146, y + 90, 16, C.ok, 3.5); txt(st.sub, x0 + 166, y + 98, { size: 24, w: 650, color: mixc(C.ok, C.ink, 0.2) }); ctx.restore();
-    } else txt(r.v, x0 + 136, y + 98, { size: 24, w: 500, color: C.mute });
-    statusSwap(st.from, st.lab, st.tc, t, x0 + w - 36, y + 65, { right: true, size: 24 });
-    if (i < ROWS.length - 1) { ctx.fillStyle = C.line; ctx.fillRect(x0 + 36, y + ROW_H - 1, w - 72, 2); }
+      ctx.save(); ctx.globalAlpha *= nk; ctx.translate(0, (1 - nk) * 10); check(x0 + 136, y + 83, 15, C.ok, 3.5);
+      txt(st.sub, x0 + 154, y + 90, { size: 23, w: 650, color: mixc(C.ok, C.ink, 0.2) }); ctx.restore();
+    } else txt(r.v, x0 + 126, y + 90, { size: 23, w: 500, color: C.mute });
+    statusSwap(st.from, st.lab, st.tc, t, x0 + w - 32, y + 59, { right: true, size: 23 });
+    if (i < ROWS.length - 1) { ctx.fillStyle = C.line; ctx.fillRect(x0 + 32, y + ROW_H - 1, w - 64, 2); }
     ctx.restore();
   });
 }
@@ -228,251 +263,236 @@ function dashboard(t, mode, inAt) {
 function sceneOpen(t) {
   const D = TM.D;
   // a slow push-in through the intro, released on the drop
-  const z = t < D ? lerp(1.0, 1.035, io(P(t, 0, D))) : lerp(1.035, 1, expo(P(t, D, D + 0.4)));
-  ctx.save(); ctx.translate(CX, PAN.y + 450); ctx.scale(z, z); ctx.translate(-CX, -(PAN.y + 450));
-  // the card becomes the dashboard: same white panel, it grows to fit the list
+  const z = t < D ? lerp(1.0, 1.03, io(P(t, 0, D))) : lerp(1.03, 1, expo(P(t, D, D + 0.4)));
+  ctx.save(); ctx.translate(CX, PAN.y + 400); ctx.scale(z, z); ctx.translate(-CX, -(PAN.y + 400));
   const g = expo(P(t, D, D + 0.5));
-  panel(lerp(900, DASH_H, g));
-  if (t < D + 0.3) { // Sarah's card shrinks into her row and fades as the list arrives
+  panel(lerp(HOOK_H, DASH_H, g)); // the card becomes the dashboard: same white panel, resized to the list
+  if (t < D + 0.3) { // Sarah's card shrinks into her row and blurs away as the list arrives
     const q = P(t, D, D + 0.3), s = lerp(1, 0.55, eo(q));
-    ctx.save(); ctx.globalAlpha *= 1 - eo(clamp(q * 1.6));
+    ctx.save(); ctx.globalAlpha *= 1 - eo(clamp(q * 1.6)); if (q > 0) ctx.filter = `blur(${eo(q) * 12 * DPR}px)`;
     ctx.translate(PAN.x + 60, PAN.y + 60); ctx.scale(s, s); ctx.translate(-(PAN.x + 60), -(PAN.y + 60));
-    ctx.beginPath(); ctx.roundRect(PAN.x, PAN.y, PAN.w, 900, 40); ctx.clip();
+    ctx.beginPath(); ctx.roundRect(PAN.x, PAN.y, PAN.w, HOOK_H, 40); ctx.clip();
     hookCard(t); ctx.restore();
   }
   if (t >= D) dashboard(t, 'flag', D);
   ctx.restore();
-  headline([[['Your best client']], [['is about to '], ['leave.', C.risk]]], t, -1, D - 0.1);
-  headline([[['MsgHealth', C.accent], [' spots it']], [['before you do.']]], t, D + 0.12);
+  headline([[['Your best client']], [['is about to '], ['leave.', C.risk]]], t, -1, D - 0.12);
+  headline([[['MsgHealth', C.accent], [' spots it']], [['before you do.']]], t, D + 0.1);
 }
 
 // ── 3 · The text (bar 2) ─────────────────────────────────────────────────────
 function bubble(lines, x, y, out, p) { // x: the bubble's outer edge (right for outgoing, left for replies)
   if (p <= 0) return 0;
-  const size = 36, lh = 48, px = 28, py = 22, w = Math.max(...lines.map((l) => tw(l, size, 500, -0.3))) + px * 2, h = lines.length * lh + py * 2 - 8;
+  const size = 34, lh = 46, px = 28, py = 22, w = Math.max(...lines.map((l) => tw(l, size, 500, -0.3))) + px * 2, h = lines.length * lh + py * 2 - 8;
   const x0 = out ? x - w : x, s = lerp(0.6, 1, back(p, 1.4));
   ctx.save(); ctx.globalAlpha *= clamp(p * 3);
   ctx.translate(out ? x : x0, y + h); ctx.scale(s, s); ctx.translate(-(out ? x : x0), -(y + h));
   box(x0, y, w, h, out ? [30, 30, 8, 30] : [30, 30, 30, 8], out ? C.accent : C.bubble);
-  lines.forEach((l, i) => txt(l, x0 + px, y + py + 34 + i * lh, { size, w: 500, ls: -0.3, color: out ? '#fff' : C.ink }));
+  lines.forEach((l, i) => txt(l, x0 + px, y + py + 32 + i * lh, { size, w: 500, ls: -0.3, color: out ? '#fff' : C.ink }));
   ctx.restore(); return h;
 }
 function sceneChat(t) {
   const x0 = PAN.x, y0 = PAN.y, w = PAN.w, b = (n) => at(n);
-  panel(660);
+  panel(640);
   ctx.save(); ctx.strokeStyle = C.accent; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  ctx.beginPath(); ctx.moveTo(x0 + 56, y0 + 48); ctx.lineTo(x0 + 40, y0 + 64); ctx.lineTo(x0 + 56, y0 + 80); ctx.stroke(); ctx.restore();
-  avatar(x0 + 112, y0 + 64, 32, 'Sarah Mitchell');
-  txt('Sarah Mitchell', x0 + 160, y0 + 58, { size: 32, w: 700, ls: -0.5 });
-  txt('Text message', x0 + 160, y0 + 90, { size: 22, w: 500, color: C.mute });
-  ctx.fillStyle = C.line; ctx.fillRect(x0, y0 + 126, w, 2);
+  ctx.beginPath(); ctx.moveTo(x0 + 54, y0 + 46); ctx.lineTo(x0 + 38, y0 + 62); ctx.lineTo(x0 + 54, y0 + 78); ctx.stroke(); ctx.restore();
+  avatar(x0 + 108, y0 + 62, 30, 'Sarah Mitchell');
+  txt('Sarah Mitchell', x0 + 152, y0 + 56, { size: 30, w: 700, ls: -0.5 });
+  txt('Text message', x0 + 152, y0 + 88, { size: 21, w: 500, color: C.mute });
+  ctx.fillStyle = C.line; ctx.fillRect(x0, y0 + 122, w, 2);
   // the win-back text lands on beat 2, the "sent by MsgHealth" tag on beat 3, her reply on beat 4
-  bubble(['Hi Sarah! It’s been a while.', 'Want your usual Thursday', '10am slot?'], x0 + w - 36, y0 + 166, true, P(t, b(5) - 0.02, b(5) + 0.34));
+  bubble(['Hi Sarah! It’s been a while.', 'Want your usual Thursday', '10am slot?'], x0 + w - 32, y0 + 160, true, P(t, b(5) - 0.02, b(5) + 0.34));
   const tg = eo(P(t, b(6) - 0.02, b(6) + 0.3));
   if (tg > 0) {
-    const s = 'Sent automatically by MsgHealth', sw = tw(s, 22, 650);
+    const s = 'Sent automatically by MsgHealth', sw = tw(s, 21, 650);
     ctx.save(); ctx.globalAlpha *= tg; ctx.translate(0, (1 - tg) * 10);
-    txt(s, x0 + w - 40, y0 + 392, { size: 22, w: 650, color: C.accent, align: 'right' });
-    logo(x0 + w - 40 - sw - 22, y0 + 384, 38, C.accent); ctx.restore();
+    txt(s, x0 + w - 36, y0 + 380, { size: 21, w: 650, color: C.accent, align: 'right' });
+    logo(x0 + w - 36 - sw - 22, y0 + 373, 36, C.accent); ctx.restore();
   }
   const ty = P(t, b(6) + 0.06, b(6) + 0.2) * (1 - P(t, b(7) - 0.06, b(7)));
   if (ty > 0) { // typing…
-    ctx.save(); ctx.globalAlpha *= ty; box(x0 + 36, y0 + 432, 124, 72, [30, 30, 30, 8], C.bubble);
-    for (let j = 0; j < 3; j++) dot(x0 + 70 + j * 28, y0 + 468 - 6 * Math.max(0, Math.sin((t - b(6)) * 11 - j * 0.9)), 8, C.soft);
+    ctx.save(); ctx.globalAlpha *= ty; box(x0 + 32, y0 + 420, 120, 68, [30, 30, 30, 8], C.bubble);
+    for (let j = 0; j < 3; j++) dot(x0 + 64 + j * 28, y0 + 454 - 6 * Math.max(0, Math.sin((t - b(6)) * 11 - j * 0.9)), 8, C.soft);
     ctx.restore();
   }
-  bubble(['Yes please!', 'See you Thursday'], x0 + 36, y0 + 432, false, P(t, b(7) - 0.02, b(7) + 0.34));
+  bubble(['Yes please!', 'See you Thursday'], x0 + 32, y0 + 420, false, P(t, b(7) - 0.02, b(7) + 0.34));
   headline([[['It texts them']], [['back '], ['for you.', C.accent]]], t);
 }
 
 // ── 4 · Rebooked (bar 3) ─────────────────────────────────────────────────────
 function sceneBook(t) {
   const x0 = PAN.x, y0 = PAN.y, w = PAN.w, b = (n) => at(n);
-  panel(880);
-  txt('Thursday', x0 + 48, y0 + 74, { size: 36, w: 700, ls: -0.8 });
-  txt('Appointments', x0 + w - 48, y0 + 72, { size: 24, w: 600, color: C.mute, align: 'right' });
-  ctx.fillStyle = C.line; ctx.fillRect(x0, y0 + 117, w, 2);
+  panel(790);
+  txt('Thursday', x0 + 44, y0 + 68, { size: 34, w: 700, ls: -0.8 });
+  txt('Appointments', x0 + w - 44, y0 + 66, { size: 23, w: 600, color: C.mute, align: 'right' });
+  ctx.fillStyle = C.line; ctx.fillRect(x0, y0 + 107, w, 2);
   const SLOTS = [['9:00', 'Jordan Reyes', 'Cut & style'], ['10:00', null], ['11:00', 'Marcus Lee', 'Beard trim'], ['12:00', 'Ella Wright', 'Colour']];
   SLOTS.forEach(([h, n, what], i) => {
-    const y = y0 + 132 + i * 118, bx = x0 + 168, bw = w - 168 - 36;
-    txt(h, x0 + 48, y + 58, { size: 26, w: 600, color: C.mute });
-    if (n) { box(bx, y, bw, 94, 20, '#f3f2fb'); txt(n, bx + 28, y + 58, { size: 30, w: 650, ls: -0.4 }); txt(what, bx + bw - 28, y + 58, { size: 24, w: 500, color: C.mute, align: 'right' }); return; }
+    const y = y0 + 124 + i * 106, bx = x0 + 146, bw = w - 146 - 32;
+    txt(h, x0 + 44, y + 54, { size: 25, w: 600, color: C.mute });
+    if (n) { box(bx, y, bw, 88, 20, '#f3f2fb'); txt(n, bx + 26, y + 55, { size: 28, w: 650, ls: -0.4 }); txt(what, bx + bw - 26, y + 55, { size: 23, w: 500, color: C.mute, align: 'right' }); return; }
     // Sarah drops into the empty slot on beat 2
-    box(bx, y, bw, 94, 20, null, { stroke: C.soft, lw: 2.5, dash: [10, 9] });
+    box(bx, y, bw, 88, 20, null, { stroke: C.soft, lw: 2.5, dash: [10, 9] });
     const p = P(t, b(9) - 0.03, b(9) + 0.36);
     if (p > 0) {
       const s = lerp(0.82, 1, back(p, 1.6));
-      ctx.save(); ctx.globalAlpha *= clamp(p * 3); ctx.translate(bx + bw / 2, y + 47); ctx.scale(s, s); ctx.translate(-(bx + bw / 2), -(y + 47));
-      box(bx, y, bw, 94, 20, C.accent, { shadow: 30, sa: 0.3, sy: 10 });
-      txt('Sarah Mitchell', bx + 28, y + 58, { size: 30, w: 700, ls: -0.4, color: '#fff' });
-      txt('Her usual', bx + bw - 28, y + 58, { size: 24, w: 600, color: 'rgba(255,255,255,.75)', align: 'right' });
+      ctx.save(); ctx.globalAlpha *= clamp(p * 3); ctx.translate(bx + bw / 2, y + 44); ctx.scale(s, s); ctx.translate(-(bx + bw / 2), -(y + 44));
+      box(bx, y, bw, 88, 20, C.accent, { shadow: 30, sa: 0.3, sy: 10 });
+      txt('Sarah Mitchell', bx + 26, y + 55, { size: 28, w: 700, ls: -0.4, color: '#fff' });
+      txt('Her usual', bx + bw - 26, y + 55, { size: 23, w: 600, color: 'rgba(255,255,255,.75)', align: 'right' });
       ctx.restore();
-    } else txt('Open', bx + 28, y + 58, { size: 26, w: 600, color: C.soft });
+    } else txt('Open', bx + 26, y + 55, { size: 25, w: 600, color: C.soft });
   });
-  // her health comes back on the big hit (beat 3), the status follows it
-  const hy = y0 + 640;
+  // her health comes back on the big hit (beat 3); "won back automatically" on beat 4
+  const hy = y0 + 572;
   ctx.fillStyle = C.line; ctx.fillRect(x0, hy - 24, w, 2);
   const k = io(P(t, b(10) - 0.02, b(10) + 0.5)), sc = lerp(31, 88, k), col = scoreColor(sc);
-  txt('Sarah’s health', x0 + 48, hy + 40, { size: 28, w: 600, color: C.mute });
-  box(x0 + 48, hy + 82, w - 280, 18, 9, C.line); box(x0 + 48, hy + 82, (w - 280) * sc / 100, 18, 9, col);
-  txt(String(Math.round(sc)), x0 + w - 48, hy + 112, { size: 84, w: 800, ls: -3, color: col, align: 'right' });
-  statusSwap('At risk', 'Healthy', b(10) + 0.12, t, x0 + 48, hy + 170, { size: 26 });
-  // toast on beat 4
-  const tp = back(P(t, b(11) - 0.03, b(11) + 0.36), 1.3);
+  txt('Sarah’s health', x0 + 44, hy + 34, { size: 26, w: 600, color: C.mute });
+  box(x0 + 44, hy + 72, w - 250, 16, 8, C.line); box(x0 + 44, hy + 72, (w - 250) * sc / 100, 16, 8, col);
+  txt(String(Math.round(sc)), x0 + w - 44, hy + 100, { size: 78, w: 800, ls: -3, color: col, align: 'right' });
+  statusSwap('At risk', 'Healthy', b(10) + 0.12, t, x0 + 44, hy + 158, { size: 25 });
+  const tp = eo(P(t, b(11) - 0.03, b(11) + 0.35));
   if (tp > 0) {
-    const s = 'Won back automatically', sw = tw(s, 30, 650) + 120;
-    ctx.save(); ctx.globalAlpha *= clamp(tp * 2); ctx.translate(0, (1 - tp) * 30);
-    box(CX - sw / 2, 1432, sw, 80, 40, C.ink, { shadow: 30, sa: 0.3 });
-    dot(CX - sw / 2 + 48, 1472, 20, C.ok); check(CX - sw / 2 + 48, 1473, 15, '#fff', 3.5);
-    txt(s, CX - sw / 2 + 84, 1483, { size: 30, w: 650, color: '#fff' }); ctx.restore();
+    const xx = x0 + 44 + tw('Healthy', 25, 700) + 25 * 2.4 + 22;
+    ctx.save(); ctx.globalAlpha *= tp; ctx.translate((1 - tp) * 20, 0);
+    check(xx + 10, hy + 157, 16, C.ok, 3.5); txt('Won back automatically', xx + 30, hy + 166, { size: 25, w: 650, color: mixc(C.ok, C.ink, 0.2) }); ctx.restore();
   }
   headline([[['Back on the']], [['calendar.', C.accent]]], t);
 }
 
-// ── 5 · Every client (bar 4) ─────────────────────────────────────────────────
+// ── 5 · Every client (bar 4): the cursor switches on auto win-backs, then they come back one per beat ──
 function sceneAll(t) {
   panel(DASH_H);
   dashboard(t, 'win', null);
+  const tx = PAN.x + PAN.w - 32 - 46, ty = PAN.y + 58; // the switch
+  const t0 = at(12) + 0.2, c = TM.click;
+  if (t < c + 0.9) {
+    const m = io(P(t, t0, c - 0.04)), x = lerp(860, tx, m), y = lerp(1180, ty, m);
+    const press = P(t, c - 0.06, c) * (1 - P(t, c + 0.02, c + 0.14));
+    const away = io(P(t, c + 0.25, c + 0.9));
+    cursor(x + away * 120, y + away * 260, 1 - 0.14 * press, clamp(P(t, t0 - 0.05, t0 + 0.15)) * (1 - away));
+    if (t > c) { const q = P(t, c, c + 0.45); ctx.save(); ctx.globalAlpha = (1 - q) * 0.5; ctx.strokeStyle = C.accent; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(tx, ty, 20 + q * 40, 0, 7); ctx.stroke(); ctx.restore(); }
+  }
   headline([[['Now do that for']], [['every client.', C.accent]]], t);
 }
 
-// ── 6 · Features (bar 5) on an indigo flood, which collapses into the ball ───
+// ── 6 · Features (bar 5) on an indigo flood ──────────────────────────────────
 const FEATS = ['Health scores', 'Churn alerts', 'Win-back texts', 'Online booking'];
-const LOGO_SIZE = 196, LKY = 900;
-function penStart() { const [sx, sy] = penPoint(0); return [CX + (sx / 512 - 0.5) * LOGO_SIZE, LKY + (sy / 512 - 0.5) * LOGO_SIZE]; }
-function sceneFeat(t) {
-  const t0 = at(16), c0 = at(19.5), c1 = at(20);
-  const [px, py] = penStart();
-  ctx.save(); ctx.beginPath();
-  if (t < c0) ctx.arc(CX, 1500, 2600 * expo(P(t, t0 - 0.04, t0 + 0.34)), 0, 7);
-  else ctx.arc(px, py, lerp(2300, 14, ei(P(t, c0, c1))), 0, 7); // the flood drains into the ball that will draw the logo
-  ctx.clip();
-  const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#4f46e5'); g.addColorStop(1, '#3a32c4');
+function indigo(a = 1) {
+  ctx.save(); ctx.globalAlpha *= a;
+  const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#5148ea'); g.addColorStop(1, '#3a32c4');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  const fade = 1 - P(t, c0, c0 + 0.12);
-  ctx.globalAlpha = fade;
-  const kp = eo(P(t, t0 + 0.02, t0 + 0.4));
-  txt('All in one place', 80, 560 + (1 - kp) * 16, { size: 34, w: 600, color: 'rgba(255,255,255,.72)', a: kp });
-  const size = Math.min(116, 116 * 900 / Math.max(...FEATS.map((f) => tw(f, 116, 800, -5))));
-  FEATS.forEach((f, i) => { // one per beat; the earlier ones step back a little
+  const r = ctx.createRadialGradient(CX, 860, 0, CX, 860, 760); r.addColorStop(0, 'rgba(140,150,255,0.35)'); r.addColorStop(1, 'rgba(140,150,255,0)');
+  ctx.fillStyle = r; ctx.fillRect(0, 0, W, H); ctx.restore();
+}
+function sceneFeat(t) {
+  const t0 = at(16);
+  ctx.save(); ctx.beginPath(); ctx.arc(CX, 860, 2400 * expo(P(t, t0 - 0.04, t0 + 0.4)), 0, 7); ctx.clip();
+  indigo(); ctx.restore();
+  const kp = P(t, t0 + 0.02, t0 + 0.4);
+  blurLine('All in one place', 600, kp, { size: 34, w: 600, color: 'rgba(255,255,255,.72)' });
+  const size = Math.min(104, 104 * 800 / Math.max(...FEATS.map((f) => tw(f, 104, 800, -4.5))));
+  FEATS.forEach((f, i) => { // one per beat; the earlier ones step back
     const ti = at(16 + i), p = P(t, ti - 0.02, ti + 0.4); if (p <= 0) return;
-    const y = 740 + i * 150, newer = i < 3 ? P(t, at(17 + i), at(17 + i) + 0.25) : 0;
-    ctx.save(); ctx.beginPath(); ctx.rect(40, y - size * 1.02, W - 80, size * 1.36); ctx.clip();
-    txt(f, 80, y + (1 - eo(p)) * size * 1.05, { size, w: 800, ls: -5, color: '#fff', a: clamp(p * 3) * lerp(1, 0.42, newer) });
-    ctx.restore();
+    const newer = i < 3 ? P(t, at(17 + i), at(17 + i) + 0.25) : 0;
+    blurLine(f, 760 + i * 132, p, { size, w: 800, ls: -4.5, color: '#fff', a: lerp(1, 0.42, newer) });
   });
-  ctx.restore();
 }
 
-// ── 7 · The logo: the ball draws the mark, slides right, then left uncovering the wordmark ──
-// The mark is revealed by flowing through its own pixels (a geodesic distance from its far end), so the reveal
-// always follows the real strokes; the ball rides the centre of the moving front.
-const DRAW_SEEDS = [[110, 392], [250, 318]];   // left bar foot, right diagonal foot (logo 512 px space)
-const DRAW_CUTS = [[[126, 318], [194, 388]], [[366, 318], [388, 398]]];
-let LDRAW = null;
-function buildLogoDraw() {
-  const N = 512, c = document.createElement('canvas'); c.width = c.height = N;
-  const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(tinted(C.accent), 0, 0);
-  const img = g.getImageData(0, 0, N, N), base = new Uint8ClampedArray(img.data);
-  const inMask = (i) => base[i * 4 + 3] > 0;
-  const blocked = new Uint8Array(N * N);
-  for (const [[ax, ay], [bx, by]] of DRAW_CUTS) { const L = Math.hypot(bx - ax, by - ay);
-    for (let k = 0; k <= L * 2; k++) { const x = ax + (bx - ax) * k / (L * 2), y = ay + (by - ay) * k / (L * 2);
-      for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) blocked[Math.round(y + dy) * N + Math.round(x + dx)] = 1; } }
-  const geo = (sx, sy) => { // Dial's algorithm, steps of 10 (straight) and 14 (diagonal)
-    const dist = new Int32Array(N * N).fill(-1), buckets = [];
-    const push = (i, d) => { (buckets[d] || (buckets[d] = [])).push(i); };
-    for (let y = sy - 26; y <= sy + 26; y++) for (let x = sx - 26; x <= sx + 26; x++) { const i = y * N + x; if (Math.hypot(x - sx, y - sy) <= 26 && inMask(i) && !blocked[i]) { dist[i] = 0; push(i, 0); } }
-    const done = new Uint8Array(N * N);
-    for (let d = 0; d < buckets.length; d++) { const B = buckets[d]; if (!B) continue;
-      for (const i of B) { if (done[i] || dist[i] !== d) continue; done[i] = 1; const x = i % N, y = (i / N) | 0;
-        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { if (!dx && !dy) continue; const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
-          const j = ny * N + nx; if (!inMask(j) || blocked[j] || done[j]) continue; const nd = d + (dx && dy ? 14 : 10); if (dist[j] < 0 || nd < dist[j]) { dist[j] = nd; push(j, nd); } } } }
-    return dist; };
-  const dA = geo(...DRAW_SEEDS[0]), dB = geo(...DRAW_SEEDS[1]);
-  let mA = 0, mB = 0; for (let i = 0; i < N * N; i++) { if (dA[i] > mA) mA = dA[i]; if (dB[i] > mB) mB = dB[i]; }
-  const GAP = 600, TOTAL = mA + GAP + mB, par = new Float32Array(N * N).fill(-1);
-  for (let i = 0; i < N * N; i++) { if (!inMask(i)) continue; if (dA[i] >= 0) par[i] = dA[i] / TOTAL; else if (dB[i] >= 0) par[i] = (mA + GAP + dB[i]) / TOTAL; }
-  for (let pass = 0; pass < 8; pass++) for (let i = 0; i < N * N; i++) { // pixels on the cut take their neighbours' (later) value
-    if (!inMask(i) || par[i] >= 0) continue; let v = -1; const x = i % N, y = (i / N) | 0;
-    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const j = (y + dy) * N + x + dx; if (j >= 0 && j < N * N && par[j] > v) v = par[j]; }
-    if (v >= 0) par[i] = v; }
-  for (let i = 0; i < N * N; i++) if (inMask(i) && par[i] < 0) par[i] = 1;
-  const BINS = 600, sx = new Float64Array(BINS), sy = new Float64Array(BINS), n = new Float64Array(BINS);
-  for (let i = 0; i < N * N; i++) { if (base[i * 4 + 3] < 200) continue; const b = Math.min(BINS - 1, (par[i] * BINS) | 0); sx[b] += i % N; sy[b] += (i / N) | 0; n[b]++; }
-  const pts = []; for (let b = 0; b < BINS; b++) pts.push(n[b] ? [sx[b] / n[b], sy[b] / n[b]] : null);
-  for (let b = 0; b < BINS; b++) if (!pts[b]) { let lo = b, hi = b; while (lo >= 0 && !pts[lo]) lo--; while (hi < BINS && !pts[hi]) hi++;
-    const A = pts[lo] || pts[hi], Bp = pts[hi] || pts[lo], u = lo < 0 || hi >= BINS ? 0 : (b - lo) / (hi - lo); pts[b] = [lerp(A[0], Bp[0], u), lerp(A[1], Bp[1], u)]; }
-  const pen = pts.map((_, b) => { let x = 0, y = 0, k = 0; for (let j = Math.max(0, b - 6); j <= Math.min(BINS - 1, b + 6); j++) { x += pts[j][0]; y += pts[j][1]; k++; } return [x / k, y / k]; });
-  LDRAW = { c, g, img, base, par, pen };
+// ── 7 · End card: the address is typed into a search bar, Enter, the app icon lands ──
+const URL_ = 'msghealth.net';
+function endBg(t) {
+  ctx.fillStyle = '#100e2e'; ctx.fillRect(0, 0, W, H);
+  const glow = 0.55 + 0.45 * eo(P(t, TM.icon, TM.icon + 0.6)); // the room lights up when the icon lands
+  const g = ctx.createRadialGradient(CX, 900, 0, CX, 900, 900); g.addColorStop(0, `rgba(79,70,229,${0.55 * glow})`); g.addColorStop(1, 'rgba(79,70,229,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const g2 = ctx.createRadialGradient(CX, 1900, 0, CX, 1900, 900); g2.addColorStop(0, 'rgba(120,190,255,0.22)'); g2.addColorStop(1, 'rgba(120,190,255,0)');
+  ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
 }
-function penPoint(p) {
-  if (!LDRAW) return [256, 256];
-  const P_ = LDRAW.pen, f = clamp(p) * (P_.length - 1), i = Math.min(P_.length - 2, f | 0), u = f - i;
-  return [lerp(P_[i][0], P_[i + 1][0], u), lerp(P_[i][1], P_[i + 1][1], u)];
-}
-function drawLogoProgress(x, y, size, p) {
-  const { c, g, img, base, par } = LDRAW, d = img.data, soft = 0.012;
-  for (let i = 0, j = 3; i < par.length; i++, j += 4) { const a = base[j]; d[j] = a ? a * clamp((p - par[i]) / soft) : 0; }
-  g.putImageData(img, 0, 0); ctx.drawImage(c, x - size / 2, y - size / 2, size, size);
+function appIcon(x, y, s, a) {
+  if (a <= 0 || s <= 0) return;
+  const S = 210 * s;
+  ctx.save(); ctx.globalAlpha *= a;
+  ctx.shadowColor = 'rgba(124,116,255,0.75)'; ctx.shadowBlur = 70 * DPR * s;
+  const g = ctx.createLinearGradient(x, y - S / 2, x, y + S / 2); g.addColorStop(0, '#ffffff'); g.addColorStop(1, '#ecebff');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x - S / 2, y - S / 2, S, S, S * 0.25); ctx.fill(); ctx.restore();
+  logo(x, y + 2 * s, S * 0.86, C.accent, a);
 }
 function sceneEnd(t) {
-  const size = LOGO_SIZE, word = 124, ls = -4.5, glyph = size * 0.73, gw = tw('MsgHealth', word, 700, ls);
-  const x0 = CX - (glyph + 28 + gw) / 2, mx = x0 + glyph / 2, textX = x0 + glyph + 28, textR = textX + gw;
-  const rightC = textR - glyph / 2;
-  const d0 = at(20), d1 = at(22), r1 = at(22.5), l1 = at(23.5);
-  let mc = null;
-  if (!LDRAW) return;
-  if (t < d1) { // the ball traces the mark into existence
-    const u = P(t, d0, d1), p = (1 - Math.cos(Math.PI * u)) / 2;
-    drawLogoProgress(CX, LKY, size, p);
-    const [px, py] = penPoint(p);
-    dot(CX + (px / 512 - 0.5) * size, LKY + (py / 512 - 0.5) * size, 14 * (1 - P(u, 0.9, 1)));
-  } else if (t < r1) mc = lerp(CX, rightC, io(P(t, d1, r1)));
-  else { // sliding back left, it uncovers the wordmark behind it
-    mc = lerp(rightC, mx, io(P(t, r1, l1)));
-    const edge = mc + glyph / 2 + 8;
-    if (edge < textR) {
-      ctx.save(); ctx.beginPath(); ctx.rect(edge, LKY - word, textR - edge + 20, word * 1.6); ctx.clip();
-      txt('MsgHealth', textX, LKY + word * 0.36, { size: word, w: 700, ls, color: C.ink }); ctx.restore();
+  const t0 = TM.scene[5], T = TM.type;
+  endBg(t);
+  // the features blur away as the indigo deepens into the end card
+  if (t < at(20) + 0.1) {
+    const k = P(t, t0, at(20));
+    ctx.save(); ctx.globalAlpha = 1 - eo(k); indigo(); ctx.restore();
+    ctx.save(); ctx.filter = `blur(${eo(k) * 22 * DPR}px)`; ctx.globalAlpha = 1 - eo(clamp(k * 1.4));
+    blurLine('All in one place', 600, 1, { size: 34, w: 600, color: 'rgba(255,255,255,.72)' });
+    const size = Math.min(104, 104 * 800 / Math.max(...FEATS.map((f) => tw(f, 104, 800, -4.5))));
+    FEATS.forEach((f, i) => blurLine(f, 760 + i * 132, 1, { size, w: 800, ls: -4.5, color: '#fff', a: i < 3 ? 0.42 : 1 }));
+    ctx.restore();
+  }
+  // the search bar: blurs in on bar 6, the address types itself, Enter on the "and" of beat 2
+  const bin = P(t, at(20) - 0.05, at(20) + 0.35), ent = P(t, T.enter, T.enter + 0.4), m = io(ent);
+  const n = Math.max(0, Math.min(13, Math.floor((t - T.t0) / T.step) + 1));
+  const typed = URL_.slice(0, t < T.t0 ? 0 : n);
+  const size = lerp(46, 42, m), tW = tw(URL_, size, 600, -0.5);
+  const bw = lerp(720, tW + 96, m), bh = lerp(112, 88, m), by = lerp(960, 1084, m);
+  if (bin > 0) {
+    ctx.save(); ctx.globalAlpha *= clamp(bin * 1.5); const b = (1 - eo(bin)) * 18; if (b > 0.3) ctx.filter = `blur(${b * DPR}px)`;
+    ctx.translate(CX, by); const sc = lerp(1.08, 1, eo(bin)); ctx.scale(sc, sc); ctx.translate(-CX, -by);
+    const press = P(t, T.enter - 0.06, T.enter) * (1 - P(t, T.enter + 0.02, T.enter + 0.2));
+    box(CX - bw / 2, by - bh / 2, bw, bh, bh / 2, `rgba(255,255,255,${0.09 + 0.1 * press + 0.05 * m})`, { stroke: 'rgba(255,255,255,0.32)', lw: 2 });
+    // magnifier (fades as the bar becomes the address pill)
+    ctx.save(); ctx.globalAlpha *= 1 - m; ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 4.5; ctx.lineCap = 'round';
+    const mx = CX - bw / 2 + 58; ctx.beginPath(); ctx.arc(mx, by - 4, 15, 0, 7); ctx.moveTo(mx + 11, by + 7); ctx.lineTo(mx + 22, by + 18); ctx.stroke(); ctx.restore();
+    const tx = lerp(CX - bw / 2 + 100, CX - tW / 2, m);
+    if (!typed) txt('Search', tx, by + 16, { size, w: 500, color: 'rgba(255,255,255,0.4)' });
+    txt(typed, tx, by + size * 0.35, { size, w: 600, ls: -0.5, color: '#fff' });
+    if (t < T.enter && t > at(20) + 0.1 && Math.floor((t - at(20)) / 0.24) % 2 === 0) { // caret (blinks on the eighths)
+      ctx.fillStyle = '#8f88ff'; ctx.fillRect(tx + tw(typed, size, 600, -0.5) + 4, by - 26, 3.5, 52);
     }
+    ctx.restore();
   }
-  if (mc != null) logo(mc, LKY, size, C.accent);
-  // the address lands on bar 7's downbeat; the hook's promise answers underneath it
-  const up = eo(P(t, at(24) - 0.02, at(24) + 0.4));
-  if (up > 0) {
-    const u = 'msghealth.net', uw = tw(u, 50, 650, -1);
-    ctx.save(); ctx.globalAlpha *= up; ctx.translate(0, (1 - up) * 14);
-    txt(u, CX, LKY + 150, { size: 50, w: 650, color: C.accent, align: 'center', ls: -1 });
-    ctx.fillStyle = C.accent; ctx.fillRect(CX - uw / 2, LKY + 168, uw * eo(P(t, at(24) + 0.1, at(24) + 0.5)), 3); ctx.restore();
-  }
-  const tg = eo(P(t, at(25) - 0.02, at(25) + 0.4));
-  if (tg > 0) txt('Know who’s about to leave.', CX, LKY + 250 + (1 - tg) * 12, { size: 36, w: 500, color: C.mute, align: 'center', a: tg });
+  // the app icon lands on beat 3, the name blurs in under it, the line on bar 7
+  const ip = P(t, TM.icon - 0.03, TM.icon + 0.45);
+  appIcon(CX, 690 + (1 - eo(ip)) * 30, lerp(0.6, 1, back(ip, 1.5)), clamp(ip * 2.5));
+  blurLine('MsgHealth', 950, P(t, TM.icon + 0.1, TM.icon + 0.5), { size: 96, w: 800, ls: -4, color: '#fff' });
+  blurLine('Know who’s about to leave.', 1210, P(t, TM.tag - 0.02, TM.tag + 0.4), { size: 36, w: 500, color: 'rgba(255,255,255,0.68)' });
 }
 
 // ── frame ────────────────────────────────────────────────────────────────────
+let LAYER = null;
+// draw one scene on its own layer, then composite it blurred / faded / scaled (the scene transitions)
+function layered(fn, t, a, blur, s) {
+  if (a <= 0.003) return;
+  const main = ctx; ctx = LAYER;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, LAYER.canvas.width, LAYER.canvas.height);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  fn(t); ctx = main;
+  main.save(); main.setTransform(1, 0, 0, 1, 0, 0); main.globalAlpha = a;
+  if (blur > 0.3) main.filter = `blur(${blur * DPR}px)`;
+  main.translate(CX * DPR, 820 * DPR); main.scale(s, s); main.translate(-CX * DPR, -820 * DPR);
+  main.drawImage(LAYER.canvas, 0, 0); main.restore();
+}
 const SCENES = [sceneOpen, sceneChat, sceneBook, sceneAll, sceneFeat, sceneEnd];
 function drawScene(t) {
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
-  ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
+  background();
   let i = 0; while (i + 1 < TM.scene.length && t >= TM.scene[i + 1]) i++;
   const t0 = TM.scene[i];
-  if (i >= 1 && i <= 3 && t < t0 + TM.PUSH) { // bars 2–4 arrive on the downbeat: the last one lifts away as the next rises in
-    const k = io(P(t, t0, t0 + TM.PUSH)), d = H * 0.4;
-    ctx.save(); ctx.globalAlpha = 1 - P(k, 0.1, 0.5); ctx.translate(0, -d * k); SCENES[i - 1](t); ctx.restore();
-    ctx.save(); ctx.globalAlpha = P(k, 0.4, 0.8); ctx.translate(0, d * (1 - k)); SCENES[i](t); ctx.restore();
-  } else if (i === 4 && t < t0 + 0.4) { SCENES[3](t); SCENES[4](t); } // the flood covers the list
+  if (i >= 1 && i <= 3 && t < t0 + TM.PUSH) { // bars 2–4 arrive on the downbeat: the last scene blurs back, the next blurs into focus
+    const k = P(t, t0, t0 + TM.PUSH), ki = P(k, 0.3, 1);
+    layered(SCENES[i - 1], t, 1 - eo(P(k, 0, 0.55)), 22 * eo(P(k, 0, 0.6)), 1 - 0.06 * io(k));
+    layered(SCENES[i], t, eo(P(k, 0.3, 0.8)), 22 * (1 - eo(ki)), 1.06 - 0.06 * eo(ki));
+  } else if (i === 4 && t < t0 + 0.45) { SCENES[3](t); SCENES[4](t); } // the flood covers the list
   else SCENES[i](t);
 }
 let MAIN, SCRATCH, SUB = 1;
 const SHUTTER = 0.5 / FPS; // 180° shutter at the render frame rate
-// the scene changes move ~4,000 px/s at their peak, so those frames take more samples to blur smoothly
-const fast = (t) => TM.scene.slice(1, 4).some((t0) => t > t0 - 0.02 && t < t0 + TM.PUSH + 0.02) || (t > at(19.5) - 0.02 && t < at(20) + 0.02);
 function renderFrame(t) {
   if (SUB <= 1) { ctx = MAIN; drawScene(t); return; }
-  const n = fast(t) ? SUB * 3 : SUB;
-  for (let k = 0; k < n; k++) {
-    ctx = SCRATCH; drawScene(clamp(t + ((k + 0.5) / n - 0.5) * SHUTTER, 0, DURATION - 1e-4));
+  for (let k = 0; k < SUB; k++) {
+    ctx = SCRATCH; drawScene(clamp(t + ((k + 0.5) / SUB - 0.5) * SHUTTER, 0, DURATION - 1e-4));
     MAIN.setTransform(1, 0, 0, 1, 0, 0); MAIN.globalAlpha = 1 / (k + 1); MAIN.drawImage(SCRATCH.canvas, 0, 0);
   }
   MAIN.globalAlpha = 1; ctx = MAIN;
@@ -483,10 +503,10 @@ window.DURATION = DURATION;
 window.ready = (async () => {
   const el = document.getElementById('c'); el.width = Math.round(W * DPR); el.height = Math.round(H * DPR);
   MAIN = ctx = el.getContext('2d');
-  const sc = document.createElement('canvas'); sc.width = Math.round(W * DPR); sc.height = Math.round(H * DPR); SCRATCH = sc.getContext('2d');
+  const mk = () => { const c = document.createElement('canvas'); c.width = Math.round(W * DPR); c.height = Math.round(H * DPR); return c.getContext('2d'); };
+  SCRATCH = mk(); LAYER = mk();
   await Promise.all(['400', '500', '600', '650', '700', '800'].map((w) => document.fonts.load(`${w} 40px Inter`)));
   LOGO = await new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = BRAND.logoFile; });
-  if (LOGO) buildLogoDraw();
   if (location.search.includes('render')) { document.body.classList.add('render'); SUB = +(QS.get('sub') || 6); } // motion-blur samples per frame
   renderFrame(0);
   // in-browser player (with the soundtrack when dist/reel-score.wav has been rendered)
