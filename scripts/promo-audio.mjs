@@ -1,6 +1,6 @@
 // Builds the promo soundtrack: the music track (muffled across one bar, faded at the end) plus the
 // sound effects, each placed so its "anchor" (attack or peak) lands exactly on its cue.
-// Cues come from the film itself (window.SFX, window.MUFFLE in src/promo.js); a cue's optional `gain`
+// Cues come from the film itself (window.SFX, window.MUFFLE, window.MUSIC_FADE in src/promo.js); a cue's optional `gain`
 // scales that one sound.
 //   node scripts/promo-audio.mjs dist/promo-audio.wav
 import path from 'node:path';
@@ -21,7 +21,7 @@ const SOUNDS = {
 };
 
 const film = await openFilm('promo.html');
-const { sfx, muffle, duration } = await film.page.evaluate(() => ({ sfx: window.SFX, muffle: window.MUFFLE, duration: DURATION }));
+const { sfx, muffle, duration, fade } = await film.page.evaluate(() => ({ sfx: window.SFX, muffle: window.MUFFLE, duration: DURATION, fade: window.MUSIC_FADE ?? 1.9 }));
 await film.close();
 
 const kinds = Object.keys(SOUNDS);
@@ -47,6 +47,6 @@ kinds.forEach((k, ki) => {
   });
 });
 graph.push(`${mixIn.join('')}amix=inputs=${mixIn.length}:normalize=0:duration=first,` +
-  `afade=t=out:st=${(duration - 1.9).toFixed(3)}:d=1.9,atrim=0:${duration.toFixed(3)}[out]`);
+  `afade=t=out:st=${(duration - fade).toFixed(3)}:d=${fade},atrim=0:${duration.toFixed(3)}[out]`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', ...inputs, '-filter_complex', graph.join(';'), '-map', '[out]', '-c:a', 'pcm_s16le', out], { stdio: 'inherit' });
 console.log(`audio → ${out}  (${kinds.map((k) => `${sfx.filter((c) => c.kind === k).length} ${k}`).join(', ')}; muffled ${a.toFixed(2)}–${b.toFixed(2)}s)`);
