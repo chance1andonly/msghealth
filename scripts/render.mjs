@@ -1,5 +1,6 @@
 // Renders a film to MP4 (24 fps, H.264 + AAC).
 //   npm run render            → dist/msghealth-demo.mp4        (16:9 film, index.html)
+//   npm run render:reel       → dist/msghealth-reel.mp4        (15.7 s 9:16 reel, reel.html, 1440×2560 60 fps)
 //   npm run render:ad         → dist/msghealth-ad-9x16.mp4     (9:16 social ad, ad.html)
 // Env: FFMPEG (path to an ffmpeg with libx264), WORKERS (parallel browser pages, default 3)
 import fs from 'node:fs';
@@ -12,11 +13,13 @@ const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const ENTRY = process.env.ENTRY || 'index.html';
 const IS_AD = ENTRY === 'ad.html';
 const IS_LAUNCH = ENTRY === 'launch.html';
-const FPS = +(process.env.FPS || (IS_LAUNCH ? 60 : 24));
-const SCALE = +(process.env.SCALE || (IS_LAUNCH ? 4 / 3 : 1)); // launch film: 1440×2560 at 60 fps (the only version we ship)
+const IS_REEL = ENTRY === 'reel.html';
+const HI = IS_LAUNCH || IS_REEL; // the vertical films ship at 1440×2560, 60 fps
+const FPS = +(process.env.FPS || (HI ? 60 : 24));
+const SCALE = +(process.env.SCALE || (HI ? 4 / 3 : 1));
 process.env.FILM_QUERY = `fps=${FPS}&scale=${SCALE}`;
-const OUT_NAME = (IS_LAUNCH ? 'msghealth-launch' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo') + (process.env.SUFFIX || '');
-const AUDIO_SCRIPT = IS_LAUNCH ? 'scripts/launch-audio.mjs' : IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
+const OUT_NAME = (IS_REEL ? 'msghealth-reel' : IS_LAUNCH ? 'msghealth-launch' : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo') + (process.env.SUFFIX || '');
+const AUDIO_SCRIPT = IS_REEL ? 'scripts/reel-audio.mjs' : IS_LAUNCH ? 'scripts/launch-audio.mjs' : IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
 const DIST = path.join(ROOT, 'dist');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'msgh-'));
@@ -53,7 +56,7 @@ const parts = await Promise.all(Array.from({ length: WORKERS }, (_, k) => worker
 
 const list = path.join(TMP, 'list.txt');
 fs.writeFileSync(list, parts.map((p) => `file '${p}'`).join('\n'));
-const wav = path.join(DIST, IS_LAUNCH ? 'launch-score.wav' : IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
+const wav = path.join(DIST, IS_REEL ? 'reel-score.wav' : IS_LAUNCH ? 'launch-score.wav' : IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
 execFileSync('node', [path.join(ROOT, AUDIO_SCRIPT), wav], { stdio: 'inherit' });
 const mp4 = path.join(DIST, `${OUT_NAME}.mp4`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', list, '-i', wav,

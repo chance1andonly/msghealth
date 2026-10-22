@@ -1,4 +1,5 @@
 node_modules/
 dist/score.wav
 dist/launch-score.wav
+dist/reel-score.wav
 assets/audio/

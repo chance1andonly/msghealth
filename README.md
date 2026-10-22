@@ -125,3 +125,35 @@ deep-indigo ink, the official logo mark and Inter type. It runs the length of it
   "Keep your customers." and then draws the logo: it traces the mark along its strokes (left bar → loop → diagonal →
   right bar → hook), the mark slides right to the end of the wordmark, then back left into the lockup, uncovering
   "MsgHealth" behind it, and the lockup and msghealth.net hold to the end.
+
+---
+
+# Reel (9:16, 15.7 s, cut to the track)
+
+A short, retention-first cut for TikTok and Reels. It was made after the launch film's analytics showed half of
+viewers leaving in the first ~2 seconds, so the hook ("Your best client is about to leave.") is fully on screen
+from the first frame, and the first frame also works as the cover. The film is short, the story is told in
+on-screen text so it works muted, and every element stays inside TikTok's safe area (x 70–930, y 220–1500).
+
+- **Final video:** `dist/msghealth-reel.mp4` (1440×2560, 60 fps, H.264 + AAC)
+- **Interactive player:** `reel.html` (it plays `dist/reel-score.wav` once that has been rendered)
+- **Render:** `npm run render:reel`. The track lives in `assets/audio/reel-track.wav`, which is not committed.
+
+| Time | Music | What happens |
+|---|---|---|
+| 0–3.2 s | Intro hats | "Your best client is about to leave." Sarah's days-since-visit counter climbs and her health drains. She turns *Needs attention*, then two warning signs appear, then *At risk*, each on a hat. |
+| 3.21 s | The drop | Her card becomes the Client health list: "MsgHealth spots it before you do." Three more clients tip over, one per beat. |
+| 5.13 s | Bar 2 | "It texts them back for you." The win-back text lands, then "Sent automatically by MsgHealth", then her reply. |
+| 7.05 s | Bar 3 | "Back on the calendar." She drops into the open 10:00 slot, and her health returns on the big hit (31 → 88). |
+| 8.97 s | Bar 4 | "Now do that for every client." The rest come back one per beat, and the *Won back* count rolls 1 → 4. |
+| 10.89 s | Bar 5 | An indigo flood: Health scores · Churn alerts · Win-back texts · Online booking, one per beat. |
+| 12.57 s | | The flood drains into the ball. |
+| 12.81 s | Bar 6 | The ball draws the logo, which slides right, then back left uncovering the wordmark. |
+| 14.73 s | Bar 7 | msghealth.net, then "Know who's about to leave." |
+
+The source track runs out at bar 7's downbeat. Under the end card, the soundtrack repeats the first two
+beats of bar 6 (spliced downbeat to downbeat) and fades out. There are no sound effects.
+
+- `src/reel-timing.js`: the beat grid (125 BPM, drop at 3.21 s), shared by the picture and the soundtrack
+- `src/reel.js`: the scenes
+- `scripts/reel-audio.mjs`: the soundtrack
