@@ -106,49 +106,41 @@ Keep the delivery natural and conversational, as if one business owner were talk
 
 ---
 
-# 23-second product film (9:16 and 16:9, 60 fps)
+# "While you cut": 23-second product film (9:16 and 16:9, 60 fps)
 
-A keynote-style product film for barbers, cut to "keep steady" (120 BPM), in black and champagne gold (the product
-screens keep the app's real indigo). It is built for short-form feeds: the hook ("For barbers: Your regulars won't tell
-you they're leaving.") is already on screen at 0:00, so the first frame works as the cover. An at-risk alert lands on beat 1,
-"leaving." turns red with After Effects-style light rays, and on the drop (2.3 s) the camera dives through the word into the
-analytics dashboard. Then health scores, win-backs on autopilot, the AI Business Analyst, the tagline and the end card.
-Scene changes are 3D camera moves rendered in WebGL with GPU motion blur; each travels one way and lands.
+One Tuesday at a barbershop, told by the clock, in the MsgHealth brand indigo (#4F46E5) on black, cut to "keep steady"
+(120 BPM). The hook is the day's result: "6 regulars rebooked. You sent 0 texts." It is already on screen at 0:00, so the
+first frame works as the cover. Three booking notifications land while the intro plays muffled. On the drop (2.3 s) the clock
+rolls back to 9:02 AM and walks through what MsgHealth did while the barber was cutting.
+
+Every change of hour is the clock rolling over. Both shots are faces of one 3D cube that turns a quarter, upward, like a digit
+on a flip clock. It is rendered in WebGL with GPU motion blur, and each move travels one way and lands. Within a scene, a
+changed digit rolls in place (9:02 → 9:03).
 
 - **Video:** `dist/msghealth-promo.mp4` (1920×1080, 60 fps, 23.4 s), and the vertical cut `dist/msghealth-promo-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
 - 9:16: `promo-vertical.html` renders the same film natively at 1080×1920 (`npm run render:promo:9x16`). Each scene has its own framing
-  (`FRAMING` in `src/promo.js`). The laptop fills the width and pushes closer while a feature is shown,
-  the feature titles sit above the laptop, the hook and the health-score scene are stacked, the win-back steps form one column,
-  and every scene keeps clear of the screen edges and the app's buttons.
+  (`FRAMING` in `src/promo.js`). In 16:9 the clock sits to the left of each moment; in 9:16 it sits above it.
+  The laptop fills the width while the camera is in on the calendar, and every scene keeps clear of the app's buttons.
 - Source: `promo.html`, `src/promo.js`. The beat grid is `BEAT` / `B0` at the top (120 BPM, first downbeat 0.348 s), and all timing is written in beats (`b(k)`).
-  Scenes start on bar downbeats and are grouped into 4-bar phrases.
 - Music: `assets/audio/promo-track.m4a` (from the supplied screen recording). Check you have the rights before running it as a paid ad.
-- Sound: `scripts/promo-audio.mjs` places each effect so its attack (or peak) lands on its cue from `window.SFX`:
-  a soft swoosh as the at-risk alert lands, a camera flash as "leaving." finishes turning red, a mouse click on every pointer click,
-  a whoosh (trimmed to its core) at the fastest point of each move that brings the laptop in, and a snap as MsgHealth lands on the end card, together with the peak of a metallic riser that builds into it.
+- Sound: `scripts/promo-audio.mjs` places each effect so its attack (or peak) lands on its cue from `window.SFX`. A cue can carry
+  its own `gain`. Sounds:
+  - a soft swoosh as each notification lands, as the texts go out, and as Marcus replies
+  - a click as the clock ticks over, as the booking confirms, on each star, and (quietly) on each booking added to the calendar
+  - a whoosh at the fastest point of every roll
+  - a snap and the peak of a metallic riser as MsgHealth lands on the end card
+
   The intro plays muffled until the drop, and the music fades out over the last 1.9 s.
 - Sync: `src/promo-onsets.js` lists every hit in the track (`python3 scripts/promo-onsets.py` regenerates it). Entrances snap onto the nearest hit.
 - Render: `npm run render:promo`
-- On-screen "today" is Sunday, October 18, 2026, and every date shown is recent relative to it.
+- On-screen "today" is Tuesday, October 20, 2026.
 
-The opening texts finish before the beat drops at beat 4 (2.3 s). From there, every scene starts on a downbeat, and each scene
-change has its own transition, used once. The laptop demos zoom in to show the feature in use, then zoom back out, and the
-feature's title shows only while the laptop is zoomed out. Each demo cuts about half a second after it zooms back out.
-
-| Beats | Time | What's on screen | 3D transition in |
+| Beats | Time | What's on screen | Transition in |
 |---|---|---|---|
-| 0–4 | 0–2.3s | iPhone: "I don't know how" / "salon owners could live" / "without this 👀" sent at 0.35, 1.1 and 1.6 s with the sent sound, "Delivered" at 2.0 s | — |
-| 4–8 | 2.3–4.3s | "Repeat clients are the business." | Camera pushes into the last bubble |
-| 8–16 | 4.3–8.3s | "But when a regular stops booking…": Jan, Feb, Mar, then an empty April. "No reply. No warning." | Whip pan |
-| 16–20 | 8.3–10.3s | Black and white: "You won't see it coming until they're gone." The music is muffled, and "gone." fades to red, landing on a camera flash at 9.8 s | Camera cranes up as the cards tip away |
-| 20–24 | 10.3–12.3s | The logo lands, steps right, then sweeps left as MsgHealth wipes in, with a light sweep | Straight cut |
-| 24–28 | 12.3–14.3s | "It tells you who's drifting and brings them back." + chips | Camera orbits to the far side |
-| 28–32 | 14.3–16.3s | The MacBook opens on Home | The laptop rises from below, tilted |
-| 32–36 | 16.3–18.3s | Health scores on glass | The laptop eases back and down as the next shot comes forward |
-| 36–46 | 18.3–23.3s | MacBook: AI Business Analyst (zoom in → question → answer → send → zoom out) | The laptop swings in as the last shot defocuses |
-| 46–52 | 23.3–26.3s | "Win them back on autopilot.": the flow, the text, the reply, booked | The laptop drifts toward the camera, out of focus |
-| 52–60 | 26.3–30.3s | MacBook: October calendar (Chloe booked on Oct 21, four online bookings) | Layered panes slide up and settle |
-| 60–68 | 30.3–34.2s | MacBook: review requests and a new 5★ review | Straight cut |
-| 68–80 | 34.2–40.2s | MacBook: Analytics & Predictions rising card by card | Straight cut |
-| 80–84 | 40.2–42.2s | "Know your customers. Keep your customers." | The laptop falls back into the dark |
-| 84–end | 42.2–44.9s | Logo, msghealth.net, "Start now · 50% off your first month" | Straight cut, with a snap |
+| 0–4 | 0–2.3s | "Tuesday, October 20 · 6 regulars rebooked. You sent 0 texts." Three booking notifications land on beats 1, 2 and 3 | — |
+| 4–12 | 2.3–6.3s | **9:02 AM** "MsgHealth spots who's due back.": four regulars, Due / Overdue. The clock ticks to **9:03**: "…and texts each one for you." Each turns "Text sent" | Clock roll |
+| 12–20 | 6.3–10.3s | **11:47 AM** "Marcus books himself in.": the morning's text, his reply, "Booked · Thu, Oct 22 · 2:00 PM" | Clock roll |
+| 20–26 | 10.3–13.3s | **3:15 PM** "Jay leaves you five stars.": the stars fill one per half-beat, then the review | Clock roll |
+| 26–36 | 13.3–18.3s | **7:00 PM** MacBook, Home: the camera moves in on this week as six bookings land, then up to "Booked this week: 6" | Clock roll |
+| 36–40 | 18.3–20.3s | "You cut hair. MsgHealth fills the chair." | The laptop falls back into the dark |
+| 40–end | 20.3–23.4s | Logo, msghealth.net, "Start now · 50% off your first month" | Straight cut, with a snap |

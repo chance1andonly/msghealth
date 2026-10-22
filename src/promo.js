@@ -1,7 +1,8 @@
-// MsgHealth · 23s product film (1920 × 1080 or 1080 × 1920, 60 fps), cut to "keep steady" (120 BPM).
-// Keynote look in black and gold: large type, a MacBook presenting the product, and 3D camera moves on
-// the downbeats. Built for short-form feeds: the hook is readable on the first frame and the product
-// is on screen by 2.3s. Nothing pulses.
+// MsgHealth · "While you cut" · 23s film (1920 × 1080 or 1080 × 1920, 60 fps), cut to "keep steady" (120 BPM).
+// One Tuesday at a barbershop, told by the clock: the hook is the day's result, then the clock rolls
+// back to 9:02 AM and walks through what MsgHealth did while the barber was cutting. Brand indigo on
+// black, every change of hour a 3D roll on the downbeat. The hook is readable on the first frame and
+// the product is on screen by 3s. Nothing pulses.
 'use strict';
 
 const W = 1920, H = 1080, FPS = 60; // scenes are laid out on this 16:9 stage
@@ -12,11 +13,10 @@ const OUT = VERT ? { w: 1080, h: 1920 } : { w: W, h: H };
 const DURATION = 23.4; // the end card (beat 40, 20.3s) holds, then fades
 const C = BRAND.colors;
 const FONT = 'Inter';
-const IND = '#5b50e8';        // dashboard chart indigo
 const MUTED = '#6b6b85', FAINT = '#9a9ab0', LINE = '#ececf3';
 const SOFT = 'rgba(235,235,245,0.62)'; // secondary text on the black stage
-// The film's own colorway: black and champagne gold. The product screens keep the app's real indigo.
-const GOLD = { hi: '#f6e2b3', mid: '#e2b86a', deep: '#c48a3a', glow: '#b07a35' };
+// The brand indigo (#4F46E5), with lighter tints that read on the black stage.
+const IN = { hi: '#dcd9ff', mid: '#a49dff', deep: '#7268ff', glow: C.primary };
 
 // Beat grid of assets/audio/promo-track.m4a: 120 BPM (0.4985s a beat), first downbeat 0.348s,
 // 4-beat bars, 4-bar phrases. Every entrance is snapped onto a real hit (src/promo-onsets.js).
@@ -33,7 +33,7 @@ function hits(from, n) {
   return Array.from({ length: n }, (_, i) => O[i] ?? from + i * 0.12);
 }
 
-let ctx = null, MAIN = null, LOGO = null, LOGO_GOLD = null;
+let ctx = null, MAIN = null, LOGO = null;
 
 // ── maths ────────────────────────────────────────────────────────────────────
 const clamp = (v, a = 0, c = 1) => Math.max(a, Math.min(c, v));
@@ -46,7 +46,6 @@ const ease = {
   inOut: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
 };
 function rgba(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
-const money = (v) => '$' + Math.round(v).toLocaleString('en-US');
 
 // UI elements land with a short, soft settle; headlines use the slower riseIn below.
 const SNAP = 0.3;
@@ -55,14 +54,6 @@ const snapP = (t, at) => ease.quint(seg(t, at, at + SNAP));
 // ── drawing primitives ───────────────────────────────────────────────────────
 function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
 function fillRR(x, y, w, h, r, col) { rr(x, y, w, h, r); ctx.fillStyle = col; ctx.fill(); }
-function card(x, y, w, h, r, o = {}) {
-  ctx.save();
-  ctx.shadowColor = o.shadowColor ?? 'rgba(30,27,75,0.10)';
-  ctx.shadowBlur = o.shadow ?? 40; ctx.shadowOffsetY = (o.shadow ?? 40) * 0.35;
-  fillRR(x, y, w, h, r, o.fill ?? '#ffffff');
-  ctx.restore();
-  if (o.stroke) { rr(x, y, w, h, r); ctx.strokeStyle = o.stroke; ctx.lineWidth = o.lw ?? 1.5; ctx.stroke(); }
-}
 function font(size, weight = 600, track = -0.03) { ctx.font = `${weight} ${size}px ${FONT}`; ctx.letterSpacing = `${(size * track).toFixed(2)}px`; }
 function text(s, x, y, size, weight, color, align = 'left', track) {
   font(size, weight, track ?? (size >= 40 ? -0.03 : -0.005));
@@ -100,23 +91,8 @@ function snapIn(t, at, cx, cy, fn, o = {}) {
   ctx.restore();
 }
 
-// A line of text whose chunks appear at their own times. chunks: [text, time, colour?]
-// The whole line is laid out up front so nothing shifts when a chunk lands.
-function line(t, chunks, x, y, size, o = {}) {
-  const weight = o.weight ?? 700, gap = tw(' ', size, weight);
-  const ws = chunks.map(([s]) => tw(s, size, weight));
-  const total = ws.reduce((p, w) => p + w, 0) + gap * (chunks.length - 1);
-  let cx = o.align === 'left' ? x : x - total / 2;
-  chunks.forEach(([s, at, col], i) => {
-    const w = ws[i], x0 = cx;
-    snapIn(t, at, x0 + w / 2, y, () => text(s, x0, y, size, weight, col ?? C.ink), { dy: size * 0.3, from: 0.96 });
-    cx += w + gap;
-  });
-  return total;
-}
-
 // ── the stage: black, with an optional soft glow behind the subject ──────────
-function stage(glow = 0, col = GOLD.glow, gy = 0.55, R = 950) {
+function stage(glow = 0, col = IN.glow, gy = 0.55, R = 950) {
   ctx.fillStyle = '#000'; ctx.fillRect(-2 * W, -3 * H, 5 * W, 7 * H);
   if (glow <= 0) return;
   const g = ctx.createRadialGradient(W / 2, H * gy, 0, W / 2, H * gy, R);
@@ -128,7 +104,7 @@ function glass(x, y, w, h, r, o = {}) {
   rr(x, y, w, h, r); ctx.strokeStyle = o.stroke ?? 'rgba(255,255,255,0.13)'; ctx.lineWidth = o.lw ?? 1.5; ctx.stroke();
 }
 const silver = (y, size) => { const g = ctx.createLinearGradient(0, y - size * 0.55, 0, y + size * 0.55); g.addColorStop(0, '#ffffff'); g.addColorStop(1, '#b4b4c2'); return g; };
-const brandGrad = (x0, x1) => { const g = ctx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, GOLD.hi); g.addColorStop(0.5, GOLD.mid); g.addColorStop(1, GOLD.deep); return g; };
+const brandGrad = (x0, x1) => { const g = ctx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, IN.hi); g.addColorStop(0.5, IN.mid); g.addColorStop(1, IN.deep); return g; };
 
 // Headline entrance: fades up out of a soft blur, starting on a hit.
 function riseIn(t, at, fn, o = {}) {
@@ -206,7 +182,7 @@ let LIDC = null; // offscreen lid, used only while the lid is opening
 function laptopShadow() {
   const by = LAP.y + LAP.h + 26;
   const g = ctx.createRadialGradient(W / 2, by + 30, 0, W / 2, by + 30, 900);
-  g.addColorStop(0, 'rgba(200,150,80,0.08)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  g.addColorStop(0, 'rgba(120,110,255,0.10)'); g.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g; ctx.fillRect(0, by - 200, W, 500);
   ctx.save(); ctx.scale(1, 0.08); const s = ctx.createRadialGradient(W / 2, (by + 26) / 0.08, 0, W / 2, (by + 26) / 0.08, 760);
   s.addColorStop(0, 'rgba(0,0,0,0.9)'); s.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = s; ctx.fillRect(0, (by - 40) / 0.08, W, 160 / 0.08); ctx.restore();
@@ -276,10 +252,9 @@ function renderInto(i, fn, t) {
   ctx = prev;
   return buffer(i).canvas;
 }
-// Scene changes are camera moves in a real 3D scene (WebGL): both shots are textured planes, the camera
-// whips, orbits, cranes and pushes between them, and every frame is motion-blurred by averaging sub-frames
-// across a short shutter. Moves only ever travel toward their resting place: no overshoot, no snap-back.
-// Cuts between the laptop demos, onto the logo and onto the end card are straight cuts.
+// Scene changes are moves in a real 3D scene (WebGL): both shots are textured planes, and every frame is
+// motion-blurred by averaging sub-frames across a short shutter. Moves only ever travel toward their
+// resting place: no overshoot, no snap-back. The cut onto the end card is a straight cut.
 const FOV = 0.7, CAM_D = (OUT.h / 2) / Math.tan(FOV / 2); // at z = 0 a plane the size of the output frame fills it exactly
 const M4 = {
   mul(a, b) { const o = new Array(16); for (let c = 0; c < 4; c++) for (let r = 0; r < 4; r++) { let s = 0; for (let k = 0; k < 4; k++) s += a[k * 4 + r] * b[c * 4 + k]; o[c * 4 + r] = s; } return o; },
@@ -355,42 +330,23 @@ function glScene({ planes, cam = {} }) {
 }
 const xio = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2); // fast through the middle
 const qn = ease.quint;
-let DIVE_AT = { x: 540, y: 960 }; // "leaving." on screen, set while the opening draws
 // Each entry: scene(p) → { planes, cam } for time p; optional defocus(p) → [blurA, blurB]. Every move travels one way and lands.
 const one = (planes, cam) => ({ planes, cam });
 const TRANSITIONS = {
-  // opening → dashboard: the camera pushes into "leaving." and the laptop settles out of it
-  dive: { scene(p) {
-    const e = xio(clamp(p / 0.62)), k = qn(clamp((p - 0.4) / 0.6));
-    return one([plane('A', { a: 1 - clamp((p - 0.42) / 0.2) }), plane('B', { z: lerp(CAM_D * 0.5, 0, k), a: clamp((p - 0.4) / 0.2), layer: 1 })],
-      { x: (DIVE_AT.x - OUT.w / 2) * e * (1 - k), y: (OUT.h / 2 - DIVE_AT.y) * e * (1 - k), z: -CAM_D * 0.9 * e * (1 - k) });
+  // the clock rolls: both shots are faces of one cube that turns a quarter, upward, like a digit on a
+  // flip clock. The old hour rolls up and over the top as the next one comes up from below.
+  drum: { scene(p) {
+    const e = xio(p), R = OUT.h / 2, th = Math.PI / 2;
+    const face = (tex, phi) => plane(tex, { y: R * Math.sin(phi), z: R * Math.cos(phi) - R, rx: -phi });
+    return one([face('A', th * e), face('B', th * (e - 1))]);
   } },
-  // → health scores: the laptop floats off the top, tilted, as the next shot rises up from below
-  rise: { scene(p) {
-    const e = xio(p);
-    return one([plane('A', { y: OUT.h * 0.9 * e, rx: -0.45 * e, z: -300 * e, a: 1 - clamp((p - 0.6) / 0.4) }), plane('B', { y: -OUT.h * 1.1 * (1 - e), rx: 0.5 * (1 - e), z: -300 * (1 - e) })]);
-  } },
-  // → win-back: the health card eases back and down out of shot while the next shot comes forward to rest
-  settle: { scene(p) {
-    const e = xio(p), k = qn(clamp((p - 0.2) / 0.8));
-    return one([plane('A', { rx: -0.45 * e, py: -OUT.h / 2, y: -OUT.h * 0.3 * e, z: -900 * e, a: 1 - clamp((p - 0.45) / 0.4) }), plane('B', { z: -1300 * (1 - k), a: clamp(k * 1.6), layer: 1 })]);
-  } },
-  // → AI Analyst: the laptop swings in from the right like a floating panel as the old shot drifts back out of focus
-  swing: {
-    defocus: (p) => [16 * xio(p), 0],
-    scene(p) {
-      const e = xio(p), k = qn(clamp((p - 0.1) / 0.9));
-      return one([plane('A', { x: -OUT.w * 0.45 * e, z: -900 * e, ry: 0.55 * e, a: 1 - clamp((p - 0.5) / 0.5) * 0.85 }), plane('B', { x: OUT.w * 0.95 * (1 - k), z: -700 * (1 - k), ry: -1.0 * (1 - k) })]);
-    },
-  },
   // → tagline: the laptop falls back into the dark as the words drop in from above
   fall: { scene(p) {
     const e = xio(p), k = qn(clamp((p - 0.25) / 0.75));
     return one([plane('A', { rx: -0.9 * e, z: -2600 * e * e, y: -150 * e, a: 1 - clamp((p - 0.55) / 0.35) }), plane('B', { y: OUT.h * 0.85 * (1 - k), rx: -0.4 * (1 - k), a: clamp(k * 1.6) })]);
   } },
 };
-// Motion blur: every frame averages sub-frames spread across the shutter, on the GPU. Fast moves
-// streak; anything still stays crisp.
+
 const SHUTTER = 0.045, SAMPLES = 32;
 function transition(type, p, A, B, dur) {
   const T = TRANSITIONS[type];
@@ -416,45 +372,6 @@ function transition(type, p, A, B, dur) {
 }
 
 // ── shared product UI (rebuilt from the screen recordings) ───────────────────
-function glyph(kind, x, y, col) { // small line icons
-  ctx.save(); ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 3.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  if (kind === 'alert') { ctx.beginPath(); ctx.moveTo(x, y - 14); ctx.lineTo(x + 15, y + 12); ctx.lineTo(x - 15, y + 12); ctx.closePath(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x, y + 3); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y + 8, 1.6, 0, 7); ctx.fill(); }
-  if (kind === 'chat') { rr(x - 15, y - 12, 30, 20, 6); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 6, y + 8); ctx.lineTo(x - 10, y + 15); ctx.lineTo(x + 2, y + 8); ctx.stroke(); }
-  if (kind === 'mail') { rr(x - 16, y - 11, 32, 22, 4); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 15, y - 9); ctx.lineTo(x, y + 2); ctx.lineTo(x + 15, y - 9); ctx.stroke(); }
-  if (kind === 'cal') { rr(x - 15, y - 12, 30, 27, 5); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 15, y - 3); ctx.lineTo(x + 15, y - 3); ctx.moveTo(x - 7, y - 16); ctx.lineTo(x - 7, y - 9); ctx.moveTo(x + 7, y - 16); ctx.lineTo(x + 7, y - 9); ctx.stroke(); }
-  if (kind === 'star') { ctx.beginPath(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 7 : 16, a = -Math.PI / 2 + (i * Math.PI) / 5; ctx.lineTo(x + r * Math.cos(a), y + r * Math.sin(a)); } ctx.closePath(); ctx.stroke(); }
-  if (kind === 'gift') { rr(x - 15, y - 6, 30, 21, 3); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 17, y - 6); ctx.lineTo(x + 17, y - 6); ctx.moveTo(x, y - 6); ctx.lineTo(x, y + 15); ctx.stroke(); ctx.beginPath(); ctx.arc(x - 6, y - 11, 5, 0, 7); ctx.arc(x + 6, y - 11, 5, 0, 7); ctx.stroke(); }
-  if (kind === 'card') { rr(x - 17, y - 12, 34, 24, 4); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 17, y - 4); ctx.lineTo(x + 17, y - 4); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 10, y + 5); ctx.lineTo(x - 2, y + 5); ctx.stroke(); }
-  if (kind === 'bolt') { ctx.beginPath(); ctx.moveTo(x + 3, y - 16); ctx.lineTo(x - 10, y + 2); ctx.lineTo(x, y + 2); ctx.lineTo(x - 3, y + 16); ctx.lineTo(x + 10, y - 2); ctx.lineTo(x, y - 2); ctx.closePath(); ctx.stroke(); }
-  ctx.restore();
-}
-
-function pointer(t, path, clicks, z) {
-  path = path.map(([at, px, py]) => [hit(at), px, py]); clicks = clicks.map(hit);
-  let [x, y] = [path[0][1], path[0][2]];
-  for (let i = 1; i < path.length; i++) {
-    const [at, nx, ny] = path[i], p = ease.inOut(seg(t, at - 0.38, at));
-    if (p <= 0) break;
-    x = lerp(x, nx, p); y = lerp(y, ny, p);
-  }
-  const s = 2.1 / z;
-  const c = clicks.find((ct) => t >= ct && t < ct + 0.32);
-  ctx.save();
-  if (c != null) { // one ring per click, expanding once
-    const k = (t - c) / 0.32;
-    ctx.beginPath(); ctx.arc(x, y, (8 + 26 * ease.out(k)) * s, 0, Math.PI * 2);
-    ctx.strokeStyle = rgba(C.primary, 0.55 * (1 - k)); ctx.lineWidth = 3 * s; ctx.stroke();
-  }
-  const press = c != null && t < c + 0.12 ? 0.84 : 1;
-  ctx.translate(x, y); ctx.scale(s * press, s * press);
-  ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2;
-  ctx.beginPath();
-  [[0, 0], [0, 25], [6.5, 19.5], [11, 29], [15, 27.2], [10.6, 18], [18.5, 18]].forEach(([px, py], i) => (i ? ctx.lineTo(px, py) : ctx.moveTo(px, py)));
-  ctx.closePath();
-  ctx.fillStyle = '#111118'; ctx.fill();
-  ctx.shadowColor = 'transparent'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
-  ctx.restore();
-}
 // Feature name, top left in screen space: a quiet glass label, so each demo is named.
 function featureTag(t, at, label, sub, zoom = 1) {
   const a = 1 - clamp((zoom - 1) / 0.25); // steps aside while the camera is pushed in
@@ -469,36 +386,24 @@ function featureTag(t, at, label, sub, zoom = 1) {
   }, { dy: 14, blur: 8 });
   ctx.restore();
 }
-function withCam(t, keys, fn) {
-  const [cx, cy, z] = camAt(t, keys);
-  ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.translate(-cx, -cy);
-  fn(z);
-  ctx.restore();
-}
-function stars(x, y, n, size = 12) {
-  for (let i = 0; i < 5; i++) {
-    ctx.beginPath();
-    for (let k = 0; k < 10; k++) { const rr0 = k % 2 ? size * 0.42 : size, a = -Math.PI / 2 + (k * Math.PI) / 5; ctx.lineTo(x + i * size * 2.2 + rr0 * Math.cos(a), y + rr0 * Math.sin(a)); }
-    ctx.closePath(); ctx.fillStyle = i < n ? '#f5b301' : '#dcdce6'; ctx.fill();
-  }
-}
+
 const box = (x, y, w, h, r = 10) => { fillRR(x, y, w, h, r, '#fff'); rr(x, y, w, h, r); ctx.strokeStyle = '#e6e6ee'; ctx.lineWidth = 1.2; ctx.stroke(); };
 
 // Home: KPI tiles, the October calendar and the Today panel.
-// Sunday 18 October 2026 is "today"; 1 October 2026 falls on a Thursday.
+// Tuesday 20 October 2026 is "today"; 1 October 2026 falls on a Thursday.
 const CAL = { x: 330, w: 1225, gx: 345, gw: 1195, top: 440, rh: 97 };
 const cellOf = (d) => { const i = d + 3; return [CAL.gx + (i % 7) * (CAL.gw / 7), CAL.top + Math.floor(i / 7) * CAL.rh]; };
 const BASE_EVENTS = [
   [1, '10a', 'Melissa Grant', 'Beard Trim'], [2, '2:30p', 'Isabella Rossi', 'Skin Fade'], [6, '11a', 'Drew Bianchi', 'Cut & Beard'],
-  [8, '10:30a', 'Jordan Ellis', 'Signature Cut'], [9, '1:30p', 'Maya Sandoval', 'Signature Cut'], [13, '12p', 'Marcus Bell', 'Signature Cut'],
+  [8, '10:30a', 'Jordan Ellis', 'Signature Cut'], [9, '1:30p', 'Maya Sandoval', 'Signature Cut'], [13, '12p', 'Theo Park', 'Signature Cut'],
   [15, '2p', 'Jordan Ellis', 'Lineup'], [16, '3:30p', 'Avery Whitfield', 'Hot Towel Shave'], [17, '11a', 'Simone Archer', 'Skin Fade'],
-  [29, '11a', 'Jordan Ellis', 'Signature Cut'],
+  [20, '9a', 'Kai Moreno', 'Skin Fade'], [20, '1p', 'Jay Ortiz', 'Signature Cut'], [20, '5:30p', 'Leo Grant', 'Lineup'], [29, '11a', 'Jordan Ellis', 'Signature Cut'],
 ];
 function homeWorld(t, o = {}) {
   const added = (o.added ?? []).filter((e) => t >= e[4]);
   ctx.fillStyle = '#fafafc'; ctx.fillRect(0, 0, W, H);
   appSidebar(74, 'Dashboard');
-  appTopBar('Home', 'Sunday, October 18, 2026 · What needs your attention right now, nothing to dig for.');
+  appTopBar('Home', 'Tuesday, October 20, 2026 · What needs your attention right now, nothing to dig for.');
   const kx = LAYOUT.x0, kw = (1890 - kx) / 4;
   box(kx, 92, 1890 - kx, 112, 10);
   [['Booked this week', String(added.length), added.length ? `${added.length} new since this morning` : 'None today'],
@@ -535,7 +440,7 @@ function homeWorld(t, o = {}) {
   for (let i = 0; i < 35; i++) {
     const d = i - 3, x = CAL.gx + (i % 7) * cw, y = CAL.top + Math.floor(i / 7) * CAL.rh;
     const label = d < 1 ? [27, 28, 29, 30][i] : d; // Sep 27–30 lead into the month
-    if (d === 18) { ctx.fillStyle = rgba(C.primary, 0.07); ctx.fillRect(x + 1, y + 1, cw - 2, CAL.rh - 2); }
+    if (d === 20) { ctx.fillStyle = rgba(C.primary, 0.07); ctx.fillRect(x + 1, y + 1, cw - 2, CAL.rh - 2); }
     text(String(label), x + cw - 12, y + 16, 12, 600, d < 1 ? '#b5b5c8' : '#22223a', 'right');
   }
   const events = BASE_EVENTS.map((e) => [...e, -1]).concat(added);
@@ -554,9 +459,9 @@ function homeWorld(t, o = {}) {
   });
   // Today + Needs attention
   box(1573, 222, 315, 190, 10);
-  text('Today', 1591, 246, 14, 600, '#16162a'); text('Sunday, Oct 18', 1591, 266, 12, 400, MUTED);
-  text('Nothing booked today', 1730, 330, 13, 600, '#16162a', 'center');
-  const next = added.find((e) => e[0] === 21) ? 'Next: Wed, Oct 21 at 11:00 AM, Chloe Bergeron' : 'Next: Thu, Oct 29 at 11:00 AM, Jordan Ellis';
+  text('Today', 1591, 246, 14, 600, '#16162a'); text('Tuesday, Oct 20', 1591, 266, 12, 400, MUTED);
+  text('8 cuts today', 1730, 330, 13, 600, '#16162a', 'center');
+  const next = added.find((e) => e[0] === 21) ? 'Next: Wed, Oct 21 at 4:00 PM, Chris Okafor' : 'Next: Thu, Oct 22 at 10:00 AM, Kai Moreno';
   text(next, 1730, 356, 11.5, 400, MUTED, 'center');
   box(1573, 426, 315, 520, 10);
   text('Needs attention', 1591, 452, 14, 600, '#16162a'); text('5 open items, most urgent first', 1591, 472, 11.5, 400, MUTED);
@@ -570,42 +475,7 @@ function homeWorld(t, o = {}) {
   });
 }
 
-const AI_Q = 'Which clients haven’t booked in 60 days?';
-const AI_ROWS = [
-  ['Chloe Bergeron', 'Jul 29', '81'], ['Renee Calloway', 'Jul 31', '79'], ['Reese Abara', 'Aug 2', '77'], ['Lauren Kowalczyk', 'Aug 4', '75'],
-  ['Hannah McAllister', 'Aug 7', '72'], ['Riley Delgado', 'Aug 10', '69'], ['Charlotte Reddick', 'Aug 11', '68'], ['Nina Petrossian', 'Aug 13', '66'], ['Dominic Ferraro', 'Aug 14', '65'],
-];
-// ── Analytics & Predictions ──────────────────────────────────────────────────
-// Shown straight after the hook, so the viewer sees the product before it's explained.
-const RISE = { // beat-locked: the camera arrives on a card, then it climbs
-  health: [b(8), b(9.5)],
-  rebook: [b(10.5), b(12)],
-  revenue: [b(13), b(14.5)],  // the last three climb together once the camera is back out
-  forecast: [b(13), b(14.5)],
-  cohort: [b(13.25), b(14.5)],
-};
-const r = (t, k) => ease.inOut(seg(t, RISE[k][0], RISE[k][1]));
-const LAYOUT = { // world coordinates of the dashboard page (1920 × 1080)
-  side: 300, x0: 330, colW: 506, gap: 20, row1: 288, row1h: 312, row2: 668, row2h: 386,
-};
-const cardBox = {
-  health: [LAYOUT.x0, LAYOUT.row1, LAYOUT.colW, LAYOUT.row1h],
-  rebook: [LAYOUT.x0 + LAYOUT.colW + LAYOUT.gap, LAYOUT.row1, LAYOUT.colW, LAYOUT.row1h],
-  revenue: [LAYOUT.x0 + 2 * (LAYOUT.colW + LAYOUT.gap), LAYOUT.row1, LAYOUT.colW, LAYOUT.row1h],
-  forecast: [LAYOUT.x0, LAYOUT.row2, 900, LAYOUT.row2h],
-  cohort: [LAYOUT.x0 + 920, LAYOUT.row2, 1890 - LAYOUT.x0 - 920, LAYOUT.row2h],
-};
-function dcard(key, title, sub) {
-  const [x, y, w, h] = cardBox[key];
-  fillRR(x, y, w, h, 12, '#fff'); rr(x, y, w, h, 12); ctx.strokeStyle = '#e6e6ee'; ctx.lineWidth = 1.2; ctx.stroke();
-  text(title, x + 20, y + 30, 15, 600, '#16162a');
-  text(sub, x + 20, y + 51, 12, 400, MUTED);
-  for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(x + w - 36 + i * 6, y + 30, 1.6, 0, 7); ctx.fillStyle = '#55556a'; ctx.fill(); }
-  return [x, y, w, h];
-}
-function delta(t, key, x, y, label) { // "+46 pts" tag snaps in as the rise finishes
-  snapIn(t, RISE[key][1] - 0.05, x, y, () => pill(x, y, label, '#1f9d5c', 12, 'left'), { from: 0.7, dy: 0, blur: 6 });
-}
+const LAYOUT = { side: 300, x0: 330 }; // world coordinates of the app pages (1920 × 1080)
 // The product chrome, shared by every screen rebuilt from the recordings.
 function appSidebar(bh, active) {
   const L = LAYOUT;
@@ -639,139 +509,7 @@ function appTopBar(title, sub) {
   });
   fillRR(1750, 20, 140, 32, 6, C.primary); text('+ Add Client', 1820, 36, 12.5, 600, '#fff', 'center');
 }
-function appTabs(tabs, active, y = 114) {
-  const x = LAYOUT.x0;
-  let tx = x + 10;
-  tabs.forEach((s) => {
-    const on = s === active, w = tw(s, 12.5, on ? 600 : 500);
-    text(s, tx, y, 12.5, on ? 600 : 500, on ? '#16162a' : '#55556f');
-    if (on) { ctx.fillStyle = '#16162a'; ctx.fillRect(tx - 10, y + 17, w + 20, 2); }
-    tx += w + 50;
-  });
-  ctx.fillStyle = '#ececf2'; ctx.fillRect(x, y + 19, 1560, 1);
-}
-function dashSidebar(t) { appSidebar(Math.round(lerp(41, 88, r(t, 'cohort'))), 'Analytics & Predictions'); }
-function dashHeader() {
-  const x = LAYOUT.x0;
-  appTopBar('Analytics & Predictions', 'Sunday, October 18, 2026 · Your business at a glance: health, revenue, activity and forecasts that update automatically.');
-  appTabs(['Overview', 'Revenue', 'Retention', 'Economics', 'Growth'], 'Retention');
-  text('Where clients stand', x, 252, 14.5, 600, '#16162a'); text('Risk and health across your whole client list today', x, 271, 12, 400, MUTED);
-  text('Forecast and engagement', x, 632, 14.5, 600, '#16162a'); text('Where retention is heading, and how each month’s clients stick', x, 651, 12, 400, MUTED);
-}
-function cardHealth(t) {
-  const [x, y] = dcard('health', 'Client health', 'Clients by health score band');
-  const k = r(t, 'health');
-  const vals = [lerp(31, 84, k), lerp(52, 13, k), lerp(17, 3, k)], cols = ['#22c55e', '#f59e0b', '#ef4444'];
-  const cx = x + 100, cy = y + 170, R = 62;
-  let a0 = -Math.PI / 2;
-  vals.forEach((v, i) => { const a1 = a0 + (v / 100) * Math.PI * 2; ctx.beginPath(); ctx.arc(cx, cy, R, a0 + 0.03, a1 - 0.03); ctx.strokeStyle = cols[i]; ctx.lineWidth = 16; ctx.lineCap = 'butt'; ctx.stroke(); a0 = a1; });
-  text(`${Math.round(vals[0])}%`, cx, cy - 6, 24, 700, '#16162a', 'center');
-  text('Healthy', cx, cy + 18, 11, 500, MUTED, 'center');
-  ['Healthy', 'At risk', 'Critical'].forEach((n, i) => {
-    const ly = y + 128 + i * 28;
-    ctx.beginPath(); ctx.arc(x + 210, ly, 4.5, 0, 7); ctx.fillStyle = cols[i]; ctx.fill();
-    text(n, x + 224, ly + 1, 13, 500, '#2a2a44');
-    text(`${Math.round(vals[i] * 0.4)}`, x + 420, ly + 1, 13, 600, '#16162a', 'right');
-    text(`${Math.round(vals[i])}%`, x + 468, ly + 1, 12, 500, FAINT, 'right');
-  });
-  ctx.fillStyle = LINE; ctx.fillRect(x + 210, y + 212, 270, 1);
-  text(`Average health score ${Math.round(lerp(46, 86, k))} out of 100`, x + 210, y + 232, 12, 500, MUTED);
-  delta(t, 'health', x + 210, y + 270, '+53 pts healthy');
-}
-function cardRebook(t) {
-  const [x, y, w] = dcard('rebook', 'Repeat booking rate', 'Clients who rebook within 60 days');
-  const k = r(t, 'rebook');
-  const v = lerp(38, 79, k);
-  text(`${Math.round(v)}%`, x + 20, y + 102, 40, 700, v > 60 ? '#16162a' : C.risk, 'left', -0.03);
-  text('of clients came back', x + 22, y + 136, 12, 500, MUTED);
-  const lo = [44, 41, 39, 37, 38, 38], hi = [44, 47, 55, 63, 71, 79];
-  const pts = lo.map((p, i) => lerp(p, hi[i], k));
-  const gx = x + 20, gw = w - 40, gy = y + 160, gh = 120;
-  const px = (i) => gx + (i * gw) / 5, py = (v) => gy + gh - ((v - 20) / 70) * gh;
-  ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(px(i), py(p)) : ctx.moveTo(px(i), py(p))));
-  ctx.lineTo(px(5), gy + gh); ctx.lineTo(px(0), gy + gh); ctx.closePath();
-  const g = ctx.createLinearGradient(0, gy, 0, gy + gh); g.addColorStop(0, rgba(IND, 0.22)); g.addColorStop(1, rgba(IND, 0)); ctx.fillStyle = g; ctx.fill();
-  ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(px(i), py(p)) : ctx.moveTo(px(i), py(p)))); ctx.strokeStyle = IND; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.stroke();
-  ctx.beginPath(); ctx.arc(px(5), py(pts[5]), 4.5, 0, 7); ctx.fillStyle = IND; ctx.fill();
-  ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'].forEach((m, i) => text(m, px(i), gy + gh + 16, 11, 500, FAINT, 'center'));
-  delta(t, 'rebook', x + 150, y + 102, '+41%');
-}
-function cardRevenue(t) {
-  const [x, y] = dcard('revenue', 'Revenue won back', 'From at-risk clients who rebooked');
-  const k = r(t, 'revenue');
-  text(money(lerp(0, 4436, k)), x + 20, y + 104, 40, 700, '#16162a', 'left', -0.03);
-  text(`${Math.round(lerp(0, 23, k))} clients won back this quarter`, x + 22, y + 138, 12, 500, MUTED);
-  ctx.fillStyle = LINE; ctx.fillRect(x + 20, y + 168, 466, 1);
-  text('Could still be lost', x + 20, y + 196, 12, 500, MUTED);
-  text(money(lerp(5750, 1315, k)), x + 20, y + 226, 22, 700, k > 0.5 ? '#16162a' : C.risk);
-  text('Rebook rate after win-back', x + 260, y + 196, 12, 500, MUTED);
-  text(`${Math.round(lerp(0, 64, k))}%`, x + 260, y + 226, 22, 700, '#16162a');
-  delta(t, 'revenue', x + 20, y + 270, `+${money(4436)} recovered`);
-}
-function cardForecast(t) {
-  const [x, y, w, h] = dcard('forecast', 'Retention forecast', 'Active clients projected over the next 6 months');
-  const k = r(t, 'forecast');
-  text(`${Math.round(lerp(21, 68, k))}%`, x + 20, y + 92, 26, 700, '#16162a', 'left', -0.02);
-  text('retained at 6 months', x + 82, y + 94, 12.5, 500, MUTED);
-  const lo = [40, 27, 19, 14, 11, 9, 8], hi = [40, 38, 36, 33, 31, 29, 27];
-  const gx = x + 60, gw = w - 90, gy = y + 130, gh = h - 180;
-  [0, 10, 20, 30, 40].forEach((v) => { const yy = gy + gh - (v / 40) * gh; ctx.fillStyle = '#f0f0f5'; ctx.fillRect(gx, yy, gw, 1); text(String(v), gx - 14, yy, 11, 500, FAINT, 'right'); });
-  ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'].forEach((m, i) => {
-    const v = lerp(lo[i], hi[i], k), bw = 46, bx = gx + (i + 0.5) * (gw / 7) - bw / 2, bh = (v / 40) * gh;
-    fillRR(bx, gy + gh - bh, bw, bh, [3, 3, 0, 0], i === 0 ? '#cfd3dd' : IND);
-    text(String(Math.round(v)), bx + bw / 2, gy + gh - bh - 12, 11, 500, '#55556f', 'center');
-    text(m, bx + bw / 2, gy + gh + 16, 11, 500, FAINT, 'center');
-  });
-  const tag = k > 0.5 ? ['High confidence', '#1f9d5c'] : ['Declining', C.risk];
-  pill(x + w - 60, y + 30, tag[0], tag[1], 11, 'right');
-  delta(t, 'forecast', x + 220, y + 93, '+47 pts');
-}
-function cardCohort(t) {
-  const [x, y, w] = dcard('cohort', 'Cohort retention', 'Share of each month’s new clients still booking');
-  const k = r(t, 'cohort');
-  const lo = [[100, 100, 75, 50, 25], [100, 89, 56, 33], [100, 71, 43], [100, 50], [100]];
-  const hi = [[100, 100, 100, 92, 88], [100, 100, 94, 90], [100, 100, 93], [100, 96], [100]];
-  const months = ['May', 'Jun', 'Jul', 'Aug', 'Sep'];
-  const cx0 = x + 70, cw = (w - 90) / 5, ch = 46, cy0 = y + 100;
-  ['M0', 'M1', 'M2', 'M3', 'M4'].forEach((m, j) => text(m, cx0 + j * cw + cw / 2, cy0 - 18, 11, 500, FAINT, 'center'));
-  months.forEach((m, i) => {
-    text(m, x + 20, cy0 + i * (ch + 4) + ch / 2, 12, 600, '#2a2a44');
-    for (let j = 0; j < 5; j++) {
-      const bx = cx0 + j * cw, by = cy0 + i * (ch + 4);
-      if (j >= lo[i].length) { text('–', bx + cw / 2, by + ch / 2, 12, 500, '#c5c5d6', 'center'); continue; }
-      const v = lerp(lo[i][j], hi[i][j], k);
-      ctx.fillStyle = rgba('#3b2fc9', 0.12 + 0.86 * Math.pow(v / 100, 1.6)); ctx.fillRect(bx + 1, by, cw - 2, ch);
-      text(`${Math.round(v)}%`, bx + cw / 2, by + ch / 2 + 1, 12, 600, v > 55 ? '#fff' : '#2a2a55', 'center');
-    }
-  });
-}
-function dashboardWorld(t) {
-  const at = b(4), cardAt = hits(b(5), 5); // the frame is there as the lid opens; the cards land once it's up
-  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
-  ctx.fillStyle = '#fafafc'; ctx.fillRect(LAYOUT.side, 0, W - LAYOUT.side, H);
-  snapIn(t, at, 150, H / 2, () => dashSidebar(t), { dy: 0, from: 0.98 });
-  snapIn(t, at, W / 2, 80, () => dashHeader(), { dy: 0, from: 0.98 });
-  [['health', cardHealth], ['rebook', cardRebook], ['revenue', cardRevenue], ['forecast', cardForecast], ['cohort', cardCohort]].forEach(([k, fn], i) => {
-    const [x, y, w, h] = cardBox[k];
-    snapIn(t, cardAt[i], x + w / 2, y + h / 2, () => fn(t), { dy: 18 });
-  });
-}
-// Camera keys: [time, centre x, centre y, zoom]. Moves start on a beat and settle in 0.4s.
-const focus = (k, z) => { const [x, y, w, h] = cardBox[k]; return [x + w / 2, y + h / 2, z]; };
-const CAM = [
-  [b(4), W / 2, H / 2, 1],
-  [b(7.5), ...focus('health', 2.4)],
-  [b(10), ...focus('rebook', 2.4)],
-  [b(12.5), W / 2, H / 2, 1],
-];
-function sDashboard(t) { // the MacBook opens straight onto the numbers
-  stage(0.12, GOLD.glow, 0.6);
-  const open = ease.inOut(seg(t, b(4), b(4) + 0.9)), lift = (1 - ease.quint(seg(t, b(4), b(4) + 1.2))) * 90;
-  const cam = camAt(t);
-  laptop(t, cam, () => dashboardWorld(t), { open, lift });
-  featureTag(t, b(5.5), 'MsgHealth', 'See who’s drifting, before they’re gone.', cam[2]);
-}
-function camAt(t, keys = CAM) {
+function camAt(t, keys) {
   let c = keys[0].slice(1);
   for (let i = 1; i < keys.length; i++) {
     const [at, ...to] = keys[i];
@@ -782,85 +520,180 @@ function camAt(t, keys = CAM) {
   }
   return c;
 }
+
 // ═════════════════════════════════════════════════════════════════════════════
-// The film. Phrases are 4 bars (16 beats, ~8s); scenes start on downbeats.
+// The film: one Tuesday at the shop, told by the clock. Scenes start on downbeats, and every change
+// of hour is the clock rolling over.
 // ═════════════════════════════════════════════════════════════════════════════
 
-// ── A · beats 0–4 · the hook, readable from the very first frame ────────────
-// The line is already on screen at 0:00 (nothing fades up), so the first frame works as the cover and
-// nobody waits for it. An at-risk alert lands on beat 1, "leaving." turns red with light rays opening
-// on the camera flash, and on the drop the camera dives through the word into the product.
-window.SFX = [{ t: b(1) + 0.11, kind: 'sent' }]; // the alert lands with a soft swoosh
-window.MUFFLE = [0, b(4)]; // the intro plays underwater and the music opens up on the drop
-const LEAVE = { from: b(2), at: b(2.5), end: b(4) };
-window.SFX.push({ t: LEAVE.at, kind: 'flash' });
-function mixHex(a, c, k) { const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)); const x = p(a), y = p(c); return `rgb(${x.map((v, i) => Math.round(lerp(v, y[i], k))).join(',')})`; }
-// Light rays (the After Effects "CC Light Rays" look): a light sits just behind the word and its
-// letters stream out as soft rays, a radial blur of the word away from that light. They build as the
-// word turns red (T.from → T.at), open fully on the camera flash, and the light drifts across the
-// word while a red wash keeps growing outward until T.end.
-const RAY = { w: 1500, h: 1100, s: 0.5 }; // ray buffers: w × h stage px around the word, at scale s
-let RAYB = null;
-function wordRays(t, word, size, x, y, xl, col, T) {
-  const build = ease.inOut(seg(t, T.from, T.at)), burst = ease.out(seg(t, T.at, T.at + 0.4));
-  const grow = ease.out(seg(t, T.at, T.end));
-  if (build <= 0) return;
-  // the wash: a red gradient that grows from the word across the frame
-  ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  const R = lerp(160, 1500, grow), g = ctx.createRadialGradient(x, y, 0, x, y, R);
-  g.addColorStop(0, `rgba(255,59,48,${0.11 * build})`); g.addColorStop(0.45, `rgba(200,30,30,${0.045 * build})`); g.addColorStop(1, 'rgba(120,10,10,0)');
-  ctx.fillStyle = g; ctx.fillRect(-2 * W, -3 * H, 5 * W, 7 * H);
-  ctx.restore();
-  const bw = Math.round(RAY.w * RAY.s), bh = Math.round(RAY.h * RAY.s);
-  if (!RAYB) RAYB = [0, 1].map(() => { const c = document.createElement('canvas'); c.width = bw; c.height = bh; return c.getContext('2d'); });
-  let [A, B] = RAYB;
-  // the source: the word itself, dim, exactly where (and as) the headline draws it
-  const prev = ctx; ctx = A;
-  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, bw, bh);
-  ctx.scale(RAY.s, RAY.s); ctx.translate(RAY.w / 2 - x, RAY.h / 2 - y);
-  ctx.globalAlpha = 0.24;
-  font(size, 700, -0.035); ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = col; ctx.fillText(word, xl, y);
-  ctx = prev;
-  // the light sits just under the word, so the rays fan up and out, and drifts left to right
-  const drift = ease.inOut(seg(t, T.from, T.end)), lx = (RAY.w / 2 + lerp(-90, 90, drift)) * RAY.s, ly = (RAY.h / 2 + size * 0.4) * RAY.s;
-  // radial blur by repeated doubling: 5 passes = 32 copies, each scaled a step further from the light
-  const F = 1 + 0.3 * build + 0.35 * burst + 0.1 * grow, N = 32, decay = 0.9; // short rays that stay around the word
-  for (let k = 0; k < 5; k++) {
-    const sc = Math.pow(F, Math.pow(2, k) / N);
-    B.setTransform(1, 0, 0, 1, 0, 0); B.globalAlpha = 1; B.globalCompositeOperation = 'source-over';
-    B.drawImage(A.canvas, 0, 0);
-    B.globalCompositeOperation = 'lighter'; B.globalAlpha = Math.pow(decay, Math.pow(2, k));
-    B.translate(lx, ly); B.scale(sc, sc); B.translate(-lx, -ly);
-    B.drawImage(A.canvas, 0, 0);
-    [A, B] = [B, A];
-  }
-  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.4 * build + 0.2 * burst;
-  ctx.filter = 'blur(2px)';
-  ctx.drawImage(A.canvas, x - RAY.w / 2, y - RAY.h / 2, RAY.w, RAY.h);
-  ctx.restore();
+// The clock: h:mm in fixed-width digit slots, so a digit that changes rolls in place (the old one up
+// and out, the new one up from below). keys: [[time, 'h:mm', 'AM' | 'PM'], …], each key the same length.
+function clock(t, keys, x, y, size, align = 'left') {
+  let cur = keys[0], prev = null, at = -1;
+  keys.slice(1).forEach((k) => { if (t >= hit(k[0])) { prev = cur; cur = k; at = hit(k[0]); } });
+  const tr = -0.02, dw = Math.max(...'0123456789'.split('').map((d) => tw(d, size, 700, tr)));
+  const slot = (ch) => (ch === ':' ? tw(':', size, 700, tr) : dw);
+  const ms = size * 0.36, gap = size * 0.16, mw = tw(cur[2], ms, 700, 0.02);
+  const digits = cur[1].split(''), total = digits.reduce((s, ch) => s + slot(ch), 0) + gap + mw;
+  let cx = align === 'center' ? x - total / 2 : x;
+  const by = y + size * 0.36, p = at < 0 ? 1 : ease.inOut(seg(t, at, at + 0.42));
+  digits.forEach((ch, i) => {
+    const w = slot(ch), old = prev && prev[1][i] !== ch ? prev[1][i] : null, x0 = cx;
+    const draw = (c, dy, a) => {
+      if (a <= 0.003) return;
+      ctx.save(); ctx.globalAlpha *= a;
+      const bl = old ? 7 * Math.sin(Math.PI * p) : 0; if (bl > 0.3) ctx.filter = `blur(${bl.toFixed(1)}px)`;
+      font(size, 700, tr); ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = silver(y + dy, size);
+      ctx.fillText(c, x0 + w / 2, by + dy); ctx.restore();
+    };
+    if (old && p < 1) {
+      ctx.save(); ctx.beginPath(); ctx.rect(x0 - 10, y - size * 0.55, w + 20, size); ctx.clip();
+      draw(old, -size * 0.95 * p, 1 - p); draw(ch, size * 0.95 * (1 - p), p);
+      ctx.restore();
+    } else draw(ch, 0, 1);
+    cx += w;
+  });
+  font(ms, 700, 0.02); ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = IN.mid;
+  ctx.fillText(cur[2], cx + gap, by);
 }
-const OPEN = VERT // stacked tighter for the phone
-  ? { eyebrow: 165, lines: [['Your regulars', 300], ['won’t tell you', 432]], y2: 564, size: 120, card: 700 }
-  : { eyebrow: 340, lines: [['Your regulars won’t tell you', 460]], y2: 575, size: 100, card: 700 };
+// A line under the clock; each new line replaces the one before, both moving up. The old line is
+// gone before the new one comes up, so they never overlap.
+function subline(t, keys, x, y, size, align) {
+  keys = keys.map(([at, s]) => [hit(at), s]);
+  keys.forEach(([at, s], i) => {
+    const next = keys[i + 1]?.[0] ?? Infinity, out = ease.inOut(seg(t, next, next + 0.22));
+    if (t < at || out >= 1) return;
+    ctx.save(); ctx.globalAlpha *= 1 - out; ctx.translate(0, -out * size * 0.6);
+    riseIn(t, at + (i ? 0.2 : 0), () => text(s, x, y, size, 600, 'rgba(235,235,245,0.78)', align, -0.015), { dy: size * 0.5, blur: 10 });
+    ctx.restore();
+  });
+}
+// Every scene of the day: the time, and what MsgHealth did then. 16:9: left of the content; 9:16: above it.
+const HEAD = VERT ? { x: W / 2, y: 30, sy: 170, size: 170, sub: 46, align: 'center' } : { x: 150, y: 410, sy: 540, size: 150, sub: 42, align: 'left' };
+const COL = { x: VERT ? W / 2 - 390 : 1000, w: 780 }; // the content column
+function head(t, clockKeys, subKeys) {
+  clock(t, clockKeys, HEAD.x, HEAD.y, HEAD.size, HEAD.align);
+  subline(t, subKeys, HEAD.x, HEAD.sy, HEAD.sub, HEAD.align);
+}
+
+// ── A · beats 0–4 · the hook, readable from the very first frame ────────────
+// The day's result, already on screen at 0:00 (nothing fades up), so the first frame works as the
+// cover. Three bookings land as notifications while the intro plays muffled; on the drop the clock
+// rolls back to the morning.
+window.SFX = [];
+window.MUFFLE = [0, b(4)]; // the intro plays underwater and the music opens up on the drop
+const NOTES = [['11:47 AM', 'Marcus Bell booked Thursday, 2:00 PM'], ['12:20 PM', 'Devon Price booked Friday, 11:30 AM'], ['4:05 PM', 'Andre Silva booked Saturday, 10:00 AM']];
+const NOTE_AT = [b(1), b(2), b(3)];
+NOTE_AT.forEach((t, i) => window.SFX.push({ t: t + 0.11, kind: 'sent', gain: [1, 0.7, 0.7][i] }));
+function notice(x, y, w, time, body) { // a banner from the MsgHealth app
+  const h = 100;
+  glass(x, y, w, h, 30, { fill: 'rgba(255,255,255,0.08)' });
+  fillRR(x + 22, y + 22, 56, 56, 15, '#ffffff'); logoMark(x + 50, y + 50, 40);
+  text('MSGHEALTH', x + 98, y + 35, 17, 600, SOFT, 'left', 0.06);
+  text(time, x + w - 28, y + 35, 17, 500, 'rgba(235,235,245,0.45)', 'right', 0);
+  text(body, x + 98, y + 67, 26, 600, '#ffffff');
+}
+const OPEN = VERT // stacked for the phone
+  ? { eyebrow: -40, lines: [[['6 regulars', -1]], [['rebooked.', -1]], [['You sent', -1]], [['0 texts.', -1, true]]], ys: [90, 220, 390, 520], size: 124, notes: 680, nw: 820 }
+  : { eyebrow: 150, lines: [[['6 regulars rebooked.', -1]], [['You sent', -1], ['0 texts.', -1, true]]], ys: [262, 384], size: 104, notes: 520, nw: 780 };
 function sOpen(t) {
-  stage(0.1, GOLD.glow, 0.45);
-  const { size, y2 } = OPEN, tr = -0.035, red = ease.inOut(seg(t, LEAVE.from, LEAVE.at));
-  const wA = tw('they’re', size, 700, tr), gap = tw(' ', size, 700, tr), wB = tw('leaving.', size, 700, tr);
-  const xl = W / 2 - (wA + gap + wB) / 2 + wA + gap; // where "leaving." starts
-  wordRays(t, 'leaving.', size, xl + wB / 2, y2, xl, '#c8161a', LEAVE); // drawn first, so the glow sits behind every word
-  text('FOR BARBERS', W / 2, OPEN.eyebrow, 34, 700, GOLD.mid, 'center', 0.22);
-  OPEN.lines.forEach(([s, y]) => headline(t, [[s, -1]], W / 2, y, size)); // -1: already in place at 0:00
-  headline(t, [['they’re', -1], ['leaving.', -1, false, mixHex('#ffffff', '#ff5a4f', red)]], W / 2, y2, size);
-  DIVE_AT = ctx.getTransform().transformPoint(new DOMPoint(xl + wB / 2, y2));
-  const cw = 640, ch = 108, cx = W / 2 - cw / 2, cy = OPEN.card;
-  snapIn(t, b(1), W / 2, cy + ch / 2, () => { // the alert MsgHealth would send
-    glass(cx, cy, cw, ch, 28);
-    ctx.beginPath(); ctx.arc(cx + 58, cy + ch / 2, 30, 0, 7); ctx.fillStyle = 'rgba(255,122,107,0.2)'; ctx.fill();
-    text('JL', cx + 58, cy + ch / 2 + 1, 22, 700, '#ffb3a8', 'center');
-    text('Jordan Lee is at risk', cx + 106, cy + 38, 28, 700, '#ffffff');
-    text('No booking in 62 days. Usually every 3 weeks.', cx + 106, cy + 74, 21, 500, SOFT);
-  }, { dy: 24 });
+  stage(0.16, IN.glow, 0.42);
+  text('TUESDAY, OCTOBER 20', W / 2, OPEN.eyebrow, 30, 700, IN.mid, 'center', 0.22);
+  OPEN.lines.forEach((chunks, i) => headline(t, chunks, W / 2, OPEN.ys[i], OPEN.size)); // -1: already in place at 0:00
+  NOTES.forEach(([time, body], i) => {
+    const y = OPEN.notes + i * 118;
+    snapIn(t, NOTE_AT[i], W / 2, y + 50, () => notice(W / 2 - OPEN.nw / 2, y, OPEN.nw, time, body), { dy: -26 });
+  });
+}
+
+// ── B · beats 4–12 · 9:02 AM: who's due, and a text to each ────────────────
+const DUE = [
+  ['Marcus Bell', 'MB', '#d97706', 'Every 3 weeks · last cut 23 days ago', 'Due', '#fbbf24'],
+  ['Devon Price', 'DP', '#0891b2', 'Every 2 weeks · last cut 16 days ago', 'Due', '#fbbf24'],
+  ['Andre Silva', 'AS', '#7c3aed', 'Every 4 weeks · last cut 33 days ago', 'Overdue', '#ff7a6b'],
+  ['Chris Okafor', 'CO', '#db2777', 'Every 3 weeks · last cut 21 days ago', 'Due', '#fbbf24'],
+];
+const TEXTED = [8.5, 9, 9.5, 10].map(b); // one text a half-beat
+window.SFX.push({ t: b(8), kind: 'click' }, { t: TEXTED[0] + 0.11, kind: 'sent', gain: 0.7 });
+function sDue(t) {
+  stage(0.14);
+  head(t, [[-1, '9:02', 'AM'], [b(8), '9:03', 'AM']], [[b(5), 'MsgHealth spots who’s due back.'], [b(8), '…and texts each one for you.']]);
+  const { x, w } = COL, rh = 118, y0 = 270, land = [5.5, 6, 6.5, 7].map(b);
+  snapIn(t, b(5.5), x + w / 2, y0 + 2 * rh, () => glass(x, y0, w, rh * 4 + 40, 34), { dy: 20 });
+  DUE.forEach(([n, ini, c, sub, st, sc], i) => {
+    const ry = y0 + 20 + rh / 2 + i * rh;
+    snapIn(t, land[i], x + w / 2, ry, () => {
+      ctx.beginPath(); ctx.arc(x + 64, ry, 30, 0, 7); ctx.fillStyle = rgba(c, 0.3); ctx.fill();
+      text(ini, x + 64, ry + 1, 21, 700, '#ffffff', 'center');
+      text(n, x + 112, ry - 15, 28, 600, '#ffffff');
+      text(sub, x + 112, ry + 20, 20, 500, SOFT);
+      if (t < TEXTED[i]) pill(x + w - 30, ry, st, sc, 20, 'right');
+      else snapIn(t, TEXTED[i], x + w - 90, ry, () => pill(x + w - 30, ry, 'Text sent', IN.mid, 20, 'right'), { from: 0.6, dy: 0 });
+    }, { dy: 16 });
+  });
+}
+
+// ── C · beats 12–20 · 11:47 AM: Marcus books himself in ─────────────────────
+const REPLY = { at: b(14.5), booked: b(16) };
+window.SFX.push({ t: REPLY.at + 0.11, kind: 'sent', gain: 0.8 }, { t: REPLY.booked, kind: 'click' });
+function sReply(t) {
+  stage(0.14);
+  head(t, [[-1, '11:47', 'AM']], [[b(13), 'Marcus books himself in.']]);
+  const { x, w } = COL, size = 30, cx = x + w / 2;
+  text('Today 9:03 AM', cx, 300, 19, 500, 'rgba(235,235,245,0.45)', 'center', 0);
+  sentBubble(x + w, 330, ['Hey Marcus, it’s been 3 weeks.', 'Want your usual, Thursday at 2?'], size, true); // sent this morning
+  snapIn(t, REPLY.at, x + 140, 545, () => {
+    text('11:47 AM', cx, 480, 19, 500, 'rgba(235,235,245,0.45)', 'center', 0);
+    recvBubble(x, 510, ['Bet. See you Thursday.'], size, true, true);
+  }, { from: 0.6, dy: 30, blur: 0 });
+  const by = 690;
+  snapIn(t, REPLY.booked, cx, by, () => {
+    const pw = 600;
+    glass(cx - pw / 2, by - 38, pw, 76, 38, { fill: 'rgba(74,222,128,0.12)', stroke: 'rgba(74,222,128,0.4)' });
+    ctx.beginPath(); ctx.arc(cx - pw / 2 + 50, by, 19, 0, 7); ctx.fillStyle = '#4ade80'; ctx.fill(); check(cx - pw / 2 + 50, by, 19, '#0b2e17', 4);
+    text('Booked · Thu, Oct 22 · 2:00 PM', cx - pw / 2 + 84, by + 1, 28, 700, '#bbf7d0');
+  }, { from: 0.85 });
+}
+
+// ── D · beats 20–26 · 3:15 PM: Jay leaves five stars ───────────────────────
+const STARS = [21.5, 22, 22.5, 23, 23.5].map(b); // a star a half-beat
+STARS.forEach((t) => window.SFX.push({ t, kind: 'click', gain: 0.5 }));
+function star(x, y, R) {
+  ctx.beginPath();
+  for (let k = 0; k < 10; k++) { const rk = k % 2 ? R * 0.43 : R, a = -Math.PI / 2 + (k * Math.PI) / 5; ctx.lineTo(x + rk * Math.cos(a), y + rk * Math.sin(a)); }
+  ctx.closePath();
+}
+function sReview(t) {
+  stage(0.14);
+  head(t, [[-1, '3:15', 'PM']], [[b(21), 'Jay leaves you five stars.']]);
+  const { x, w } = COL, y = 280, h = 420;
+  glass(x, y, w, h, 34);
+  ctx.beginPath(); ctx.arc(x + 76, y + 80, 34, 0, 7); ctx.fillStyle = rgba('#0ea5e9', 0.3); ctx.fill();
+  text('JO', x + 76, y + 81, 24, 700, '#ffffff', 'center');
+  text('Jay Ortiz', x + 128, y + 64, 30, 700, '#ffffff');
+  text('Signature Cut · today, 1:00 PM', x + 128, y + 100, 21, 500, SOFT);
+  STARS.forEach((at, i) => {
+    const sx = x + 76 + i * 72, sy = y + 190;
+    star(sx, sy, 28); ctx.fillStyle = 'rgba(255,255,255,0.13)'; ctx.fill();
+    snapIn(t, at, sx, sy, () => { star(sx, sy, 28); ctx.fillStyle = '#fbbf24'; ctx.fill(); }, { from: 0.5, dy: 0, blur: 6 });
+  });
+  riseIn(t, b(24), () => text('“Cleanest fade I’ve had in years.”', x + 44, y + 280, 36, 600, '#ffffff', 'left', -0.015), { dy: 18, blur: 10 });
+  ctx.fillStyle = 'rgba(255,255,255,0.1)'; ctx.fillRect(x + 44, y + 336, w - 88, 1.5);
+  text('Asked automatically, after his cut.', x + 44, y + 376, 21, 500, 'rgba(235,235,245,0.5)', 'left', 0);
+}
+
+// ── E · beats 26–36 · 7:00 PM: the week, on the MacBook ─────────────────────
+// The calendar fills as the camera looks over the week, then it moves up to "Booked this week".
+const WEEK_AT = [28.5, 29, 29.5, 30, 30.5, 31].map(b);
+const ADDED = [[21, '4p', 'Chris Okafor', 'Skin Fade'], [22, '2p', 'Marcus Bell', 'Signature Cut'], [23, '11:30a', 'Devon Price', 'Skin Fade'],
+  [23, '3p', 'Sam Rivera', 'Beard Trim'], [24, '10a', 'Andre Silva', 'Cut & Beard'], [24, '1p', 'Nico Alvarez', 'Signature Cut']].map((e, i) => [...e, WEEK_AT[i]]);
+WEEK_AT.forEach((t) => window.SFX.push({ t, kind: 'click', gain: 0.35 }));
+const WEEK_CAM = [[b(26), 960, 540, 1], [b(27.5), 1110, 770, 1.9], [b(31.5), 560, 150, 2.3], [b(33.5), 960, 540, 1]];
+function sWeek(t) {
+  stage(0.12, IN.glow, 0.6);
+  const cam = camAt(t, WEEK_CAM);
+  laptop(t, cam, () => homeWorld(t, { added: ADDED }));
+  featureTag(t, b(26.5), '7:00 PM', 'Your week, booked while you worked.', cam[2]);
 }
 
 // ── the MsgHealth lockup (end card) ──────────────────────────────────────────
@@ -887,140 +720,28 @@ function lockup(t, at, y, ls, size, o = {}) {
   }
   riseIn(t, at, () => {
     const gl = ctx.createRadialGradient(lx, y, 0, lx, y, ls * 0.8); // a tight glow, just behind the mark
-    gl.addColorStop(0, 'rgba(226,184,106,0.26)'); gl.addColorStop(1, 'rgba(226,184,106,0)');
+    gl.addColorStop(0, 'rgba(99,102,241,0.34)'); gl.addColorStop(1, 'rgba(99,102,241,0)');
     ctx.fillStyle = gl; ctx.fillRect(lx - ls, y - ls, ls * 2, ls * 2);
-    logoMark(lx, y, ls, LOGO_GOLD ?? LOGO);
+    logoMark(lx, y, ls);
   }, o.static ? { dy: 0, d: 0.2, blur: 6 } : { dy: 0, d: 0.8, blur: 20 });
 }
 
-// ── B · beats 16–36 · what it does ───────────────────────────────────────────
-function sHealth(t) {
-  stage(0.12);
-  if (VERT) { // stacked: the headline sits over the card
-    headline(t, [['Every client', b(16)]], W / 2, 20, 92);
-    headline(t, [['gets a', b(16.5)], ['health score.', b(16.5), true]], W / 2, 125, 92);
-  } else {
-    headline(t, [['Every client', b(16)]], 150, 440, 92, { align: 'left' });
-    headline(t, [['gets a', b(16.5)], ['health score.', b(16.5), true]], 150, 550, 92, { align: 'left' });
-  }
-  const w = 770, x = VERT ? W / 2 - w / 2 : 1010, rh = 112, y0 = 250, flag = b(18.5), at = hits(b(17), 5);
-  snapIn(t, b(17), x + w / 2, H / 2, () => glass(x, y0 - 40, w, rh * 5 + 80, 34), { dy: 20 });
-  ROWS.forEach((r, i) => {
-    const ry = y0 + 30 + i * rh, jordan = i === 2;
-    snapIn(t, at[i], x + w / 2, ry, () => {
-      if (jordan && t >= flag) fillRR(x + 14, ry - 48, w - 28, 96, 20, `rgba(236,95,79,${0.13 * snapP(t, flag)})`);
-      ctx.beginPath(); ctx.arc(x + 62, ry, 28, 0, 7); ctx.fillStyle = rgba(r.c, 0.28); ctx.fill();
-      text(r.i, x + 62, ry + 1, 21, 700, '#ffffff', 'center');
-      text(r.n, x + 108, ry - 13, 27, 600, '#ffffff');
-      text(r.v, x + 108, ry + 19, 20, 500, jordan ? '#ff8a7a' : SOFT);
-      text(String(r.s), x + 395, ry + 1, 32, 700, r.sc, 'right'); // clear of the widest pill ("Needs attention")
-      fillRR(x + 413, ry - 5, 90, 10, 5, 'rgba(255,255,255,0.12)'); fillRR(x + 413, ry - 5, (90 * r.s) / 100, 10, 5, r.sc);
-      if (!jordan) pill(x + w - 30, ry, r.st, r.sc, 20, 'right');
-      else snapIn(t, flag, x + w - 90, ry, () => pill(x + w - 30, ry, r.st, r.sc, 20, 'right'), { from: 0.6, dy: 0 });
-    }, { dy: 16 });
-  });
-}
-const ROWS = [
-  { n: 'Alex Kim', i: 'AK', c: '#d97706', s: 91, st: 'Healthy', sc: '#4ade80', v: '4 days ago' },
-  { n: 'Priya Shah', i: 'PS', c: '#db2777', s: 54, st: 'Needs attention', sc: '#fbbf24', v: '3 weeks ago' },
-  { n: 'Jordan Lee', i: 'JL', c: '#6366f1', s: 38, st: 'At risk', sc: '#ff7a6b', v: '62 days ago' },
-  { n: 'Casey Park', i: 'CP', c: '#0891b2', s: 86, st: 'Healthy', sc: '#4ade80', v: '1 week ago' },
-  { n: 'Riley Chen', i: 'RC', c: '#7c3aed', s: 79, st: 'Healthy', sc: '#4ade80', v: '9 days ago' },
-];
 
-// AI Business Analyst on the MacBook
-const AI = { open: b(27.5), click: b(28), typeA: b(28), typeB: b(29.5), run: b(30), ans: b(30.5), send: b(33.5), out: b(34.75) };
-[AI.click, AI.run, AI.send].forEach((t) => window.SFX.push({ t, kind: 'click' }));
-const AI_CAM = [[b(26), 960, 540, 1], [b(27), 960, 300, 2.0], [AI.ans, 960, 470, 1.6], [AI.out, 960, 540, 1]];
-function analystWorld(t, z) {
-  homeWorld(t);
-  if (t >= AI.open) { ctx.fillStyle = `rgba(10,10,22,${0.55 * snapP(t, AI.open)})`; ctx.fillRect(0, 0, W, H); }
-  const x = 530, w = 860, y = 120, { ans, send } = AI;
-  snapIn(t, AI.open, x + w / 2, y + 40, () => {
-    const h = t >= ans ? 690 : 80;
-    fillRR(x, y, w, h, 14, '#12121c'); rr(x, y, w, h, 14); ctx.strokeStyle = 'rgba(139,131,255,0.35)'; ctx.lineWidth = 1.5; ctx.stroke();
-    glyph('bolt', x + 28, y + 28, '#a59cff');
-    const typed = AI_Q.slice(0, Math.floor(AI_Q.length * seg(t, AI.typeA, AI.typeB)));
-    text(typed || 'Ask anything about your business…', x + 54, y + 28, 15, 500, typed ? '#f1f1f7' : '#6b6b85');
-    if (t >= AI.click && t < AI.run) { ctx.fillStyle = '#a59cff'; ctx.fillRect(x + 56 + tw(typed, 15, 500), y + 18, 2, 21); }
-    fillRR(x + w - 74, y + 13, 58, 30, 7, C.primary); text('Run', x + w - 45, y + 28, 13, 600, '#fff', 'center');
-    ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fillRect(x, y + 56, w, 1);
-    text('Navigates the dashboard or answers from your data', x + 18, y + 68, 11, 400, '#6b6b85');
-    if (t < ans) return;
-    snapIn(t, ans, x + w / 2, y + 380, () => {
-      text('Here’s what I found', x + 20, y + 104, 16, 700, '#f1f1f7');
-      rr(x + 18, y + 124, w - 36, 470, 10); ctx.strokeStyle = 'rgba(139,131,255,0.7)'; ctx.lineWidth = 1.5; ctx.stroke();
-      fillRR(x + 19, y + 125, w - 38, 468, 10, 'rgba(91,80,232,0.08)');
-      text('AI GENERATED', x + 40, y + 148, 10.5, 700, '#a59cff', 'left', 0.08);
-      text('Based on today’s date, these clients haven’t booked in 60+ days, the ones most worth reaching out to:', x + 40, y + 176, 13.5, 500, '#e4e4ee');
-      const at = hits(ans, 3); // three rows land on each hit
-      AI_ROWS.forEach(([n, d, days], i) => {
-        const ry = y + 210 + i * 34;
-        snapIn(t, at[Math.floor(i / 3)], x + 200, ry, () => {
-          ctx.beginPath(); ctx.arc(x + 48, ry, 2.5, 0, 7); ctx.fillStyle = '#e4e4ee'; ctx.fill();
-          text(n, x + 60, ry, 14, 700, '#ffffff');
-          text(`· last booked ${d} (${days} days ago)`, x + 66 + tw(n, 14, 700), ry, 14, 400, '#c9c9d9');
-        }, { dy: 8, blur: 6 });
-      });
-      text('The top 3 haven’t been in for over 11 weeks. Great candidates for a win-back offer.', x + 40, y + 530, 13.5, 500, '#e4e4ee');
-      const bw = 330, bx = x + 20, by = y + 618;
-      if (t < send) { fillRR(bx, by, bw, 40, 9, C.primary); text('Send win-back offer to all 9', bx + bw / 2, by + 20, 14, 600, '#fff', 'center'); }
-      else snapIn(t, send, bx + bw / 2, by + 20, () => { fillRR(bx, by, bw, 40, 9, '#16a34a'); check(bx + 30, by + 20, 14, '#fff', 3); text('Win-back sent to 9 clients', bx + bw / 2 + 14, by + 20, 14, 600, '#fff', 'center'); }, { dy: 0, from: 0.92, blur: 4 });
-    }, { dy: 14 });
-  }, { dy: 20 });
-  pointer(t, [[b(26), 1210, 620], [AI.click, 980, 152], [AI.run, 1345, 150], [send, 560, 760]], [AI.click, AI.run, send], z);
-}
-function sAnalyst(t) {
-  stage(0.1);
-  const cam = camAt(t, AI_CAM);
-  laptop(t, cam, (z) => analystWorld(t, z));
-  featureTag(t, b(26), 'AI Business Analyst', 'Ask in plain words. Get an answer from your data.', cam[2]);
-}
-
-// Win them back
-function sWinBack(t) {
-  stage(0.14);
-  if (VERT) { headline(t, [['Win them back', b(20)]], W / 2, 60, 84); headline(t, [['on autopilot.', b(20.5), true]], W / 2, 160, 84); }
-  else headline(t, [['Win them back', b(20)], ['on autopilot.', b(20.5), true]], W / 2, 170, 84);
-  const nodes = [['At risk detected', '#ff7a6b', 'alert'], ['Text sent', GOLD.mid, 'chat'], ['Email follow-up', '#f0a35e', 'mail'], ['Invite to book', '#4ade80', 'cal']];
-  // 16:9: the four steps in a row; 9:16: one column, each step joined to the one above
-  const nw = VERT ? 430 : 330, nh = 120, gap = VERT ? 34 : 66, at = hits(b(21), 4);
-  const x0 = VERT ? W / 2 - nw / 2 : W / 2 - (4 * nw + 3 * gap) / 2;
-  nodes.forEach(([label, col, icon], i) => {
-    const x = VERT ? x0 : x0 + i * (nw + gap), ny = VERT ? 250 + i * (nh + gap) : 290;
-    if (i > 0 && t >= at[i]) {
-      const p = snapP(t, at[i]); ctx.strokeStyle = rgba(GOLD.mid, 0.5); ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath();
-      if (VERT) { ctx.moveTo(x + 58, ny - gap + 8); ctx.lineTo(x + 58, ny - gap + 8 + (gap - 16) * p); }
-      else { ctx.moveTo(x - gap + 10, ny + nh / 2); ctx.lineTo(x - gap + 10 + (gap - 20) * p, ny + nh / 2); }
-      ctx.stroke();
-    }
-    snapIn(t, at[i], x + nw / 2, ny + nh / 2, () => {
-      glass(x, ny, nw, nh, 26);
-      ctx.beginPath(); ctx.arc(x + 58, ny + nh / 2, 30, 0, 7); ctx.fillStyle = rgba(col, 0.18); ctx.fill();
-      glyph(icon, x + 58, ny + nh / 2, col);
-      text(`Step ${i + 1}`, x + 104, ny + 42, 19, 600, SOFT);
-      text(label, x + 104, ny + 76, 26, 700, '#fff');
-    }, { dy: 18 });
-  });
-  const size = 30, sx1 = VERT ? 1310 : 1450, sy = VERT ? 880 : 500, rx = VERT ? 620 : 470, ry = VERT ? 1040 : 650, by = VERT ? 1190 : 860;
-  snapIn(t, b(22.5), sx1 - 250, sy + 60, () => { sentBubble(sx1, sy, ['Hi Jordan! We miss you. Want your', 'usual Thursday at 10:00?'], size, true); text('Delivered', sx1, sy + 118, 17, 500, 'rgba(235,235,245,0.45)', 'right', 0); }, { from: 0.6, dy: 50, blur: 0 });
-  snapIn(t, b(23.5), rx + 130, ry + 40, () => recvBubble(rx, ry, ['Yes please! See you then.'], size, true, true), { from: 0.6, dy: 30, blur: 0 });
-  snapIn(t, b(24.5), W / 2, by, () => {
-    glass(W / 2 - 230, by - 38, 460, 76, 38, { fill: 'rgba(74,222,128,0.12)', stroke: 'rgba(74,222,128,0.4)' });
-    ctx.beginPath(); ctx.arc(W / 2 - 180, by, 19, 0, 7); ctx.fillStyle = '#4ade80'; ctx.fill(); check(W / 2 - 180, by, 19, '#0b2e17', 4);
-    text('Booked · Thu 10:00', W / 2 - 146, by + 1, 30, 700, '#bbf7d0');
-  }, { from: 0.85 });
-}
-
-// ── C · beats 36–47 · close ──────────────────────────────────────────────────
+// ── F · beats 36–47 · close ──────────────────────────────────────────────────
 function sTagline(t) {
-  stage(0.1);
-  headline(t, [['Know your customers.', b(36)]], W / 2, H / 2 - 76, 124);
-  headline(t, [['Keep', b(38), true], ['your customers.', b(38)]], W / 2, H / 2 + 76, 124);
+  stage(0.12);
+  if (VERT) {
+    headline(t, [['You cut hair.', b(36)]], W / 2, 330, 118);
+    headline(t, [['MsgHealth', b(38)]], W / 2, 540, 118);
+    headline(t, [['fills the chair.', b(38), true]], W / 2, 670, 118);
+  } else {
+    headline(t, [['You cut hair.', b(36)]], W / 2, H / 2 - 76, 116);
+    headline(t, [['MsgHealth', b(38)], ['fills the chair.', b(38), true]], W / 2, H / 2 + 76, 116);
+  }
 }
 window.SFX.push({ t: b(40), kind: 'snap' }, { t: b(40), kind: 'riser' }); // the riser peaks as MsgHealth lands on the end card, with the snap
 function sEnd(t) {
-  stage(0.15, GOLD.glow, 0.45, 580);
+  stage(0.18, IN.glow, 0.45, 580);
   lockup(t, b(40), H / 2 - 70, 190, 150, { static: true });
   headline(t, [[BRAND.url, b(41)]], W / 2, H / 2 + 80, 44, { color: SOFT, weight: 500 });
   riseIn(t, b(42), () => {
@@ -1035,23 +756,24 @@ function sEnd(t) {
 // [start, end, scene, 3D transition into it, its length in seconds]. No transition means a straight cut.
 const SCENES = [
   [0, b(4), sOpen],
-  [b(4), b(16), sDashboard, 'dive', 0.7],      // on the drop: through "leaving." into the product
-  [b(16), b(20), sHealth, 'rise', 0.6],
-  [b(20), b(26), sWinBack, 'settle', 0.7],
-  [b(26), b(36), sAnalyst, 'swing', 0.65],     // cuts ~0.5s after it zooms back out
+  [b(4), b(12), sDue, 'drum', 0.7],       // on the drop: the clock rolls back to the morning
+  [b(12), b(20), sReply, 'drum', 0.7],
+  [b(20), b(26), sReview, 'drum', 0.7],
+  [b(26), b(36), sWeek, 'drum', 0.75],
   [b(36), b(40), sTagline, 'fall', 0.7],
-  [b(40), DURATION + 1, sEnd],                 // straight cut to the end card
+  [b(40), DURATION + 1, sEnd],            // straight cut to the end card
 ];
-// 9:16 framing: [focus x, focus y, scale] of the 16:9 stage, per scene. The laptop scenes push closer
-// while the camera is in on a feature, so the UI fills the phone's width.
+// 9:16 framing: [focus x, focus y, scale] of the 16:9 stage, per scene. The laptop pushes closer
+// while the camera is in on the calendar, so the UI fills the phone's width.
 const fixed = (fx, fy, sc) => () => [fx, fy, sc];
 const lapFrame = (keys) => (t) => { const k = clamp((camAt(t, keys)[2] - 1) / 0.6); return [960, lerp(560, 540, k), lerp(0.62, 0.95, k)]; }; // zoomed out, the whole MacBook fits
+const DAY = fixed(960, 420, 1.08);
 const FRAMING = new Map([
-  [sOpen, fixed(960, 450, 1.0)], [sDashboard, lapFrame(CAM)], [sHealth, fixed(960, 410, 1.04)], [sWinBack, fixed(960, 620, 1.2)],
-  [sAnalyst, lapFrame(AI_CAM)], [sTagline, fixed(960, 540, 0.66)], [sEnd, fixed(960, 560, 0.9)],
+  [sOpen, fixed(960, 470, 1.0)], [sDue, DAY], [sReply, DAY], [sReview, DAY],
+  [sWeek, lapFrame(WEEK_CAM)], [sTagline, fixed(960, 510, 1.0)], [sEnd, fixed(960, 560, 0.9)],
 ]);
-// The whoosh peaks at the fastest point of each move that brings the laptop in.
-SCENES.filter(([, , fn, type]) => type && [sDashboard, sAnalyst].includes(fn)).forEach(([st, , , , dur]) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh' }));
+// A whoosh peaks at the fastest point of every roll; the first, on the drop, sits a little louder.
+SCENES.filter(([, , , type]) => type === 'drum').forEach(([st, , , , dur], i) => window.SFX.push({ t: st + dur / 2, kind: 'whoosh', gain: i === 0 ? 1 : 0.6 }));
 
 function renderFrame(t) {
   ctx = MAIN;
@@ -1074,12 +796,6 @@ window.ready = (async () => {
   await Promise.all(['400', '500', '600', '700', '800'].map((w) => document.fonts.load(`${w} 40px ${FONT}`)));
   const load = (src) => new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
   LOGO = await load(BRAND.logoFile);
-  if (LOGO) { // the mark in gold for the stage; the app's own screens keep it indigo
-    const c = document.createElement('canvas'); c.width = LOGO.width; c.height = LOGO.height; const g = c.getContext('2d');
-    g.drawImage(LOGO, 0, 0); g.globalCompositeOperation = 'source-in';
-    const gr = g.createLinearGradient(0, 0, c.width, c.height); gr.addColorStop(0, GOLD.hi); gr.addColorStop(0.5, GOLD.mid); gr.addColorStop(1, GOLD.deep);
-    g.fillStyle = gr; g.fillRect(0, 0, c.width, c.height); LOGO_GOLD = c;
-  }
   if (location.search.includes('render')) document.body.classList.add('render');
   renderFrame(0);
   return true;

@@ -1,6 +1,7 @@
 // Builds the promo soundtrack: the music track (muffled across one bar, faded at the end) plus the
 // sound effects, each placed so its "anchor" (attack or peak) lands exactly on its cue.
-// Cues come from the film itself (window.SFX, window.MUFFLE in src/promo.js).
+// Cues come from the film itself (window.SFX, window.MUFFLE in src/promo.js); a cue's optional `gain`
+// scales that one sound.
 //   node scripts/promo-audio.mjs dist/promo-audio.wav
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -41,7 +42,7 @@ kinds.forEach((k, ki) => {
   cues.forEach((c, i) => {
     const start = c.t - SOUNDS[k].anchor, ms = Math.max(0, Math.round(start * 1000));
     const skip = start < 0 ? `,atrim=start=${(-start).toFixed(3)},asetpts=PTS-STARTPTS` : '';
-    graph.push(`[${k}${i}]volume=${SOUNDS[k].gain}${skip},adelay=${ms}|${ms}[${k}d${i}]`);
+    graph.push(`[${k}${i}]volume=${(SOUNDS[k].gain * (c.gain ?? 1)).toFixed(3)}${skip},adelay=${ms}|${ms}[${k}d${i}]`);
     mixIn.push(`[${k}d${i}]`);
   });
 });
