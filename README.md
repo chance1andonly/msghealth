@@ -151,7 +151,7 @@ changed digit rolls in place (9:02 → 9:03).
 
 ---
 
-# "Every touch": 37-second explainer ad (16:9 and 9:16, 60 fps)
+# "Every touch": 38-second explainer ad (16:9 and 9:16, 60 fps)
 
 It starts as a quick explainer on how a phone's touchscreen works, then turns into a pitch: a lot of a business owner's
 taps go to client admin, and MsgHealth can do that for them. The captions tell the whole story, so it works with the
@@ -210,8 +210,13 @@ the brand, at the top of a musical phrase (24.91 s).
 - **Finger:** two cursor-style hands in `assets/img`. The pointing hand (`hand-tap.png`, click lines recoloured white for
   the dark screens) shows while the finger presses. The middle finger (`hand-hover.png`) shows while it hovers. Both were cut
   out of the supplied pictures, and `HANDS` in `src/screen.js` records where each fingertip sits.
-- **"2 hours back" clip:** the supplied clip plays muted over the card while the caption reads "That's 2 hours back. Every day.". It is
-  stored as 25 fps frames in `assets/video/escape` with no audio track, starting 0.35 s in so the dash lands before the cut.
+- **"2 hours back" clip:** the supplied clip (`assets/video/peace`: 34 frames at 25 fps, plus `audio.wav`) pops up as an overlay on
+  the card once "That's 2 hours back. Every day." has landed.
+  - The music pauses on the beat at 28.91 s and only the clip's own sound plays (about 3 dB up to match the mix). No effects
+    play over it.
+  - The music then picks up from where it stopped. Everything after the clip comes 1.36 s later, so every later cut is
+    still on the beat.
+  - `PAUSE` in `src/screen.js` sets where the pause happens.
 - Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills (film time): `ENTRY=screen.html node scripts/snap.mjs out/ 12`
 
 | Time | Caption | What's on screen |
@@ -224,9 +229,9 @@ the brand, at the top of a musical phrase (24.91 s).
 | 14.9–16.9s | "That's your touch." | The crosshair follows the finger as it drags |
 | 16.9–19.4s | "Run a business? A lot of those touches are for clients." | Back to the phone for a burst of taps |
 | 19.4–24.9s | "Booking. Reminders. Rescheduling. Follow-ups." / "Over 2 hours a day, just keeping your calendar full." | Client admin per day: booking 45m, reminders & confirmations 30m, rescheduling & cancellations 25m, follow-ups & rebooking 20m, review requests 10m = 2h 10m |
-| 24.9–30.9s | (MsgHealth logo) "It does all of that for you." / "That's 2 hours back. Every day." | The colour turns brand indigo. Each row flips to "Automatic", its bar drains, the total counts down to 0m and "2h 10m back" appears. |
-| 30.9–32.9s | "Without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: reminders sent, a booking, a reschedule, a review request |
-| 32.9–36.9s | — | Logo, "Get your hours back.", msghealth.net |
+| 24.9–32.3s | (MsgHealth logo) "It does all of that for you." / "That's 2 hours back. Every day." | The colour turns brand indigo. Each row flips to "Automatic", its bar drains, the total counts down to 0m and "2h 10m back" appears. At 28.9s the music pauses and the clip plays over the card with its own sound. |
+| 32.3–34.3s | "Without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: reminders sent, a booking, a reschedule, a review request |
+| 34.3–38.3s | — | Logo, "Get your hours back.", msghealth.net |
 
 How a touchscreen works, as shown: a phone screen is a mutual-capacitance touchscreen. Under the cover glass sits a grid
 of transparent electrodes. Drive lines run one way and sense lines run the other. A small signal on the drive lines sets up

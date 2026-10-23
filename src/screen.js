@@ -16,18 +16,24 @@ const W = V ? 1080 : 1920, H = V ? 1920 : 1080;
 // The story is written on its own clock (STORY seconds). RETIME maps it onto the music: every cut lands on a
 // beat of assets/audio/screen-track.m4a ("Timeless" instrumental from its drop, 120 BPM: a beat every 0.5 s,
 // bars at 0.91 + 2k s, and the drum pattern restarts every 4 s at 0.91 + 4k). MsgHealth arrives at the top of
-// a phrase (24.91 s) and the end card lands on the next-but-one (32.91 s). [film time, story time] pairs;
+// a phrase (24.91 s) and the end card lands on the next-but-one (32.91 s). [music time, story time] pairs;
 // time between them is stretched linearly.
+// The music pauses once (PAUSE, in music time, on a beat) while the supplied clip plays with its own sound; the
+// picture holds underneath and everything after carries on PAUSE.dur later, still on the beat.
 const STORY = 38.0;
 const RETIME = [[0, 0], [3.91, 4.0], [6.91, 7.6], [16.91, 17.0], [19.41, 19.6], [24.91, 25.3], [30.91, 31.4], [32.91, 34.2], [36.91, STORY]];
-const DURATION = 36.91; // the film ends as the phrase after the end card's comes round
+const MUSIC_END = 36.91; // the music ends as the phrase after the end card's comes round
+const PAUSE = { at: 28.91, dur: 34 / 25 }; // on a beat once "That's 2 hours back" has fully landed; the clip is 34 frames at 25 fps
+const DURATION = MUSIC_END + PAUSE.dur;
+const musicAt = (f) => (f < PAUSE.at ? f : f < PAUSE.at + PAUSE.dur ? PAUSE.at : f - PAUSE.dur);
+const filmOfMusic = (m) => (m < PAUSE.at ? m : m + PAUSE.dur);
 function remap(v, from, to) {
   for (let i = 1; i < RETIME.length; i++) {
     const a = RETIME[i - 1], b = RETIME[i];
     if (v <= b[from] || i === RETIME.length - 1) return a[to] + (b[to] - a[to]) * Math.max(0, Math.min(1, (v - a[from]) / (b[from] - a[from])));
   }
 }
-const storyAt = (t) => remap(t, 0, 1), filmAt = (st) => remap(st, 1, 0);
+const storyAt = (f) => remap(musicAt(f), 0, 1), filmAt = (st) => filmOfMusic(remap(st, 1, 0));
 const BRAND_AT = 25.3; // MsgHealth is named here; the brand colour arrives with it
 const C = BRAND.colors;
 const FONT = 'Inter';
@@ -591,8 +597,7 @@ const ROWS = [
 ];
 const MAXM = 45;
 ROWS.forEach((r) => window.SFX.push({ t: r.at, kind: 'key', gain: 1.4 }, { t: r.flip, kind: 'key', gain: 1.3 }));
-// a till rings when the hours come back
-window.SFX.push({ t: 28.3, kind: 'cash', gain: 1.4 });
+// (the clip carries its own sound here)
 function glyph(kind, x, y) {
   ctx.save(); ctx.translate(x, y);
   ctx.strokeStyle = '#fff'; ctx.fillStyle = '#fff'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -606,25 +611,29 @@ function glyph(kind, x, y) {
 }
 const CW = 700, ROWH = 104;
 function hm(min) { const m = Math.round(min / 5) * 5; return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`; }
-// The supplied clip (assets/video/escape, 25 fps, sound removed) plays over the card while the caption says the
-// hours are back. Frames are numbered from 1.
-const CLIP = { at: 28.3, out: 31.4, fps: 25, frames: [] };
-function clip(t) {
-  const k = ease.quint(seg(t, CLIP.at, CLIP.at + 0.25));
-  if (k <= 0 || !CLIP.frames.length) return;
-  const n = clamp(Math.floor((filmAt(t) - filmAt(CLIP.at)) * CLIP.fps), 0, CLIP.frames.length - 1), img = CLIP.frames[n];
-  const w = V ? 900 : 660, hh = w * img.height / img.width, x0 = OBJ.x - w / 2, y0 = OBJ.y - hh / 2;
-  ctx.save(); ctx.globalAlpha = k;
-  ctx.translate(OBJ.x, OBJ.y); const sc = lerp(0.92, 1, k); ctx.scale(sc, sc); ctx.translate(-OBJ.x, -OBJ.y);
-  rr(x0, y0, w, hh, 36); ctx.save(); ctx.clip(); ctx.drawImage(img, x0, y0, w, hh); ctx.restore();
-  rr(x0, y0, w, hh, 36); ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 2; ctx.stroke();
+// The supplied clip (assets/video/peace: 34 frames at 25 fps, plus its sound) plays as an overlay on the card during
+// the music's pause, while the caption says the hours are back. Frames are numbered from 1.
+const CLIP = { fps: 25, count: 34, frames: [], audio: 'assets/video/peace/audio.wav' };
+function clipOverlay(ft) {
+  const local = ft - PAUSE.at;
+  if (local < 0 || local >= PAUSE.dur || !CLIP.frames.length) return;
+  const img = CLIP.frames[clamp(Math.floor(local * CLIP.fps), 0, CLIP.frames.length - 1)];
+  const k = ease.out(seg(local, 0, 0.12)) * (1 - ease.in(seg(local, PAUSE.dur - 0.1, PAUSE.dur)));
+  const w = V ? 760 : 560, hh = w * img.height / img.width, x0 = OBJ.x - w / 2, y0 = OBJ.y - hh / 2;
+  ctx.save();
+  ctx.fillStyle = `rgba(0,0,0,${0.45 * k})`; ctx.fillRect(0, 0, W, H); // the card dims behind it
+  ctx.translate(OBJ.x, OBJ.y); const sc = lerp(0.85, 1, k); ctx.scale(sc, sc); ctx.translate(-OBJ.x, -OBJ.y);
+  ctx.globalAlpha = k;
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 18; fillRR(x0, y0, w, hh, 32, '#000'); ctx.restore();
+  rr(x0, y0, w, hh, 32); ctx.save(); ctx.clip(); ctx.drawImage(img, x0, y0, w, hh); ctx.restore();
+  rr(x0, y0, w, hh, 32); ctx.strokeStyle = 'rgba(255,255,255,0.22)'; ctx.lineWidth = 2; ctx.stroke();
   ctx.restore();
 }
 function sCard(t) {
   const brand = ease.out(seg(t, BRAND_AT, BRAND_AT + 0.7));
   stage(lerp(0.12, 0.2, brand), mix(SLATE, C.primary, brand));
   const ch = 200 + ROWS.length * ROWH + 20, x0 = OBJ.x - CW / 2, y0 = OBJ.y - ch / 2;
-  const cin = ease.quint(seg(t, 19.6, 20.1)) * (1 - ease.out(seg(t, CLIP.at - 0.05, CLIP.at + 0.2))); // makes way for the clip
+  const cin = ease.quint(seg(t, 19.6, 20.1));
   ctx.save(); ctx.globalAlpha = cin; ctx.translate(0, (1 - cin) * 40);
   ctx.translate(OBJ.x, OBJ.y); ctx.scale(CS, CS); ctx.translate(-OBJ.x, -OBJ.y);
   glass(x0, y0, CW, ch, 36, { fill: 'rgba(255,255,255,0.06)' });
@@ -660,7 +669,6 @@ function sCard(t) {
     ctx.restore();
   });
   ctx.restore();
-  clip(t);
 }
 window.SFX.push({ t: BRAND_AT, kind: 'transitionHit', gain: 0.7 }); // a whoosh that builds into a hit as MsgHealth lands
 
@@ -782,11 +790,13 @@ function renderFrame(ft) {
     });
   } else fn(t);
   ctx = MAIN; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  clipOverlay(ft);
   drawCaptions(t);
 }
 
-// Sound cues are written in story time; the soundtrack wants film time.
-window.SFX = window.SFX.map((c) => ({ ...c, t: filmAt(c.t) }));
+// Sound cues are written in story time; the soundtrack wants film time. Nothing plays over the clip but the clip.
+window.SFX = window.SFX.map((c) => ({ ...c, t: filmAt(c.t) })).filter((c) => c.t < PAUSE.at - 0.05 || c.t > PAUSE.at + PAUSE.dur);
+window.MUSIC = { end: MUSIC_END, pause: PAUSE, clipAudio: CLIP.audio };
 window.DURATION = DURATION;
 window.renderFrame = renderFrame;
 // Text audit hook (scripts/audit-text.mjs): while window.TEXT_LOG is an array, every string drawn is logged with
@@ -813,28 +823,38 @@ window.ready = (async () => {
   const load = (src) => new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
   LOGO = await load(BRAND.logoFile);
   for (const h of Object.values(HANDS)) h.img = await load(h.src);
-  CLIP.frames = (await Promise.all(Array.from({ length: 76 }, (_, i) => load(`assets/video/escape/f${String(i + 1).padStart(3, '0')}.jpg`)))).filter(Boolean);
+  CLIP.frames = (await Promise.all(Array.from({ length: CLIP.count }, (_, i) => load(`assets/video/peace/f${String(i + 1).padStart(3, '0')}.jpg`)))).filter(Boolean);
   if (location.search.includes('render')) document.body.classList.add('render');
   renderFrame(0);
   return true;
 })();
 
-// ── player (plays the track in sync) ─────────────────────────────────────────
+// ── player (plays the track in sync, pausing it for the clip) ────────────────
 (() => {
   const btn = document.getElementById('play'), seek = document.getElementById('seek'), tm = document.getElementById('time'), au = document.getElementById('track');
-  let playing = false, cur = 0;
-  const show = (t) => { cur = t; renderFrame(t); seek.value = (t / DURATION) * 1000; tm.textContent = `${t.toFixed(1)}s / ${DURATION}s`; };
-  const loop = () => {
+  const clipAu = new Audio(CLIP.audio);
+  let playing = false, cur = 0, t0 = 0, w0 = 0, inClip = false;
+  const show = (t) => { cur = t; renderFrame(t); seek.value = (t / DURATION) * 1000; tm.textContent = `${t.toFixed(1)}s / ${DURATION.toFixed(1)}s`; };
+  const stopAll = () => { au.pause(); clipAu.pause(); inClip = false; };
+  const loop = (now) => {
     if (!playing) return;
-    const t = au.currentTime;
-    if (t >= DURATION || au.ended) { playing = false; au.pause(); btn.textContent = 'Replay'; show(DURATION); return; }
+    const t = t0 + (now - w0) / 1000;
+    if (t >= DURATION) { playing = false; stopAll(); btn.textContent = 'Replay'; show(DURATION); return; }
+    const clipNow = t >= PAUSE.at && t < PAUSE.at + PAUSE.dur;
+    if (clipNow !== inClip) {
+      inClip = clipNow;
+      if (clipNow) { au.pause(); clipAu.currentTime = t - PAUSE.at; clipAu.play(); }
+      else { clipAu.pause(); au.currentTime = musicAt(t); au.play(); }
+    }
     show(t); requestAnimationFrame(loop);
   };
   btn.onclick = () => {
-    if (playing) { playing = false; au.pause(); btn.textContent = 'Play'; return; }
+    if (playing) { playing = false; stopAll(); btn.textContent = 'Play'; return; }
     if (cur >= DURATION) cur = 0;
-    au.currentTime = cur; au.play(); playing = true; btn.textContent = 'Pause'; requestAnimationFrame(loop);
+    inClip = cur >= PAUSE.at && cur < PAUSE.at + PAUSE.dur;
+    if (inClip) { clipAu.currentTime = cur - PAUSE.at; clipAu.play(); } else { au.currentTime = musicAt(cur); au.play(); }
+    t0 = cur; w0 = performance.now(); playing = true; btn.textContent = 'Pause'; requestAnimationFrame(loop);
   };
-  seek.oninput = () => { playing = false; au.pause(); btn.textContent = 'Play'; show((seek.value / 1000) * DURATION); };
+  seek.oninput = () => { playing = false; stopAll(); btn.textContent = 'Play'; show((seek.value / 1000) * DURATION); };
   window.ready.then(() => { const q = new URLSearchParams(location.search).get('t'); if (q) show(+q); });
 })();
