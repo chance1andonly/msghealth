@@ -10,6 +10,7 @@ const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const out = process.argv[2] || path.join(ROOT, 'dist/screen-audio.wav');
 const SR = 48000;
 const FADE = 0.35; // the track's last bar ends right after the film; a short fade keeps the cut clean
+// The supplied track sits around -23 LUFS; the mix is lifted ~7 dB into a limiter to land near the -14 LUFS social platforms play at.
 // file, where its anchor sits inside the file (s), gain
 const SOUNDS = {
   click: { file: 'fx-click.wav', anchor: 0.057, gain: 1 },         // anchor = attack
@@ -45,7 +46,7 @@ kinds.forEach((k, ki) => {
     mixIn.push(`[${k}d${i}]`);
   });
 });
-graph.push(`${mixIn.join('')}amix=inputs=${mixIn.length}:normalize=0:duration=first,alimiter=limit=0.95,` +
+graph.push(`${mixIn.join('')}amix=inputs=${mixIn.length}:normalize=0:duration=first,volume=2.2,alimiter=limit=0.9:level=disabled,` +
   `afade=t=out:st=${(duration - FADE).toFixed(3)}:d=${FADE},atrim=0:${duration.toFixed(3)}[out]`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', ...inputs, '-filter_complex', graph.join(';'), '-map', '[out]', '-ac', '2', '-c:a', 'pcm_s16le', out], { stdio: 'inherit' });
 console.log(`audio → ${out}  (${kinds.map((k) => `${sfx.filter((c) => c.kind === k).length} ${k}`).join(', ')})`);
