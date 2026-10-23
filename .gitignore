@@ -1,3 +1,4 @@
 node_modules/
 dist/score.wav
 dist/promo-audio.wav
+dist/screen-audio.wav

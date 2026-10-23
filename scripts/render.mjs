@@ -3,6 +3,8 @@
 //   npm run render:ad         → dist/msghealth-ad-9x16.mp4     (9:16 social ad, ad.html)
 //   npm run render:promo      → dist/msghealth-promo.mp4       (16:9 promo, promo.html)
 //   npm run render:promo:9x16 → dist/msghealth-promo-9x16.mp4  (9:16 promo, promo-vertical.html)
+//   npm run render:screen     → dist/msghealth-screen.mp4       (16:9 "6 hours of this", screen.html)
+//   npm run render:screen:9x16 → dist/msghealth-screen-9x16.mp4 (9:16, screen-vertical.html)
 // Env: FFMPEG (path to an ffmpeg with libx264), WORKERS (parallel browser pages, default 3)
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,10 +15,11 @@ import { openFilm, ROOT } from './lib.mjs';
 const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const ENTRY = process.env.ENTRY || 'index.html';
 const IS_AD = ENTRY === 'ad.html';
-const IS_PROMO = /^promo/.test(ENTRY); // recorded music track + sound effects instead of the synthesised score
-const OUT_NAME = IS_PROMO ? (/vertical/.test(ENTRY) ? 'msghealth-promo-9x16' : 'msghealth-promo') : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
-const AUDIO_SCRIPT = IS_PROMO ? 'scripts/promo-audio.mjs' : IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
-const FPS = IS_PROMO ? 60 : 24;
+const IS_PROMO = /^promo/.test(ENTRY);
+const IS_SCREEN = /^screen/.test(ENTRY); // recorded music track + sound effects instead of the synthesised score
+const OUT_NAME = IS_SCREEN ? (/vertical/.test(ENTRY) ? 'msghealth-screen-9x16' : 'msghealth-screen') : IS_PROMO ? (/vertical/.test(ENTRY) ? 'msghealth-promo-9x16' : 'msghealth-promo') : IS_AD ? 'msghealth-ad-9x16' : 'msghealth-demo';
+const AUDIO_SCRIPT = IS_SCREEN ? 'scripts/screen-audio.mjs' : IS_PROMO ? 'scripts/promo-audio.mjs' : IS_AD ? 'scripts/ad-audio.mjs' : 'scripts/audio.mjs';
+const FPS = IS_PROMO || IS_SCREEN ? 60 : 24;
 const WORKERS = +(process.env.WORKERS || Math.max(1, Math.min(3, os.cpus().length - 1)));
 const DIST = path.join(ROOT, 'dist');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'msgh-'));
@@ -53,7 +56,7 @@ const parts = await Promise.all(Array.from({ length: WORKERS }, (_, k) => worker
 
 const list = path.join(TMP, 'list.txt');
 fs.writeFileSync(list, parts.map((p) => `file '${p}'`).join('\n'));
-const wav = path.join(DIST, IS_PROMO ? 'promo-audio.wav' : IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
+const wav = path.join(DIST, IS_SCREEN ? 'screen-audio.wav' : IS_PROMO ? 'promo-audio.wav' : IS_AD ? 'ad-music-sfx.wav' : 'score.wav');
 execFileSync('node', [path.join(ROOT, AUDIO_SCRIPT), wav], { stdio: 'inherit' });
 const mp4 = path.join(DIST, `${OUT_NAME}.mp4`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', list, '-i', wav,

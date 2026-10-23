@@ -148,3 +148,49 @@ changed digit rolls in place (9:02 → 9:03).
 | 24–32 | 15.5–20.6s | **7:00 PM** MacBook, Home: the camera moves in on this week as six bookings land, then settles on "Booked this week: 6 new since this morning" | Clock roll, on the chorus drop |
 | 32–36 | 20.6–23.1s | "You cut hair. MsgHealth fills the chair." | The laptop falls back into the dark |
 | 36–end | 23.1–26.6s | Logo, msghealth.net, "Start now · 50% off your first month", over the last verse | Straight cut, with a snap |
+
+---
+
+# "6 hours of this": 63-second explainer ad (16:9 and 9:16, 60 fps)
+
+It starts as a short explainer on how a phone's touchscreen works, then turns into a pitch: most of a business owner's
+screen time goes to tapping out messages to clients, and MsgHealth can do that tapping for them. The captions tell the whole
+story, so it works with the sound off.
+
+- **Video:** `dist/msghealth-screen.mp4` (1920×1080) and `dist/msghealth-screen-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
+- Source: `screen.html` / `screen-vertical.html`, `src/screen.js`. The short side is 1080 px in both formats. In 16:9 the captions
+  sit on the left with the object on the right. In 9:16 the captions are at the top and the object is below them.
+- Sound: `scripts/screen-audio.mjs` synthesises an original music bed and mixes in the sound effects from `assets/audio`, cued
+  from `window.SFX`.
+- Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills: `ENTRY=screen.html node scripts/snap.mjs out/ 27.6`
+
+| Time | Caption | What's on screen |
+|---|---|---|
+| 0–3s | "Your screen time: 6 hours a day." | A phone with a Screen Time widget showing 6h 0m. A finger taps it. |
+| 3–7s | "That's 6 hours of this." | The finger taps and swipes faster and faster while the widget's "Touches today" count climbs to 2,617 |
+| 7–10s | "Ever wonder how it knows where you touched?" | The phone tilts back into an isometric view |
+| 10–14s | "Your screen is a stack of layers." / "The magic is in the middle one." | It comes apart into labelled layers: cover glass, touch sensor, display. The sensor lights up. |
+| 14–17.5s | "Under the glass: a grid of see-through wires." | Zoom into the sensor. Diamond-pattern drive electrodes run across and sense electrodes run down, with drive pulses travelling along the rows. |
+| 17.5–20.5s | "A tiny current gives every crossing an electric field." | Charge particles flow in arcs from drive to sense at every crossing |
+| 20.5–24s | "Your finger conducts electricity. It pulls charge away." | A see-through finger presses down. Nearby particles stream up into it and the field around it dims. |
+| 24–27s | "The phone scans the grid over 100 times a second…" | A scan line sweeps the grid (labelled "shown slowed down") and the crossings that lost charge light up as a heat map |
+| 27–30.5s | "…finds where the charge dropped. That's your touch." | A crosshair locks onto the centre of the drop with a coordinate tag, then follows the finger as it drags |
+| 30.5–35.5s | "You do this thousands of times a day." / "Run a business? Then you know where it goes." | Back to the phone for a burst of taps |
+| 35.5–44.5s | "Reaching out. Booking. Rescheduling." / "5 of your 6 hours, spent keeping clients on the books." | A Screen Time card. Reaching out to clients 3h, Booking appointments 1h, Rescheduling & cancellations 1h, Everything else 1h. |
+| 44.5–52.5s | (MsgHealth logo) "It does all that tapping for you." / "That's 5 hours back. Every day." | The three business rows turn "Automatic" one after another. Their bars drain, the total counts down to 1h 0m and "5h 0m saved" appears. |
+| 52.5–57.8s | "All without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: follow-ups sent, a booking, a reschedule, reminders |
+| 57.8–63s | — | Logo, "Get your hours back.", msghealth.net |
+
+How a touchscreen works, as shown: a phone screen is a mutual-capacitance touchscreen. Under the cover glass sits a grid
+of transparent electrodes. Drive lines run one way and sense lines run the other. A small signal on the drive lines sets up
+an electric field at each crossing. A finger is conductive, so it draws some of that field away from the crossings beneath
+it. The touch controller scans the grid many times a second (typically 60–240 Hz), finds the crossings whose signal dropped,
+and takes their centre as the touch point.
+
+Numbers: "6 hours a day" and the 3h / 1h / 1h / 1h split are illustrative. "2,617 touches a day" is the average from
+dscout's 2016 "Mobile Touches" study. The notification names are made up.
+
+### Optional voiceover
+
+The captions can be read as a VO, line by line, in the windows given above. A natural, curious delivery suits the science
+half. Lift the energy at 44.5s, when MsgHealth arrives.
