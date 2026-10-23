@@ -357,7 +357,7 @@ function sHook(t) {
   const f = gesture(t, TAPS1, [330, 760], [380, 820], 0.12, 3.95);
   phone(t, () => { homeScreen(pickupsAt(t)); ripples(t, TAPS1); }, () => { if (f.visible) finger(f.x, f.y, f.lift); }, { dy: (1 - k) * 60, alpha: k });
 }
-TAPS1.forEach((c) => window.SFX.push({ t: c.t0, kind: 'click', gain: 0.5 }));
+TAPS1.forEach((c) => window.SFX.push({ t: c.t0, kind: 'tap', gain: 1.6 }));
 
 // ── 2 · the layers ───────────────────────────────────────────────────────────
 // Each layer is a plane: rotated by theta in its own plane, squashed by sy (the tilt), lifted by z.
@@ -444,7 +444,7 @@ function fingerGrid(t) {
   const contact = ease.out(seg(t, 10.8, 11.0));
   return { x, y, contact, alpha: seg(t, 10.15, 10.45) };
 }
-window.SFX.push({ t: 11.0, kind: 'click', gain: 0.9 }, { t: 14.6, kind: 'shutter', gain: 0.9 }); // finger down; the touch is pinned
+window.SFX.push({ t: 11.0, kind: 'tap', gain: 1.8 }, { t: 14.6, kind: 'ding', gain: 0.6 }); // finger down; the touch is pinned
 function sGrid(t) {
   stage(0.12);
   ctx.save(); ctx.translate(OBJ.x, OBJ.y);
@@ -584,7 +584,7 @@ function sTurn(t) {
   const f = gesture(t, TAPS2, [330, 760], [380, 820], 17.0, 19.6);
   phone(t, () => { homeScreen(PICKUPS); ripples(t, TAPS2); }, () => { if (f.visible) finger(f.x, f.y, f.lift); });
 }
-TAPS2.forEach((c) => window.SFX.push({ t: c.t0, kind: 'click', gain: 0.45 }));
+TAPS2.forEach((c) => window.SFX.push({ t: c.t0, kind: 'tap', gain: 1.5 }));
 
 // ── 5 · where the hours go, and MsgHealth taking them back ───────────────────
 // A service business's client admin on a typical day, in minutes. Estimates, built from published
@@ -598,9 +598,9 @@ const ROWS = [
   { label: 'Review requests', sub: 'Asking happy clients for reviews', auto: 'Sent after every visit', m: 10, icon: 'star', at: 21.4, flip: 27.3 },
 ];
 const MAXM = 45;
-ROWS.forEach((r) => window.SFX.push({ t: r.at, kind: 'click', gain: 0.55 }));
-// the time drains away as the rows turn automatic; a coin when the hours come back
-window.SFX.push({ t: 22.65, kind: 'wrong', gain: 0.45 }, { t: ROWS[0].flip, kind: 'ff', gain: 0.7 }, { t: 28.3, kind: 'coin', gain: 0.35 });
+ROWS.forEach((r) => window.SFX.push({ t: r.at, kind: 'key', gain: 1.4 }, { t: r.flip, kind: 'key', gain: 1.3 }));
+// a till rings when the hours come back
+window.SFX.push({ t: 28.3, kind: 'cash', gain: 1.4 });
 function glyph(kind, x, y) {
   ctx.save(); ctx.translate(x, y);
   ctx.strokeStyle = '#fff'; ctx.fillStyle = '#fff'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -655,7 +655,7 @@ function sCard(t) {
   });
   ctx.restore();
 }
-window.SFX.push({ t: BRAND_AT, kind: 'riser', gain: 0.55 }, { t: BRAND_AT, kind: 'idea', gain: 0.8 });
+window.SFX.push({ t: BRAND_AT, kind: 'transitionHit', gain: 0.7 }); // a whoosh that builds into a hit as MsgHealth lands
 
 // ── 6 · without lifting a finger ─────────────────────────────────────────────
 const NOTES = [
@@ -664,7 +664,7 @@ const NOTES = [
   { at: 33.0, s: 'Leo moved to Fri, 10:30 AM' },
   { at: 33.45, s: 'Review request sent to Sam' },
 ];
-NOTES.forEach((n, i) => window.SFX.push({ t: n.at, kind: 'notify', gain: i ? 0.3 : 0.45 }));
+NOTES.forEach((n, i) => window.SFX.push({ t: n.at, kind: 'notification', gain: i ? 0.6 : 1.4 }));
 function lockScreen(t) {
   screenBg(true); statusBar('10:42');
   text('Tuesday, October 20', 0, -PH / 2 + 104, 20, 600, SOFT, 'center');
@@ -700,7 +700,7 @@ function sHands(t) {
 }
 
 // ── 7 · end card ─────────────────────────────────────────────────────────────
-window.SFX.push({ t: 34.2, kind: 'punch', gain: 0.6 });
+window.SFX.push({ t: 34.2, kind: 'bang', gain: 0.4 });
 function sEnd(t) {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   const cy = H / 2 - 40, g = ctx.createRadialGradient(W / 2, cy, 0, W / 2, cy, 620);
@@ -736,8 +736,8 @@ const SCENES = [
   [31.4, 34.2, sHands, 'cross', 0.4],
   [34.2, STORY + 1, sEnd],         // straight cut, with a snap
 ];
-SCENES.forEach(([st, , , type, dur]) => { if (type) window.SFX.push(type === 'cross' ? { t: st + dur / 2, kind: 'swoosh', gain: 0.35 } : { t: st + dur / 2, kind: 'whoosh', gain: 0.5 }); });
-window.SFX.push({ t: 4.4, kind: 'swoosh', gain: 0.4 }); // the phone tips back
+SCENES.forEach(([st, , , type, dur]) => { if (type) window.SFX.push(type === 'cross' ? { t: st + dur / 2, kind: 'swoosh', gain: 0.6 } : { t: st + dur / 2, kind: 'transition', gain: 0.6 }); });
+window.SFX.push({ t: 4.4, kind: 'swish', gain: 0.35 }); // the phone tips back
 
 function renderInto(k, fn, t) {
   const c = OFF[k]; ctx = c.getContext('2d');

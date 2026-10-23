@@ -186,23 +186,27 @@ the brand, at the top of a musical phrase (24.91 s).
   | End card (top of a phrase) | 32.91 s |
 
   The film ends at 36.91 s, as the next phrase comes round.
-- **Sound effects** are cut from the supplied effects reel into `assets/audio/fx-*.wav`, and `scripts/screen-audio.mjs` places
-  them from `window.SFX`:
+- **Sound effects** are cut from the supplied "sound effects you need as an editor" reel into `assets/audio/fx-*.wav`. The
+  narrator's spoken labels are left out. `scripts/screen-audio.mjs` places them from `window.SFX`:
 
   | Effect | Where it plays |
   |---|---|
-  | click | taps, finger down on the grid, card rows appearing |
-  | swoosh | phone tilting back, cross-fades |
-  | whoosh | zoom into the grid and back out |
-  | camera shutter | the touch point locking on |
-  | wrong answer | "Over 2 hours a day" |
-  | riser + good idea | building into MsgHealth and landing on it |
-  | fast forward | the hours draining as the rows turn automatic |
-  | Mario coin | "2 hours back" |
-  | Discord join | each notification |
-  | punch | the logo landing on the end card |
+  | tap | every finger tap, and the finger pressing the grid |
+  | phone-typing click (`fx-key`) | card rows appearing and turning "Automatic" |
+  | swish | phone tipping back into layers |
+  | transition | zoom into the grid and back out |
+  | swoosh | cross-fades |
+  | ding | the touch point locking on |
+  | transition with a hit (`fx-transition-hit`) | the build into MsgHealth, landing on 24.91 s |
+  | Shopify cash register (`fx-cash`) | "That's 2 hours back" |
+  | phone notification | each lock-screen notification (the first is loudest) |
+  | bang | the logo landing on the end card |
 
-  The reel's game-menu, keyboard, Windows-error sounds and its TikTok outro aren't used.
+  The reel's paper crumple isn't used.
+
+  Levels: the track is mastered loud (about -9.6 LUFS) and the reel is quiet, so the music drops about 7 dB and the effects come
+  up about 8 dB (`MUSIC_GAIN` and `FX_GAIN`). The mix lands around -14.5 LUFS. `MUSIC_GAIN=0 node scripts/screen-audio.mjs out.wav`
+  renders the effects alone, for checking levels.
 - Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills (film time): `ENTRY=screen.html node scripts/snap.mjs out/ 12`
 
 | Time | Caption | What's on screen |
