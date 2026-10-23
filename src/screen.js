@@ -196,39 +196,31 @@ function drawCaptions(t) {
 }
 
 // ── the finger ───────────────────────────────────────────────────────────────
-// Drawn in the local space of whatever it touches. (x, y) is the centre of the pad that touches the glass;
-// the finger comes in from the bottom right. lift 0 = pressing, 1 = hovering just above.
+// Two cursor-style hands (assets/img): the pointing hand with its click lines while the finger is pressing, the
+// middle finger while it hovers. Drawn in the local space of whatever it touches; (x, y) is the fingertip's
+// pad, where it meets the glass. lift 0 = pressing, 1 = hovering just above.
+const HANDS = {
+  tap: { src: 'assets/img/hand-tap.png', tipX: 110.5, padY: 117, finger: 61 },     // index finger, click lines round the tip
+  hover: { src: 'assets/img/hand-hover.png', tipX: 395.5, padY: 63, finger: 126 }, // middle finger
+};
+const FINGER_W = 70; // fingertip width on the glass, phone units
 function finger(x, y, lift = 0, o = {}) {
-  const a = o.alpha ?? 1;
-  if (a <= 0) return;
+  const a = o.alpha ?? 1, h = HANDS[lift > 0.5 ? 'hover' : 'tap'];
+  if (a <= 0 || !h.img) return;
+  const k = FINGER_W / h.finger, base = ctx.filter === 'none' ? '' : `${ctx.filter} `;
+  const place = () => { ctx.rotate(-0.12); ctx.scale(k, k); ctx.translate(-h.tipX, -h.padY); };
   ctx.save();
   ctx.translate(x, y); ctx.scale(o.scale ?? 1, o.scale ?? 1);
   // shadow: further away and softer as the finger lifts
   ctx.save();
-  ctx.globalAlpha = a * (0.45 - 0.2 * lift);
-  ctx.filter = `blur(${(10 + 22 * lift).toFixed(1)}px)`;
-  ctx.translate(18 + 46 * lift, 24 + 60 * lift); ctx.rotate(-0.5);
-  fillRR(-48, -58, 96, 640, 48, '#000');
+  ctx.globalAlpha *= a * (0.4 - 0.18 * lift);
+  ctx.filter = `${base}brightness(0) blur(${(8 + 18 * lift).toFixed(1)}px)`;
+  ctx.translate(14 + 40 * lift, 20 + 52 * lift); place();
+  ctx.drawImage(h.img, 0, 0);
   ctx.restore();
-  ctx.translate(12 * lift, 16 * lift); const s = 1 + 0.07 * lift; ctx.scale(s, s);
-  ctx.rotate(-0.5);
-  ctx.globalAlpha = a;
-  const g = ctx.createLinearGradient(-46, 0, 46, 0);
-  g.addColorStop(0, SKIN.lo); g.addColorStop(0.28, SKIN.mid); g.addColorStop(0.55, SKIN.hi); g.addColorStop(1, SKIN.lo);
-  fillRR(-46, -58, 92, 640, 46, g);
-  // the tip is a touch lighter where the light catches it
-  const tg = ctx.createRadialGradient(-6, -26, 4, -6, -26, 60);
-  tg.addColorStop(0, 'rgba(255,224,204,0.35)'); tg.addColorStop(1, 'rgba(255,224,204,0)');
-  ctx.fillStyle = tg; ctx.fillRect(-46, -58, 92, 120);
-  // nail
-  const ng = ctx.createLinearGradient(0, -48, 0, 40);
-  ng.addColorStop(0, '#f6dccf'); ng.addColorStop(0.2, SKIN.nail); ng.addColorStop(1, '#dca891');
-  fillRR(-30, -46, 60, 84, 27, ng);
-  rr(-30, -46, 60, 84, 27); ctx.strokeStyle = 'rgba(120,70,50,0.35)'; ctx.lineWidth = 2; ctx.stroke();
-  fillRR(-22, 20, 44, 14, 7, 'rgba(255,240,232,0.35)'); // lunula
-  // knuckle creases
-  ctx.strokeStyle = 'rgba(110,60,40,0.28)'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
-  [168, 184, 330, 344].forEach((cy, i) => { ctx.beginPath(); ctx.moveTo(-26 + (i % 2) * 6, cy); ctx.quadraticCurveTo(0, cy + 7, 26 - (i % 2) * 6, cy); ctx.stroke(); });
+  ctx.translate(10 * lift, 14 * lift); const s = 1 + 0.07 * lift; ctx.scale(s, s);
+  ctx.globalAlpha *= a; place();
+  ctx.drawImage(h.img, 0, 0);
   ctx.restore();
 }
 
@@ -614,11 +606,25 @@ function glyph(kind, x, y) {
 }
 const CW = 700, ROWH = 104;
 function hm(min) { const m = Math.round(min / 5) * 5; return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`; }
+// The supplied clip (assets/video/escape, 25 fps, sound removed) plays over the card while the caption says the
+// hours are back. Frames are numbered from 1.
+const CLIP = { at: 28.3, out: 31.4, fps: 25, frames: [] };
+function clip(t) {
+  const k = ease.quint(seg(t, CLIP.at, CLIP.at + 0.25));
+  if (k <= 0 || !CLIP.frames.length) return;
+  const n = clamp(Math.floor((filmAt(t) - filmAt(CLIP.at)) * CLIP.fps), 0, CLIP.frames.length - 1), img = CLIP.frames[n];
+  const w = V ? 900 : 660, hh = w * img.height / img.width, x0 = OBJ.x - w / 2, y0 = OBJ.y - hh / 2;
+  ctx.save(); ctx.globalAlpha = k;
+  ctx.translate(OBJ.x, OBJ.y); const sc = lerp(0.92, 1, k); ctx.scale(sc, sc); ctx.translate(-OBJ.x, -OBJ.y);
+  rr(x0, y0, w, hh, 36); ctx.save(); ctx.clip(); ctx.drawImage(img, x0, y0, w, hh); ctx.restore();
+  rr(x0, y0, w, hh, 36); ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.restore();
+}
 function sCard(t) {
   const brand = ease.out(seg(t, BRAND_AT, BRAND_AT + 0.7));
   stage(lerp(0.12, 0.2, brand), mix(SLATE, C.primary, brand));
   const ch = 200 + ROWS.length * ROWH + 20, x0 = OBJ.x - CW / 2, y0 = OBJ.y - ch / 2;
-  const cin = ease.quint(seg(t, 19.6, 20.1));
+  const cin = ease.quint(seg(t, 19.6, 20.1)) * (1 - ease.out(seg(t, CLIP.at - 0.05, CLIP.at + 0.2))); // makes way for the clip
   ctx.save(); ctx.globalAlpha = cin; ctx.translate(0, (1 - cin) * 40);
   ctx.translate(OBJ.x, OBJ.y); ctx.scale(CS, CS); ctx.translate(-OBJ.x, -OBJ.y);
   glass(x0, y0, CW, ch, 36, { fill: 'rgba(255,255,255,0.06)' });
@@ -654,6 +660,7 @@ function sCard(t) {
     ctx.restore();
   });
   ctx.restore();
+  clip(t);
 }
 window.SFX.push({ t: BRAND_AT, kind: 'transitionHit', gain: 0.7 }); // a whoosh that builds into a hit as MsgHealth lands
 
@@ -700,7 +707,7 @@ function sHands(t) {
 }
 
 // ── 7 · end card ─────────────────────────────────────────────────────────────
-window.SFX.push({ t: 34.2, kind: 'bang', gain: 0.4 });
+window.SFX.push({ t: 34.2, kind: 'punch', gain: 0.5 });
 function sEnd(t) {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   const cy = H / 2 - 40, g = ctx.createRadialGradient(W / 2, cy, 0, W / 2, cy, 620);
@@ -803,7 +810,10 @@ window.ready = (async () => {
   ctx = MAIN;
   for (let k = 0; k < 2; k++) { const c = document.createElement('canvas'); c.width = W; c.height = H; OFF.push(c); }
   await Promise.all(['400', '500', '600', '700', '800'].map((w) => document.fonts.load(`${w} 40px ${FONT}`)));
-  LOGO = await new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = BRAND.logoFile; });
+  const load = (src) => new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+  LOGO = await load(BRAND.logoFile);
+  for (const h of Object.values(HANDS)) h.img = await load(h.src);
+  CLIP.frames = (await Promise.all(Array.from({ length: 76 }, (_, i) => load(`assets/video/escape/f${String(i + 1).padStart(3, '0')}.jpg`)))).filter(Boolean);
   if (location.search.includes('render')) document.body.classList.add('render');
   renderFrame(0);
   return true;

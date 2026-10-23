@@ -21,7 +21,7 @@ const SOUNDS = {
   ding: { file: 'fx-ding.wav', anchor: 0.058, gain: 1 },
   cash: { file: 'fx-cash.wav', anchor: 0.037, gain: 1 },
   notification: { file: 'fx-notification.wav', anchor: 0.043, gain: 1 },
-  bang: { file: 'fx-bang.wav', anchor: 0.083, gain: 1 },
+  punch: { file: 'fx-punch.wav', anchor: 0.052, gain: 1 },                  // from the first effects reel
 };
 
 const film = await openFilm('screen.html');

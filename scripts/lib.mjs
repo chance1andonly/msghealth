@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.woff2': 'font/woff2', '.png': 'image/png', '.css': 'text/css', '.m4a': 'audio/mp4' };
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.woff2': 'font/woff2', '.png': 'image/png', '.jpg': 'image/jpeg', '.css': 'text/css', '.m4a': 'audio/mp4' };
 
 export function serve() {
   return new Promise((resolve) => {

@@ -200,13 +200,18 @@ the brand, at the top of a musical phrase (24.91 s).
   | transition with a hit (`fx-transition-hit`) | the build into MsgHealth, landing on 24.91 s |
   | Shopify cash register (`fx-cash`) | "That's 2 hours back" |
   | phone notification | each lock-screen notification (the first is loudest) |
-  | bang | the logo landing on the end card |
+  | punch (`fx-punch`, kept from the first effects reel) | the logo landing on the end card |
 
-  The reel's paper crumple isn't used.
+  The reel's paper crumple and bang aren't used.
 
   Levels: the track is mastered loud (about -9.6 LUFS) and the reel is quiet, so the music drops about 7 dB and the effects come
   up about 8 dB (`MUSIC_GAIN` and `FX_GAIN`). The mix lands around -14.5 LUFS. `MUSIC_GAIN=0 node scripts/screen-audio.mjs out.wav`
   renders the effects alone, for checking levels.
+- **Finger:** two cursor-style hands in `assets/img`. The pointing hand (`hand-tap.png`, click lines recoloured white for
+  the dark screens) shows while the finger presses. The middle finger (`hand-hover.png`) shows while it hovers. Both were cut
+  out of the supplied pictures, and `HANDS` in `src/screen.js` records where each fingertip sits.
+- **"2 hours back" clip:** the supplied clip plays muted over the card while the caption reads "That's 2 hours back. Every day.". It is
+  stored as 25 fps frames in `assets/video/escape` with no audio track, starting 0.35 s in so the dash lands before the cut.
 - Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills (film time): `ENTRY=screen.html node scripts/snap.mjs out/ 12`
 
 | Time | Caption | What's on screen |
