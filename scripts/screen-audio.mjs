@@ -1,4 +1,5 @@
-// Builds the "Every touch" soundtrack: the supplied instrumental (assets/audio/screen-track.m4a) with the
+// Builds the "Every touch" soundtrack: the supplied instrumental (assets/audio/screen-track.m4a, cut from 16 s
+// into the supplied clip, where the drop hits) with the
 // sound effects cut from the supplied effects reel (assets/audio/fx-*.wav), each placed so its anchor
 // (attack or peak) lands on its cue. Cues come from the film itself (window.SFX in src/screen.js).
 //   node scripts/screen-audio.mjs dist/screen-audio.wav
@@ -9,8 +10,7 @@ import { openFilm, ROOT } from './lib.mjs';
 const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const out = process.argv[2] || path.join(ROOT, 'dist/screen-audio.wav');
 const SR = 48000;
-const FADE = 0.35; // the track's last bar ends right after the film; a short fade keeps the cut clean
-// The supplied track sits around -23 LUFS; the mix is lifted ~7 dB into a limiter to land near the -14 LUFS social platforms play at.
+const FADE = 0.6; // the track carries on past the film; fade it out over the last beat
 // file, where its anchor sits inside the file (s), gain
 const SOUNDS = {
   click: { file: 'fx-click.wav', anchor: 0.057, gain: 1 },         // anchor = attack
@@ -35,7 +35,8 @@ const unknown = [...new Set(sfx.map((c) => c.kind))].filter((k) => !SOUNDS[k]);
 if (unknown.length) throw new Error(`no sound for cue kind(s): ${unknown.join(', ')}`);
 const inputs = ['-i', path.join(ROOT, 'assets/audio/screen-track.m4a')];
 kinds.forEach((k) => inputs.push('-i', path.join(ROOT, 'assets/audio', SOUNDS[k].file)));
-const graph = [`[0:a]aresample=${SR},volume=0.9[music]`], mixIn = ['[music]'];
+// The track is mastered loud (about -9.6 LUFS); -5 dB leaves room for the effects and lands the mix near -14 LUFS.
+const graph = [`[0:a]aresample=${SR},volume=0.56[music]`], mixIn = ['[music]'];
 kinds.forEach((k, ki) => {
   const cues = sfx.filter((c) => c.kind === k);
   graph.push(`[${ki + 1}:a]aresample=${SR},asplit=${cues.length}${cues.map((_, i) => `[${k}${i}]`).join('')}`);
@@ -46,7 +47,7 @@ kinds.forEach((k, ki) => {
     mixIn.push(`[${k}d${i}]`);
   });
 });
-graph.push(`${mixIn.join('')}amix=inputs=${mixIn.length}:normalize=0:duration=first,volume=2.2,alimiter=limit=0.9:level=disabled,` +
+graph.push(`${mixIn.join('')}amix=inputs=${mixIn.length}:normalize=0:duration=first,alimiter=limit=0.9:level=disabled,` +
   `afade=t=out:st=${(duration - FADE).toFixed(3)}:d=${FADE},atrim=0:${duration.toFixed(3)}[out]`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', ...inputs, '-filter_complex', graph.join(';'), '-map', '[out]', '-ac', '2', '-c:a', 'pcm_s16le', out], { stdio: 'inherit' });
 console.log(`audio → ${out}  (${kinds.map((k) => `${sfx.filter((c) => c.kind === k).length} ${k}`).join(', ')})`);

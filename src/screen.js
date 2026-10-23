@@ -14,12 +14,13 @@
 const V = !!(window.FORMAT && window.FORMAT.vertical);
 const W = V ? 1080 : 1920, H = V ? 1920 : 1080;
 // The story is written on its own clock (STORY seconds). RETIME maps it onto the music: every cut lands on a
-// beat of assets/audio/screen-track.m4a (83 BPM, a beat every 0.7225 s, bar lines at 0.46 + 2.89k s), and
-// MsgHealth arrives on the downbeat where the drums come back in (26.47 s). [film time, story time] pairs;
+// beat of assets/audio/screen-track.m4a ("Timeless" instrumental from its drop, 120 BPM: a beat every 0.5 s,
+// bars at 0.91 + 2k s, and the drum pattern restarts every 4 s at 0.91 + 4k). MsgHealth arrives at the top of
+// a phrase (24.91 s) and the end card lands on the next-but-one (32.91 s). [film time, story time] pairs;
 // time between them is stretched linearly.
 const STORY = 38.0;
-const RETIME = [[0, 0], [4.07, 4.0], [7.69, 7.6], [17.08, 17.0], [19.97, 19.6], [26.47, 25.3], [31.53, 31.4], [34.42, 34.2], [37.1, STORY]];
-const DURATION = 37.1; // the film; the track's last bar ends at 37.2 s
+const RETIME = [[0, 0], [3.91, 4.0], [6.91, 7.6], [16.91, 17.0], [19.41, 19.6], [24.91, 25.3], [30.91, 31.4], [32.91, 34.2], [36.91, STORY]];
+const DURATION = 36.91; // the film ends as the phrase after the end card's comes round
 function remap(v, from, to) {
   for (let i = 1; i < RETIME.length; i++) {
     const a = RETIME[i - 1], b = RETIME[i];
@@ -136,7 +137,6 @@ const CAPS = [
   { at: 31.55, out: 34.05, s: 'Without *lifting a finger.*' },
 ];
 const EYES = [
-  { at: 4.1, out: 16.95, s: 'HOW A TOUCHSCREEN WORKS' },
   { at: 19.8, out: 25.2, s: 'A TYPICAL DAY' },
   { at: 25.3, out: 31.3, logo: true },
 ];
