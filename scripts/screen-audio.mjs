@@ -41,15 +41,15 @@ const bass = (f, d) => (t) => Math.min(1, t / 0.02) * Math.min(1, (d - t) / 0.3)
 const kick = (t) => Math.exp(-t * 16) * Math.sin(2 * Math.PI * 55 * (1 + 1.5 * Math.exp(-t * 35)) * t);
 
 const CH = { Am: [45, 57, 60, 64], F: [41, 57, 60, 65], C: [48, 55, 60, 64], G: [43, 55, 59, 62], Dm: [38, 57, 62, 65], E: [40, 56, 59, 64], Em: [40, 55, 59, 64] };
-const BAR = 2.4; // 100 bpm, 4/4
+const BAR = 2.0; // 120 bpm, 4/4
 // [start, chord, style]: hook · science · the hours · MsgHealth · end
 const plan = [];
 const run = (t0, t1, seq, style) => { for (let t = t0, i = 0; t < t1 - 0.01; t += BAR, i++) plan.push([t, Math.min(BAR, t1 - t), seq[i % seq.length], style]); };
-run(0, 7.0, ['Am', 'F', 'C'], 'hook');
-run(7.0, 30.6, ['Am', 'F', 'C', 'G'], 'science');
-run(30.6, 44.6, ['Dm', 'Am', 'E', 'Am', 'Dm', 'E'], 'hours');
-run(44.6, 57.8, ['C', 'G', 'Am', 'F'], 'lift');
-plan.push([57.8, 5.2, 'C', 'end']);
+run(0, 4.0, ['Am', 'F'], 'hook');
+run(4.0, 17.0, ['Am', 'F', 'C', 'G'], 'science');
+run(17.0, 25.3, ['Dm', 'Am', 'E', 'Am'], 'hours');
+run(25.3, 34.2, ['C', 'G', 'Am', 'F'], 'lift');
+plan.push([34.2, 3.8, 'C', 'end']);
 for (const [t0, d, ch, style] of plan) {
   const notes = CH[ch];
   const pg = style === 'lift' ? 0.06 : style === 'end' ? 0.07 : 0.045;
@@ -60,11 +60,11 @@ for (const [t0, d, ch, style] of plan) {
   const g = { hook: 0.05, science: 0.06, hours: 0.05, lift: 0.08, end: 0 }[style];
   for (let k = 0; k * step < d - 0.01 && g; k++) add(t0 + k * step, 1.2, (style === 'science' ? bell : pluck)(mtof(arp[k % 8] + 12)), g, k % 2 ? 0.35 : -0.35);
   if (style === 'lift') for (let k = 0; k < 4; k++) add(t0 + k * BAR / 4, 0.4, kick, 0.22);
-  if (style === 'hours') for (let k = 0; k < 4; k++) add(t0 + k * BAR / 4, 0.4, kick, 0.12);
+  if (style === 'hours' || style === 'hook') for (let k = 0; k < 4; k++) add(t0 + k * BAR / 4, 0.4, kick, 0.12);
 }
-add(57.8, 4.5, bell(mtof(84)), 0.09); add(57.8, 4.5, bell(mtof(79)), 0.07, 0.3);
+add(34.2, 3.6, bell(mtof(84)), 0.09); add(34.2, 3.6, bell(mtof(79)), 0.07, 0.3);
 // a soft electric hum under the field, swelling while the finger is down
-add(17.6, 13.0, (t) => Math.min(1, t / 1.2) * Math.min(1, (13.0 - t) / 0.8) * (0.6 + 0.4 * Math.sin(2 * Math.PI * 3 * t)) * (Math.sin(2 * Math.PI * 110 * t) + 0.3 * Math.sin(2 * Math.PI * 220 * t)), 0.035);
+add(8.4, 8.6, (t) => Math.min(1, t / 1.0) * Math.min(1, (8.6 - t) / 0.6) * (0.6 + 0.4 * Math.sin(2 * Math.PI * 3 * t)) * (Math.sin(2 * Math.PI * 110 * t) + 0.3 * Math.sin(2 * Math.PI * 220 * t)), 0.035);
 
 function reverb(x, mix = 0.22) {
   const combs = [1557, 1617, 1491, 1422].map((d) => ({ d, b: new Float32Array(d), i: 0 }));

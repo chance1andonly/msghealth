@@ -151,35 +151,33 @@ changed digit rolls in place (9:02 → 9:03).
 
 ---
 
-# "6 hours of this": 63-second explainer ad (16:9 and 9:16, 60 fps)
+# "Every touch": 38-second explainer ad (16:9 and 9:16, 60 fps)
 
-It starts as a short explainer on how a phone's touchscreen works, then turns into a pitch: most of a business owner's
-screen time goes to tapping out messages to clients, and MsgHealth can do that tapping for them. The captions tell the whole
-story, so it works with the sound off.
+It starts as a quick explainer on how a phone's touchscreen works, then turns into a pitch: a lot of a business owner's
+taps go to client admin, and MsgHealth can do that for them. The captions tell the whole story, so it works with the
+sound off. Until MsgHealth is named (25.3 s, `BRAND_AT`), everything is slate with an electric-cyan accent. The brand
+indigo arrives with the brand.
 
 - **Video:** `dist/msghealth-screen.mp4` (1920×1080) and `dist/msghealth-screen-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
 - Source: `screen.html` / `screen-vertical.html`, `src/screen.js`. The short side is 1080 px in both formats. In 16:9 the captions
   sit on the left with the object on the right. In 9:16 the captions are at the top and the object is below them.
-- Sound: `scripts/screen-audio.mjs` synthesises an original music bed and mixes in the sound effects from `assets/audio`, cued
-  from `window.SFX`.
-- Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills: `ENTRY=screen.html node scripts/snap.mjs out/ 27.6`
+- Sound: `scripts/screen-audio.mjs` synthesises an original 120 BPM music bed and mixes in the sound effects from `assets/audio`,
+  cued from `window.SFX`.
+- Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills: `ENTRY=screen.html node scripts/snap.mjs out/ 14.8`
 
 | Time | Caption | What's on screen |
 |---|---|---|
-| 0–3s | "Your screen time: 6 hours a day." | A phone with a Screen Time widget showing 6h 0m. A finger taps it. |
-| 3–7s | "That's 6 hours of this." | The finger taps and swipes faster and faster while the widget's "Touches today" count climbs to 2,617 |
-| 7–10s | "Ever wonder how it knows where you touched?" | The phone tilts back into an isometric view |
-| 10–14s | "Your screen is a stack of layers." / "The magic is in the middle one." | It comes apart into labelled layers: cover glass, touch sensor, display. The sensor lights up. |
-| 14–17.5s | "Under the glass: a grid of see-through wires." | Zoom into the sensor. Diamond-pattern drive electrodes run across and sense electrodes run down, with drive pulses travelling along the rows. |
-| 17.5–20.5s | "A tiny current gives every crossing an electric field." | Charge particles flow in arcs from drive to sense at every crossing |
-| 20.5–24s | "Your finger conducts electricity. It pulls charge away." | A see-through finger presses down. Nearby particles stream up into it and the field around it dims. |
-| 24–27s | "The phone scans the grid over 100 times a second…" | A scan line sweeps the grid (labelled "shown slowed down") and the crossings that lost charge light up as a heat map |
-| 27–30.5s | "…finds where the charge dropped. That's your touch." | A crosshair locks onto the centre of the drop with a coordinate tag, then follows the finger as it drags |
-| 30.5–35.5s | "You do this thousands of times a day." / "Run a business? Then you know where it goes." | Back to the phone for a burst of taps |
-| 35.5–44.5s | "Reaching out. Booking. Rescheduling." / "5 of your 6 hours, spent keeping clients on the books." | A Screen Time card. Reaching out to clients 3h, Booking appointments 1h, Rescheduling & cancellations 1h, Everything else 1h. |
-| 44.5–52.5s | (MsgHealth logo) "It does all that tapping for you." / "That's 5 hours back. Every day." | The three business rows turn "Automatic" one after another. Their bars drain, the total counts down to 1h 0m and "5h 0m saved" appears. |
-| 52.5–57.8s | "All without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: follow-ups sent, a booking, a reschedule, reminders |
-| 57.8–63s | — | Logo, "Get your hours back.", msghealth.net |
+| 0–4s | "You're on your phone 5 hours a day." / "Ever wonder how it knows where you touch?" | A finger taps and swipes a phone. Its Screen Time widget reads 5h 1m, with pickups counting up to 186. |
+| 4–7.6s | "It's a stack of layers." / "The trick is the touch sensor." | The phone tilts and comes apart: cover glass, touch sensor, display. The sensor lights up. |
+| 7.6–10.6s | "A grid of invisible wires. Every crossing holds an electric field." | Zoom into the sensor's diamond electrode grid. Drive pulses run along the rows and charge particles flow at every crossing. |
+| 10.6–13.3s | "Your finger conducts. It pulls charge away." | A see-through finger presses down, and nearby charge streams up into it |
+| 13.3–15.4s | "The phone scans for the drop over 100 times a second." | A scan line sweeps the grid ("shown slowed down"). The drained crossings light up and a crosshair locks on with a coordinate tag. |
+| 15.4–17s | "That's your touch." | The crosshair follows the finger as it drags |
+| 17–19.6s | "Run a business? A lot of those touches are for clients." | Back to the phone for a burst of taps |
+| 19.6–25.3s | "Booking. Reminders. Rescheduling. Follow-ups." / "Over 2 hours a day, just keeping your calendar full." | Client admin per day: booking 45m, reminders & confirmations 30m, rescheduling & cancellations 25m, follow-ups & rebooking 20m, review requests 10m = 2h 10m |
+| 25.3–31.4s | (MsgHealth logo) "It does all of that for you." / "That's 2 hours back. Every day." | The colour turns brand indigo. Each row flips to "Automatic", its bar drains, the total counts down to 0m and "2h 10m back" appears. |
+| 31.4–34.2s | "Without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: reminders sent, a booking, a reschedule, a review request |
+| 34.2–38s | — | Logo, "Get your hours back.", msghealth.net |
 
 How a touchscreen works, as shown: a phone screen is a mutual-capacitance touchscreen. Under the cover glass sits a grid
 of transparent electrodes. Drive lines run one way and sense lines run the other. A small signal on the drive lines sets up
@@ -187,10 +185,21 @@ an electric field at each crossing. A finger is conductive, so it draws some of 
 it. The touch controller scans the grid many times a second (typically 60–240 Hz), finds the crossings whose signal dropped,
 and takes their centre as the touch point.
 
-Numbers: "6 hours a day" and the 3h / 1h / 1h / 1h split are illustrative. "2,617 touches a day" is the average from
-dscout's 2016 "Mobile Touches" study. The notification names are made up.
+Where the numbers come from:
+- **5 hours a day, 186 pickups:** Reviews.org's 2025 survey of US smartphone users (about 5h 1m a day, 186 checks a day).
+  Other 2025 estimates range from about 4 to 5.5 hours.
+- **The client-admin day (2h 10m)** is an estimate for a typical appointment-based business, built from published benchmarks:
+  - roughly 7 hours a week on scheduling;
+  - about 45 minutes a day on reminder calls (a salon-software benchmark);
+  - most cancellations arriving with under 24 hours' notice (Fresha);
+  - administrative work taking about a third of an owner's ~45-hour week.
+
+  Most of these figures come from booking-software vendors, so treat the split as illustrative. Every row is something
+  MsgHealth automates: booking and appointment management, reminders, rescheduling, automatic SMS & email follow-ups,
+  and review requests.
+- The names in the notifications are made up.
 
 ### Optional voiceover
 
-The captions can be read as a VO, line by line, in the windows given above. A natural, curious delivery suits the science
-half. Lift the energy at 44.5s, when MsgHealth arrives.
+The captions can be read as a VO, line by line, in the windows given above. The pace is quick, so keep it tight and
+conversational. Lift the energy at 25.3s, when MsgHealth arrives.
