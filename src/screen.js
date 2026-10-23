@@ -13,7 +13,20 @@
 // side is 1080 in both, so every object is sized once; only where things sit changes.
 const V = !!(window.FORMAT && window.FORMAT.vertical);
 const W = V ? 1080 : 1920, H = V ? 1920 : 1080;
-const DURATION = 38.0;
+// The story is written on its own clock (STORY seconds). RETIME maps it onto the music: every cut lands on a
+// beat of assets/audio/screen-track.m4a (83 BPM, a beat every 0.7225 s, bar lines at 0.46 + 2.89k s), and
+// MsgHealth arrives on the downbeat where the drums come back in (26.47 s). [film time, story time] pairs;
+// time between them is stretched linearly.
+const STORY = 38.0;
+const RETIME = [[0, 0], [4.07, 4.0], [7.69, 7.6], [17.08, 17.0], [19.97, 19.6], [26.47, 25.3], [31.53, 31.4], [34.42, 34.2], [37.1, STORY]];
+const DURATION = 37.1; // the film; the track's last bar ends at 37.2 s
+function remap(v, from, to) {
+  for (let i = 1; i < RETIME.length; i++) {
+    const a = RETIME[i - 1], b = RETIME[i];
+    if (v <= b[from] || i === RETIME.length - 1) return a[to] + (b[to] - a[to]) * Math.max(0, Math.min(1, (v - a[from]) / (b[from] - a[from])));
+  }
+}
+const storyAt = (t) => remap(t, 0, 1), filmAt = (st) => remap(st, 1, 0);
 const BRAND_AT = 25.3; // MsgHealth is named here; the brand colour arrives with it
 const C = BRAND.colors;
 const FONT = 'Inter';
@@ -25,7 +38,9 @@ const AMBER = '#f2b441', SKIN = { hi: '#e2a888', mid: '#c98a68', lo: '#a36a4e', 
 
 // Layout. The object (phone, grid, card) sits right of the captions in 16:9, below them in 9:16.
 const OBJ = V ? { x: 540, y: 1190 } : { x: 1340, y: 540 };
-const CAP = V ? { x: 540, y: 340, w: 960, size: 72, align: 'center' } : { x: 140, y: 540, w: 740, size: 68, align: 'left' };
+// Captions hang from a fixed first line (y) so nothing moves when a caption has more or fewer lines; the
+// eyebrow sits a fixed distance above it.
+const CAP = V ? { x: 540, y: 300, w: 960, size: 72, align: 'center' } : { x: 140, y: 450, w: 740, size: 68, align: 'left' };
 const PS = V ? 1.22 : 0.98;        // phone scale
 const CS = V ? 1.3 : 1;            // card scale
 const G = V ? 920 : 800;           // touch-grid size
@@ -154,7 +169,7 @@ function fadeState(t, at, out, i = 0) {
 function drawCaptions(t) {
   CAPS.forEach((c) => {
     if (t < c.at || t > c.out) return;
-    const lines = capLines(c), lh = lineH(), y0 = CAP.y - ((lines.length - 1) * lh) / 2;
+    const lines = capLines(c), lh = lineH(), y0 = CAP.y;
     lines.forEach(({ l, width, sp }, i) => {
       const f = fadeState(t, c.at, c.out, i), y = y0 + i * lh + f.dy;
       if (f.a <= 0.001) return;
@@ -167,8 +182,7 @@ function drawCaptions(t) {
   });
   EYES.forEach((e) => {
     if (t < e.at || t > e.out) return;
-    const cur = CAPS.filter((c) => c.at <= t + 0.6 && c.at >= e.at - 0.01).pop() ?? CAPS.find((c) => c.at >= e.at);
-    const n = capLines(cur).length, y = CAP.y - ((n - 1) * lineH()) / 2 - CAP.size * 0.62 - 44;
+    const y = CAP.y - CAP.size * 0.62 - 44;
     const f = fadeState(t, e.at, e.out);
     ctx.save(); ctx.globalAlpha = f.a; if (f.blur > 0.3) ctx.filter = `blur(${f.blur.toFixed(1)}px)`;
     if (e.logo) {
@@ -343,7 +357,7 @@ function sHook(t) {
   const f = gesture(t, TAPS1, [330, 760], [380, 820], 0.12, 3.95);
   phone(t, () => { homeScreen(pickupsAt(t)); ripples(t, TAPS1); }, () => { if (f.visible) finger(f.x, f.y, f.lift); }, { dy: (1 - k) * 60, alpha: k });
 }
-TAPS1.forEach((c) => window.SFX.push({ t: c.t0, kind: 'click', gain: 0.32 }));
+TAPS1.forEach((c) => window.SFX.push({ t: c.t0, kind: 'click', gain: 0.5 }));
 
 // ── 2 · the layers ───────────────────────────────────────────────────────────
 // Each layer is a plane: rotated by theta in its own plane, squashed by sy (the tilt), lifted by z.
@@ -390,7 +404,7 @@ function sLayers(t) {
   // labels with leader lines
   const lx = V ? 872 : OBJ.x + 330;
   [['Cover glass', spread, 5.1], ['Touch sensor', 0, 5.22], ['Display', -spread, 5.34]].forEach(([s, z, at], i) => {
-    const a = ease.out(seg(t, at, at + 0.3)) * (i === 1 ? 1 : dimOthers);
+    const a = ease.out(seg(t, at, at + 0.3)) * (i === 1 ? 1 : dimOthers) * (1 - seg(t, 7.25, 7.5)); // gone before the zoom
     if (a <= 0) return;
     const [px, py] = planePoint(th, sy, sc, z, PW / 2 + 15, -PH / 2 + 120);
     ctx.save(); ctx.globalAlpha = a;
@@ -430,7 +444,7 @@ function fingerGrid(t) {
   const contact = ease.out(seg(t, 10.8, 11.0));
   return { x, y, contact, alpha: seg(t, 10.15, 10.45) };
 }
-window.SFX.push({ t: 11.0, kind: 'click', gain: 0.7 }, { t: 14.6, kind: 'click', gain: 0.55 });
+window.SFX.push({ t: 11.0, kind: 'click', gain: 0.9 }, { t: 14.6, kind: 'shutter', gain: 0.9 }); // finger down; the touch is pinned
 function sGrid(t) {
   stage(0.12);
   ctx.save(); ctx.translate(OBJ.x, OBJ.y);
@@ -532,7 +546,7 @@ function sGrid(t) {
     ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
   }
   // the controller's answer: a crosshair on the centre of the drop
-  const lock = ease.quint(seg(t, 14.6, 14.9));
+  const lock = ease.quint(seg(t, 14.6, 14.9)) * (1 - seg(t, 16.6, 16.9)); // gone before the zoom out
   if (lock > 0) {
     let sx = 0, sy = 0, sw = 0;
     CROSS.forEach((p) => { const w = pull(p.x, p.y); if (w > 0.08) { sx += p.x * w; sy += p.y * w; sw += w; } });
@@ -570,7 +584,7 @@ function sTurn(t) {
   const f = gesture(t, TAPS2, [330, 760], [380, 820], 17.0, 19.6);
   phone(t, () => { homeScreen(PICKUPS); ripples(t, TAPS2); }, () => { if (f.visible) finger(f.x, f.y, f.lift); });
 }
-TAPS2.forEach((c) => window.SFX.push({ t: c.t0, kind: 'click', gain: 0.28 }));
+TAPS2.forEach((c) => window.SFX.push({ t: c.t0, kind: 'click', gain: 0.45 }));
 
 // ── 5 · where the hours go, and MsgHealth taking them back ───────────────────
 // A service business's client admin on a typical day, in minutes. Estimates, built from published
@@ -584,7 +598,9 @@ const ROWS = [
   { label: 'Review requests', sub: 'Asking happy clients for reviews', auto: 'Sent after every visit', m: 10, icon: 'star', at: 21.4, flip: 27.3 },
 ];
 const MAXM = 45;
-ROWS.forEach((r) => { window.SFX.push({ t: r.at, kind: 'click', gain: 0.4 }); window.SFX.push({ t: r.flip, kind: 'sent', gain: 0.6 }); });
+ROWS.forEach((r) => window.SFX.push({ t: r.at, kind: 'click', gain: 0.55 }));
+// the time drains away as the rows turn automatic; a coin when the hours come back
+window.SFX.push({ t: 22.65, kind: 'wrong', gain: 0.45 }, { t: ROWS[0].flip, kind: 'ff', gain: 0.7 }, { t: 28.3, kind: 'coin', gain: 0.35 });
 function glyph(kind, x, y) {
   ctx.save(); ctx.translate(x, y);
   ctx.strokeStyle = '#fff'; ctx.fillStyle = '#fff'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -623,11 +639,13 @@ function sCard(t) {
     if (f > 0.5) check(x0 + pad + 28, ry + 40, 24, '#fff', 4); else glyph(r.icon, x0 + pad + 28, ry + 40);
     const tx = x0 + pad + 76;
     text(r.label, tx, ry + 24, 26, 600, '#fff');
-    ctx.save(); ctx.globalAlpha *= 1 - f; text(r.sub, tx, ry + 56, 19, 500, SOFT); ctx.restore();
-    ctx.save(); ctx.globalAlpha *= f; text(r.auto, tx, ry + 56, 19, 600, IN.hi); ctx.restore();
+    // the old text leaves before the new arrives, so the two never sit on top of each other
+    const was = 1 - seg(f, 0, 0.5), now = seg(f, 0.5, 1);
+    ctx.save(); ctx.globalAlpha *= was; text(r.sub, tx, ry + 56, 19, 500, SOFT); ctx.restore();
+    ctx.save(); ctx.globalAlpha *= now; text(r.auto, tx, ry + 56, 19, 600, IN.hi); ctx.restore();
     // time, or the Automatic pill
-    ctx.save(); ctx.globalAlpha *= 1 - f; text(`${r.m}m`, x0 + CW - pad, ry + 24, 28, 700, '#fff', 'right'); ctx.restore();
-    if (f > 0) { ctx.save(); ctx.globalAlpha *= f; pill(x0 + CW - pad, ry + 24, 'Automatic', C.primary, 17, 'right', true); ctx.restore(); }
+    ctx.save(); ctx.globalAlpha *= was; text(`${r.m}m`, x0 + CW - pad, ry + 24, 28, 700, '#fff', 'right'); ctx.restore();
+    if (now > 0) { ctx.save(); ctx.globalAlpha *= now; pill(x0 + CW - pad, ry + 24, 'Automatic', C.primary, 17, 'right', true); ctx.restore(); }
     // bar
     const bw = CW - pad - (tx - x0), grow = ease.out(seg(t, r.at + 0.05, r.at + 0.6)), drain = ease.inOut(seg(t, r.flip, r.flip + 0.6));
     fillRR(tx, ry + 78, bw, 9, 4.5, 'rgba(255,255,255,0.08)');
@@ -637,7 +655,7 @@ function sCard(t) {
   });
   ctx.restore();
 }
-window.SFX.push({ t: BRAND_AT, kind: 'snap', gain: 0.8 }, { t: BRAND_AT, kind: 'riser', gain: 0.7 });
+window.SFX.push({ t: BRAND_AT, kind: 'riser', gain: 0.55 }, { t: BRAND_AT, kind: 'idea', gain: 0.8 });
 
 // ── 6 · without lifting a finger ─────────────────────────────────────────────
 const NOTES = [
@@ -646,7 +664,7 @@ const NOTES = [
   { at: 33.0, s: 'Leo moved to Fri, 10:30 AM' },
   { at: 33.45, s: 'Review request sent to Sam' },
 ];
-NOTES.forEach((n) => window.SFX.push({ t: n.at, kind: 'sent', gain: 0.8 }));
+NOTES.forEach((n, i) => window.SFX.push({ t: n.at, kind: 'notify', gain: i ? 0.3 : 0.45 }));
 function lockScreen(t) {
   screenBg(true); statusBar('10:42');
   text('Tuesday, October 20', 0, -PH / 2 + 104, 20, 600, SOFT, 'center');
@@ -682,7 +700,7 @@ function sHands(t) {
 }
 
 // ── 7 · end card ─────────────────────────────────────────────────────────────
-window.SFX.push({ t: 34.2, kind: 'snap', gain: 0.9 });
+window.SFX.push({ t: 34.2, kind: 'punch', gain: 0.6 });
 function sEnd(t) {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   const cy = H / 2 - 40, g = ctx.createRadialGradient(W / 2, cy, 0, W / 2, cy, 620);
@@ -703,7 +721,7 @@ function sEnd(t) {
   ctx.restore();
   const k3 = ease.quint(seg(t, 35.2, 35.7));
   ctx.save(); ctx.globalAlpha = k3; text(BRAND.url, W / 2, cy + 236, 38, 500, SOFT, 'center'); ctx.restore();
-  const out = seg(t, DURATION - 0.6, DURATION);
+  const out = seg(t, STORY - 0.6, STORY);
   if (out > 0) { ctx.fillStyle = `rgba(0,0,0,${out})`; ctx.fillRect(0, 0, W, H); }
 }
 
@@ -716,10 +734,10 @@ const SCENES = [
   [17.0, 19.6, sTurn, 'zoomOut', 0.5],
   [19.6, 31.4, sCard, 'cross', 0.4],
   [31.4, 34.2, sHands, 'cross', 0.4],
-  [34.2, DURATION + 1, sEnd],         // straight cut, with a snap
+  [34.2, STORY + 1, sEnd],         // straight cut, with a snap
 ];
-SCENES.forEach(([st, , , type, dur]) => { if (type) window.SFX.push({ t: st + dur / 2, kind: 'whoosh', gain: type === 'cross' ? 0.4 : 0.8 }); });
-window.SFX.push({ t: 4.4, kind: 'whoosh', gain: 0.45 }, { t: 5.1, kind: 'whoosh', gain: 0.6 });
+SCENES.forEach(([st, , , type, dur]) => { if (type) window.SFX.push(type === 'cross' ? { t: st + dur / 2, kind: 'swoosh', gain: 0.35 } : { t: st + dur / 2, kind: 'whoosh', gain: 0.5 }); });
+window.SFX.push({ t: 4.4, kind: 'swoosh', gain: 0.4 }); // the phone tips back
 
 function renderInto(k, fn, t) {
   const c = OFF[k]; ctx = c.getContext('2d');
@@ -728,18 +746,20 @@ function renderInto(k, fn, t) {
   return c;
 }
 function drawScaled(img, s, a) {
+  img._map = { s, a };
   ctx.save(); ctx.globalAlpha = a;
   ctx.translate(OBJ.x, OBJ.y); ctx.scale(s, s); ctx.translate(-OBJ.x, -OBJ.y);
   ctx.drawImage(img, 0, 0); ctx.restore();
 }
 function transition(type, p, A, B) {
-  const e = ease.inOut(p);
+  const e = ease.inOut(p), out = 1 - ease.out(seg(e, 0, 0.55)), inn = ease.out(seg(e, 0.45, 1));
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
-  if (type === 'zoomIn') { drawScaled(A, 1 + 0.9 * e, 1 - e); drawScaled(B, 0.7 + 0.3 * e, e); }
-  else if (type === 'zoomOut') { drawScaled(A, 1 - 0.45 * e, 1 - e); drawScaled(B, 1.5 - 0.5 * e, e); }
-  else { drawScaled(A, 1, 1); drawScaled(B, 1, e); }
+  if (type === 'zoomIn') { drawScaled(A, 1 + 0.9 * e, out); drawScaled(B, 0.7 + 0.3 * e, inn); }
+  else if (type === 'zoomOut') { drawScaled(A, 1 - 0.45 * e, out); drawScaled(B, 1.5 - 0.5 * e, inn); }
+  else { drawScaled(A, 1, out); drawScaled(B, 1, inn); }
 }
-function renderFrame(t) {
+function renderFrame(ft) {
+  const t = storyAt(ft);
   ctx = MAIN;
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
   const i = Math.max(0, SCENES.findIndex(([s, e]) => t >= s && t < e));
@@ -747,13 +767,37 @@ function renderFrame(t) {
   if (i > 0 && type && t < start + dur) {
     const A = renderInto(0, SCENES[i - 1][2], t), B = renderInto(1, fn, t);
     ctx = MAIN; transition(type, (t - start) / dur, A, B);
+    if (window.TEXT_LOG) window.TEXT_LOG.forEach((b) => { // place text drawn off screen where the transition put it
+      const m = b.layer === 'main' ? null : OFF[b.layer]._map;
+      if (!m) return;
+      const X = (v) => OBJ.x + (v - OBJ.x) * m.s, Y = (v) => OBJ.y + (v - OBJ.y) * m.s;
+      Object.assign(b, { x0: X(b.x0), x1: X(b.x1), y0: Y(b.y0), y1: Y(b.y1), a: b.a * m.a, layer: 'main' });
+    });
   } else fn(t);
   ctx = MAIN; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
   drawCaptions(t);
 }
 
+// Sound cues are written in story time; the soundtrack wants film time.
+window.SFX = window.SFX.map((c) => ({ ...c, t: filmAt(c.t) }));
 window.DURATION = DURATION;
 window.renderFrame = renderFrame;
+// Text audit hook (scripts/audit-text.mjs): while window.TEXT_LOG is an array, every string drawn is logged with
+// its on-screen box.
+{
+  const fill = CanvasRenderingContext2D.prototype.fillText;
+  CanvasRenderingContext2D.prototype.fillText = function (str, x, y, ...rest) {
+    const T = this.getTransform();
+    if (window.TEXT_LOG && Math.abs(T.b) < 1e-6) { // rotated text is texture on a tilted layer, not copy
+      const m = this.measureText(str);
+      const pts = [[x - m.actualBoundingBoxLeft, y - m.actualBoundingBoxAscent], [x + m.actualBoundingBoxRight, y + m.actualBoundingBoxDescent]]
+        .flatMap(([px, py], i, a) => [[px, py], [a[1 - i][0], py]]).map(([px, py]) => [T.a * px + T.c * py + T.e, T.b * px + T.d * py + T.f]);
+      const xs = pts.map((q) => q[0]), ys = pts.map((q) => q[1]);
+      window.TEXT_LOG.push({ str, x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys), a: this.globalAlpha, layer: this.canvas === MAIN.canvas ? 'main' : OFF.indexOf(this.canvas) });
+    }
+    return fill.call(this, str, x, y, ...rest);
+  };
+}
 window.ready = (async () => {
   MAIN = document.getElementById('c').getContext('2d');
   ctx = MAIN;
@@ -765,23 +809,22 @@ window.ready = (async () => {
   return true;
 })();
 
-// ── player (silent preview; the soundtrack is built at render time) ──────────
+// ── player (plays the track in sync) ─────────────────────────────────────────
 (() => {
-  const btn = document.getElementById('play'), seek = document.getElementById('seek'), tm = document.getElementById('time');
-  let playing = false, cur = 0, t0 = 0, w0 = 0;
+  const btn = document.getElementById('play'), seek = document.getElementById('seek'), tm = document.getElementById('time'), au = document.getElementById('track');
+  let playing = false, cur = 0;
   const show = (t) => { cur = t; renderFrame(t); seek.value = (t / DURATION) * 1000; tm.textContent = `${t.toFixed(1)}s / ${DURATION}s`; };
-  const loop = (now) => {
+  const loop = () => {
     if (!playing) return;
-    const t = cur0() + (now - w0) / 1000;
-    if (t >= DURATION) { playing = false; btn.textContent = 'Replay'; show(DURATION); return; }
+    const t = au.currentTime;
+    if (t >= DURATION || au.ended) { playing = false; au.pause(); btn.textContent = 'Replay'; show(DURATION); return; }
     show(t); requestAnimationFrame(loop);
   };
-  const cur0 = () => t0;
   btn.onclick = () => {
-    if (playing) { playing = false; btn.textContent = 'Play'; return; }
+    if (playing) { playing = false; au.pause(); btn.textContent = 'Play'; return; }
     if (cur >= DURATION) cur = 0;
-    t0 = cur; w0 = performance.now(); playing = true; btn.textContent = 'Pause'; requestAnimationFrame(loop);
+    au.currentTime = cur; au.play(); playing = true; btn.textContent = 'Pause'; requestAnimationFrame(loop);
   };
-  seek.oninput = () => { playing = false; btn.textContent = 'Play'; show((seek.value / 1000) * DURATION); };
+  seek.oninput = () => { playing = false; au.pause(); btn.textContent = 'Play'; show((seek.value / 1000) * DURATION); };
   window.ready.then(() => { const q = new URLSearchParams(location.search).get('t'); if (q) show(+q); });
 })();

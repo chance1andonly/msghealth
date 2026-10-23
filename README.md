@@ -151,33 +151,69 @@ changed digit rolls in place (9:02 → 9:03).
 
 ---
 
-# "Every touch": 38-second explainer ad (16:9 and 9:16, 60 fps)
+# "Every touch": 37-second explainer ad (16:9 and 9:16, 60 fps)
 
 It starts as a quick explainer on how a phone's touchscreen works, then turns into a pitch: a lot of a business owner's
 taps go to client admin, and MsgHealth can do that for them. The captions tell the whole story, so it works with the
-sound off. Until MsgHealth is named (25.3 s, `BRAND_AT`), everything is slate with an electric-cyan accent. The brand
-indigo arrives with the brand.
+sound off. Until MsgHealth is named, everything is slate with an electric-cyan accent. The brand indigo arrives with
+the brand, on the downbeat at 26.47 s where the drums come back in.
 
 - **Video:** `dist/msghealth-screen.mp4` (1920×1080) and `dist/msghealth-screen-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
 - Source: `screen.html` / `screen-vertical.html`, `src/screen.js`. The short side is 1080 px in both formats. In 16:9 the captions
   sit on the left with the object on the right. In 9:16 the captions are at the top and the object is below them.
-- Sound: `scripts/screen-audio.mjs` synthesises an original 120 BPM music bed and mixes in the sound effects from `assets/audio`,
-  cued from `window.SFX`.
-- Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills: `ENTRY=screen.html node scripts/snap.mjs out/ 14.8`
+- Captions hang from a fixed first line, with the eyebrow a fixed distance above. Nothing jumps when a caption has more or
+  fewer lines. Captions are drawn over the scenes, so a transition never moves them.
+- Labels inside a scene leave before it transitions out. Transitions and card rows swap their text in sequence: the
+  outgoing text is gone before the incoming text is readable.
+- **Text check:** `ENTRY=screen.html node scripts/audit-text.mjs 0.05` (and `screen-vertical.html`) samples 20 frames a second.
+  It reports any text that overlaps other text or is cropped by the frame. Both formats currently report 0 issues.
+- **Music:** `assets/audio/screen-track.m4a` is the supplied TikTok instrumental ("GOAT Instrumentals Pt. 239", a "Sing About Me"
+  instrumental). It is cut at 37.2 s, before TikTok's outro sound. It runs at 83 BPM: a beat every 0.7225 s, with bar lines at
+  0.46 + 2.89k s. Check you have the rights before running it as a paid ad.
+- **Timing:** the story is written on its own clock, and `RETIME` in `src/screen.js` maps it onto the music so that every cut
+  lands on a beat:
+
+  | Moment | Time |
+  |---|---|
+  | Layers | 4.07 s |
+  | Grid | 7.69 s |
+  | Back to the phone | 17.08 s |
+  | Card | 19.97 s |
+  | MsgHealth | 26.47 s |
+  | Lock screen | 31.53 s |
+  | End card | 34.42 s |
+- **Sound effects** are cut from the supplied effects reel into `assets/audio/fx-*.wav`, and `scripts/screen-audio.mjs` places
+  them from `window.SFX`:
+
+  | Effect | Where it plays |
+  |---|---|
+  | click | taps, finger down on the grid, card rows appearing |
+  | swoosh | phone tilting back, cross-fades |
+  | whoosh | zoom into the grid and back out |
+  | camera shutter | the touch point locking on |
+  | wrong answer | "Over 2 hours a day" |
+  | riser + good idea | building into MsgHealth and landing on it |
+  | fast forward | the hours draining as the rows turn automatic |
+  | Mario coin | "2 hours back" |
+  | Discord join | each notification |
+  | punch | the logo landing on the end card |
+
+  The reel's game-menu, keyboard, Windows-error sounds and its TikTok outro aren't used.
+- Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills (film time): `ENTRY=screen.html node scripts/snap.mjs out/ 12`
 
 | Time | Caption | What's on screen |
 |---|---|---|
-| 0–4s | "You're on your phone 5 hours a day." / "Ever wonder how it knows where you touch?" | A finger taps and swipes a phone. Its Screen Time widget reads 5h 1m, with pickups counting up to 186. |
-| 4–7.6s | "It's a stack of layers." / "The trick is the touch sensor." | The phone tilts and comes apart: cover glass, touch sensor, display. The sensor lights up. |
-| 7.6–10.6s | "A grid of invisible wires. Every crossing holds an electric field." | Zoom into the sensor's diamond electrode grid. Drive pulses run along the rows and charge particles flow at every crossing. |
-| 10.6–13.3s | "Your finger conducts. It pulls charge away." | A see-through finger presses down, and nearby charge streams up into it |
+| 0–4.1s | "You're on your phone 5 hours a day." / "Ever wonder how it knows where you touch?" | A finger taps and swipes a phone. Its Screen Time widget reads 5h 1m, with pickups counting up to 186. |
+| 4.1–7.7s | "It's a stack of layers." / "The trick is the touch sensor." | The phone tilts and comes apart: cover glass, touch sensor, display. The sensor lights up. |
+| 7.7–10.7s | "A grid of invisible wires. Every crossing holds an electric field." | Zoom into the sensor's diamond electrode grid. Drive pulses run along the rows and charge particles flow at every crossing. |
+| 10.7–13.3s | "Your finger conducts. It pulls charge away." | A see-through finger presses down, and nearby charge streams up into it |
 | 13.3–15.4s | "The phone scans for the drop over 100 times a second." | A scan line sweeps the grid ("shown slowed down"). The drained crossings light up and a crosshair locks on with a coordinate tag. |
-| 15.4–17s | "That's your touch." | The crosshair follows the finger as it drags |
-| 17–19.6s | "Run a business? A lot of those touches are for clients." | Back to the phone for a burst of taps |
-| 19.6–25.3s | "Booking. Reminders. Rescheduling. Follow-ups." / "Over 2 hours a day, just keeping your calendar full." | Client admin per day: booking 45m, reminders & confirmations 30m, rescheduling & cancellations 25m, follow-ups & rebooking 20m, review requests 10m = 2h 10m |
-| 25.3–31.4s | (MsgHealth logo) "It does all of that for you." / "That's 2 hours back. Every day." | The colour turns brand indigo. Each row flips to "Automatic", its bar drains, the total counts down to 0m and "2h 10m back" appears. |
-| 31.4–34.2s | "Without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: reminders sent, a booking, a reschedule, a review request |
-| 34.2–38s | — | Logo, "Get your hours back.", msghealth.net |
+| 15.4–17.1s | "That's your touch." | The crosshair follows the finger as it drags |
+| 17.1–20s | "Run a business? A lot of those touches are for clients." | Back to the phone for a burst of taps |
+| 20–26.5s | "Booking. Reminders. Rescheduling. Follow-ups." / "Over 2 hours a day, just keeping your calendar full." | Client admin per day: booking 45m, reminders & confirmations 30m, rescheduling & cancellations 25m, follow-ups & rebooking 20m, review requests 10m = 2h 10m |
+| 26.5–31.5s | (MsgHealth logo) "It does all of that for you." / "That's 2 hours back. Every day." | The colour turns brand indigo. Each row flips to "Automatic", its bar drains, the total counts down to 0m and "2h 10m back" appears. |
+| 31.5–34.4s | "Without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: reminders sent, a booking, a reschedule, a review request |
+| 34.4–37.1s | — | Logo, "Get your hours back.", msghealth.net |
 
 How a touchscreen works, as shown: a phone screen is a mutual-capacitance touchscreen. Under the cover glass sits a grid
 of transparent electrodes. Drive lines run one way and sense lines run the other. A small signal on the drive lines sets up
@@ -202,4 +238,4 @@ Where the numbers come from:
 ### Optional voiceover
 
 The captions can be read as a VO, line by line, in the windows given above. The pace is quick, so keep it tight and
-conversational. Lift the energy at 25.3s, when MsgHealth arrives.
+conversational. Lift the energy at 26.5s, when MsgHealth arrives.
