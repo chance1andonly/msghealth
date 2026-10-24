@@ -273,3 +273,97 @@ Where the numbers come from:
 
 The captions can be read as a VO, line by line, in the windows given above. The pace is quick, so keep it tight and
 conversational. Lift the energy at 24.9s, when MsgHealth arrives.
+
+---
+
+# "The canary": 36-second vertical ad (9:16, 30 fps)
+
+A "did you know" short, in the format of the supplied reference ad: a flat-vector story told one caption at a time,
+then a turn into the product. For 75 years coal miners took a canary to work. Deadly gas could build up with no smell
+and no color, but the canary felt it first, and when it stopped singing the miners got out. Then: your customers go
+quiet before they leave too. MsgHealth hears the silence.
+
+- **Video:** `dist/msghealth-canary-9x16.mp4` (1080×1920, 30 fps, 36 s, for TikTok, Reels and Shorts)
+- Source: `canary.html`, `src/canary.js` (the whole film), `src/canary-vo.js` (voiceover clip lengths and caption timing)
+- Render: `npm run render:canary`. Text check: `npm run audit:canary` (0 issues). Stills: `ENTRY=canary.html node scripts/snap.mjs out/ 4.3 25.4`
+- Look: act 1 is a flat cross-section of the ground (sky and winding tower, earth layers, the gallery with timber
+  sets, lanterns and rails), with a camera that tilts down the shaft and pushes into the cage. The gas shows in green
+  at first. On "no smell, no color" the fill drains away until only a shimmering dashed outline is left. Act 2 is black
+  with a faint grid in the MsgHealth indigo. Captions are one phrase at a time in a black box. Accent words are canary
+  yellow in the mine and indigo after the turn.
+- **Voiceover:** synthesised with Kokoro TTS (voice `af_heart`, speed 1.08). Each line is its own clip,
+  `assets/audio/canary/vo-NN.wav`. `VO_AT` in `src/canary.js` sets when each clip starts, and every story beat (`T`) is
+  read off the voiceover, so picture, captions and sound stay locked to it. Caption chunk timings were found by
+  aligning syllables to each clip's voiced frames, then checked by hand. Swap in a recorded read by replacing the clips
+  and adjusting the offsets in `src/canary-vo.js`.
+- **Sound** (`scripts/canary-audio.mjs`): a synthesised music-box ostinato that cuts dead on "stopped singing", the
+  canary's chirps (they weaken as the gas reaches it), mine rumble, drips and footsteps, a heartbeat under "your
+  customers go quiet", then a 112 BPM groove from the logo hit. The drums drop out under "Stop guessing" and come back
+  for the end card. Effects come from `assets/audio/fx-*.wav`, placed from `window.SFX`. The score ducks under the
+  voice. The mix lands around −15 LUFS.
+
+| Time | Voiceover | What's on screen |
+|---|---|---|
+| 0–3.7s | "For 75 years, coal miners took a tiny bird to work." | Tilt down from the winding tower to the gallery. A miner walks in with a brass cage, then a push-in on it. |
+| 3.9–4.6s | "A canary." | Close on the canary, singing. Notes float up. |
+| 5.0–9.0s | "Deep underground, a deadly gas could build up, with no smell, and no color." | Pull back to the full depth. Green gas rolls in along the gallery, then fades to a dashed outline. |
+| 9.2–10.7s | "But the canary felt it first." | The gas reaches the cage. The canary puffs up, its eyes close, and its notes falter. |
+| 11.0–13.7s | "So when the canary stopped singing, the miners got out." | The song (and the music) stops. The last notes drop. The miner turns and runs for the shaft. |
+| 14.0–15.1s | "Before it was too late." | A whip up to the surface. The miner holds the cage up and the canary perks back up. |
+| 15.5–17.1s | "Your customers go quiet too." | CUSTOMER ACTIVITY: a year of visits and replies. Jordan's bars stop: "Quiet for 9 weeks". |
+| 17.4–19.3s | "They stop booking. They stop replying." | JORDAN · THE SIGNS: "Usual 4-week booking: MISSED", "Your last 2 texts: NO REPLY". |
+| 19.5–20.4s | "Then they're gone." | Jordan's avatar fades to an empty dashed outline. |
+| 20.8–22.4s | "MsgHealth hears the silence." | The logo lands with a hit. Listening rings go out. |
+| 22.6–25.8s | "It scores every customer's health, and flags who's at risk." | CLIENT HEALTH: scores count up (92, 85, 61, 38). Jordan is flagged AT RISK: "Visit overdue · 5 weeks", "No reply · 12 days". |
+| 26.0–28.1s | "Then it texts them for you, before they leave." | AUTOMATIONS · WIN-BACK: "When At risk → Send SMS" switches on, and the text goes out: "Sent automatically · SMS · Delivered". |
+| 28.4–29.3s | "And they book again." | "Yes please! See you then." Then "Booked · Thu 10:00 AM", and Jordan's health goes from 38 to 86. |
+| 29.7–32.4s | "Stop guessing when your customers are planning to leave." | "Stop guessing." (struck out), then "Start knowing." |
+| 32.6–36s | "MsgHealth dot net." | Logo, "Know your customers. Keep your customers.", a tap on "Try MsgHealth →", then msghealth.net. |
+
+On the facts: British coal mines used canaries from the 1911 Coal Mines Act until they were phased out in 1986. Carbon
+monoxide has no smell or color, and canaries show its effects well before people do. Miners watched for a bird in
+distress ("stopped singing" is the popular shorthand). The customers, names and numbers are illustrative.
+
+---
+
+# "Pizza index": 38-second vertical ad (9:16, 30 fps)
+
+A joke built on a real story, like the supplied reference: in 1990, the night before Iraq invaded Kuwait, late-night
+pizza deliveries to the Pentagon spiked, and Washington has called it the Pentagon Pizza Index ever since. Act 1 plays
+the story straight in flat vector, then pushes it further: a tower of boxes goes through the roof, a general eats under
+a spinning siren, and a spy in a bush tails the delivery guy through binoculars. Then the punchline turns into the pitch:
+"Your customers drop hints too. They just don't order pizza."
+
+- **Video:** `dist/msghealth-pizza-9x16.mp4` (1080×1920, 30 fps, 37.8 s)
+- Source: `pizza.html`, `src/pizza.js`, `src/pizza-vo.js` (voiceover clip lengths and caption timing). Act 2 uses the
+  same MsgHealth screens as "The canary" with new copy.
+- Render: `npm run render:pizza`. Text check: `npm run audit:pizza`. It reports one expected flag: the shop's "PIZZA"
+  sign is cut off by the frame inside the zoomed binocular view (15.3–16.6 s).
+- **Voiceover:** Kokoro TTS (`af_heart`, speed 1.08), one clip per line in `assets/audio/pizza/`, started at `VO_AT`
+  in `src/pizza.js`. Every story beat (`T`) is read off the voiceover.
+- **Sound** (`scripts/pizza-audio.mjs`): a synthesised pizzicato spy groove under act 1, delivery-car passes, box thocks
+  that speed up and rise as the tower goes through the roof, a two-tone siren for the general, a rustling bush, a
+  sad-trombone sting after "They just don't order pizza", then the MsgHealth groove from the logo hit. Its drums drop
+  under "No binoculars required" and return for the end card. Effects come from `assets/audio/fx-*.wav`. The score
+  ducks under the voice. The mix lands around −15 LUFS.
+
+| Time | Voiceover | What's on screen |
+|---|---|---|
+| 0–3.4s | "In 1990, the night before Iraq invaded Kuwait," | The Pentagon from above at night, with a surveillance HUD ("WASHINGTON, D.C. · AUG 1, 1990 · 11:47 PM"). A pizza car pulls in. |
+| 3.5–6.2s | "pizza deliveries to the Pentagon went through the roof." | More pizza cars arrive and the HUD's "PIZZA ORDERS" meter fills. A stack of boxes rises out of the courtyard and shoots up past the frame. |
+| 6.6–9.9s | "Insiders even gave it a name. The Pentagon Pizza Index." | A chart card. The line is flat for weeks, then a pizza slice rides it up to "AUG 1". The title stamps in. |
+| 10.3–12.6s | "Late-night pizza? Something big is coming." | Through a window: a general mid-slice, with a stack of boxes and a red phone. A siren starts spinning, his eyes go wide and the cheese drips. |
+| 12.9–16.2s | "So now, some people watch pizza deliveries… very closely." | Outside the pizza shop, a spy rises out of a bush that creeps after the delivery guy. Then the binocular view: "PEPPERONI · LARGE", "CONFIRMED". |
+| 16.6–18.3s | "Your customers drop hints too." | The binoculars iris out onto CUSTOMER ACTIVITY. Jordan's bars tail off. |
+| 18.6–19.9s | "They just don't order pizza." | A pizza box drops onto the card and gets stamped "NO PIZZA DETECTED". Sad trombone. |
+| 20.3–23.1s | "They book less. They reply slower. Then they're gone." | JORDAN · THE SIGNS: visits now every 9 weeks, replies after 3 days. Jordan fades to a dashed outline. |
+| 23.5–25.5s | "MsgHealth reads the signs for you." | The logo lands with a hit. |
+| 25.7–28.8s | "It scores every customer's health, and flags who's at risk." | CLIENT HEALTH: scores count up. Jordan is flagged AT RISK. |
+| 29.1–31.9s | "Then it texts them, before they leave. And they book again." | An automatic win-back SMS, Jordan's reply, "Booked · Thu 10:00 AM", and health from 38 to 86. |
+| 32.4–34.0s | "No binoculars required." | Binoculars, struck out. Then "Just MsgHealth." |
+| 34.2–37.8s | "MsgHealth dot net." | End card: logo, tagline, a tap on "Try MsgHealth →", then msghealth.net. |
+
+On the facts: the "Pizza Meter" story comes from Frank Meeks, who ran Domino's franchises in Washington. He told
+reporters that late-night orders from the Pentagon and the White House jumped the night before Iraq invaded Kuwait on
+August 2, 1990. "Pentagon Pizza Index" is the name the idea still goes by. The film shows no pizza brand, and the 11:47 PM
+timestamp, the spy and the general are jokes. The customers, names and numbers are illustrative.
