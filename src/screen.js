@@ -609,13 +609,14 @@ function hm(min) { const m = Math.round(min / 5) * 5; return m < 60 ? `${m}m` : 
 // background and the second guy removed, bottom edge feathered; plus its sound). He appears standing on the card from
 // the MsgHealth hit (on the beat at 28.91 s) and, as he dashes off, blurs and fades into the card, before the rows turn
 // automatic and the time drops. His sound sits muffled under the music. Frames are numbered from 1.
-const CLIP = { at: 28.91, fps: 25, count: 33, frames: [], audio: 'assets/video/peace/audio.wav' };
-CLIP.dur = CLIP.count / CLIP.fps;
-const CLIP_FADE = [0.3, 0.56]; // seconds into the clip: he starts his dash, then he's gone
+// He holds on his first frame for `hold` seconds, then plays at 60% speed.
+const CLIP = { at: 28.91, fps: 25, count: 33, speed: 0.6, hold: 0.5, frames: [], audio: 'assets/video/peace/audio.wav' };
+CLIP.dur = CLIP.hold + CLIP.count / CLIP.fps / CLIP.speed;
+const CLIP_FADE = [CLIP.hold + 0.3 / CLIP.speed, CLIP.hold + 0.56 / CLIP.speed]; // seconds in: he starts his dash, then he's gone
 function clipOverlay(ft) {
   const local = ft - CLIP.at;
   if (local < 0 || local >= CLIP.dur || !CLIP.frames.length) return;
-  const img = CLIP.frames[clamp(Math.floor(local * CLIP.fps), 0, CLIP.frames.length - 1)];
+  const img = CLIP.frames[clamp(Math.floor(Math.max(0, local - CLIP.hold) * CLIP.fps * CLIP.speed), 0, CLIP.frames.length - 1)];
   const away = ease.inOut(seg(local, CLIP_FADE[0], CLIP_FADE[1]));
   const k = ease.out(seg(local, 0, 0.12)) * (1 - away);
   if (k <= 0.005) return;
@@ -795,7 +796,7 @@ function renderFrame(ft) {
 
 // Sound cues are written in story time; the soundtrack wants film time.
 window.SFX = window.SFX.map((c) => ({ ...c, t: filmAt(c.t) }));
-window.CLIP_AUDIO = { file: CLIP.audio, at: CLIP.at, dur: CLIP.dur };
+window.CLIP_AUDIO = { file: CLIP.audio, at: CLIP.at + CLIP.hold, dur: CLIP.dur - CLIP.hold, speed: CLIP.speed }; // his sound starts with the dash
 window.DURATION = DURATION;
 window.renderFrame = renderFrame;
 // Text audit hook (scripts/audit-text.mjs): while window.TEXT_LOG is an array, every string drawn is logged with
@@ -831,7 +832,7 @@ window.ready = (async () => {
 // ── player (plays the track in sync, with the clip's sound muffled under it) ─
 (() => {
   const btn = document.getElementById('play'), seek = document.getElementById('seek'), tm = document.getElementById('time'), au = document.getElementById('track');
-  const clipAu = new Audio(CLIP.audio);
+  const clipAu = new Audio(CLIP.audio); clipAu.playbackRate = CLIP.speed; clipAu.preservesPitch = true;
   let playing = false, cur = 0, wired = false, clipOn = false;
   const muffle = () => { // route the clip through a low-pass filter, like the render
     if (wired) return; wired = true;
@@ -843,8 +844,8 @@ window.ready = (async () => {
     if (!playing) return;
     const t = au.currentTime;
     if (t >= DURATION || au.ended) { playing = false; au.pause(); clipAu.pause(); btn.textContent = 'Replay'; show(DURATION); return; }
-    const on = t >= CLIP.at && t < CLIP.at + CLIP.dur;
-    if (on && !clipOn) { clipAu.currentTime = t - CLIP.at; clipAu.play(); }
+    const on = t >= CLIP.at + CLIP.hold && t < CLIP.at + CLIP.dur;
+    if (on && !clipOn) { clipAu.currentTime = (t - CLIP.at - CLIP.hold) * CLIP.speed; clipAu.play(); }
     if (!on && clipOn) clipAu.pause();
     clipOn = on;
     show(t); requestAnimationFrame(loop);

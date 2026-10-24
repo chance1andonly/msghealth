@@ -213,9 +213,9 @@ the brand, at the top of a musical phrase (28.91 s).
 - **Clip overlay:** the guy throwing up the peace sign, cut out of the supplied clip, stands on the card from the MsgHealth hit
   (28.91 s).
   - The background and the second guy are removed. `assets/video/peace` holds 33 RGBA frames at 25 fps plus `audio.wav`.
-  - As he dashes off (0.3–0.56 s into the clip) he blurs and fades into the card. That's before the rows turn "Automatic" and
-    the time drops.
-  - His sound sits muffled under the music.
+  - He holds still for half a second (`CLIP.hold`), then plays at 60% speed (`CLIP.speed`). As he dashes off (1.0–1.43 s in) he
+    blurs and fades into the card. Right after that, the rows turn "Automatic" and the time drops.
+  - His sound starts with the dash. It's slowed to match (pitch kept) and sits muffled under the music.
   - The cut-out was made with Google's DeepLab v3 person segmentation (through MediaPipe), limited to his side of the frame
     and his hand, with jersey and background pixels dropped and the bottom edge feathered.
   - `CLIP` and `CLIP_FADE` in `src/screen.js` set the timing.

@@ -38,13 +38,13 @@ kinds.forEach((k) => inputs.push('-i', path.join(ROOT, 'assets/audio', SOUNDS[k]
 // effect comes up ~8 dB so they sit on top of the beat; the limiter catches the peaks and the mix lands near -14 LUFS.
 // MUSIC_GAIN=0 renders the effects alone, for checking levels.
 const MUSIC_GAIN = +(process.env.MUSIC_GAIN ?? 0.45), FX_GAIN = 2.5;
-// The clip's own sound sits under the music, muffled (two low-pass stages at 500 Hz) as if heard through a wall;
+// The clip's own sound, slowed with the picture (atempo keeps its pitch), sits under the music, muffled (two low-pass stages at 500 Hz) as if heard through a wall;
 // the low-pass takes most of its level, so it comes back up to stay audible.
 const CLIP_GAIN = 2.2;
 const ms = Math.round(clip.at * 1000);
 const graph = [
   `[0:a]aresample=${SR},volume=${MUSIC_GAIN}[music]`,
-  `[1:a]aresample=${SR},lowpass=f=500,lowpass=f=500,volume=${MUSIC_GAIN > 0 ? CLIP_GAIN : 0},afade=t=out:st=${(clip.dur - 0.08).toFixed(3)}:d=0.08,adelay=${ms}|${ms}[clip]`,
+  `[1:a]aresample=${SR},atempo=${clip.speed ?? 1},lowpass=f=500,lowpass=f=500,volume=${MUSIC_GAIN > 0 ? CLIP_GAIN : 0},afade=t=out:st=${(clip.dur - 0.08).toFixed(3)}:d=0.08,adelay=${ms}|${ms}[clip]`,
 ];
 const mixIn = ['[music]', '[clip]'];
 kinds.forEach((k, ki) => {
