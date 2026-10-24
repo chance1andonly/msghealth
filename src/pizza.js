@@ -361,10 +361,7 @@ function binoculars(t) {
   const r = lerp(800, 300, ease.out(k)) + iris * 1400, L = { x: 540 - r * 0.62, y: 900 }, R = { x: 540 + r * 0.62, y: 900 };
   // inside the lenses: the box, close up, with a little handheld wobble
   const z = 3.1, fx = courierX(t) + 70 + Math.sin(t * 5) * 6, fy = STREET_Y + 110 - 190 - 40 + Math.cos(t * 4) * 6;
-  ctx.save();
-  ctx.beginPath(); ctx.moveTo(L.x + r, L.y); ctx.arc(L.x, L.y, r, 0, Math.PI * 2); ctx.moveTo(R.x + r, R.y); ctx.arc(R.x, R.y, r, 0, Math.PI * 2); ctx.rect(W, 0, -W, H); // the mask, wound so the lenses stay clear
-  ctx.fillStyle = '#000'; ctx.fill('evenodd');
-  ctx.restore();
+  lensMask(r);
   ctx.save();
   ctx.beginPath(); ctx.moveTo(L.x + r, L.y); ctx.arc(L.x, L.y, r, 0, Math.PI * 2); ctx.moveTo(R.x + r, R.y); ctx.arc(R.x, R.y, r, 0, Math.PI * 2); ctx.clip('nonzero');
   if (iris <= 0) {
@@ -745,9 +742,17 @@ function renderFrame(t) {
   drawCaption(t);
 }
 function binocularMask(t) {
-  const iris = ease.in(seg(t, T.pivot - 0.05, T.pivot + 0.55)), r = 300 + iris * 1400;
-  ctx.beginPath(); ctx.moveTo(540 - r * 0.62 + r, 900); ctx.arc(540 - r * 0.62, 900, r, 0, Math.PI * 2); ctx.moveTo(540 + r * 0.62 + r, 900); ctx.arc(540 + r * 0.62, 900, r, 0, Math.PI * 2); ctx.rect(W, 0, -W, H);
-  ctx.fillStyle = '#000'; ctx.fill('evenodd');
+  lensMask(300 + ease.in(seg(t, T.pivot - 0.05, T.pivot + 0.55)) * 1400);
+}
+// Black everywhere except the two lenses (their union, overlap included): cut out of a black layer, then laid on top.
+let MASK = null;
+function lensMask(r) {
+  if (!MASK) { MASK = document.createElement('canvas'); MASK.width = W; MASK.height = H; }
+  const m = MASK.getContext('2d');
+  m.globalCompositeOperation = 'source-over'; m.fillStyle = '#000'; m.fillRect(0, 0, W, H);
+  m.globalCompositeOperation = 'destination-out';
+  [540 - r * 0.62, 540 + r * 0.62].forEach((x) => { m.beginPath(); m.arc(x, 900, r, 0, Math.PI * 2); m.fill(); });
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(MASK, 0, 0); ctx.restore();
 }
 
 // Sound cues (sample-based effects; the music, siren, engines and stings are synthesised from window.CUES).
