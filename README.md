@@ -151,12 +151,12 @@ changed digit rolls in place (9:02 → 9:03).
 
 ---
 
-# "Every touch": 37-second explainer ad (16:9 and 9:16, 60 fps)
+# "Every touch": 43-second explainer ad (16:9 and 9:16, 60 fps)
 
 It starts as a quick explainer on how a phone's touchscreen works, then turns into a pitch: a lot of a business owner's
 taps go to client admin, and MsgHealth can do that for them. The captions tell the whole story, so it works with the
 sound off. Until MsgHealth is named, everything is slate with an electric-cyan accent. The brand indigo arrives with
-the brand, at the top of a musical phrase (24.91 s).
+the brand, at the top of a musical phrase (28.91 s).
 
 - **Video:** `dist/msghealth-screen.mp4` (1920×1080) and `dist/msghealth-screen-9x16.mp4` (1080×1920, for TikTok, Reels and Shorts)
 - Source: `screen.html` / `screen-vertical.html`, `src/screen.js`. The short side is 1080 px in both formats. In 16:9 the captions
@@ -177,15 +177,15 @@ the brand, at the top of a musical phrase (24.91 s).
 
   | Moment | Time |
   |---|---|
-  | Layers | 3.91 s |
-  | Grid | 6.91 s |
-  | Back to the phone | 16.91 s |
-  | Card | 19.41 s |
-  | MsgHealth (top of a phrase) | 24.91 s |
-  | Lock screen | 30.91 s |
-  | End card (top of a phrase) | 32.91 s |
+  | Layers | 4.41 s |
+  | Grid | 8.41 s |
+  | Back to the phone | 18.91 s |
+  | Card | 21.91 s |
+  | MsgHealth (top of a phrase) | 28.91 s |
+  | Lock screen | 35.41 s |
+  | End card (on a bar line) | 38.91 s |
 
-  The film ends at 36.91 s, as the next phrase comes round.
+  The film ends at 42.91 s, after four seconds of end card and just before the clip's TikTok outro.
 - **Sound effects** are cut from the supplied "sound effects you need as an editor" reel into `assets/audio/fx-*.wav`. The
   narrator's spoken labels are left out. `scripts/screen-audio.mjs` places them from `window.SFX`:
 
@@ -197,7 +197,7 @@ the brand, at the top of a musical phrase (24.91 s).
   | transition | zoom into the grid and back out |
   | swoosh | cross-fades |
   | ding | the touch point locking on |
-  | transition with a hit (`fx-transition-hit`) | the build into MsgHealth, landing on 24.91 s |
+  | transition with a hit (`fx-transition-hit`) | the build into MsgHealth, landing on 28.91 s |
   | Shopify cash register (`fx-cash`) | "That's 2 hours back" |
   | phone notification | each lock-screen notification (the first is loudest) |
   | punch (`fx-punch`, kept from the first effects reel) | the logo landing on the end card |
@@ -211,7 +211,7 @@ the brand, at the top of a musical phrase (24.91 s).
   the dark screens) shows while the finger presses. The middle finger (`hand-hover.png`) shows while it hovers. Both were cut
   out of the supplied pictures, and `HANDS` in `src/screen.js` records where each fingertip sits.
 - **Clip overlay:** the guy throwing up the peace sign, cut out of the supplied clip, stands on the card from the MsgHealth hit
-  (24.91 s).
+  (28.91 s).
   - The background and the second guy are removed. `assets/video/peace` holds 33 RGBA frames at 25 fps plus `audio.wav`.
   - As he dashes off (0.3–0.56 s into the clip) he blurs and fades into the card. That's before the rows turn "Automatic" and
     the time drops.
@@ -223,17 +223,17 @@ the brand, at the top of a musical phrase (24.91 s).
 
 | Time | Caption | What's on screen |
 |---|---|---|
-| 0–3.9s | "You're on your phone 5 hours a day." / "Ever wonder how it knows where you touch?" | A finger taps and swipes a phone. Its Screen Time widget reads 5h 1m, with pickups counting up to 186. |
-| 3.9–6.9s | "It's a stack of layers." / "The trick is the touch sensor." | The phone tilts and comes apart: cover glass, touch sensor, display. The sensor lights up. |
-| 6.9–10.1s | "A grid of invisible wires. Every crossing holds an electric field." | Zoom into the sensor's diamond electrode grid. Drive pulses run along the rows and charge particles flow at every crossing. |
-| 10.1–12.7s | "Your finger conducts. It pulls charge away." | A see-through finger presses down, and nearby charge streams up into it |
-| 12.7–14.9s | "The phone scans for the drop over 100 times a second." | A scan line sweeps the grid ("shown slowed down"). The drained crossings light up and a crosshair locks on with a coordinate tag. |
-| 14.9–16.9s | "That's your touch." | The crosshair follows the finger as it drags |
-| 16.9–19.4s | "Run a business? A lot of those touches are for clients." | Back to the phone for a burst of taps |
-| 19.4–24.9s | "Booking. Reminders. Rescheduling. Follow-ups." / "Over 2 hours a day, just keeping your calendar full." | Client admin per day: booking 45m, reminders & confirmations 30m, rescheduling & cancellations 25m, follow-ups & rebooking 20m, review requests 10m = 2h 10m |
-| 24.9–30.9s | (MsgHealth logo) "It does all of that for you." / "That's 2 hours back. Every day." | The colour turns brand indigo. The peace-sign guy, cut out of the clip, stands on the card and fades into it as he dashes off, with his sound muffled under the music. From 26.4s each row flips to "Automatic", its bar drains, the total counts down to 0m and "2h 10m back" appears. |
-| 30.9–32.9s | "Without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: reminders sent, a booking, a reschedule, a review request |
-| 32.9–36.9s | — | Logo, "Get your hours back.", msghealth.net |
+| 0.0–4.4s | "You're on your phone 5 hours a day." / "Ever wonder how it knows where you touch?" | A finger taps and swipes a phone. Its Screen Time widget reads 5h 1m, with pickups counting up to 186. |
+| 4.4–8.4s | "It's a stack of layers." / "The trick is the touch sensor." | The phone tilts and comes apart: cover glass, touch sensor, display. The sensor lights up. |
+| 8.4–11.8s | "A grid of invisible wires. Every crossing holds an electric field." | Zoom into the sensor's diamond electrode grid. Drive pulses run along the rows and charge particles flow at every crossing. |
+| 11.8–14.5s | "Your finger conducts. It pulls charge away." | A see-through finger presses down, and nearby charge streams up into it |
+| 14.5–16.8s | "The phone scans for the drop over 100 times a second." | A scan line sweeps the grid ("shown slowed down"). The drained crossings light up and a crosshair locks on with a coordinate tag. |
+| 16.8–18.9s | "That's your touch." | The crosshair follows the finger as it drags |
+| 18.9–21.9s | "Run a business? A lot of those touches are for clients." | Back to the phone for a burst of taps |
+| 21.9–28.9s | "Booking. Reminders. Rescheduling. Follow-ups." / "Over 2 hours a day, just keeping your calendar full." | Client admin per day: booking 45m, reminders & confirmations 30m, rescheduling & cancellations 25m, follow-ups & rebooking 20m, review requests 10m = 2h 10m |
+| 28.9–35.4s | (MsgHealth logo) "It does all of that for you." / "That's 2 hours back. Every day." | The colour turns brand indigo. The peace-sign guy, cut out of the clip, stands on the card and fades into it as he dashes off, with his sound muffled under the music. From 30.6s each row flips to "Automatic", its bar drains, the total counts down to 0m and "2h 10m back" appears. |
+| 35.4–38.9s | "Without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: reminders sent, a booking, a reschedule, a review request |
+| 38.9–42.9s | — | Logo, "Get your hours back.", msghealth.net |
 
 How a touchscreen works, as shown: a phone screen is a mutual-capacitance touchscreen. Under the cover glass sits a grid
 of transparent electrodes. Drive lines run one way and sense lines run the other. A small signal on the drive lines sets up

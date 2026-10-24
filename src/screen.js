@@ -16,11 +16,11 @@ const W = V ? 1080 : 1920, H = V ? 1920 : 1080;
 // The story is written on its own clock (STORY seconds). RETIME maps it onto the music: every cut lands on a
 // beat of assets/audio/screen-track.m4a ("Timeless" instrumental from its drop, 120 BPM: a beat every 0.5 s,
 // bars at 0.91 + 2k s, and the drum pattern restarts every 4 s at 0.91 + 4k). MsgHealth arrives at the top of
-// a phrase (24.91 s) and the end card lands on the next-but-one (32.91 s). [music time, story time] pairs;
+// a phrase (28.91 s) and the end card lands on a bar line (38.91 s). [music time, story time] pairs;
 // time between them is stretched linearly.
 const STORY = 38.0;
-const RETIME = [[0, 0], [3.91, 4.0], [6.91, 7.6], [16.91, 17.0], [19.41, 19.6], [24.91, 25.3], [30.91, 31.4], [32.91, 34.2], [36.91, STORY]];
-const DURATION = 36.91; // the film ends as the phrase after the end card's comes round
+const RETIME = [[0, 0], [4.41, 4.0], [8.41, 7.6], [18.91, 17.0], [21.91, 19.6], [28.91, 25.3], [35.41, 31.4], [38.91, 34.2], [42.91, STORY]];
+const DURATION = 42.91; // four seconds of end card; the track's TikTok outro starts a second later
 function remap(v, from, to) {
   for (let i = 1; i < RETIME.length; i++) {
     const a = RETIME[i - 1], b = RETIME[i];
@@ -607,9 +607,9 @@ const CW = 700, ROWH = 104;
 function hm(min) { const m = Math.round(min / 5) * 5; return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`; }
 // The supplied clip, cut down to just the guy throwing up the peace sign (assets/video/peace: 33 RGBA frames at 25 fps,
 // background and the second guy removed, bottom edge feathered; plus its sound). He appears standing on the card from
-// the MsgHealth hit (on the beat at 24.91 s) and, as he dashes off, blurs and fades into the card, before the rows turn
+// the MsgHealth hit (on the beat at 28.91 s) and, as he dashes off, blurs and fades into the card, before the rows turn
 // automatic and the time drops. His sound sits muffled under the music. Frames are numbered from 1.
-const CLIP = { at: 24.91, fps: 25, count: 33, frames: [], audio: 'assets/video/peace/audio.wav' };
+const CLIP = { at: 28.91, fps: 25, count: 33, frames: [], audio: 'assets/video/peace/audio.wav' };
 CLIP.dur = CLIP.count / CLIP.fps;
 const CLIP_FADE = [0.3, 0.56]; // seconds into the clip: he starts his dash, then he's gone
 function clipOverlay(ft) {
