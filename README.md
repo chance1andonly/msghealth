@@ -219,6 +219,20 @@ the brand, at the top of a musical phrase (28.91 s).
   - The cut-out was made with Google's DeepLab v3 person segmentation (through MediaPipe), limited to his side of the frame
     and his hand, with jersey and background pixels dropped and the bottom edge feathered.
   - `CLIP` and `CLIP_FADE` in `src/screen.js` set the timing.
+- **Voiceover:** a male text-to-speech voice reads every caption, then "Get your hours back, with Message Health." on the end
+  card.
+  - The voice is Piper TTS's "Ryan (high)" US English voice. The lines are in `assets/audio/vo` (one WAV per line, plus
+    `vo.json` with each line's start time).
+  - Each line starts as its caption lands. A line that would run past its caption is sped up (to at most ×1.2, pitch kept),
+    and if it still overruns, the next line waits a beat so two lines never overlap.
+  - Spoken text differs from the screen where it should: "five hours", "a hundred times", "Message Health does all of that
+    for you".
+  - The music ducks about 8 dB under the voice and comes back between lines. The mix lands around -14 LUFS.
+  - To regenerate: `pip install piper-tts`, then `PIPER_VOICE=/path/to/en-us-ryan-high.onnx node scripts/screen-vo.mjs`. Edit
+    the lines through the `vo` fields in `CAPS` (`src/screen.js`).
+  - **Licence:** the Ryan voice was trained on a CC BY-NC-SA 4.0 dataset (non-commercial). Use it for drafts. For a paid ad,
+    swap in a commercially licensed voice or a recorded read. Replace the WAVs and keep the file names, or rerun the script
+    with another voice.
 - Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills (film time): `ENTRY=screen.html node scripts/snap.mjs out/ 12`
 
 | Time | Caption | What's on screen |

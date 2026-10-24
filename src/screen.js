@@ -121,19 +121,19 @@ function stage(glow = 0.16, col = SLATE) {
 // ── captions ─────────────────────────────────────────────────────────────────
 // Words between *stars* take the brand gradient. Each caption fades up out of a blur and leaves upward.
 const CAPS = [
-  { at: 0.2, out: 2.05, s: "You're on your phone *5 hours a day.*" },
+  { at: 0.2, out: 2.05, s: "You're on your phone *5 hours a day.*", vo: "You're on your phone five hours a day." },
   { at: 2.15, out: 3.95, s: 'Ever wonder how it *knows where you touch?*' },
   { at: 4.1, out: 5.75, s: "It's a *stack of layers.*" },
   { at: 5.85, out: 7.55, s: 'The trick is the *touch sensor.*' },
   { at: 7.8, out: 10.6, s: 'A grid of invisible wires. Every crossing holds an *electric field.*' },
   { at: 10.75, out: 13.25, s: 'Your finger conducts. It *pulls charge away.*' },
-  { at: 13.35, out: 15.35, s: 'The phone scans for the drop *over 100 times a second.*' },
+  { at: 13.35, out: 15.35, s: 'The phone scans for the drop *over 100 times a second.*', vo: 'It scans for the drop over a hundred times a second.' },
   { at: 15.45, out: 16.95, s: "*That's your touch.*" },
   { at: 17.2, out: 19.55, s: 'Run a business? A lot of those touches are *for clients.*' },
   { at: 19.8, out: 22.55, s: 'Booking. Reminders. Rescheduling. *Follow-ups.*' },
-  { at: 22.65, out: 25.2, s: '*Over 2 hours a day*, just keeping your calendar full.' },
-  { at: 25.3, out: 28.2, s: 'It does all of that *for you.*' },
-  { at: 28.3, out: 31.3, s: "That's *2 hours back.* Every day." },
+  { at: 22.65, out: 25.2, s: '*Over 2 hours a day*, just keeping your calendar full.', vo: 'Over two hours a day, just keeping your calendar full.' },
+  { at: 25.3, out: 28.2, s: 'It does all of that *for you.*', vo: 'Message Health does all of that for you.' },
+  { at: 28.3, out: 31.3, s: "That's *2 hours back.* Every day.", vo: "That's two hours back. Every day." },
   { at: 31.55, out: 34.05, s: 'Without *lifting a finger.*' },
 ];
 const EYES = [
@@ -794,6 +794,11 @@ function renderFrame(ft) {
   drawCaptions(t);
 }
 
+// The voiceover reads each caption (its `vo` text where the spoken words differ from the screen), starting just after
+// the caption lands and finishing before the next one, then the end card's line. Film times; scripts/screen-vo.mjs
+// synthesises the lines from this list.
+window.VO = CAPS.map((c, i) => ({ text: c.vo ?? c.s.replace(/\*/g, ''), at: filmAt(c.at) + 0.05, until: CAPS[i + 1] ? filmAt(CAPS[i + 1].at) - 0.05 : filmAt(c.out) + 0.6 }))
+  .concat([{ text: 'Get your hours back, with Message Health.', at: filmAt(34.75), until: DURATION - 0.8 }]);
 // Sound cues are written in story time; the soundtrack wants film time.
 window.SFX = window.SFX.map((c) => ({ ...c, t: filmAt(c.t) }));
 window.CLIP_AUDIO = { file: CLIP.audio, at: CLIP.at + CLIP.hold, dur: CLIP.dur - CLIP.hold, speed: CLIP.speed }; // his sound starts with the dash
