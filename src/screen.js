@@ -18,22 +18,16 @@ const W = V ? 1080 : 1920, H = V ? 1920 : 1080;
 // bars at 0.91 + 2k s, and the drum pattern restarts every 4 s at 0.91 + 4k). MsgHealth arrives at the top of
 // a phrase (24.91 s) and the end card lands on the next-but-one (32.91 s). [music time, story time] pairs;
 // time between them is stretched linearly.
-// The music pauses once (PAUSE, in music time, on a beat) while the supplied clip plays with its own sound; the
-// picture holds underneath and everything after carries on PAUSE.dur later, still on the beat.
 const STORY = 38.0;
 const RETIME = [[0, 0], [3.91, 4.0], [6.91, 7.6], [16.91, 17.0], [19.41, 19.6], [24.91, 25.3], [30.91, 31.4], [32.91, 34.2], [36.91, STORY]];
-const MUSIC_END = 36.91; // the music ends as the phrase after the end card's comes round
-const PAUSE = { at: 28.91, dur: 34 / 25 }; // on a beat once "That's 2 hours back" has fully landed; the clip is 34 frames at 25 fps
-const DURATION = MUSIC_END + PAUSE.dur;
-const musicAt = (f) => (f < PAUSE.at ? f : f < PAUSE.at + PAUSE.dur ? PAUSE.at : f - PAUSE.dur);
-const filmOfMusic = (m) => (m < PAUSE.at ? m : m + PAUSE.dur);
+const DURATION = 36.91; // the film ends as the phrase after the end card's comes round
 function remap(v, from, to) {
   for (let i = 1; i < RETIME.length; i++) {
     const a = RETIME[i - 1], b = RETIME[i];
     if (v <= b[from] || i === RETIME.length - 1) return a[to] + (b[to] - a[to]) * Math.max(0, Math.min(1, (v - a[from]) / (b[from] - a[from])));
   }
 }
-const storyAt = (f) => remap(musicAt(f), 0, 1), filmAt = (st) => filmOfMusic(remap(st, 1, 0));
+const storyAt = (t) => remap(t, 0, 1), filmAt = (st) => remap(st, 1, 0);
 const BRAND_AT = 25.3; // MsgHealth is named here; the brand colour arrives with it
 const C = BRAND.colors;
 const FONT = 'Inter';
@@ -589,11 +583,11 @@ TAPS2.forEach((c) => window.SFX.push({ t: c.t0, kind: 'tap', gain: 1.5 }));
 // benchmarks (see README): about 7 hours a week on scheduling, ~45 minutes a day on reminder calls,
 // most cancellations arriving with under 24 hours' notice.
 const ROWS = [
-  { label: 'Booking appointments', sub: 'Back-and-forth on times', auto: 'Clients book themselves', m: 45, icon: 'cal', at: 20.0, flip: 25.9 },
-  { label: 'Reminders & confirmations', sub: 'Texting before every visit', auto: 'Sent automatically', m: 30, icon: 'bubble', at: 20.35, flip: 26.25 },
-  { label: 'Rescheduling & cancellations', sub: 'Moving and re-filling slots', auto: 'Handled for you', m: 25, icon: 'redo', at: 20.7, flip: 26.6 },
-  { label: 'Follow-ups & rebooking', sub: "Chasing clients who haven't been back", auto: 'Automatic SMS & email', m: 20, icon: 'bubble', at: 21.05, flip: 26.95 },
-  { label: 'Review requests', sub: 'Asking happy clients for reviews', auto: 'Sent after every visit', m: 10, icon: 'star', at: 21.4, flip: 27.3 },
+  { label: 'Booking appointments', sub: 'Back-and-forth on times', auto: 'Clients book themselves', m: 45, icon: 'cal', at: 20.0, flip: 26.85 },
+  { label: 'Reminders & confirmations', sub: 'Texting before every visit', auto: 'Sent automatically', m: 30, icon: 'bubble', at: 20.35, flip: 27.2 },
+  { label: 'Rescheduling & cancellations', sub: 'Moving and re-filling slots', auto: 'Handled for you', m: 25, icon: 'redo', at: 20.7, flip: 27.55 },
+  { label: 'Follow-ups & rebooking', sub: "Chasing clients who haven't been back", auto: 'Automatic SMS & email', m: 20, icon: 'bubble', at: 21.05, flip: 27.9 },
+  { label: 'Review requests', sub: 'Asking happy clients for reviews', auto: 'Sent after every visit', m: 10, icon: 'star', at: 21.4, flip: 28.25 },
 ];
 const MAXM = 45;
 ROWS.forEach((r) => window.SFX.push({ t: r.at, kind: 'key', gain: 1.4 }, { t: r.flip, kind: 'key', gain: 1.3 }));
@@ -611,22 +605,22 @@ function glyph(kind, x, y) {
 }
 const CW = 700, ROWH = 104;
 function hm(min) { const m = Math.round(min / 5) * 5; return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`; }
-// The supplied clip (assets/video/peace: 34 frames at 25 fps, plus its sound) plays as an overlay on the card during
-// the music's pause, while the caption says the hours are back. Frames are numbered from 1.
-const CLIP = { fps: 25, count: 34, frames: [], audio: 'assets/video/peace/audio.wav' };
+// The supplied clip (assets/video/peace: 34 frames at 25 fps, plus its sound) plays as a 50% overlay on the card from
+// the MsgHealth hit (on the beat at 24.91 s), before the rows turn automatic and the time drops. Its sound sits
+// muffled under the music. Frames are numbered from 1.
+const CLIP = { at: 24.91, fps: 25, count: 34, frames: [], audio: 'assets/video/peace/audio.wav', opacity: 0.5 };
+CLIP.dur = CLIP.count / CLIP.fps;
 function clipOverlay(ft) {
-  const local = ft - PAUSE.at;
-  if (local < 0 || local >= PAUSE.dur || !CLIP.frames.length) return;
+  const local = ft - CLIP.at;
+  if (local < 0 || local >= CLIP.dur || !CLIP.frames.length) return;
   const img = CLIP.frames[clamp(Math.floor(local * CLIP.fps), 0, CLIP.frames.length - 1)];
-  const k = ease.out(seg(local, 0, 0.12)) * (1 - ease.in(seg(local, PAUSE.dur - 0.1, PAUSE.dur)));
+  const k = ease.out(seg(local, 0, 0.12)) * (1 - ease.in(seg(local, CLIP.dur - 0.1, CLIP.dur)));
   const w = V ? 760 : 560, hh = w * img.height / img.width, x0 = OBJ.x - w / 2, y0 = OBJ.y - hh / 2;
   ctx.save();
-  ctx.fillStyle = `rgba(0,0,0,${0.45 * k})`; ctx.fillRect(0, 0, W, H); // the card dims behind it
   ctx.translate(OBJ.x, OBJ.y); const sc = lerp(0.85, 1, k); ctx.scale(sc, sc); ctx.translate(-OBJ.x, -OBJ.y);
-  ctx.globalAlpha = k;
-  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 18; fillRR(x0, y0, w, hh, 32, '#000'); ctx.restore();
+  ctx.globalAlpha = k * CLIP.opacity;
   rr(x0, y0, w, hh, 32); ctx.save(); ctx.clip(); ctx.drawImage(img, x0, y0, w, hh); ctx.restore();
-  rr(x0, y0, w, hh, 32); ctx.strokeStyle = 'rgba(255,255,255,0.22)'; ctx.lineWidth = 2; ctx.stroke();
+  rr(x0, y0, w, hh, 32); ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 2; ctx.stroke();
   ctx.restore();
 }
 function sCard(t) {
@@ -794,9 +788,9 @@ function renderFrame(ft) {
   drawCaptions(t);
 }
 
-// Sound cues are written in story time; the soundtrack wants film time. Nothing plays over the clip but the clip.
-window.SFX = window.SFX.map((c) => ({ ...c, t: filmAt(c.t) })).filter((c) => c.t < PAUSE.at - 0.05 || c.t > PAUSE.at + PAUSE.dur);
-window.MUSIC = { end: MUSIC_END, pause: PAUSE, clipAudio: CLIP.audio };
+// Sound cues are written in story time; the soundtrack wants film time.
+window.SFX = window.SFX.map((c) => ({ ...c, t: filmAt(c.t) }));
+window.CLIP_AUDIO = { file: CLIP.audio, at: CLIP.at, dur: CLIP.dur };
 window.DURATION = DURATION;
 window.renderFrame = renderFrame;
 // Text audit hook (scripts/audit-text.mjs): while window.TEXT_LOG is an array, every string drawn is logged with
@@ -829,32 +823,33 @@ window.ready = (async () => {
   return true;
 })();
 
-// ── player (plays the track in sync, pausing it for the clip) ────────────────
+// ── player (plays the track in sync, with the clip's sound muffled under it) ─
 (() => {
   const btn = document.getElementById('play'), seek = document.getElementById('seek'), tm = document.getElementById('time'), au = document.getElementById('track');
   const clipAu = new Audio(CLIP.audio);
-  let playing = false, cur = 0, t0 = 0, w0 = 0, inClip = false;
-  const show = (t) => { cur = t; renderFrame(t); seek.value = (t / DURATION) * 1000; tm.textContent = `${t.toFixed(1)}s / ${DURATION.toFixed(1)}s`; };
-  const stopAll = () => { au.pause(); clipAu.pause(); inClip = false; };
-  const loop = (now) => {
+  let playing = false, cur = 0, wired = false, clipOn = false;
+  const muffle = () => { // route the clip through a low-pass filter, like the render
+    if (wired) return; wired = true;
+    const ac = new AudioContext(), src = ac.createMediaElementSource(clipAu), lp = ac.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 500; src.connect(lp).connect(ac.destination);
+  };
+  const show = (t) => { cur = t; renderFrame(t); seek.value = (t / DURATION) * 1000; tm.textContent = `${t.toFixed(1)}s / ${DURATION}s`; };
+  const loop = () => {
     if (!playing) return;
-    const t = t0 + (now - w0) / 1000;
-    if (t >= DURATION) { playing = false; stopAll(); btn.textContent = 'Replay'; show(DURATION); return; }
-    const clipNow = t >= PAUSE.at && t < PAUSE.at + PAUSE.dur;
-    if (clipNow !== inClip) {
-      inClip = clipNow;
-      if (clipNow) { au.pause(); clipAu.currentTime = t - PAUSE.at; clipAu.play(); }
-      else { clipAu.pause(); au.currentTime = musicAt(t); au.play(); }
-    }
+    const t = au.currentTime;
+    if (t >= DURATION || au.ended) { playing = false; au.pause(); clipAu.pause(); btn.textContent = 'Replay'; show(DURATION); return; }
+    const on = t >= CLIP.at && t < CLIP.at + CLIP.dur;
+    if (on && !clipOn) { clipAu.currentTime = t - CLIP.at; clipAu.play(); }
+    if (!on && clipOn) clipAu.pause();
+    clipOn = on;
     show(t); requestAnimationFrame(loop);
   };
   btn.onclick = () => {
-    if (playing) { playing = false; stopAll(); btn.textContent = 'Play'; return; }
+    muffle();
+    if (playing) { playing = false; au.pause(); clipAu.pause(); clipOn = false; btn.textContent = 'Play'; return; }
     if (cur >= DURATION) cur = 0;
-    inClip = cur >= PAUSE.at && cur < PAUSE.at + PAUSE.dur;
-    if (inClip) { clipAu.currentTime = cur - PAUSE.at; clipAu.play(); } else { au.currentTime = musicAt(cur); au.play(); }
-    t0 = cur; w0 = performance.now(); playing = true; btn.textContent = 'Pause'; requestAnimationFrame(loop);
+    au.currentTime = cur; au.play(); playing = true; btn.textContent = 'Pause'; requestAnimationFrame(loop);
   };
-  seek.oninput = () => { playing = false; stopAll(); btn.textContent = 'Play'; show((seek.value / 1000) * DURATION); };
+  seek.oninput = () => { playing = false; au.pause(); clipAu.pause(); clipOn = false; btn.textContent = 'Play'; show((seek.value / 1000) * DURATION); };
   window.ready.then(() => { const q = new URLSearchParams(location.search).get('t'); if (q) show(+q); });
 })();

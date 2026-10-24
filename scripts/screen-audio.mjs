@@ -1,6 +1,7 @@
 // Builds the "Every touch" soundtrack: the supplied instrumental (assets/audio/screen-track.m4a, cut from 16 s
 // into the supplied clip, where the drop hits) with sound effects cut from the supplied "sound effects you need
-// as an editor" reel (assets/audio/fx-*.wav), each placed so its anchor (attack or peak) lands on its cue. Cues come from the film itself (window.SFX in src/screen.js).
+// as an editor" reel (assets/audio/fx-*.wav), each placed so its anchor (attack or peak) lands on its cue. Cues
+// come from the film itself (window.SFX in src/screen.js).
 //   node scripts/screen-audio.mjs dist/screen-audio.wav
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -25,28 +26,27 @@ const SOUNDS = {
 };
 
 const film = await openFilm('screen.html');
-const { sfx, duration, music } = await film.page.evaluate(() => ({ sfx: window.SFX, duration: DURATION, music: window.MUSIC }));
+const { sfx, duration, clip } = await film.page.evaluate(() => ({ sfx: window.SFX, duration: DURATION, clip: window.CLIP_AUDIO }));
 await film.close();
 
 const kinds = Object.keys(SOUNDS).filter((k) => sfx.some((c) => c.kind === k));
 const unknown = [...new Set(sfx.map((c) => c.kind))].filter((k) => !SOUNDS[k]);
 if (unknown.length) throw new Error(`no sound for cue kind(s): ${unknown.join(', ')}`);
-const inputs = ['-i', path.join(ROOT, 'assets/audio/screen-track.m4a'), '-i', path.join(ROOT, music.clipAudio)];
+const inputs = ['-i', path.join(ROOT, 'assets/audio/screen-track.m4a'), '-i', path.join(ROOT, clip.file)];
 kinds.forEach((k) => inputs.push('-i', path.join(ROOT, 'assets/audio', SOUNDS[k].file)));
 // The track is mastered loud (about -9.6 LUFS) and the effects came from a quiet reel: the music drops ~7 dB and every
 // effect comes up ~8 dB so they sit on top of the beat; the limiter catches the peaks and the mix lands near -14 LUFS.
 // MUSIC_GAIN=0 renders the effects alone, for checking levels.
 const MUSIC_GAIN = +(process.env.MUSIC_GAIN ?? 0.45), FX_GAIN = 2.5;
-// The music stops on a beat for the clip, which plays with its own sound only, then picks up where it stopped.
-// Short fades at the seams keep the cut clean.
-const P = music.pause.at, D = music.pause.dur, CLIP_GAIN = 1.4; // the clip is about -17 LUFS; +3 dB matches the mix
+// The clip's own sound sits under the music, muffled (two low-pass stages at 500 Hz) as if heard through a wall;
+// the low-pass takes most of its level, so it comes back up to stay audible.
+const CLIP_GAIN = 2.2;
+const ms = Math.round(clip.at * 1000);
 const graph = [
-  `[0:a]aresample=${SR},volume=${MUSIC_GAIN},asplit=2[m1][m2]`,
-  `[m1]atrim=0:${P.toFixed(3)},afade=t=out:st=${(P - 0.015).toFixed(3)}:d=0.015[ma]`,
-  `[m2]atrim=start=${P.toFixed(3)},asetpts=PTS-STARTPTS,afade=t=in:d=0.015,adelay=${Math.round((P + D) * 1000)}|${Math.round((P + D) * 1000)}[mb]`,
-  `[1:a]aresample=${SR},volume=${MUSIC_GAIN > 0 ? CLIP_GAIN : 0},afade=t=out:st=${(D - 0.03).toFixed(3)}:d=0.03,adelay=${Math.round(P * 1000)}|${Math.round(P * 1000)}[clip]`,
+  `[0:a]aresample=${SR},volume=${MUSIC_GAIN}[music]`,
+  `[1:a]aresample=${SR},lowpass=f=500,lowpass=f=500,volume=${MUSIC_GAIN > 0 ? CLIP_GAIN : 0},afade=t=out:st=${(clip.dur - 0.08).toFixed(3)}:d=0.08,adelay=${ms}|${ms}[clip]`,
 ];
-const mixIn = ['[ma]', '[mb]', '[clip]'];
+const mixIn = ['[music]', '[clip]'];
 kinds.forEach((k, ki) => {
   const cues = sfx.filter((c) => c.kind === k);
   graph.push(`[${ki + 2}:a]aresample=${SR},asplit=${cues.length}${cues.map((_, i) => `[${k}${i}]`).join('')}`);
@@ -57,7 +57,7 @@ kinds.forEach((k, ki) => {
     mixIn.push(`[${k}d${i}]`);
   });
 });
-graph.push(`${mixIn.join('')}amix=inputs=${mixIn.length}:normalize=0:duration=longest,alimiter=limit=0.9:level=disabled,` +
+graph.push(`${mixIn.join('')}amix=inputs=${mixIn.length}:normalize=0:duration=first,alimiter=limit=0.9:level=disabled,` +
   `afade=t=out:st=${(duration - FADE).toFixed(3)}:d=${FADE},atrim=0:${duration.toFixed(3)}[out]`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', ...inputs, '-filter_complex', graph.join(';'), '-map', '[out]', '-ac', '2', '-c:a', 'pcm_s16le', out], { stdio: 'inherit' });
 console.log(`audio → ${out}  (${kinds.map((k) => `${sfx.filter((c) => c.kind === k).length} ${k}`).join(', ')})`);
