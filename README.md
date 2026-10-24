@@ -309,3 +309,47 @@ quiet before they leave too. MsgHealth hears the silence.
 On the facts: British coal mines used canaries from the 1911 Coal Mines Act until they were phased out in 1986. Carbon
 monoxide has no smell or color, and canaries show its effects well before people do. Miners watched for a bird in
 distress ("stopped singing" is the popular shorthand). The customers, names and numbers are illustrative.
+
+---
+
+# "Pizza index": 38-second vertical ad (9:16, 30 fps)
+
+A joke built on a real story, like the supplied reference: in 1990, the night before Iraq invaded Kuwait, late-night
+pizza deliveries to the Pentagon spiked, and Washington has called it the Pentagon Pizza Index ever since. Act 1 plays
+the story straight in flat vector, then pushes it further: a tower of boxes goes through the roof, a general eats under
+a spinning siren, and a spy in a bush tails the delivery guy through binoculars. Then the punchline turns into the pitch:
+"Your customers drop hints too. They just don't order pizza."
+
+- **Video:** `dist/msghealth-pizza-9x16.mp4` (1080×1920, 30 fps, 37.8 s)
+- Source: `pizza.html`, `src/pizza.js`, `src/pizza-vo.js` (voiceover clip lengths and caption timing). Act 2 uses the
+  same MsgHealth screens as "The canary" with new copy.
+- Render: `npm run render:pizza`. Text check: `npm run audit:pizza`. It reports one expected flag: the shop's "PIZZA"
+  sign is cut off by the frame inside the zoomed binocular view (15.3–16.6 s).
+- **Voiceover:** Kokoro TTS (`af_heart`, speed 1.08), one clip per line in `assets/audio/pizza/`, started at `VO_AT`
+  in `src/pizza.js`. Every story beat (`T`) is read off the voiceover.
+- **Sound** (`scripts/pizza-audio.mjs`): a synthesised pizzicato spy groove under act 1, delivery-car passes, box thocks
+  that speed up and rise as the tower goes through the roof, a two-tone siren for the general, a rustling bush, a
+  sad-trombone sting after "They just don't order pizza", then the MsgHealth groove from the logo hit. Its drums drop
+  under "No binoculars required" and return for the end card. Effects come from `assets/audio/fx-*.wav`. The score
+  ducks under the voice. The mix lands around −15 LUFS.
+
+| Time | Voiceover | What's on screen |
+|---|---|---|
+| 0–3.4s | "In 1990, the night before Iraq invaded Kuwait," | The Pentagon from above at night, with a surveillance HUD ("WASHINGTON, D.C. · AUG 1, 1990 · 11:47 PM"). A pizza car pulls in. |
+| 3.5–6.2s | "pizza deliveries to the Pentagon went through the roof." | More pizza cars arrive and the HUD's "PIZZA ORDERS" meter fills. A stack of boxes rises out of the courtyard and shoots up past the frame. |
+| 6.6–9.9s | "Insiders even gave it a name. The Pentagon Pizza Index." | A chart card. The line is flat for weeks, then a pizza slice rides it up to "AUG 1". The title stamps in. |
+| 10.3–12.6s | "Late-night pizza? Something big is coming." | Through a window: a general mid-slice, with a stack of boxes and a red phone. A siren starts spinning, his eyes go wide and the cheese drips. |
+| 12.9–16.2s | "So now, some people watch pizza deliveries… very closely." | Outside the pizza shop, a spy rises out of a bush that creeps after the delivery guy. Then the binocular view: "PEPPERONI · LARGE", "CONFIRMED". |
+| 16.6–18.3s | "Your customers drop hints too." | The binoculars iris out onto CUSTOMER ACTIVITY. Jordan's bars tail off. |
+| 18.6–19.9s | "They just don't order pizza." | A pizza box drops onto the card and gets stamped "NO PIZZA DETECTED". Sad trombone. |
+| 20.3–23.1s | "They book less. They reply slower. Then they're gone." | JORDAN · THE SIGNS: visits now every 9 weeks, replies after 3 days. Jordan fades to a dashed outline. |
+| 23.5–25.5s | "MsgHealth reads the signs for you." | The logo lands with a hit. |
+| 25.7–28.8s | "It scores every customer's health, and flags who's at risk." | CLIENT HEALTH: scores count up. Jordan is flagged AT RISK. |
+| 29.1–31.9s | "Then it texts them, before they leave. And they book again." | An automatic win-back SMS, Jordan's reply, "Booked · Thu 10:00 AM", and health from 38 to 86. |
+| 32.4–34.0s | "No binoculars required." | Binoculars, struck out. Then "Just MsgHealth." |
+| 34.2–37.8s | "MsgHealth dot net." | End card: logo, tagline, a tap on "Try MsgHealth →", then msghealth.net. |
+
+On the facts: the "Pizza Meter" story comes from Frank Meeks, who ran Domino's franchises in Washington. He told
+reporters that late-night orders from the Pentagon and the White House jumped the night before Iraq invaded Kuwait on
+August 2, 1990. "Pentagon Pizza Index" is the name the idea still goes by. The film shows no pizza brand, and the 11:47 PM
+timestamp, the spy and the general are jokes. The customers, names and numbers are illustrative.

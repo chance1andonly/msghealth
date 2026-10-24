@@ -13,7 +13,9 @@
     "render:screen:9x16": "ENTRY=screen-vertical.html node scripts/render.mjs",
     "audit:ad": "ENTRY=ad.html node scripts/audit-text.mjs",
     "render:canary": "ENTRY=canary.html node scripts/render.mjs",
-    "audit:canary": "ENTRY=canary.html node scripts/audit-text.mjs 0.1"
+    "audit:canary": "ENTRY=canary.html node scripts/audit-text.mjs 0.1",
+    "render:pizza": "ENTRY=pizza.html node scripts/render.mjs",
+    "audit:pizza": "ENTRY=pizza.html node scripts/audit-text.mjs 0.1"
   },
   "repository": {
     "type": "git",
