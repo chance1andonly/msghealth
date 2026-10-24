@@ -605,22 +605,27 @@ function glyph(kind, x, y) {
 }
 const CW = 700, ROWH = 104;
 function hm(min) { const m = Math.round(min / 5) * 5; return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`; }
-// The supplied clip (assets/video/peace: 34 frames at 25 fps, plus its sound) plays as a 50% overlay on the card from
-// the MsgHealth hit (on the beat at 24.91 s), before the rows turn automatic and the time drops. Its sound sits
-// muffled under the music. Frames are numbered from 1.
-const CLIP = { at: 24.91, fps: 25, count: 34, frames: [], audio: 'assets/video/peace/audio.wav', opacity: 0.5 };
+// The supplied clip, cut down to just the guy throwing up the peace sign (assets/video/peace: 33 RGBA frames at 25 fps,
+// background and the second guy removed, bottom edge feathered; plus its sound). He appears standing on the card from
+// the MsgHealth hit (on the beat at 24.91 s) and, as he dashes off, blurs and fades into the card, before the rows turn
+// automatic and the time drops. His sound sits muffled under the music. Frames are numbered from 1.
+const CLIP = { at: 24.91, fps: 25, count: 33, frames: [], audio: 'assets/video/peace/audio.wav' };
 CLIP.dur = CLIP.count / CLIP.fps;
+const CLIP_FADE = [0.3, 0.56]; // seconds into the clip: he starts his dash, then he's gone
 function clipOverlay(ft) {
   const local = ft - CLIP.at;
   if (local < 0 || local >= CLIP.dur || !CLIP.frames.length) return;
   const img = CLIP.frames[clamp(Math.floor(local * CLIP.fps), 0, CLIP.frames.length - 1)];
-  const k = ease.out(seg(local, 0, 0.12)) * (1 - ease.in(seg(local, CLIP.dur - 0.1, CLIP.dur)));
-  const w = V ? 760 : 560, hh = w * img.height / img.width, x0 = OBJ.x - w / 2, y0 = OBJ.y - hh / 2;
+  const away = ease.inOut(seg(local, CLIP_FADE[0], CLIP_FADE[1]));
+  const k = ease.out(seg(local, 0, 0.12)) * (1 - away);
+  if (k <= 0.005) return;
+  const ch = (200 + ROWS.length * ROWH + 20) * CS, w = V ? 760 : 560, hh = w * img.height / img.width;
+  const x0 = OBJ.x - w * 0.4, y0 = OBJ.y + ch / 2 - hh; // centred on the card (he stands at 0.4 of the frame's width), on its bottom edge
   ctx.save();
-  ctx.translate(OBJ.x, OBJ.y); const sc = lerp(0.85, 1, k); ctx.scale(sc, sc); ctx.translate(-OBJ.x, -OBJ.y);
-  ctx.globalAlpha = k * CLIP.opacity;
-  rr(x0, y0, w, hh, 32); ctx.save(); ctx.clip(); ctx.drawImage(img, x0, y0, w, hh); ctx.restore();
-  rr(x0, y0, w, hh, 32); ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.globalAlpha = k;
+  if (away > 0.01) ctx.filter = `blur(${(8 * away).toFixed(1)}px)`;
+  ctx.translate(OBJ.x, y0 + hh); const sc = lerp(0.92, 1, ease.out(seg(local, 0, 0.12))); ctx.scale(sc, sc); ctx.translate(-OBJ.x, -(y0 + hh));
+  ctx.drawImage(img, x0, y0, w, hh);
   ctx.restore();
 }
 function sCard(t) {
@@ -817,7 +822,7 @@ window.ready = (async () => {
   const load = (src) => new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
   LOGO = await load(BRAND.logoFile);
   for (const h of Object.values(HANDS)) h.img = await load(h.src);
-  CLIP.frames = (await Promise.all(Array.from({ length: CLIP.count }, (_, i) => load(`assets/video/peace/f${String(i + 1).padStart(3, '0')}.jpg`)))).filter(Boolean);
+  CLIP.frames = (await Promise.all(Array.from({ length: CLIP.count }, (_, i) => load(`assets/video/peace/f${String(i + 1).padStart(3, '0')}.png`)))).filter(Boolean);
   if (location.search.includes('render')) document.body.classList.add('render');
   renderFrame(0);
   return true;

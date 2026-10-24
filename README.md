@@ -210,13 +210,15 @@ the brand, at the top of a musical phrase (24.91 s).
 - **Finger:** two cursor-style hands in `assets/img`. The pointing hand (`hand-tap.png`, click lines recoloured white for
   the dark screens) shows while the finger presses. The middle finger (`hand-hover.png`) shows while it hovers. Both were cut
   out of the supplied pictures, and `HANDS` in `src/screen.js` records where each fingertip sits.
-- **Clip overlay:** the supplied clip (`assets/video/peace`: 34 frames at 25 fps, plus `audio.wav`) plays over the card at 50%
-  opacity.
-  - It starts on the MsgHealth hit (24.91 s) and lasts 1.36 s. That's before the rows turn "Automatic" and the time drops, which
-    starts right after it at 26.4 s.
-  - The music keeps playing. The clip's sound sits under it, muffled through two 500 Hz low-pass stages and brought back up to
-    about the music's level.
-  - `CLIP` in `src/screen.js` sets the timing and opacity.
+- **Clip overlay:** the guy throwing up the peace sign, cut out of the supplied clip, stands on the card from the MsgHealth hit
+  (24.91 s).
+  - The background and the second guy are removed. `assets/video/peace` holds 33 RGBA frames at 25 fps plus `audio.wav`.
+  - As he dashes off (0.3–0.56 s into the clip) he blurs and fades into the card. That's before the rows turn "Automatic" and
+    the time drops.
+  - His sound sits muffled under the music.
+  - The cut-out was made with Google's DeepLab v3 person segmentation (through MediaPipe), limited to his side of the frame
+    and his hand, with jersey and background pixels dropped and the bottom edge feathered.
+  - `CLIP` and `CLIP_FADE` in `src/screen.js` set the timing.
 - Render: `npm run render:screen` and `npm run render:screen:9x16`. Stills (film time): `ENTRY=screen.html node scripts/snap.mjs out/ 12`
 
 | Time | Caption | What's on screen |
@@ -229,7 +231,7 @@ the brand, at the top of a musical phrase (24.91 s).
 | 14.9–16.9s | "That's your touch." | The crosshair follows the finger as it drags |
 | 16.9–19.4s | "Run a business? A lot of those touches are for clients." | Back to the phone for a burst of taps |
 | 19.4–24.9s | "Booking. Reminders. Rescheduling. Follow-ups." / "Over 2 hours a day, just keeping your calendar full." | Client admin per day: booking 45m, reminders & confirmations 30m, rescheduling & cancellations 25m, follow-ups & rebooking 20m, review requests 10m = 2h 10m |
-| 24.9–30.9s | (MsgHealth logo) "It does all of that for you." / "That's 2 hours back. Every day." | The colour turns brand indigo and the clip plays over the card at 50% opacity, with its sound muffled under the music. From 26.4s each row flips to "Automatic", its bar drains, the total counts down to 0m and "2h 10m back" appears. |
+| 24.9–30.9s | (MsgHealth logo) "It does all of that for you." / "That's 2 hours back. Every day." | The colour turns brand indigo. The peace-sign guy, cut out of the clip, stands on the card and fades into it as he dashes off, with his sound muffled under the music. From 26.4s each row flips to "Automatic", its bar drains, the total counts down to 0m and "2h 10m back" appears. |
 | 30.9–32.9s | "Without lifting a finger." | The finger lifts off a lock screen as MsgHealth notifications land: reminders sent, a booking, a reschedule, a review request |
 | 32.9–36.9s | — | Logo, "Get your hours back.", msghealth.net |
 
