@@ -179,7 +179,7 @@ function aerialScene(t) {
   drawPentagon(t);
   drawTower(t);
   ctx.restore();
-  if (t < T.roof + 0.2) { ctx.save(); ctx.globalAlpha = 1 - seg(t, T.roof - 0.2, T.roof + 0.2); moon(860, 210, 56); ctx.restore(); }
+  if (t < T.roof + 0.2) { ctx.save(); ctx.globalAlpha = 1 - seg(t, T.roof - 0.2, T.roof + 0.2); moon(900, 440, 56); ctx.restore(); }
   // the surveillance-feed HUD
   hud('WASHINGTON, D.C.', 540, 300, 24); hud('AUG 1, 1990 · 11:47 PM', 540, 340, 30);
   const k = seg(t, T.pentagon, T.roof + 0.3);
@@ -189,7 +189,7 @@ function aerialScene(t) {
 // ── "The Pentagon Pizza Index" ───────────────────────────────────────────────
 function indexScene(t) {
   ctx.save(); nightSky(t, 0, H); ctx.restore();
-  moon(860, 230, 50);
+  moon(900, 360, 50);
   // a stack of boxes in the background still going up
   for (let i = 0; i < 40; i++) pizzaBox(170 + Math.sin(i) * 6, 1900 - i * 40 - ((t - T.name) * 120 % 40), 140, 0, true);
   const k = ease.back(seg(t, T.name - 0.05, T.name + 0.35));
