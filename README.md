@@ -386,7 +386,7 @@ flags who's at risk the moment they slip, and texts them so they book again.
   camera pulls back to the whole crowd as their beams come up. A big 3, 2, 1, then a green flash on "FIRE!". Then black
   space schematics, labelled like the reference: a big title top left, small tracked labels. The pivot keeps the clock
   spinning while it counts weeks since Jordan's last visit, and it turns red past six weeks. Act 2 uses the MsgHealth
-  screens from "The canary" and "Pizza index", on black with a faint grid in brand indigo. Captions are bold white with
+  screens from "The canary" and "Pizza index", on black (no corner watermark; the brand shows only from the logo hit on) with a faint grid in brand indigo. Captions are bold white with
   a soft shadow and no box. Accent words are pale gold until the logo and indigo after it.
 - **Voiceover:** Kokoro TTS, voice `am_michael` (a male narrator, like the reference), speed 1.1. "Uranus" is said as two words, "your anus" (the TTS is fed that spelling; captions still read Uranus). In line 14 the pause the TTS puts after "businesses" is cut out, so the line runs straight through. There's one clip per
   line in `assets/audio/uranus/`, and each starts at its time in `VO_AT`. Caption chunks were timed with

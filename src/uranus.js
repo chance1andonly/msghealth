@@ -659,17 +659,6 @@ function drawCaption(t) {
   words.forEach((w) => { ctx.fillStyle = w.acc ? (c.brand ? IN.mid : ACCENT) : '#ffffff'; ctx.fillText(w.w, x, CAP_Y + 2); x += w.width + sp; });
   ctx.restore();
 }
-// A small brand watermark, right side (hidden while the logo itself is on screen).
-function watermark(t) {
-  const a = 0.85 * (1 - seg(t, T.brand - 0.3, T.brand)) + 0.85 * seg(t, T.every, T.every + 0.3) * (1 - seg(t, T.end - 0.3, T.end));
-  if (a <= 0.01) return;
-  ctx.save(); ctx.globalAlpha = a; ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 8;
-  const s = BRAND.url.toUpperCase(), w = tw(s, 17, 800, 0.12), x1 = 1020, y = 400;
-  text(s, x1, y, 17, 800, '#fff', 'right', 0.12);
-  if (LOGO) ctx.drawImage(LOGO, x1 - w - 42, y - 16, 32, 32);
-  ctx.restore();
-}
-
 // ── the edit ─────────────────────────────────────────────────────────────────
 const SCENES = [
   [0, T.space, crowdScene],
@@ -695,7 +684,6 @@ function renderFrame(t) {
   // a quick white flash on the cut to space
   { const f = 1 - seg(t, T.space, T.space + 0.15); if (t >= T.space && f > 0) { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = rgba('#ffffff', 0.6 * f); ctx.fillRect(0, 0, W, H); } }
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.shadowBlur = 0;
-  watermark(t);
   drawCaption(t);
 }
 
