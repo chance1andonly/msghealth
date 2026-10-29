@@ -70,12 +70,12 @@ for (let t = T.six, i = 0; t < T.brand - 0.35; i++) {
 }
 for (let t = T.pivot + 0.2; t < T.brand - 0.4; t += 0.85) { add(MUS, t, 0.3, kick(), 0.32); add(MUS, t + 0.22, 0.3, kick(), 0.2); }
 pad(MUS, T.pivot, T.brand - T.pivot - 0.2, [38, 45, 50, 53], 0.045);
-// Act 2 · MsgHealth: an upbeat groove (112 BPM) from the logo; drums drop out under "Stop guessing" and come back for the URL.
+// Act 2 · MsgHealth: an upbeat groove (112 BPM) from the logo until the end card, which has no music.
 {
   const beat = 60 / 112, chords = [[60, 64, 67, 72], [55, 59, 62, 67], [57, 60, 64, 69], [53, 57, 60, 65]];
   for (let k = 0; ; k++) {
-    const t = T.brand + k * beat / 2; if (t > DUR) break;
-    const bar = Math.floor(k / 8), ch = chords[bar % 4], drop = t > T.stop - 0.1 && t < T.url - 0.05;
+    const t = T.brand + k * beat / 2; if (t >= T.end) break;
+    const bar = Math.floor(k / 8), ch = chords[bar % 4], drop = false;
     if (!drop && k % 2 === 0) add(MUS, t, 0.45, kick(), 0.5);
     if (!drop && k % 4 === 2) noise(MUS, t, 0.25, 0.16, 18, 0.2);
     if (!drop) noise(MUS, t + (k % 2 ? 0.02 : 0), 0.06, 0.05, 70, 0.95, k % 2 ? 0.3 : -0.3);
@@ -86,6 +86,9 @@ pad(MUS, T.pivot, T.brand - T.pivot - 0.2, [38, 45, 50, 53], 0.045);
 }
 // The booking: a bright little chord.
 [84, 88, 91].forEach((m, i) => add(MUS, T.again + 0.42 + i * 0.06, 1.4, bell(mtof(m), 4), 0.06));
+
+// The end card is music-free: whatever still rings at T.end fades out over 0.3 s.
+for (let n = Math.floor(T.end * SR); n < N; n++) { const g = Math.max(0, 1 - (n / SR - T.end) / 0.3); MUS[0][n] *= g; MUS[1][n] *= g; }
 
 // ── write the synth stems, then mix with ffmpeg ──────────────────────────────
 function wav(file, L, R) {
@@ -101,7 +104,7 @@ wav(path.join(TMP, 'music.wav'), ...MUS); wav(path.join(TMP, 'amb.wav'), ...AMB)
 
 const SOUNDS = { // file, where its anchor (attack or peak) sits inside the file, gain
   swoosh: { file: 'fx-swoosh.wav', anchor: 0.057, gain: 1 }, swish: { file: 'fx-swish.wav', anchor: 0.159, gain: 1 },
-  transition: { file: 'fx-transition.wav', anchor: 0.242, gain: 1 }, transitionHit: { file: 'fx-transition-hit.wav', anchor: 0.62, gain: 1 },
+  transition: { file: 'fx-transition.wav', anchor: 0.242, gain: 1 }, transitionHit: { file: 'fx-transition-hit.wav', anchor: 0.62, gain: 1, skip: 0.36 }, // skip: the reel's narrator says "two" before the hit
   key: { file: 'fx-key.wav', anchor: 0.036, gain: 1 }, ding: { file: 'fx-ding.wav', anchor: 0.058, gain: 1 },
   notification: { file: 'fx-notification.wav', anchor: 0.043, gain: 1 }, punch: { file: 'fx-punch.wav', anchor: 0.052, gain: 1 },
   tap: { file: 'fx-tap.wav', anchor: 0.046, gain: 1 },
@@ -119,8 +122,8 @@ kinds.forEach((k, ki) => {
   const cues = sfx.filter((c) => c.kind === k), idx = ki + 2 + vo.length;
   graph.push(`[${idx}:a]aresample=${SR},asplit=${cues.length}${cues.map((_, i) => `[${k}${i}]`).join('')}`);
   cues.forEach((c, i) => {
-    const start = c.t - SOUNDS[k].anchor, ms = Math.max(0, Math.round(start * 1000));
-    const skip = start < 0 ? `,atrim=start=${(-start).toFixed(3)},asetpts=PTS-STARTPTS` : '';
+    const lead = SOUNDS[k].skip ?? 0, start = c.t - SOUNDS[k].anchor + lead, ms = Math.max(0, Math.round(start * 1000));
+    const cut = lead + Math.max(0, -start), skip = cut > 0 ? `,atrim=start=${cut.toFixed(3)},asetpts=PTS-STARTPTS` : '';
     graph.push(`[${k}${i}]volume=${(FX_GAIN * SOUNDS[k].gain * (c.gain ?? 1)).toFixed(3)}${skip},adelay=${ms}|${ms}[${k}d${i}]`);
     fxIn.push(`[${k}d${i}]`);
   });
