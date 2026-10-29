@@ -368,3 +368,56 @@ On the facts: the "Pizza Meter" story comes from Frank Meeks, who ran Domino's f
 reporters that late-night orders from the Pentagon and the White House jumped the night before Iraq invaded Kuwait on
 August 2, 1990. "Pentagon Pizza Index" is the name the idea still goes by. The film shows no pizza brand, and the 11:47 PM
 timestamp, the spy and the general are jokes. The customers, names and numbers are illustrative.
+
+---
+
+# "Uranus": 58-second vertical ad (9:16, 30 fps)
+
+A "what if" science short in the format of the supplied reference (same Uranus laser hook): eight billion people aim
+lasers at Uranus. The light takes almost three hours to get there, a single beam spreads to a spot twice as wide as the
+Sun, so almost all of it misses, and any light coming back would need another three hours. Then the turn: six hours
+round trip "is still faster than most businesses notice a regular has stopped coming." MsgHealth scores every customer,
+flags who's at risk the moment they slip, and texts them so they book again.
+
+- **Video:** `dist/msghealth-uranus-9x16.mp4` (1080×1920, 30 fps, 57.6 s)
+- Source: `uranus.html`, `src/uranus.js`, `src/uranus-vo.js` (clip lengths, caption timing and the spoken text)
+- Render: `npm run render:uranus`. Text check: `npm run audit:uranus` (0 issues).
+- Look: act 1 is a flat-vector crowd at night. It opens tight on one guy's raised hand, his pointer clicks on, and the
+  camera pulls back to the whole crowd as their beams come up. A big 3, 2, 1, then a green flash on "FIRE!". Then black
+  space schematics, labelled like the reference: a big title top left, small tracked labels. The pivot keeps the clock
+  spinning while it counts weeks since Jordan's last visit, and it turns red past six weeks. Act 2 uses the MsgHealth
+  screens from "The canary" and "Pizza index", on black with a faint grid in brand indigo. Captions are bold white with
+  a soft shadow and no box. Accent words are pale gold until the logo and indigo after it.
+- **Voiceover:** Kokoro TTS, voice `am_michael` (a male narrator, like the reference), speed 1.1. There's one clip per
+  line in `assets/audio/uranus/`, and each starts at its time in `VO_AT`. Caption chunks were timed with
+  `scripts/vo-align.py`, which spreads syllables over each clip's voiced span and snaps each boundary to the quietest
+  nearby frame.
+- **Sound** (`scripts/uranus-audio.mjs`): a low drone with a pulse and a rising swell into the countdown, a hit on each
+  number, a boom and a spray of synthesised laser zaps on "FIRE!", a spacey pad with a sparse bell arpeggio, clock
+  ticks (faster once they count weeks), a heartbeat under the lost customer, then the MsgHealth groove from the logo hit.
+  The drums drop under "Stop guessing…" and come back for the URL. The mix lands around −16.5 LUFS.
+
+| Time | Voiceover | What's on screen |
+|---|---|---|
+| 0–3.3s | "What if eight billion people aimed lasers at Uranus?" | Close on a raised hand. The pointer clicks on, then a pull back to the crowd as every beam comes up. |
+| 3.6–7.0s | "Three. Two. One. Fire!" | A big 3, 2, 1. Green flash and shake, and the beams blaze. |
+| 7.5–9.7s | "Billions of beams shoot into space." | 8 BILLION LASERS: Earth with a sheet of beams leaving it |
+| 9.9–13.3s | "But it could take almost three hours, just to reach Uranus." | ≈3 HOURS: a green wedge crawls from a tiny Earth to Uranus |
+| 13.6–19.1s | "And the beams keep spreading. By then, one laser could make a spot twice as wide as the Sun." | THE FOOTPRINT EXPANDS (0.9 mrad), then ≈2 SUNS WIDE: two suns inside one beam's spot |
+| 19.4–22.7s | "Uranus is just fifty-one thousand kilometers wide." | URANUS DIAMETER counts up to 51,118 km |
+| 22.9–25.0s | "So almost all that light misses." | ALMOST ALL MISSES: at the same scale, Uranus shrinks to a speck inside the green footprint |
+| 25.4–31.6s | "But here's the weird part. Even if Uranus lit up, the light coming back would need another three hours." | Uranus lights up and a dot of light crawls back to Earth. "+≈3 HOURS" |
+| 31.8–33.4s | "Six hours, round trip." | ≈6 HOURS: a clock spins through six hours |
+| 33.7–38.2s | "Which is still faster than most businesses notice a regular has stopped coming." | MEANWHILE, AT YOUR SHOP: "3w 3d → 9w 0d since Jordan's last visit". Jordan's card turns red: "NOT BOOKED · NO REPLY" |
+| 38.4–42.2s | "By the time they do, that customer is already booked somewhere else." | "→ booked somewhere else" (struck through), then a CUSTOMER LOST stamp |
+| 42.8–48.1s | "MsgHealth scores every customer's health, and flags who's at risk the moment they slip." | The logo lands with a hit. CLIENT HEALTH: scores count up, Jordan slides from 78 to 38 and is flagged AT RISK ("Visit overdue · 2 weeks", "No reply") |
+| 48.4–50.8s | "Then it texts them for you, so they book again." | AUTOMATIONS · WIN-BACK: an automatic SMS, "Yes please! See you then.", "Booked · Thu 10:00 AM", and health from 38 to 86 |
+| 51.3–57.6s | "Stop guessing when your customers are planning to leave. MsgHealth dot net." | End card: logo, tagline, a tap on "Try MsgHealth →", "50% off your first month", msghealth.net |
+
+On the facts: Earth–Uranus distance runs about 2.6–3.2 billion km, so light takes about 2.4–2.9 hours one way. At a
+0.9 mrad full-angle divergence, which is typical of a cheap laser pointer, a beam that has travelled about 2.7–3 billion km is
+about 2.4–2.7 million km wide. The Sun is about 1.39 million km across, so that's roughly two Suns. It's also about 50
+times Uranus' diameter (51,118 km), which is why the "same scale" shot leaves Uranus as a speck. The return trip is the
+same distance, so six hours is the round trip. The six-hours-versus-weeks line is a comparison, not a measured
+statistic. The customers, names and numbers are illustrative. The "50% off your first month" offer is the one from the
+"While you cut" end card, so confirm it's still running before you buy media.

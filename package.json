@@ -15,7 +15,9 @@
     "render:canary": "ENTRY=canary.html node scripts/render.mjs",
     "audit:canary": "ENTRY=canary.html node scripts/audit-text.mjs 0.1",
     "render:pizza": "ENTRY=pizza.html node scripts/render.mjs",
-    "audit:pizza": "ENTRY=pizza.html node scripts/audit-text.mjs 0.1"
+    "audit:pizza": "ENTRY=pizza.html node scripts/audit-text.mjs 0.1",
+    "render:uranus": "ENTRY=uranus.html node scripts/render.mjs",
+    "audit:uranus": "ENTRY=uranus.html node scripts/audit-text.mjs 0.1"
   },
   "repository": {
     "type": "git",
