@@ -1,6 +1,7 @@
 // Voiceover clips (assets/audio/uranus/vo-NN.wav, Kokoro TTS, voice am_michael, speed 1.1): each clip's length and when
 // each caption chunk starts inside it (seconds). Found by spreading syllables over the voiced part of each clip and
-// snapping every boundary to the quietest nearby frame.
+// snapping every boundary to the quietest nearby frame. Clip 14 has the TTS's pause after "businesses" (2.26–2.49 s) cut
+// out with a 50 ms crossfade, so the line reads straight through.
 window.VO_CLIPS = [
   { dur: 3.179, chunks: [["What *if* eight billion", 0.0], ["*people* aimed lasers", 1.19], ["at *Uranus?*", 2.49]] }, // 00
   { dur: 0.725, chunks: [["*Three.*", 0.0]] }, // 01
@@ -16,7 +17,7 @@ window.VO_CLIPS = [
   { dur: 1.621, chunks: [["But here's *the weird part.*", 0.0]] }, // 11
   { dur: 4.544, chunks: [["Even if *Uranus* lit up,", 0.0], ["the light coming *back*", 1.84], ["would need *another*", 2.82], ["three *hours.*", 3.94]] }, // 12
   { dur: 1.643, chunks: [["*Six hours* round trip…", 0.0]] }, // 13
-  { dur: 4.523, chunks: [["which is *still* faster", 0.0], ["than *most* businesses", 0.98], ["notice a regular", 2.26], ["has stopped *coming.*", 3.32]] }, // 14
+  { dur: 4.243, chunks: [["which is *still* faster", 0.0], ["than *most* businesses", 0.98], ["notice a regular", 2.15], ["has stopped *coming.*", 3.04]] }, // 14
   { dur: 3.84, chunks: [["By the time *they* do,", 0.0], ["that customer is *already*", 1.15], ["booked *somewhere else.*", 2.74]] }, // 15
   { dur: 5.397, chunks: [["*MsgHealth* scores", 0.0], ["every customer's *health*,", 1.24], ["and flags who's *at risk*", 2.66], ["the moment they *slip.*", 4.16]] }, // 16
   { dur: 2.432, chunks: [["Then it *texts* them for you,", 0.0], ["so they *book again.*", 1.37]] }, // 17

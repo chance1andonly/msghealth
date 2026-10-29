@@ -388,7 +388,7 @@ flags who's at risk the moment they slip, and texts them so they book again.
   spinning while it counts weeks since Jordan's last visit, and it turns red past six weeks. Act 2 uses the MsgHealth
   screens from "The canary" and "Pizza index", on black with a faint grid in brand indigo. Captions are bold white with
   a soft shadow and no box. Accent words are pale gold until the logo and indigo after it.
-- **Voiceover:** Kokoro TTS, voice `am_michael` (a male narrator, like the reference), speed 1.1. "Uranus" is said as two words, "your anus" (the TTS is fed that spelling; captions still read Uranus). There's one clip per
+- **Voiceover:** Kokoro TTS, voice `am_michael` (a male narrator, like the reference), speed 1.1. "Uranus" is said as two words, "your anus" (the TTS is fed that spelling; captions still read Uranus). In line 14 the pause the TTS puts after "businesses" is cut out, so the line runs straight through. There's one clip per
   line in `assets/audio/uranus/`, and each starts at its time in `VO_AT`. Caption chunks were timed with
   `scripts/vo-align.py`, which spreads syllables over each clip's voiced span and snaps each boundary to the quietest
   nearby frame.
@@ -408,7 +408,7 @@ flags who's at risk the moment they slip, and texts them so they book again.
 | 22.9–25.0s | "So almost all that light misses." | ALMOST ALL MISSES: at the same scale, Uranus shrinks to a speck inside the green footprint |
 | 25.4–31.6s | "But here's the weird part. Even if Uranus lit up, the light coming back would need another three hours." | Uranus lights up and a dot of light crawls back to Earth. "+≈3 HOURS" |
 | 31.8–33.4s | "Six hours, round trip." | ≈6 HOURS: a clock spins through six hours |
-| 33.7–38.2s | "Which is still faster than most businesses notice a regular has stopped coming." | MEANWHILE, AT YOUR SHOP: "3w 3d → 9w 0d since Jordan's last visit". Jordan's card turns red: "NOT BOOKED · NO REPLY" |
+| 33.7–37.9s | "Which is still faster than most businesses notice a regular has stopped coming." | MEANWHILE, AT YOUR SHOP: "3w 3d → 9w 0d since Jordan's last visit". Jordan's card turns red: "NOT BOOKED · NO REPLY" |
 | 38.4–42.2s | "By the time they do, that customer is already booked somewhere else." | "→ booked somewhere else" (struck through), then a CUSTOMER LOST stamp |
 | 42.8–48.1s | "MsgHealth scores every customer's health, and flags who's at risk the moment they slip." | The logo lands with a hit. CLIENT HEALTH: scores count up, Jordan slides from 78 to 38 and is flagged AT RISK ("Visit overdue · 2 weeks", "No reply") |
 | 48.4–50.8s | "Then it texts them for you, so they book again." | AUTOMATIONS · WIN-BACK: an automatic SMS, "Yes please! See you then.", "Booked · Thu 10:00 AM", and health from 38 to 86 |
