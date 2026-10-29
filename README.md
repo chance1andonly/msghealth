@@ -388,7 +388,7 @@ flags who's at risk the moment they slip, and texts them so they book again.
   spinning while it counts weeks since Jordan's last visit, and it turns red past six weeks. Act 2 uses the MsgHealth
   screens from "The canary" and "Pizza index", on black with a faint grid in brand indigo. Captions are bold white with
   a soft shadow and no box. Accent words are pale gold until the logo and indigo after it.
-- **Voiceover:** Kokoro TTS, voice `am_michael` (a male narrator, like the reference), speed 1.1. There's one clip per
+- **Voiceover:** Kokoro TTS, voice `am_michael` (a male narrator, like the reference), speed 1.1. "Uranus" is said as two words, "your anus" (the TTS is fed that spelling; captions still read Uranus). There's one clip per
   line in `assets/audio/uranus/`, and each starts at its time in `VO_AT`. Caption chunks were timed with
   `scripts/vo-align.py`, which spreads syllables over each clip's voiced span and snaps each boundary to the quietest
   nearby frame.
