@@ -1,5 +1,5 @@
 // Builds the soundtrack for "Uranus" (uranus.html): a synthesised score (a tense drone and countdown, a spacey pad,
-// a ticking clock, then the MsgHealth groove), laser zaps, sound effects from assets/audio/fx-*.wav, and the voiceover
+// a ticking clock; no music from the MsgHealth logo on), laser zaps, sound effects from assets/audio/fx-*.wav, and the voiceover
 // clips (assets/audio/uranus/vo-NN.wav).
 // Everything is timed from the film itself: window.CUES (story beats), window.SFX (effects), window.VO (clips).
 // The score ducks under the voice.
@@ -70,25 +70,12 @@ for (let t = T.six, i = 0; t < T.brand - 0.35; i++) {
 }
 for (let t = T.pivot + 0.2; t < T.brand - 0.4; t += 0.85) { add(MUS, t, 0.3, kick(), 0.32); add(MUS, t + 0.22, 0.3, kick(), 0.2); }
 pad(MUS, T.pivot, T.brand - T.pivot - 0.2, [38, 45, 50, 53], 0.045);
-// Act 2 · MsgHealth: an upbeat groove (112 BPM) from the logo until the end card, which has no music.
-{
-  const beat = 60 / 112, chords = [[60, 64, 67, 72], [55, 59, 62, 67], [57, 60, 64, 69], [53, 57, 60, 65]];
-  for (let k = 0; ; k++) {
-    const t = T.brand + k * beat / 2; if (t >= T.end) break;
-    const bar = Math.floor(k / 8), ch = chords[bar % 4], drop = false;
-    if (!drop && k % 2 === 0) add(MUS, t, 0.45, kick(), 0.5);
-    if (!drop && k % 4 === 2) noise(MUS, t, 0.25, 0.16, 18, 0.2);
-    if (!drop) noise(MUS, t + (k % 2 ? 0.02 : 0), 0.06, 0.05, 70, 0.95, k % 2 ? 0.3 : -0.3);
-    add(MUS, t, 0.7, pluck(mtof(ch[[0, 1, 2, 3, 2, 1, 2, 3][k % 8]] + 12), 5), 0.085, k % 2 ? 0.3 : -0.3);
-    if (k % 8 === 0) add(MUS, t, beat * 4, sub(mtof(ch[0] - 24), 0.6), drop ? 0.12 : 0.3);
-    if (k % 8 === 0) pad(MUS, t, beat * 4, ch, drop ? 0.06 : 0.035);
-  }
-}
+// Act 2 · MsgHealth (from the logo hit) has no music: only the voice and the effects.
 // The booking: a bright little chord.
-[84, 88, 91].forEach((m, i) => add(MUS, T.again + 0.42 + i * 0.06, 1.4, bell(mtof(m), 4), 0.06));
+[84, 88, 91].forEach((m, i) => add(AMB, T.again + 0.42 + i * 0.06, 1.4, bell(mtof(m), 4), 0.06));
 
-// The end card is music-free: whatever still rings at T.end fades out over 0.3 s.
-for (let n = Math.floor(T.end * SR); n < N; n++) { const g = Math.max(0, 1 - (n / SR - T.end) / 0.3); MUS[0][n] *= g; MUS[1][n] *= g; }
+// Whatever music still rings when the logo lands fades out over 0.2 s.
+for (let n = Math.floor(T.brand * SR); n < N; n++) { const g = Math.max(0, 1 - (n / SR - T.brand) / 0.2); MUS[0][n] *= g; MUS[1][n] *= g; }
 
 // ── write the synth stems, then mix with ffmpeg ──────────────────────────────
 function wav(file, L, R) {

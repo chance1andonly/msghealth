@@ -394,8 +394,8 @@ flags who's at risk the moment they slip, and texts them so they book again.
   nearby frame.
 - **Sound** (`scripts/uranus-audio.mjs`): a low drone with a pulse and a rising swell into the countdown, a hit on each
   number, a boom and a spray of synthesised laser zaps on "FIRE!", a spacey pad with a sparse bell arpeggio, clock
-  ticks (faster once they count weeks), a heartbeat under the lost customer, then the MsgHealth groove from the logo hit.
-  The end card has no music, only the voice and the button tap. `fx-transition-hit.wav` opens with the source reel's
+  ticks (faster once they count weeks), and a heartbeat under the lost customer. From the MsgHealth logo hit on there's no music,
+  only the voice and the effects (UI clicks, the notification, the booking chime, the button tap). `fx-transition-hit.wav` opens with the source reel's
   narrator saying "two" before the hit, so this ad skips its first 0.36 s (`skip` in `SOUNDS`).
 
 | Time | Voiceover | What's on screen |
