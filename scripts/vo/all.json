@@ -1,0 +1,82 @@
+{
+ "voice": "am_adam",
+ "speed": 1.1,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Running a business is hard enough.",
+   "caps": [
+    "Running a business",
+    "is *hard enough.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "You shouldn't need eight different apps to keep your customers.",
+   "caps": [
+    "You shouldn't need",
+    "*eight apps*",
+    "to keep your *customers.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health puts it all in one place.",
+   "caps": [
+    "*MsgHealth* puts it all",
+    "in *one place.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Client health scores. Automatic texts and emails.",
+   "caps": [
+    "Client *health scores.*",
+    "Automatic *texts* and *emails.*"
+   ],
+   "gap": 0.2
+  },
+  {
+   "say": "Bookings. A shared inbox. Payments and invoices.",
+   "caps": [
+    "*Bookings.* A shared *inbox.*",
+    "*Payments* and *invoices.*"
+   ],
+   "gap": 0.2
+  },
+  {
+   "say": "Reviews. Loyalty. And reports that show what's working.",
+   "caps": [
+    "*Reviews.* *Loyalty.*",
+    "And *reports* that show",
+    "what's *working.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "One login. One bill.",
+   "caps": [
+    "*One login.*",
+    "*One bill.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And right now, your first month is fifty percent off.",
+   "caps": [
+    "And right now,",
+    "your first month is",
+    "*fifty percent off.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Try it at Message Health dot net.",
+   "caps": [
+    "Try it at",
+    "*msghealth.net*"
+   ],
+   "gap": 0.25
+  }
+ ]
+}

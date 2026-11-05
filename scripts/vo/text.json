@@ -1,0 +1,78 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "This is Priya. She used to come in every month.",
+   "caps": [
+    "This is *Priya.*",
+    "She came in *every month.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "It's been seven weeks.",
+   "caps": [
+    "It's been *seven weeks.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "She never cancelled. She just stopped.",
+   "caps": [
+    "She never *cancelled.*",
+    "She just *stopped.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "You'll never see it coming. Message Health will.",
+   "caps": [
+    "You'll never *see it coming.*",
+    "*MsgHealth* will."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "It spots the drop, and sends this, before she's gone.",
+   "caps": [
+    "It spots the drop,",
+    "and sends *this,*",
+    "before she's *gone.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "She taps yes. She's booked.",
+   "caps": [
+    "She taps *yes.*",
+    "She's *booked.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "One text. One customer saved.",
+   "caps": [
+    "*One text.*",
+    "One customer *saved.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Get fifty percent off your first month.",
+   "caps": [
+    "Get *fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.25
+  }
+ ]
+}

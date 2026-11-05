@@ -20,6 +20,9 @@
     "render:qr": "ENTRY=qr.html node scripts/render.mjs",
     "render:jet": "ENTRY=jet.html node scripts/render.mjs",
     "render:shed": "ENTRY=shed.html node scripts/render.mjs",
+    "render:lost": "ENTRY=lost.html node scripts/render.mjs",
+    "render:all": "ENTRY=all.html node scripts/render.mjs",
+    "render:text": "ENTRY=text.html node scripts/render.mjs",
     "audit:uranus": "ENTRY=uranus.html node scripts/audit-text.mjs 0.1"
   },
   "repository": {

@@ -281,3 +281,20 @@ function boot(cfg, voDir) {
     window.ready.then(() => { const q = new URLSearchParams(location.search).get('t'); if (q) show(+q); });
   })();
 }
+
+// ── the offer: a big "50% OFF" card (direct-response ads), then the logo and the button ──
+function offerCard(t, at, until) {
+  const k = ease.back(seg(t, at, at + 0.4)), pulse = 0.5 + 0.5 * Math.sin((t - at) * 5);
+  stage(t, 0.3 + 0.12 * pulse);
+  glow(CX, 700, 900, C.primary, 0.35 * (1 - seg(t, at, at + 0.5)));
+  withFade(enter(t, at - 0.02, until, 0.15), () => {
+    eyebrow('LIMITED TIME OFFER', 380, IN.mid);
+    xf(CX, 700, 0.6 + 0.4 * clamp(k), 0, () => {
+      ctx.save(); ctx.globalAlpha = clamp(k * 1.5); ctx.shadowColor = rgba(C.primary, 0.9); ctx.shadowBlur = 60;
+      text('50%', CX, 640, 330, 800, '#fff', 'center', -0.05); ctx.restore();
+    });
+    withFade(seg(t, at + 0.25, at + 0.55), () => { text('OFF YOUR FIRST MONTH', CX, 880, 62, 800, '#fff', 'center', 0.0); });
+    withFade(seg(t, at + 0.5, at + 0.85), () => { logoLockup(CX, 1060, 70); text(BRAND.url.toUpperCase(), CX, 1170, 28, 800, IN.mid, 'center', 0.18); });
+    const b = pop(t, at + 0.7, 0.35); if (b > 0) xf(CX, 1290, b, 0, () => { const lb = 'Claim 50% off', w = tw(lb, 40, 800) + 140; fillRR(CX - w / 2, 1235, w, 110, 55, C.primary); strokeRR(CX - w / 2, 1235, w, 110, 55, 'rgba(255,255,255,0.25)', 2); text(lb, CX, 1292, 40, 800, '#fff', 'center'); });
+  });
+}

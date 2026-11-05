@@ -1,0 +1,82 @@
+{
+ "voice": "am_michael",
+ "speed": 1.1,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Quick question. How many regulars did you lose this month?",
+   "caps": [
+    "Quick question.",
+    "How many *regulars*",
+    "did you lose *this month?*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "You don't know. Nobody tells you they're leaving.",
+   "caps": [
+    "You *don't know.*",
+    "Nobody tells you",
+    "they're *leaving.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health does.",
+   "caps": [
+    "*MsgHealth* does."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "It scores every customer's health, from visits, replies and bookings.",
+   "caps": [
+    "It *scores* every",
+    "customer's *health,*",
+    "from visits, replies",
+    "and *bookings.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "The moment someone slips, you get alerted.",
+   "caps": [
+    "The moment someone *slips,*",
+    "you get *alerted.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "And it texts them for you. Automatically.",
+   "caps": [
+    "And it *texts* them",
+    "for you. *Automatically.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "They book again. You didn't lift a finger.",
+   "caps": [
+    "They *book again.*",
+    "You didn't lift a *finger.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Right now, get fifty percent off your first month.",
+   "caps": [
+    "Right now, get",
+    "*fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.25
+  }
+ ]
+}
