@@ -29,6 +29,7 @@
     "render:dance": "ENTRY=dance.html node scripts/render.mjs",
     "render:bucket": "ENTRY=bucket.html node scripts/render.mjs",
     "render:rats": "ENTRY=rats.html node scripts/render.mjs",
+    "render:crassus": "ENTRY=crassus.html node scripts/render.mjs",
     "audit:uranus": "ENTRY=uranus.html node scripts/audit-text.mjs 0.1"
   },
   "repository": {

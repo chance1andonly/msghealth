@@ -204,9 +204,9 @@ function endCard(t, at, tapAt, urlAt) {
   ctx.restore();
   const o = ease.back(seg(t, at + 0.8, at + 1.1));
   if (o > 0) {
-    ctx.save(); ctx.globalAlpha = clamp(o); const s2 = '50% OFF YOUR FIRST MONTH', w = tw(s2, 22, 800, 0.12) + 40;
+    ctx.save(); ctx.globalAlpha = clamp(o); const s2 = '50% OFF YOUR FIRST MONTH · MONTHLY PLANS', w = tw(s2, 20, 800, 0.1) + 40;
     ctx.translate(CX, by + bh + 70); ctx.scale(o, o);
-    fillRR(-w / 2, -24, w, 48, 10, rgba(GREEN, 0.18)); strokeRR(-w / 2, -24, w, 48, 10, rgba(GREEN, 0.6), 2); text(s2, 0, 1, 22, 800, '#9ff0c0', 'center', 0.12);
+    fillRR(-w / 2, -24, w, 48, 10, rgba(GREEN, 0.18)); strokeRR(-w / 2, -24, w, 48, 10, rgba(GREEN, 0.6), 2); text(s2, 0, 1, 20, 800, '#9ff0c0', 'center', 0.1);
     ctx.restore();
   }
   withFade(seg(t, urlAt, urlAt + 0.3), () => text(BRAND.url.toUpperCase(), CX, by + bh + 160, 28, 800, IN.mid, 'center', 0.18));
@@ -286,15 +286,19 @@ function boot(cfg, voDir) {
 function offerCard(t, at, until) {
   const k = ease.back(seg(t, at, at + 0.4)), pulse = 0.5 + 0.5 * Math.sin((t - at) * 5);
   stage(t, 0.3 + 0.12 * pulse);
-  glow(CX, 700, 900, C.primary, 0.35 * (1 - seg(t, at, at + 0.5)));
+  glow(CX, 560, 900, C.primary, 0.35 * (1 - seg(t, at, at + 0.5)));
   withFade(enter(t, at - 0.02, until, 0.15), () => {
-    eyebrow('LIMITED TIME OFFER', 380, IN.mid);
-    xf(CX, 700, 0.6 + 0.4 * clamp(k), 0, () => {
-      ctx.save(); ctx.globalAlpha = clamp(k * 1.5); ctx.shadowColor = rgba(C.primary, 0.9); ctx.shadowBlur = 60;
-      text('50%', CX, 640, 330, 800, '#fff', 'center', -0.05); ctx.restore();
+    eyebrow('LIMITED TIME OFFER', 330, IN.mid);
+    xf(CX, 520, 0.6 + 0.4 * clamp(k), 0, () => { ctx.save(); ctx.globalAlpha = clamp(k * 1.5); ctx.shadowColor = rgba(C.primary, 0.9); ctx.shadowBlur = 60; text('50%', CX, 500, 290, 800, '#fff', 'center', -0.05); ctx.restore(); });
+    withFade(seg(t, at + 0.2, at + 0.5), () => text('OFF YOUR FIRST MONTH', CX, 690, 56, 800, '#fff', 'center', 0.0));
+    // the real monthly prices: first month at half price
+    [['Starter', '$50', '$25'], ['Pro', '$109', '$54.50'], ['Enterprise', '$279', '$139.50']].forEach(([n, was, now], i) => {
+      const e = pop(t, at + 0.45 + i * 0.12, 0.3), y = 780 + i * 96; if (e <= 0) return;
+      xf(CX, y + 36, clamp(e), 0, () => { fillRR(130, y, 820, 80, 22, 'rgba(255,255,255,0.06)'); strokeRR(130, y, 820, 80, 22, 'rgba(255,255,255,0.14)', 2); text(n, 170, y + 41, 32, 800, '#fff', 'left', 0);
+        text(was + '/mo', 600, y + 42, 30, 600, MUTED, 'right', 0); line(600 - tw(was + '/mo', 30, 600, 0), y + 42, 600, y + 42, MUTED, 3); text('→', 650, y + 41, 30, 700, MUTED, 'center'); text(now, 920, y + 42, 42, 800, '#9ff0c0', 'right', -0.01); });
     });
-    withFade(seg(t, at + 0.25, at + 0.55), () => { text('OFF YOUR FIRST MONTH', CX, 880, 62, 800, '#fff', 'center', 0.0); });
-    withFade(seg(t, at + 0.5, at + 0.85), () => { logoLockup(CX, 1060, 70); text(BRAND.url.toUpperCase(), CX, 1170, 28, 800, IN.mid, 'center', 0.18); });
-    const b = pop(t, at + 0.7, 0.35); if (b > 0) xf(CX, 1290, b, 0, () => { const lb = 'Claim 50% off', w = tw(lb, 40, 800) + 140; fillRR(CX - w / 2, 1235, w, 110, 55, C.primary); strokeRR(CX - w / 2, 1235, w, 110, 55, 'rgba(255,255,255,0.25)', 2); text(lb, CX, 1292, 40, 800, '#fff', 'center'); });
+    withFade(seg(t, at + 0.9, at + 1.2), () => text('Monthly plans only · Pay-Per-Use Wallet not included', CX, 1100, 22, 600, MUTED, 'center', 0.02));
+    withFade(seg(t, at + 0.8, at + 1.1), () => { logoLockup(CX, 1200, 60); });
+    const b = pop(t, at + 0.9, 0.35); if (b > 0) xf(CX, 1320, b, 0, () => { const lb = 'Claim 50% off · ' + BRAND.url, w = tw(lb, 34, 800) + 120; fillRR(CX - w / 2, 1270, w, 100, 50, C.primary); strokeRR(CX - w / 2, 1270, w, 100, 50, 'rgba(255,255,255,0.25)', 2); text(lb, CX, 1322, 34, 800, '#fff', 'center'); });
   });
 }

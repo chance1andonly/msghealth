@@ -1,0 +1,124 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In ancient Rome, a man named Crassus owned a private fire brigade.",
+   "caps": [
+    "In ancient Rome,",
+    "a man named *Crassus*",
+    "owned a *private fire brigade.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "When a building caught fire, he'd show up and make an offer.",
+   "caps": [
+    "When a building *caught fire,*",
+    "he'd show up,",
+    "and make an *offer.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Sell me the building, cheap, and I'll put it out.",
+   "caps": [
+    "*Sell me the building,*",
+    "*cheap,*",
+    "and I'll put it out."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "If you said no, he just watched it burn.",
+   "caps": [
+    "If you said *no,*",
+    "he just watched it *burn.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "He became the richest man in Rome.",
+   "caps": [
+    "He became the",
+    "*richest man* in Rome."
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Reportedly, he also charged extra for water.",
+   "caps": [
+    "Reportedly, he also",
+    "charged *extra* for water."
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Pricing shouldn't feel like a fire sale.",
+   "caps": [
+    "Pricing shouldn't feel",
+    "like a *fire sale.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health shows you the price up front. Starter is fifty dollars a month.",
+   "caps": [
+    "*MsgHealth* shows you",
+    "the price *up front.*",
+    "Starter is *fifty dollars* a month."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "It includes booking, client health scoring, reminders, invoicing, loyalty and reviews.",
+   "caps": [
+    "It includes *booking,*",
+    "client *health scoring,* *reminders,*",
+    "*invoicing,* *loyalty* and *reviews.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Pay yearly, and you save twenty percent.",
+   "caps": [
+    "Pay *yearly,*",
+    "and you save *twenty percent.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "And your first month is half price.",
+   "caps": [
+    "And your first month",
+    "is *half price.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "That's twenty-five dollars to start.",
+   "caps": [
+    "That's *twenty-five dollars*",
+    "to start."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month, on any monthly plan.",
+   "caps": [
+    "*Fifty percent off*",
+    "your first month,",
+    "on any *monthly plan.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
