@@ -30,7 +30,17 @@
     "render:bucket": "ENTRY=bucket.html node scripts/render.mjs",
     "render:rats": "ENTRY=rats.html node scripts/render.mjs",
     "render:crassus": "ENTRY=crassus.html node scripts/render.mjs",
-    "audit:uranus": "ENTRY=uranus.html node scripts/audit-text.mjs 0.1"
+    "audit:uranus": "ENTRY=uranus.html node scripts/audit-text.mjs 0.1",
+    "render:yap": "ENTRY=yap.html node scripts/render.mjs",
+    "audit:yap": "ENTRY=yap.html node scripts/audit-text.mjs 0.1",
+    "render:pigwar": "ENTRY=pigwar.html node scripts/render.mjs",
+    "audit:pigwar": "ENTRY=pigwar.html node scripts/audit-text.mjs 0.1",
+    "render:norton": "ENTRY=norton.html node scripts/render.mjs",
+    "audit:norton": "ENTRY=norton.html node scripts/audit-text.mjs 0.1",
+    "render:railway": "ENTRY=railway.html node scripts/render.mjs",
+    "audit:railway": "ENTRY=railway.html node scripts/audit-text.mjs 0.1",
+    "render:petrock": "ENTRY=petrock.html node scripts/render.mjs",
+    "audit:petrock": "ENTRY=petrock.html node scripts/audit-text.mjs 0.1"
   },
   "repository": {
     "type": "git",

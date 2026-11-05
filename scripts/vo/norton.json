@@ -1,0 +1,120 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "San Francisco once had an emperor.",
+   "caps": [
+    "San Francisco once",
+    "had an *emperor.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "In eighteen fifty-nine, a failed businessman declared himself Emperor of the United States.",
+   "caps": [
+    "In *eighteen fifty-nine,*",
+    "a failed businessman declared himself",
+    "*Emperor* of the United States."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "He printed his own money. And local shops accepted it.",
+   "caps": [
+    "He printed *his own money.*",
+    "And *local shops* accepted it."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Restaurants kept him fed. Theaters kept him a seat.",
+   "caps": [
+    "*Restaurants* kept him fed.",
+    "*Theaters* kept him a seat."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "When he died, tens of thousands came to say goodbye.",
+   "caps": [
+    "When he died,",
+    "*tens of thousands*",
+    "came to say goodbye."
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "But the Emperor had one demand: a stamp card.",
+   "caps": [
+    "But the Emperor had *one demand:*",
+    "a *stamp card.*"
+   ],
+   "gap": 0.65
+  },
+  {
+   "say": "Ten stamps, free coffee. Even emperors like rewards.",
+   "caps": [
+    "Ten stamps, *free coffee.*",
+    "Even emperors like *rewards.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "Your customers like rewards too.",
+   "caps": [
+    "Your customers like",
+    "*rewards* too."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health has loyaltee and rewards built in.",
+   "caps": [
+    "*MsgHealth* has *loyalty*",
+    "and *rewards* built in."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Starter also replaces nine other apps.",
+   "caps": [
+    "*Starter* also replaces",
+    "*nine other apps.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Bought separately, that is three hundred sixteen dollars a month.",
+   "caps": [
+    "Bought *separately,*",
+    "that is *three hundred sixteen* a month."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Starter is fifty. We did the math. Twice.",
+   "caps": [
+    "Starter is *fifty.*",
+    "We did the math. *Twice.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

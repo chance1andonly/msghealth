@@ -1,0 +1,118 @@
+{
+ "voice": "am_michael",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "On the island of Yap, money is a rock.",
+   "caps": [
+    "On the island of *Yap,*",
+    "money is *a rock.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Some are over ten feet across.",
+   "caps": [
+    "Some are",
+    "over *ten feet* across."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "They were shipped in by canoe, from hundreds of miles away.",
+   "caps": [
+    "They were shipped in *by canoe,*",
+    "from *hundreds of miles* away."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "One stone sank on the way. Everyone agreed it was still owned.",
+   "caps": [
+    "One stone *sank* on the way.",
+    "Everyone agreed it was *still owned.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "When a stone is sold, nobody moves it. They just announce the new owner.",
+   "caps": [
+    "When a stone is sold, *nobody moves it.*",
+    "They just *announce* the new owner."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "No bank. No receipts. Just everyone remembering.",
+   "caps": [
+    "No bank. No *receipts.*",
+    "Just everyone *remembering.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "The ledger? One very tired man.",
+   "caps": [
+    "The *ledger?*",
+    "One *very tired man.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "He has not had a day off in years.",
+   "caps": [
+    "He has not had a *day off*",
+    "in *years.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Your customers pay you too. Someone has to remember who paid.",
+   "caps": [
+    "Your customers *pay* you too.",
+    "Someone has to *remember.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health tracks every payment.",
+   "caps": [
+    "*MsgHealth* tracks",
+    "*every payment.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Send an invoice. Share a payment link.",
+   "caps": [
+    "Send an *invoice.*",
+    "Share a *payment link.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Every payment, tracked. No tired man required.",
+   "caps": [
+    "Every payment, *tracked.*",
+    "No *tired man* required."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

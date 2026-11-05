@@ -1,0 +1,118 @@
+{
+ "voice": "am_adam",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen seventy-five, people bought rocks as pets.",
+   "caps": [
+    "In *nineteen seventy-five,*",
+    "people bought *rocks* as pets."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "An ad man named Gary Dahl invented the Pet Rock.",
+   "caps": [
+    "An *ad man* named *Gary Dahl*",
+    "invented the *Pet Rock.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "It came in a little box, with air holes and a training manual.",
+   "caps": [
+    "It came in *a little box,*",
+    "with *air holes* and a *training manual.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Under four dollars each.",
+   "caps": [
+    "Under *four dollars* each."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "It was the must-have gift that Christmas.",
+   "caps": [
+    "It was the *must-have gift*",
+    "that *Christmas.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "He sold over a million in a few months.",
+   "caps": [
+    "He sold *over a million*",
+    "in a *few months.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Everyone loved their rock. Allegedly.",
+   "caps": [
+    "Everyone *loved* their rock.",
+    "*Allegedly.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "And not one rock ever left a review.",
+   "caps": [
+    "And *not one rock*",
+    "ever left a *review.*"
+   ],
+   "gap": 0.75
+  },
+  {
+   "say": "Your customers will not review you either. Unless you ask.",
+   "caps": [
+    "Your customers",
+    "won't *review* you either.",
+    "Unless you *ask.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health sends the review request for you.",
+   "caps": [
+    "*MsgHealth* sends the",
+    "*review request* for you."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "A friendly text, right after their visit.",
+   "caps": [
+    "A *friendly text,*",
+    "right after their *visit.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Then every review lands in one place.",
+   "caps": [
+    "Then every *review*",
+    "lands in *one place.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

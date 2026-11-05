@@ -1,0 +1,111 @@
+{
+ "voice": "am_michael",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In eighteen eighty-three, America had a time problem.",
+   "caps": [
+    "In *eighteen eighty-three,*",
+    "America had a *time problem.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Every town set its clocks by the sun.",
+   "caps": [
+    "Every town set its clocks",
+    "by *the sun.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "So one railway station could show several different times.",
+   "caps": [
+    "So one station could show",
+    "*several different times.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Travelers just picked a clock and hoped.",
+   "caps": [
+    "Travelers just *picked a clock*",
+    "and *hoped.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "On November eighteenth, the railroads fixed it. They called it the day of two noons.",
+   "caps": [
+    "On *November eighteenth,*",
+    "the railroads *fixed it.*",
+    "The *day of two noons.*"
+   ],
+   "gap": 0.65
+  },
+  {
+   "say": "But before that, everyone at the station was right on time.",
+   "caps": [
+    "But before that,",
+    "*everyone* was *right on time.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "Just for different trains.",
+   "caps": [
+    "Just for",
+    "*different trains.*"
+   ],
+   "gap": 0.75
+  },
+  {
+   "say": "Your customers mix up their times too.",
+   "caps": [
+    "Your customers",
+    "*mix up* their times too."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health keeps one booking calendar, synced with Google Calendar.",
+   "caps": [
+    "*MsgHealth* keeps *one calendar,*",
+    "synced with *Google Calendar.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Then reminders go out by text and email.",
+   "caps": [
+    "Then *reminders* go out",
+    "by *text* and *email.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So everyone shows up on time. For the same appointment.",
+   "caps": [
+    "So everyone shows up *on time.*",
+    "For the *same* appointment."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

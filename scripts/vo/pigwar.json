@@ -1,0 +1,119 @@
+{
+ "voice": "am_adam",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In eighteen fifty-nine, a pig ate some potatoes.",
+   "caps": [
+    "In *eighteen fifty-nine,*",
+    "a *pig* ate some *potatoes.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The farmer shot the pig. It belonged to his British neighbor.",
+   "caps": [
+    "The farmer *shot* the pig.",
+    "It belonged to his *British neighbor.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "He offered ten dollars. The neighbor wanted a hundred.",
+   "caps": [
+    "He offered *ten dollars.*",
+    "The neighbor wanted *a hundred.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So both countries sent soldiers. And warships.",
+   "caps": [
+    "So both countries sent *soldiers.*",
+    "And *warships.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Five British warships showed up. The Americans dug in.",
+   "caps": [
+    "*Five* British warships showed up.",
+    "The Americans *dug in.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Thousands of men, over one dead pig.",
+   "caps": [
+    "*Thousands* of men,",
+    "over *one dead pig.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The only casualty was the pig.",
+   "caps": [
+    "The only *casualty*",
+    "was *the pig.*"
+   ],
+   "gap": 0.65
+  },
+  {
+   "say": "For twelve years, each side waited for the other to reply first.",
+   "caps": [
+    "For *twelve years,*",
+    "each side waited for the other",
+    "to *reply first.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Your customers are waiting on a reply too.",
+   "caps": [
+    "Your customers are *waiting*",
+    "on a *reply* too."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health puts a real person one tap away.",
+   "caps": [
+    "*MsgHealth* puts a *real person*",
+    "one *tap* away."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Tap Help. Contact a Representative.",
+   "caps": [
+    "Tap *Help.*",
+    "Contact a *Representative.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "A human answers. No standoff.",
+   "caps": [
+    "A *human* answers.",
+    "No *standoff.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
