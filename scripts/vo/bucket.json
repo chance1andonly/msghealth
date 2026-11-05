@@ -1,0 +1,112 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In thirteen twenty-five, two Italian cities went to war over a bucket.",
+   "caps": [
+    "In thirteen twenty-five,",
+    "two Italian cities",
+    "went to war over *a bucket.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Soldiers from Modehna stole a wooden bucket from a well in Bologna.",
+   "caps": [
+    "Soldiers from *Modena*",
+    "stole a *wooden bucket*",
+    "from a well in *Bologna.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Bologna asked for it back. Modehna said no.",
+   "caps": [
+    "Bologna *asked* for it back.",
+    "Modena said *no.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So thousands of soldiers fought. Modehna won.",
+   "caps": [
+    "So *thousands* of soldiers fought.",
+    "Modena *won.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Modehna still has the bucket. It's in a tower.",
+   "caps": [
+    "Modena *still has* the bucket.",
+    "It's in a *tower.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Bologna keeps messaging. Modehna leaves them on red.",
+   "caps": [
+    "Bologna keeps *messaging.*",
+    "Modena leaves them *on read.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Seven hundred years of feud, over an unanswered message.",
+   "caps": [
+    "Seven hundred years,",
+    "over an *unanswered message.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Your customers message you too. Some of them are waiting.",
+   "caps": [
+    "Your customers *message* you too.",
+    "Some are *waiting.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health puts every text and email in one inbox.",
+   "caps": [
+    "*MsgHealth* puts every *text*",
+    "and *email* in *one inbox.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "So nothing gets left on red.",
+   "caps": [
+    "So nothing gets",
+    "left *on read.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Reply in seconds, from one place.",
+   "caps": [
+    "Reply in *seconds,*",
+    "from *one place.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

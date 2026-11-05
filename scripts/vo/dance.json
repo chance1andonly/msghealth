@@ -1,0 +1,113 @@
+{
+ "voice": "am_michael",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In fifteen eighteen, a woman in Strasbourg started dancing in the street.",
+   "caps": [
+    "In fifteen eighteen,",
+    "a woman in *Strasbourg*",
+    "started *dancing* in the street."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "She couldn't stop. Within weeks, hundreds of people had joined her.",
+   "caps": [
+    "She *couldn't stop.*",
+    "Within weeks,",
+    "*hundreds* had joined her."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The city's solution? More dancing.",
+   "caps": [
+    "The city's solution?",
+    "*More dancing.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "They built a stage, and hired musicians.",
+   "caps": [
+    "They built a *stage,*",
+    "and hired *musicians.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Attendance went up. The plan was working.",
+   "caps": [
+    "*Attendance* went up.",
+    "The plan was *working.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Eventually, they cancelled the music.",
+   "caps": [
+    "Eventually, they",
+    "*cancelled* the music."
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Most businesses handle problems the same way. Guess a fix, and hope.",
+   "caps": [
+    "Most businesses",
+    "guess a *fix,*",
+    "and *hope.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health reads the signals first.",
+   "caps": [
+    "*MsgHealth* reads",
+    "the *signals* first."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Fewer visits. Slower replies. A health score that drops.",
+   "caps": [
+    "*Fewer visits.* Slower replies.",
+    "A *health score* that drops."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Then it texts them automatically, before they're gone.",
+   "caps": [
+    "Then it *texts* them",
+    "*automatically,*",
+    "before they're *gone.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "No dancing required.",
+   "caps": [
+    "*No dancing* required."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

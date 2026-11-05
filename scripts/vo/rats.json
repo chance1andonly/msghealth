@@ -1,0 +1,110 @@
+{
+ "voice": "am_adam",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen hundred and two, Hanoi had a rat problem.",
+   "caps": [
+    "In nineteen hundred and two,",
+    "*Hanoi* had a *rat problem.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So the city paid a bounty: one cent for every rat tail.",
+   "caps": [
+    "So the city paid a *bounty:*",
+    "a cent for every *rat tail.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Tails came pouring in. But the rats weren't disappearing.",
+   "caps": [
+    "*Tails* came pouring in.",
+    "But the rats *weren't* disappearing."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Hunters were cutting off the tails, and letting the rats go.",
+   "caps": [
+    "Hunters were *cutting off* tails,",
+    "and letting the rats *go.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Some even started breeding rats, for the bounty.",
+   "caps": [
+    "Some even *bred* rats",
+    "for the *bounty.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "The rats gave the program five stars.",
+   "caps": [
+    "The rats gave the program",
+    "*five stars.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "You get what you reward.",
+   "caps": [
+    "You get *what you reward.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Reward customers for coming back, not for showing up once.",
+   "caps": [
+    "Reward customers for *coming back,*",
+    "not for *showing up once.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Message Health runs your loyalty program.",
+   "caps": [
+    "*MsgHealth* runs your",
+    "*loyalty program.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Every visit earns points, and regulars unlock rewards automatically.",
+   "caps": [
+    "Every *visit* earns points,",
+    "regulars *unlock rewards*",
+    "*automatically.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "And you see who's slipping, before they leave.",
+   "caps": [
+    "And you see *who's slipping,*",
+    "*before* they leave."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
