@@ -14,8 +14,8 @@ window.VO_CLIPS = [
   { dur: 2.56, chunks: [["*MsgHealth* tracks", 0.0], ["every *visit,*", 0.66], ["and every *point.*", 1.76]] }, // 10
   { dur: 2.25, chunks: [["Regulars *unlock rewards*", 0.0], ["*automatically.*", 1.02]] }, // 11
   { dur: 1.84, chunks: [["And you see *who's slipping*", 0.0], ["*before* they leave.", 0.91]] }, // 12
-  { dur: 1.74, chunks: [["Loyalty that keeps them", 0.0], ["*coming back.*", 1.16]] }, // 13
+  { dur: 1.75, chunks: [["Loyalty that keeps them", 0.0], ["*coming back.*", 0.99]] }, // 13
   { dur: 1.34, chunks: [["*msghealth.net*", 0.0]] }, // 14
 ];
-window.VO_AT = [0.3, 2.88, 5.48, 8.43, 9.9, 13.07, 16.73, 19.96, 22.89, 25.94, 28.1, 30.96, 33.51, 35.75, 37.99];
-window.VO_TEXT = ["In nineteen ninety-six, Pepsi ran an ad.", "Points could buy a shirt, sunglasses, a jacket.", "Or a fighter jet, for seven million points.", "It was a joke.", "A student noticed you could buy points, for ten cents each.", "So he mailed Pepsi a check for seven hundred thousand dollars.", "Pepsi said no. A judge agreed it was a joke.", "Pepsi's consolation prize? One point.", "Your regulars deserve a reward they can actually get.", "Like a free haircut. Not a jet.", "Message Health tracks every visit, and every point.", "Regulars unlock rewards automatically.", "And you see who's slipping before they leave.", "Loyalty that keeps them coming back.", "Message Health dot net."];
+window.VO_AT = [0.3, 2.88, 5.48, 8.43, 9.9, 13.07, 16.73, 19.96, 22.89, 25.94, 28.1, 30.96, 33.51, 35.75, 38.0];
+window.VO_TEXT = ["In nineteen ninety-six, Pepsi ran an ad.", "Points could buy a shirt, sunglasses, a jacket.", "Or a fighter jet, for seven million points.", "It was a joke.", "A student noticed you could buy points, for ten cents each.", "So he mailed Pepsi a check for seven hundred thousand dollars.", "Pepsi said no. A judge agreed it was a joke.", "Pepsi's consolation prize? One point.", "Your regulars deserve a reward they can actually get.", "Like a free haircut. Not a jet.", "Message Health tracks every visit, and every point.", "Regulars unlock rewards automatically.", "And you see who's slipping before they leave.", "Loyaltee that keeps them coming back.", "Message Health dot net."];

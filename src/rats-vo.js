@@ -9,11 +9,11 @@ window.VO_CLIPS = [
   { dur: 2.12, chunks: [["The rats gave the program", 0.0], ["*five stars.*", 1.65]] }, // 05
   { dur: 1.22, chunks: [["You get *what you reward.*", 0.0]] }, // 06
   { dur: 3.29, chunks: [["Reward customers for *coming back,*", 0.0], ["not for *showing up once.*", 1.95]] }, // 07
-  { dur: 2.205, chunks: [["*MsgHealth* runs your", 0.0], ["*loyalty program.*", 1.03]] }, // 08
+  { dur: 2.285, chunks: [["*MsgHealth* runs your", 0.0], ["*loyalty program.*", 1.07]] }, // 08
   { dur: 3.96, chunks: [["Every *visit* earns points,", 0.0], ["regulars *unlock rewards*", 1.44], ["*automatically.*", 2.66]] }, // 09
   { dur: 1.895, chunks: [["And you see *who's slipping,*", 0.0], ["*before* they leave.", 1.2]] }, // 10
   { dur: 1.655, chunks: [["*Fifty percent off*", 0.0], ["your *first month.*", 0.92]] }, // 11
   { dur: 1.34, chunks: [["*msghealth.net*", 0.0]] }, // 12
 ];
-window.VO_AT = [0.3, 3.67, 7.26, 10.76, 14.27, 17.38, 20.2, 21.92, 25.66, 28.27, 32.63, 35.02, 37.08];
-window.VO_TEXT = ["In nineteen hundred and two, Hanoi had a rat problem.", "So the city paid a bounty: one cent for every rat tail.", "Tails came pouring in. But the rats weren't disappearing.", "Hunters were cutting off the tails, and letting the rats go.", "Some even started breeding rats, for the bounty.", "The rats gave the program five stars.", "You get what you reward.", "Reward customers for coming back, not for showing up once.", "Message Health runs your loyalty program.", "Every visit earns points, and regulars unlock rewards automatically.", "And you see who's slipping, before they leave.", "Fifty percent off your first month.", "Message Health dot net."];
+window.VO_AT = [0.3, 3.67, 7.26, 10.76, 14.27, 17.38, 20.2, 21.92, 25.66, 28.35, 32.71, 35.1, 37.16];
+window.VO_TEXT = ["In nineteen hundred and two, Hanoi had a rat problem.", "So the city paid a bounty: one cent for every rat tail.", "Tails came pouring in. But the rats weren't disappearing.", "Hunters were cutting off the tails, and letting the rats go.", "Some even started breeding rats, for the bounty.", "The rats gave the program five stars.", "You get what you reward.", "Reward customers for coming back, not for showing up once.", "Message Health runs your loyaltee program.", "Every visit earns points, and regulars unlock rewards automatically.", "And you see who's slipping, before they leave.", "Fifty percent off your first month.", "Message Health dot net."];
