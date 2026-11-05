@@ -1,0 +1,125 @@
+{
+ "voice": "am_michael",
+ "speed": 1.08,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Soldiers covered their tank in QR codes.",
+   "caps": [
+    "Soldiers covered",
+    "their *tank*",
+    "in *QR codes.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Every inch of it.",
+   "caps": [
+    "*Every inch* of it."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Because enemy drones scan whatever they see.",
+   "caps": [
+    "*Because* enemy drones",
+    "scan *whatever*",
+    "they see."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And the code takes them to a website.",
+   "caps": [
+    "And the code",
+    "takes them to *a website.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "A booking page.",
+   "caps": [
+    "*A booking page.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "The drones booked Thursday at ten.",
+   "caps": [
+    "The drones *booked*",
+    "Thursday at *ten.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Now they're busy all week.",
+   "caps": [
+    "Now they're *busy*",
+    "all *week.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Your customers like booking pages too.",
+   "caps": [
+    "Your customers",
+    "like *booking pages* too."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Minus the drones.",
+   "caps": [
+    "Minus the *drones.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "MsgHealth lets clients book themselves, any time.",
+   "caps": [
+    "*MsgHealth* lets clients",
+    "book *themselves,*",
+    "any *time.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Every appointment lands in one calendar.",
+   "caps": [
+    "Every appointment lands",
+    "in *one calendar.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "It texts the reminder for you.",
+   "caps": [
+    "It *texts* the reminder",
+    "*for you.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "And every reply lands in one inbox.",
+   "caps": [
+    "And every reply lands",
+    "in *one inbox.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Keep your calendar full.",
+   "caps": [
+    "*Keep your calendar full.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.22
+  }
+ ]
+}

@@ -1,0 +1,129 @@
+{
+ "voice": "am_adam",
+ "speed": 1.08,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 1996, Pepsi ran an ad.",
+   "caps": [
+    "In 1996,",
+    "*Pepsi* ran an ad."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Points could buy a shirt, sunglasses, a jacket.",
+   "caps": [
+    "Points buy a *shirt,*",
+    "*sunglasses,* a jacket…"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "Or a fighter jet, for seven million points.",
+   "caps": [
+    "Or a *fighter jet,*",
+    "for *seven million* points."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "It was a joke.",
+   "caps": [
+    "*It was a joke.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "A student noticed you could buy points, for ten cents each.",
+   "caps": [
+    "A student noticed",
+    "you could *buy points,*",
+    "for *ten cents* each."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "So he mailed Pepsi a check for seven hundred thousand dollars.",
+   "caps": [
+    "So he mailed Pepsi",
+    "a check for",
+    "*seven hundred thousand* dollars."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Pepsi said no. A judge agreed it was a joke.",
+   "caps": [
+    "Pepsi said *no.*",
+    "A judge agreed:",
+    "it was *a joke.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Pepsi's consolation prize? One point.",
+   "caps": [
+    "Pepsi's *consolation prize?*",
+    "*One point.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Your regulars deserve a reward they can actually get.",
+   "caps": [
+    "Your regulars deserve",
+    "a reward they *can* get."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Like a free haircut. Not a jet.",
+   "caps": [
+    "Like a *free haircut.*",
+    "Not a *jet.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "MsgHealth tracks every visit, and every point.",
+   "caps": [
+    "*MsgHealth* tracks",
+    "every *visit,*",
+    "and every *point.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Regulars unlock rewards automatically.",
+   "caps": [
+    "Regulars *unlock rewards*",
+    "*automatically.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "And you see who's slipping before they leave.",
+   "caps": [
+    "And you see *who's slipping*",
+    "*before* they leave."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Loyalty that keeps them coming back.",
+   "caps": [
+    "Loyalty that keeps them",
+    "*coming back.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.22
+  }
+ ]
+}

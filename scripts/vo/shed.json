@@ -1,0 +1,106 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 2017, a man turned his garden shed into the number one restaurant in London.",
+   "caps": [
+    "In 2017, a man",
+    "turned his *garden shed*",
+    "into the *number one*",
+    "restaurant in London."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "No menu. No chef. No customers.",
+   "caps": [
+    "No *menu.*",
+    "No *chef.*",
+    "No *customers.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Just five-star reviews. He wrote them himself.",
+   "caps": [
+    "Just *five-star* reviews.",
+    "He wrote them *himself.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Now there's a three year waiting list.",
+   "caps": [
+    "Now there's a",
+    "*three year* waiting list."
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "Meanwhile, a real restaurant down the road feeds three hundred guests a week.",
+   "caps": [
+    "Meanwhile, a *real* restaurant",
+    "down the road feeds",
+    "*three hundred* guests a week."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "It has eleven reviews.",
+   "caps": [
+    "It has *eleven* reviews."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Because nobody ever asks.",
+   "caps": [
+    "Because *nobody*",
+    "ever *asks.*"
+   ],
+   "gap": 0.65
+  },
+  {
+   "say": "MsgHealth asks for you.",
+   "caps": [
+    "*MsgHealth* asks",
+    "*for you.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "After every visit, it texts a review request.",
+   "caps": [
+    "After every visit,",
+    "it *texts* a *review request.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Happy customers tap, and real reviews roll in.",
+   "caps": [
+    "Happy customers *tap,*",
+    "and *real reviews* roll in."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Real customers beat a shed, every time.",
+   "caps": [
+    "*Real customers*",
+    "beat a *shed,*",
+    "every time."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.22
+  }
+ ]
+}
