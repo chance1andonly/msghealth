@@ -79,6 +79,7 @@ function person(x, y, h, seed, o = {}) {
   const w = h * 0.3, skin = o.skin ?? SKIN[Math.floor(hash(seed) * SKIN.length)], shirt = o.shirt ?? SHIRT[Math.floor(hash(seed + 1) * SHIRT.length)];
   const pants = o.pants ?? PANTS[Math.floor(hash(seed + 2) * PANTS.length)], hair = o.hair ?? HAIR[Math.floor(hash(seed + 3) * HAIR.length)];
   const dir = o.dir ?? 1, bob = o.bounce ? Math.sin(o.bounce) * h * 0.012 : 0;
+  if (!o.noShadow) ellipse(x, y, w * 0.95, h * 0.028, 'rgba(0,0,0,0.2)');
   ctx.save(); ctx.translate(x, y + bob); ctx.scale(dir, 1); ctx.translate(-x, -y);
   const hr = h * 0.095, hy = y - h + hr, sy = y - h * 0.76;
   fillRR(x - w * 0.36, y - h * 0.46, w * 0.32, h * 0.46, w * 0.06, pants); fillRR(x + w * 0.04, y - h * 0.46, w * 0.32, h * 0.46, w * 0.06, pants);

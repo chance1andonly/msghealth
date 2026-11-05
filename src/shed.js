@@ -31,13 +31,16 @@ function shedShape(x, y, s) { // feet at (x, y)
 function lights(x0, x1, y, t) { ctx.strokeStyle = '#222'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x0, y); ctx.quadraticCurveTo((x0 + x1) / 2, y + 90, x1, y); ctx.stroke(); for (let i = 0; i <= 10; i++) { const u = i / 10, x = lerp(x0, x1, u), yy = (1 - u) * (1 - u) * y + 2 * u * (1 - u) * (y + 90) + u * u * y; circle(x, yy + 10, 9, i % 2 ? '#ffd35a' : '#ff8fb0'); glow(x, yy + 10, 40, '#ffd35a', 0.25 + 0.1 * Math.sin(t * 4 + i)); } }
 function rating(x, y, r, n, col = '#f5b82e', off = 'rgba(255,255,255,0.15)') { for (let i = 0; i < 5; i++) star(x + i * r * 2.2, y, r, i < n ? col : off); }
 
-function sceneShed(t) {
+function streetBg() {
   ctx.fillStyle = vgrad(0, 1300, '#3d2f6b', '#f2a65a'); ctx.fillRect(0, 0, W, 1300); ctx.fillStyle = '#3b5a2c'; ctx.fillRect(0, 1300, W, 620); ctx.fillStyle = '#2f4a23'; ctx.fillRect(0, 1300, W, 22);
   for (let i = 0; i < 40; i++) circle(hash(i) * W, hash(i + 5) * 500, 2 + hash(i + 9) * 2, 'rgba(255,255,255,0.7)');
   for (let i = 0; i < 6; i++) { const x = i * 200 - 40; fillRR(x, 700 + (i % 2) * 40, 170, 600, 6, i % 2 ? '#5a3a46' : '#6a4452'); poly([[x - 10, 700 + (i % 2) * 40], [x + 85, 620 + (i % 2) * 40], [x + 180, 700 + (i % 2) * 40]], '#2d1f2c'); for (let w = 0; w < 3; w++) fillRR(x + 30 + (w % 2) * 70, 780 + w * 130 + (i % 2) * 40, 46, 70, 4, hash(i * 3 + w) > 0.4 ? '#ffd980' : '#2d1f2c'); }
   ctx.fillStyle = '#6b4a34'; ctx.fillRect(0, 1180, W, 130); for (let i = 0; i < 14; i++) ctx.fillRect(i * 80, 1150, 16, 160);
+}
+function sceneShed(t) {
+  streetBg();
   const z = 1 + 0.1 * seg(t, 0, T.menu), s = pop(t, T.shed - 0.1 + 0.5, 0.6);
-  xf(CX, 1300, z, 0, () => { lights(220, 860, 800, t); shedShape(CX, 1300, 1.4 * clamp(s)); });
+  xf(CX, 1300, z, 0, () => { lights(220, 860, 800, t); shedShape(CX, 1500, 1.4 * clamp(s)); });
   const b = pop(t, T.one, 0.35); if (b > 0) xf(CX, 380, b, 0, () => { fillRR(190, 270, 700, 220, 28, '#fff7d6'); strokeRR(190, 270, 700, 220, 28, '#e0a526', 8); text('#1', 330, 380, 130, 800, '#c9801a', 'center', 0); text('RESTAURANT', 650, 350, 44, 800, '#1b1b1f', 'center', 0.05); text('IN LONDON', 650, 410, 44, 800, '#1b1b1f', 'center', 0.05); rating(430, 465, 17, 5); });
 }
 function sceneInside(t) {
@@ -52,24 +55,27 @@ function sceneInside(t) {
 }
 const RED2_ = '#d92d3a';
 function sceneReviews(t) {
-  ctx.fillStyle = '#243044'; ctx.fillRect(0, 0, W, H); ctx.fillStyle = '#1a2230'; ctx.fillRect(0, 1200, W, 720);
-  fillRR(120, 1020, 840, 80, 10, '#3a465c'); fillRR(190, 560, 700, 460, 18, '#2c2f38'); fillRR(210, 580, 660, 420, 8, '#cfe6f5'); text('Write a review…', 250, 640, 36, 600, '#3a465c', 'left');
-  for (let i = 0; i < 3; i++) { const k = (t * 3 + i) % 1; fillRR(250, 700 + i * 80, 200 + hash(i) * 300 * clamp(seg(t, T.rev, T.rev + 1.2)), 22, 8, '#aebdd0'); }
-  person(CX, 1500, 620, 4, { skin: '#d9a27a', shirt: '#e8e2d2', pants: '#3d4a6a', arm: 'up', wave: t * 1.5, mouth: 'open', bounce: t * 6 });
+  ctx.fillStyle = '#243044'; ctx.fillRect(0, 0, W, H); ctx.fillStyle = '#1a2230'; ctx.fillRect(0, 1250, W, 670);
+  person(CX, 1560, 720, 4, { skin: '#d9a27a', shirt: '#e8e2d2', pants: '#3d4a6a', arm: 'up', wave: t * 1.5, mouth: 'open', bounce: t * 6, noShadow: true });
+  fillRR(250, 1090, 580, 330, 16, '#3a3f4c'); fillRR(262, 1102, 556, 306, 10, '#2c303b'); circle(CX, 1255, 26, '#9aa3b5'); // the laptop's back
+  ctx.fillStyle = '#8a5f3a'; ctx.fillRect(0, 1400, W, 520); ctx.fillStyle = '#a07040'; ctx.fillRect(0, 1400, W, 28);
   const cards = [['Best meal of my life', 150, 300, -0.06], ['Cosy. Quiet. Unbeatable.', 520, 200, 0.05], ['Would sit in a shed again', 240, 160, 0.04], ['10/10 would microwave', 600, 400, -0.04]];
   cards.forEach(([s, x, y, r], i) => { const at = i < 2 ? T.rev + i * 0.5 : T.himself + (i - 2) * 0.35, k = pop(t, at, 0.3); if (k > 0) xf(x + 160, y + 50, k, 0, () => { ctx.save(); ctx.translate(x + 160, y + 50); ctx.rotate(r); fillRR(-170, -55, 340, 110, 16, '#fff'); rating(-140, -25, 14, 5); text(s, -150, 22, 24, 700, '#1b1b1f', 'left'); ctx.restore(); }); });
-  const lb = pop(t, T.himself + 0.3, 0.3); if (lb > 0) xf(CX, 1200, lb, 0, () => { fillRR(190, 1170, 700, 80, 40, 'rgba(255,255,255,0.12)'); text('Written by: the owner', CX, 1211, 32, 700, '#ffd980', 'center'); });
+  const lb = pop(t, T.himself + 0.3, 0.3); if (lb > 0) xf(CX, 1040, lb, 0, () => { fillRR(190, 1000, 700, 80, 40, 'rgba(0,0,0,0.55)'); text('Written by: the owner', CX, 1041, 32, 700, '#ffd980', 'center'); });
 }
 function sceneQueue(t) {
-  ctx.fillStyle = vgrad(0, 1300, '#3d2f6b', '#f2a65a'); ctx.fillRect(0, 0, W, 1300); ctx.fillStyle = '#3b5a2c'; ctx.fillRect(0, 1300, W, 620);
-  xf(CX, 1300, 1, 0, () => { lights(220, 860, 800, t); shedShape(900, 1300, 0.9); });
-  for (let i = 0; i < 9; i++) { const k = ease.out(seg(t, T.wait + i * 0.12, T.wait + 0.5 + i * 0.12)), x = lerp(-150, 760 - i * 105, k); person(x, 1330 + (i % 2) * 50, 380 + (i % 3) * 30, i * 7 + 2, { dir: 1, bounce: t * 5 + i, mouth: i % 2 ? 'open' : '' }); }
+  streetBg();
+  xf(CX, 1300, 1, 0, () => { lights(560, 1060, 900, t); shedShape(830, 1480, 1.25); });
+  for (let i = 0; i < 9; i++) { const k = ease.out(seg(t, T.wait + i * 0.12, T.wait + 0.5 + i * 0.12)), x = lerp(-150, 640 - i * 92, k); person(x, 1500 + (i % 2) * 40, 300 + (i % 3) * 14 + (i % 2) * 18, i * 7 + 2, { dir: 1, bounce: t * 5 + i, mouth: i % 2 ? 'open' : '' }); }
   const b = pop(t, T.wait + 0.4, 0.35); xf(CX, 450, b, 0, () => { fillRR(110, 340, 860, 240, 26, '#fff'); strokeRR(110, 340, 860, 240, 26, '#c9801a', 8); text('WAITING LIST', CX, 420, 60, 800, '#1b1b1f', 'center', 0.04); text('3 YEARS', CX, 510, 100, 800, RED2_, 'center', 0); });
 }
 function resto(t) {
   ctx.fillStyle = '#f1d4ad'; ctx.fillRect(0, 0, W, H); ctx.fillStyle = '#b9895c'; ctx.fillRect(0, 1150, W, 770); ctx.fillStyle = '#8a5f3a'; ctx.fillRect(0, 1150, W, 20);
   fillRR(0, 150, W, 90, 0, '#3a3a52'); text('MARCO\'S KITCHEN', CX, 196, 60, 800, '#fff', 'center', 0.08); for (let i = 0; i < 6; i++) { glow(90 + i * 180, 330, 120, '#ffd980', 0.4); fillRR(70 + i * 180, 270, 40, 60, 10, '#ffd980'); line(90 + i * 180, 240, 90 + i * 180, 270, '#222', 4); }
-  [[210, 1160], [540, 1160], [870, 1160]].forEach(([x, y], i) => { fillRR(x - 130, y - 70, 260, 30, 8, '#fff'); fillRR(x - 14, y - 40, 28, 130, 4, '#6b4a34'); [-1, 1].forEach((d) => person(x + d * 100, y - 60, 330, i * 3 + (d + 1), { arm: 'up', wave: t + i + d, mouth: 'open', dir: d > 0 ? -1 : 1, bounce: t * 4 + i })); });
+  [[210, 1160], [540, 1160], [870, 1160]].forEach(([x, y], i) => {
+    [-1, 1].forEach((d) => person(x + d * 100, y + 190, 330, i * 3 + (d + 1), { arm: 'up', wave: t + i + d, mouth: 'open', dir: d > 0 ? -1 : 1, bounce: t * 4 + i, noShadow: true }));
+    fillRR(x - 150, y, 300, 220, 14, '#fffaf0'); fillRR(x - 150, y, 300, 26, 10, '#e8dcc8'); circle(x, y - 14, 14, '#ffd35a'); fillRR(x - 7, y - 10, 14, 10, 3, '#e8dcc8'); fillRR(x - 70, y - 4, 40, 8, 4, '#fff'); fillRR(x + 30, y - 4, 40, 8, 4, '#fff');
+  });
 }
 function sceneRestaurant(t) {
   resto(t);
@@ -79,7 +85,7 @@ function sceneRestaurant(t) {
 function sceneNobody(t) {
   resto(t);
   const k = ease.inOut(seg(t, T.ask, T.brand)), px = lerp(300, 1250, k);
-  person(px, 1500, 520, 11, { skin: '#c68a62', shirt: '#e08a6d', arm: 'wave', wave: t, mouth: 'open', dir: 1 });
+  person(px, 1700, 640, 11, { skin: '#c68a62', shirt: '#e08a6d', arm: 'wave', wave: t, mouth: 'open', dir: 1 });
   const b = pop(t, T.ask + 0.15, 0.3); xf(px, 1000, b, 0, () => { if (px < 900) { fillRR(px - 150, 920, 300, 100, 30, '#fff'); text('Loved it!', px, 972, 40, 800, '#1b1b1f', 'center'); } });
   const r = pop(t, T.ask + 0.8, 0.3); if (r > 0) xf(CX, 600, r, 0, () => { fillRR(190, 480, 700, 240, 24, '#2c2f38'); text('Write a review', 250, 540, 34, 700, '#aebdd0', 'left'); fillRR(250, 580, 580, 80, 12, '#1a1d24'); if (Math.sin(t * 8) > 0) ctx.fillRect(270, 596, 3, 48); text('…nobody asked.', CX, 760, 34, 600, '#ffd980', 'center'); });
 }

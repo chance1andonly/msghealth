@@ -54,14 +54,16 @@ function sceneTV(t) {
     ctx.restore();
   });
   // the student on the couch
-  fillRR(150, 1120, 780, 220, 50, '#a2463a'); fillRR(120, 1230, 840, 150, 40, '#b85246');
-  person(CX, 1290, 330, 5, { skin: '#d9a27a', shirt: '#e8e2d2', pants: '#3d4a6a', eyes: 'wide', mouth: t > T.jet ? 'open' : '', glasses: true, bounce: t * 3 });
+  fillRR(250, 1030, 580, 190, 10, '#6b4a34'); fillRR(270, 1050, 540, 150, 6, '#7d5a40'); // TV cabinet
+  fillRR(150, 1090, 780, 260, 50, '#a2463a'); // couch back
+  person(CX, 1400, 330, 5, { skin: '#d9a27a', shirt: '#e8e2d2', pants: '#3d4a6a', eyes: 'wide', mouth: t > T.jet ? 'open' : '', glasses: true, bounce: t * 3, noShadow: true });
+  fillRR(110, 1270, 860, 210, 44, '#b85246'); fillRR(90, 1190, 110, 290, 40, '#a2463a'); fillRR(880, 1190, 110, 290, 40, '#a2463a'); // seat and arms in front of the student
   // "JUST A JOKE"
   const st = seg(t, T.joke, T.joke + 0.18); if (st > 0) { ctx.save(); ctx.translate(CX, 700); ctx.rotate(-0.12); const z = 1 + 0.9 * (1 - ease.out(st)); ctx.scale(z, z); ctx.globalAlpha = st; fillRR(-340, -90, 680, 180, 16, 'rgba(255,255,255,0.95)'); strokeRR(-340, -90, 680, 180, 16, RED2, 12); text('JUST A JOKE', 0, 4, 98, 800, RED2, 'center', 0.0); ctx.restore(); }
   [['HA!', 230, 1000, 0.15], ['HA HA', 800, 980, 0.3], ['HA!', 860, 1130, 0.45]].forEach(([s, x, y, d]) => { const k = pop(t, T.joke + d, 0.25); if (k > 0) xf(x, y, k, 0, () => { fillRR(x - 80, y - 36, 160, 72, 36, '#fff'); text(s, x, y + 3, 40, 800, '#1b1b1f', 'center'); }); });
 }
 function sceneCalc(t) {
-  ctx.fillStyle = '#e9c9a0'; ctx.fillRect(0, 0, W, H); ctx.fillStyle = '#7a5a40'; ctx.fillRect(0, 1250, W, 670);
+  ctx.fillStyle = '#e9c9a0'; ctx.fillRect(0, 0, W, H); ctx.fillStyle = '#7a5a40'; ctx.fillRect(0, 1270, W, 650); ctx.fillStyle = '#b58a5c'; ctx.fillRect(0, 1210, W, 60); ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.fillRect(0, 1270, W, 12);
   const k = pop(t, T.buy, 0.4); xf(CX, 780, k, 0, () => {
     fillRR(170, 330, 740, 880, 50, '#2d2f3a'); fillRR(210, 380, 660, 200, 24, '#c8e6b9');
     const e1 = seg(t, T.buy + 0.4, T.buy + 0.7), e2 = seg(t, T.cents - 0.1, T.cents + 0.2), e3 = seg(t, T.cents + 0.5, T.cents + 0.9);
@@ -89,17 +91,18 @@ function sceneCourt(t) {
   for (let i = 0; i < 6; i++) fillRR(60 + i * 170, 120, 120, 620, 12, '#7a5438');
   fillRR(0, 1100, W, 820, 0, '#4a3324'); fillRR(100, 960, 880, 340, 24, '#5d4130'); fillRR(100, 960, 880, 40, 20, '#7a5538');
   person(CX, 1000, 560, 8, { skin: '#c68a62', shirt: '#14141c', pants: '#14141c', hair: '#e8e8ee', arm: 'up', wave: t * 0.2, mouth: 'open' });
-  const g = seg(t, T.gavel - 0.15, T.gavel + 0.05); xf(790, 800, 1, 0, () => { ctx.save(); ctx.translate(760, 760); ctx.rotate(lerp(-0.7, 0.1, g)); fillRR(-12, -150, 24, 160, 8, '#c9a36a'); fillRR(-60, -190, 120, 56, 14, '#b88a4a'); ctx.restore(); });
+  const g = seg(t, T.gavel - 0.15, T.gavel + 0.05); xf(790, 800, 1, 0, () => { ctx.save(); ctx.translate(666, 392); ctx.rotate(lerp(-0.45, 0.75, g)); fillRR(-12, -150, 24, 160, 8, '#c9a36a'); fillRR(-60, -190, 120, 56, 14, '#b88a4a'); ctx.restore(); fillRR(780, 930, 150, 30, 8, '#c9a36a'); });
   const sh = shake(t, T.gavel + 0.05, 16);
   xf(CX, 800, 1, sh, () => { const b = pop(t, T.ruling - 0.1, 0.3); xf(CX, 230, b, 0, () => { fillRR(130, 130, 820, 200, 36, '#fff'); text('"IT WAS A JOKE."', CX, 232, 66, 800, '#1b1b1f', 'center', 0.0); }); });
   const st = pop(t, T.ruling + 0.7, 0.25); if (st > 0) xf(CX, 1300, st, 0, () => { ctx.save(); ctx.translate(CX, 1290); ctx.rotate(-0.1); fillRR(-300, -80, 600, 160, 14, 'rgba(255,255,255,0.96)'); strokeRR(-300, -80, 600, 160, 14, RED2, 12); text('DENIED', 0, 4, 100, 800, RED2, 'center', 0.04); ctx.restore(); });
 }
 function sceneConsolation(t) {
   ctx.fillStyle = '#e9c9a0'; ctx.fillRect(0, 0, W, H); ctx.fillStyle = '#7a5a40'; ctx.fillRect(0, 1180, W, 740); ctx.fillStyle = '#6a4c35'; ctx.fillRect(0, 1180, W, 30);
-  const o = pop(t, T.prize, 0.4); xf(CX, 1100, o, 0, () => { fillRR(210, 900, 660, 280, 18, '#f6efe0'); poly([[210, 900], [870, 900], [540, 1070]], '#e3d6b8'); });
-  const c = pop(t, T.one - 0.2, 0.35); xf(CX, 760, c, 0, () => { fillRR(CX - 120, 640, 240, 150, 14, '#fff'); strokeRR(CX - 120, 640, 240, 150, 14, BLUE, 5); text('1', CX, 700, 70, 800, BLUE, 'center'); text('POINT', CX, 760, 28, 800, BLUE, 'center', 0.2); });
-  person(CX, 1900, 640, 5, { skin: '#d9a27a', shirt: '#e8e2d2', pants: '#3d4a6a', glasses: true, bounce: t * 2 });
-  withFade(seg(t, T.one + 0.3, T.one + 0.6), () => text('(one jet, sold separately)', CX, 560, 32, 600, '#6a4c35', 'center'));
+  person(250, 1420, 560, 5, { skin: '#d9a27a', shirt: '#e8e2d2', pants: '#3d4a6a', glasses: true, bounce: t * 2, noShadow: true });
+  ctx.fillStyle = '#7a5a40'; ctx.fillRect(0, 1180, W, 740); ctx.fillStyle = '#6a4c35'; ctx.fillRect(0, 1180, W, 30); ctx.fillStyle = '#5d4130'; ctx.fillRect(0, 1210, W, 710); // desk top and front, in front of the student
+  const o = pop(t, T.prize, 0.4); xf(660, 1100, o, 0, () => { fillRR(440, 1000, 440, 180, 14, '#f6efe0'); poly([[440, 1000], [880, 1000], [660, 1110]], '#e3d6b8'); });
+  const c = pop(t, T.one - 0.2, 0.35); xf(660, 900, c, 0, () => { fillRR(660 - 100, 800, 200, 130, 12, '#fff'); strokeRR(660 - 100, 800, 200, 130, 12, BLUE, 5); text('1', 660, 855, 64, 800, BLUE, 'center'); text('POINT', 660, 905, 24, 800, BLUE, 'center', 0.2); });
+  withFade(seg(t, T.one + 0.3, T.one + 0.6), () => text('(one jet, sold separately)', 660, 700, 32, 600, '#6a4c35', 'center'));
 }
 function sceneCard(t) {
   ctx.fillStyle = vgrad(0, H, '#f3e7d3', '#e3cfae'); ctx.fillRect(0, 0, W, H);

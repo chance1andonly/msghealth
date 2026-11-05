@@ -75,9 +75,9 @@ function sceneDesert(t) { // 1 · soldiers stick codes on the tank
   xf(CX, 1250, z, 0, () => {
     ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.beginPath(); ctx.ellipse(CX + 80, 1262, 400, 36, 0, 0, 7); ctx.fill();
     ctx.save(); ctx.translate(CX + 100, 1250); ctx.scale(0.86, 0.86); tank(q, t); ctx.restore();
-    soldier(120, 1255, 330, t * 2, t > T.stick0 - 0.3 && t < T.drones ? 'wave' : 'down');
+    soldier(130, 1262, 250, t * 2, t > T.stick0 - 0.3 && t < T.drones ? 'wave' : 'down');
     // a second soldier arrives with more codes on "every inch"
-    const k2 = ease.out(seg(t, T.stick1 - 0.5, T.stick1)); if (k2 > 0) soldier(lerp(-120, 990, k2), 1270, 290, t * 2, 'wave');
+    const k2 = ease.out(seg(t, T.stick1 - 0.5, T.stick1)); if (k2 > 0) soldier(lerp(-120, 990, k2), 1262, 240, t * 2, 'wave');
   });
 }
 function sceneDrones(t) { // 2 · enemy drones scan whatever they see

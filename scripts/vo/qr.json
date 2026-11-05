@@ -4,7 +4,7 @@
  "start": 0.3,
  "lines": [
   {
-   "say": "Soldiers covered their tank in QR codes.",
+   "say": "Soldiers covered their tank in Q R codes.",
    "caps": [
     "Soldiers covered",
     "their *tank*",
@@ -75,7 +75,7 @@
    "gap": 0.5
   },
   {
-   "say": "MsgHealth lets clients book themselves, any time.",
+   "say": "Message Health lets clients book themselves, any time.",
    "caps": [
     "*MsgHealth* lets clients",
     "book *themselves,*",
