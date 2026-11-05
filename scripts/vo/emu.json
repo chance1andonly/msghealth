@@ -1,0 +1,116 @@
+{
+ "voice": "am_adam",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen thirty-two, the Australian army went to war.",
+   "caps": [
+    "In nineteen thirty-two,",
+    "the *Australian army*",
+    "went to *war.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Their enemy? Twenty thousand emus.",
+   "caps": [
+    "Their enemy?",
+    "*Twenty thousand* emus."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The army brought machine guns.",
+   "caps": [
+    "The army brought",
+    "*machine guns.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The emus split up and ran in every direction.",
+   "caps": [
+    "The emus *split up*",
+    "and ran in *every direction.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "After a week, the army gave up. The emus won.",
+   "caps": [
+    "After a week,",
+    "the army *gave up.*",
+    "The *emus* won."
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "The official report was one sentence. We did not see this coming.",
+   "caps": [
+    "The official report",
+    "was one sentence:",
+    "*We did not*",
+    "*see this coming.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Most businesses fight their problems the same way.",
+   "caps": [
+    "Most businesses fight",
+    "their problems",
+    "the *same way.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Blind.",
+   "caps": [
+    "*Blind.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Message Health's reports show you what's working, and what isn't.",
+   "caps": [
+    "*MsgHealth's* reports",
+    "show you *what's working,*",
+    "and what *isn't.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Revenue, bookings, reviews, and which customers are about to leave.",
+   "caps": [
+    "*Revenue,* bookings,",
+    "reviews, and which",
+    "customers are *about to leave.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "So you can stop shooting at emus.",
+   "caps": [
+    "So you can",
+    "stop *shooting* at *emus.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

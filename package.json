@@ -23,6 +23,9 @@
     "render:lost": "ENTRY=lost.html node scripts/render.mjs",
     "render:all": "ENTRY=all.html node scripts/render.mjs",
     "render:text": "ENTRY=text.html node scripts/render.mjs",
+    "render:btc": "ENTRY=btc.html node scripts/render.mjs",
+    "render:emu": "ENTRY=emu.html node scripts/render.mjs",
+    "render:orbiter": "ENTRY=orbiter.html node scripts/render.mjs",
     "audit:uranus": "ENTRY=uranus.html node scripts/audit-text.mjs 0.1"
   },
   "repository": {

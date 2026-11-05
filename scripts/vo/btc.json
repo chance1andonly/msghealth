@@ -1,0 +1,119 @@
+{
+ "voice": "am_michael",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In twenty ten, a programmer paid ten thousand Bitcoin for two pizzas.",
+   "caps": [
+    "In twenty ten,",
+    "a programmer paid",
+    "*ten thousand Bitcoin*",
+    "for *two pizzas.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "It was the first time anyone had bought something real with it.",
+   "caps": [
+    "It was the *first time*",
+    "anyone had bought",
+    "something *real* with it."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "A stranger on a forum ordered the pizzas to his door.",
+   "caps": [
+    "A stranger on a forum",
+    "ordered the pizzas",
+    "to *his door.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The programmer asked for a receipt.",
+   "caps": [
+    "The programmer asked",
+    "for a *receipt.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The stranger wrote one on a napkin.",
+   "caps": [
+    "The stranger wrote one",
+    "on a *napkin.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The napkin was eaten by a dog.",
+   "caps": [
+    "The napkin was *eaten*",
+    "by a *dog.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Today, those pizzas cost a fortune, and nobody can prove who paid what.",
+   "caps": [
+    "Today, those pizzas",
+    "cost *a fortune,*",
+    "and nobody can prove",
+    "*who paid what.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "If you sell something, you deserve a real invoice. Not a napkin.",
+   "caps": [
+    "If you sell something,",
+    "you deserve a *real invoice.*",
+    "Not a *napkin.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "With Message Health, you send an invoice in seconds.",
+   "caps": [
+    "With *MsgHealth,*",
+    "you send an *invoice*",
+    "in *seconds.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Customers pay by card, and every payment is tracked.",
+   "caps": [
+    "Customers *pay by card,*",
+    "and every payment",
+    "is *tracked.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Nothing gets eaten by a dog.",
+   "caps": [
+    "Nothing gets eaten",
+    "by a *dog.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

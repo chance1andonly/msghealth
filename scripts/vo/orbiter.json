@@ -1,0 +1,108 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen ninety-nine, NASA lost a spacecraft worth a hundred and twenty-five million dollars.",
+   "caps": [
+    "In nineteen ninety-nine,",
+    "NASA lost a spacecraft",
+    "worth *a hundred and*",
+    "*twenty-five million* dollars."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "It flew for nine months to reach Mars.",
+   "caps": [
+    "It flew for *nine months*",
+    "to reach *Mars.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Then it burned up, because of a math mistake.",
+   "caps": [
+    "Then it *burned up,*",
+    "because of a *math mistake.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "One team used pounds. The other team used metric.",
+   "caps": [
+    "One team used *pounds.*",
+    "The other team used *metric.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Each team assumed the other one had checked.",
+   "caps": [
+    "Each team *assumed*",
+    "the other one",
+    "had *checked.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Reportedly, all that was left was a sticky note that said, ask Dave.",
+   "caps": [
+    "Reportedly, all that",
+    "was left was a *sticky note*",
+    "that said,",
+    "*ask Dave.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Sometimes, you just need a real person to ask.",
+   "caps": [
+    "Sometimes, you just need",
+    "a *real person* to ask."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health puts one a tap away.",
+   "caps": [
+    "*MsgHealth* puts one",
+    "*a tap away.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Tap Help, then Contact a Representative, and a human answers.",
+   "caps": [
+    "Tap *Help,*",
+    "then *Contact a Representative,*",
+    "and a *human* answers."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "No guessing. No sticky notes.",
+   "caps": [
+    "*No guessing.*",
+    "No *sticky notes.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
