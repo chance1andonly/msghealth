@@ -1,0 +1,39 @@
+{
+ "voice": "af_heart",
+ "speed": 0.92,
+ "start": 0.15,
+ "lines": [
+  {
+   "say": "You do not have to reply at eleven at night.",
+   "caps": [
+    "You do not have to reply",
+    "at *11 at night.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "The shop is closed. You are allowed to be, too.",
+   "caps": [
+    "The shop is *closed.*",
+    "You're allowed to be, *too.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "The good customers will wait.",
+   "caps": [
+    "The good customers",
+    "will *wait.*"
+   ],
+   "gap": 0.8
+  },
+  {
+   "say": "Follow if you needed that today.",
+   "caps": [
+    "*Follow* if you",
+    "needed that *today.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

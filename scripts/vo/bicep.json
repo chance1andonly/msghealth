@@ -1,0 +1,47 @@
+{
+ "voice": "af_heart",
+ "speed": 1.12,
+ "start": 0.15,
+ "lines": [
+  {
+   "say": "Bicep heart for customers who text when they're running late.",
+   "caps": [
+    "*Bicep heart* for customers",
+    "who *text* when they're running late."
+   ],
+   "gap": 0.12
+  },
+  {
+   "say": "Who leave a review without being asked.",
+   "caps": [
+    "Who leave a *review*",
+    "without being *asked.*"
+   ],
+   "gap": 0.12
+  },
+  {
+   "say": "Who rebook before they've left the building.",
+   "caps": [
+    "Who *rebook* before",
+    "they've left the *building.*"
+   ],
+   "gap": 0.12
+  },
+  {
+   "say": "And you, for answering at eleven at night. Again.",
+   "caps": [
+    "And *you,* for answering",
+    "at *11 at night.* Again."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Follow for more small business chaos.",
+   "caps": [
+    "*Follow* for more",
+    "small business *chaos.*"
+   ],
+   "gap": 0.2
+  }
+ ]
+}

@@ -1,0 +1,47 @@
+{
+ "voice": "am_michael",
+ "speed": 1.08,
+ "start": 0.15,
+ "lines": [
+  {
+   "say": "Small business owners. It's time.",
+   "caps": [
+    "*Small business owners.*",
+    "It's *time.*"
+   ],
+   "gap": 0.2
+  },
+  {
+   "say": "The calendar is defrosting.",
+   "caps": [
+    "The *calendar*",
+    "is *defrosting.*"
+   ],
+   "gap": 0.2
+  },
+  {
+   "say": "Holiday bookings. Gift cards. Everyone wants Saturday.",
+   "caps": [
+    "*Holiday bookings.* *Gift cards.*",
+    "Everyone wants *Saturday.*"
+   ],
+   "gap": 0.2
+  },
+  {
+   "say": "Hydrate. You're going to need it.",
+   "caps": [
+    "*Hydrate.*",
+    "You're going to *need it.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "Follow for survival tips.",
+   "caps": [
+    "*Follow* for",
+    "survival *tips.*"
+   ],
+   "gap": 0.2
+  }
+ ]
+}
