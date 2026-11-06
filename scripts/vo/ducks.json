@@ -1,0 +1,93 @@
+{
+ "voice": "am_adam",
+ "speed": 1.1,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen ninety-two, twenty-eight thousand bath toys fell into the Pacific.",
+   "caps": [
+    "In *1992,* 28,000 bath toys",
+    "fell into the *Pacific.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Nobody was tracking them.",
+   "caps": [
+    "Nobody was *tracking* them."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Months later, ducks started washing up in Alaska.",
+   "caps": [
+    "Months later, ducks started",
+    "washing up in *Alaska.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Then Hawaii. Then Australia. Some even drifted through the Arctic.",
+   "caps": [
+    "Then *Hawaii.* Then *Australia.*",
+    "Some drifted through the *Arctic.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Scientists used them to map ocean currents.",
+   "caps": [
+    "Scientists used them to",
+    "map *ocean currents.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Not one duck said it was leaving.",
+   "caps": [
+    "Not *one duck*",
+    "said it was *leaving.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Your customers drift away quietly too.",
+   "caps": [
+    "Your customers *drift away*",
+    "*quietly* too."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health scores every customer's health.",
+   "caps": [
+    "*MsgHealth* scores every",
+    "customer's *health.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "So you spot who is drifting, before they wash up somewhere else.",
+   "caps": [
+    "So you spot who's *drifting,*",
+    "before they *wash up* elsewhere."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

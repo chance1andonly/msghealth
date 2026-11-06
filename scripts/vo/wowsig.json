@@ -1,0 +1,91 @@
+{
+ "voice": "am_adam",
+ "speed": 1.1,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen seventy-seven, a radio telescope heard something from deep space.",
+   "caps": [
+    "In *1977,* a radio telescope",
+    "heard something from *deep space.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "It lasted seventy-two seconds.",
+   "caps": [
+    "It lasted *72 seconds.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "An astronomer circled it on the printout, and wrote: Wow.",
+   "caps": [
+    "An astronomer *circled* it",
+    "and wrote: *Wow.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "It has never been heard again.",
+   "caps": [
+    "It has *never* been heard again."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Nobody wrote down what they changed.",
+   "caps": [
+    "Nobody wrote down",
+    "*what they changed.*"
+   ],
+   "gap": 0.8
+  },
+  {
+   "say": "Your business sends signals too.",
+   "caps": [
+    "Your business sends *signals* too."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "A spike in bookings. A dip in reviews.",
+   "caps": [
+    "A *spike* in bookings.",
+    "A *dip* in reviews."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health's reports show what is working, and what is not.",
+   "caps": [
+    "*MsgHealth's* reports show",
+    "what's *working,* and what isn't."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "So the next Wow is one you can repeat.",
+   "caps": [
+    "So the next *Wow*",
+    "is one you can *repeat.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

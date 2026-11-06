@@ -40,7 +40,12 @@
     "render:railway": "ENTRY=railway.html node scripts/render.mjs",
     "audit:railway": "ENTRY=railway.html node scripts/audit-text.mjs 0.1",
     "render:petrock": "ENTRY=petrock.html node scripts/render.mjs",
-    "audit:petrock": "ENTRY=petrock.html node scripts/audit-text.mjs 0.1"
+    "audit:petrock": "ENTRY=petrock.html node scripts/audit-text.mjs 0.1",
+    "render:ducks": "ENTRY=ducks.html node scripts/render.mjs",
+    "render:pigeon": "ENTRY=pigeon.html node scripts/render.mjs",
+    "render:bottle": "ENTRY=bottle.html node scripts/render.mjs",
+    "render:eliza": "ENTRY=eliza.html node scripts/render.mjs",
+    "render:wowsig": "ENTRY=wowsig.html node scripts/render.mjs"
   },
   "repository": {
     "type": "git",

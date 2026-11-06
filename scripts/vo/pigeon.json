@@ -1,0 +1,94 @@
+{
+ "voice": "am_michael",
+ "speed": 1.1,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "The US once tried to guide missiles with pigeons.",
+   "caps": [
+    "The US once tried to guide",
+    "missiles with *pigeons.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "A psychologist trained them to peck at a picture of the target.",
+   "caps": [
+    "A psychologist *trained* them",
+    "to peck at a *picture*",
+    "of the target."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "It worked. Pigeons pecked all day, and never complained.",
+   "caps": [
+    "It *worked.*",
+    "Pigeons pecked all day,",
+    "never *complained.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Then the project was cancelled.",
+   "caps": [
+    "Then the project was *cancelled.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Nobody told the pigeons.",
+   "caps": [
+    "Nobody told *the pigeons.*"
+   ],
+   "gap": 0.8
+  },
+  {
+   "say": "Some work should just run itself.",
+   "caps": [
+    "Some work should just",
+    "*run itself.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health's workflow builder follows up, sends reminders, and wins customers back.",
+   "caps": [
+    "*MsgHealth's* workflow builder",
+    "*follows up,* sends reminders,",
+    "and *wins customers back.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Set it once. It never takes a break.",
+   "caps": [
+    "Set it *once.*",
+    "It never takes a *break.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "No pigeons required.",
+   "caps": [
+    "No *pigeons* required."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

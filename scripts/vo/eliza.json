@@ -1,0 +1,92 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen sixty-six, a computer program got people to share their secrets.",
+   "caps": [
+    "In *1966,* a computer program",
+    "got people to share *secrets.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "It was called Eliza.",
+   "caps": [
+    "It was called *Eliza.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "It mostly just turned what you said into a question.",
+   "caps": [
+    "It mostly just turned",
+    "what you said into *a question.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Even so, its creator's secretary asked him to leave the room.",
+   "caps": [
+    "Even so, its creator's",
+    "secretary asked him to *leave.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Eliza's only flaw? It never offered to book you.",
+   "caps": [
+    "Eliza's only flaw?",
+    "It never offered to *book you.*"
+   ],
+   "gap": 0.8
+  },
+  {
+   "say": "Your website visitors want answers now.",
+   "caps": [
+    "Your website visitors want",
+    "*answers now.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health's chat widget answers them on your site.",
+   "caps": [
+    "*MsgHealth's* chat widget",
+    "answers them *on your site.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "And every conversation lands in one inbox.",
+   "caps": [
+    "And every conversation lands",
+    "in *one inbox.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Eliza would be proud.",
+   "caps": [
+    "*Eliza* would be proud."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

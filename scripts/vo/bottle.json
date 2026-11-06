@@ -1,0 +1,92 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In twenty eighteen, a message in a bottle washed up in Australia.",
+   "caps": [
+    "In *2018,* a message in a bottle",
+    "washed up in *Australia.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "It was thrown overboard from a German ship in eighteen eighty-six.",
+   "caps": [
+    "It was thrown overboard",
+    "from a German ship in *1886.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "One hundred and thirty-one years at sea.",
+   "caps": [
+    "*131 years* at sea."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The note asked the finder to write back.",
+   "caps": [
+    "The note asked the finder",
+    "to *write back.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Their follow-up plan? More bottles.",
+   "caps": [
+    "Their follow-up plan?",
+    "*More bottles.*"
+   ],
+   "gap": 0.8
+  },
+  {
+   "say": "Your customers will not find your news in a bottle.",
+   "caps": [
+    "Your customers won't find",
+    "your news *in a bottle.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health sends one message to everyone who should get it.",
+   "caps": [
+    "*MsgHealth* sends one message",
+    "to everyone who *should get it.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "By text, and by email. In seconds.",
+   "caps": [
+    "By *text,* and by *email.*",
+    "In *seconds.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Not one hundred and thirty-one years.",
+   "caps": [
+    "Not *131 years.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Fifty percent off your first month.",
+   "caps": [
+    "*Fifty percent off*",
+    "your *first month.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
