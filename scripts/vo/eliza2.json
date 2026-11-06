@@ -1,0 +1,63 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "In nineteen sixty-six, a computer program got people to share their secrets.",
+   "caps": [
+    "In *1966,* a computer program",
+    "got people to share *secrets.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "It was called Eliza.",
+   "caps": [
+    "It was called *Eliza.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "It just turned everything you said into a question.",
+   "caps": [
+    "It just turned everything you said",
+    "into *a question.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Its creator's secretary asked him to leave the room.",
+   "caps": [
+    "Its creator's secretary",
+    "asked him to *leave the room.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Eliza's only flaw? It never once offered to book you.",
+   "caps": [
+    "Eliza's only flaw?",
+    "It never offered to *book you.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Message Health's chat widget would have just answered. Then dropped it in your inbox.",
+   "caps": [
+    "*MsgHealth's* chat widget",
+    "would've just *answered.*",
+    "Then dropped it in your *inbox.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And how does that make you feel?",
+   "caps": [
+    "And how does that",
+    "make *you* feel?"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

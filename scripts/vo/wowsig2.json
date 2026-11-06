@@ -1,0 +1,61 @@
+{
+ "voice": "am_adam",
+ "speed": 1.1,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "In nineteen seventy-seven, a radio telescope heard something from deep space.",
+   "caps": [
+    "In *1977,* a radio telescope",
+    "heard something from *deep space.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "It lasted seventy-two seconds.",
+   "caps": [
+    "It lasted *72 seconds.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "An astronomer circled it on the printout, and wrote: Wow.",
+   "caps": [
+    "An astronomer *circled* it",
+    "and wrote: *Wow.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "It has never been heard again.",
+   "caps": [
+    "It has *never* been heard again."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Nobody wrote down what they changed.",
+   "caps": [
+    "Nobody wrote down",
+    "*what they changed.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Message Health's reports would have circled the spike for you. With a reason.",
+   "caps": [
+    "*MsgHealth's* reports would've",
+    "*circled* the spike for you.",
+    "With a *reason.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Wow.",
+   "caps": [
+    "*Wow.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

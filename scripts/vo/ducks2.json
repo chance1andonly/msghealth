@@ -1,0 +1,64 @@
+{
+ "voice": "am_adam",
+ "speed": 1.1,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "Twenty-eight thousand bath toys fell into the Pacific. Watch duck number fourteen.",
+   "caps": [
+    "*28,000* bath toys fell into",
+    "the *Pacific.*",
+    "Watch duck *number fourteen.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "Nobody was tracking them.",
+   "caps": [
+    "Nobody was *tracking* them."
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "Months later, they started washing up. Alaska. Hawaii. Australia.",
+   "caps": [
+    "Months later, they started",
+    "*washing up.* *Alaska.*",
+    "*Hawaii.* *Australia.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Scientists used them to map the ocean's currents.",
+   "caps": [
+    "Scientists used them to",
+    "map the *ocean's currents.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Duck fourteen never said a word. It just drifted off.",
+   "caps": [
+    "Duck *fourteen* never said a word.",
+    "It just *drifted off.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Message Health would have flagged that. Duck fourteen: at risk.",
+   "caps": [
+    "*MsgHealth* would've flagged that.",
+    "Duck fourteen: *at risk.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Good luck out there, duck fourteen.",
+   "caps": [
+    "Good luck out there,",
+    "duck *fourteen.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

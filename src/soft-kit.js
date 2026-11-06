@@ -46,3 +46,18 @@ function ocean(t, hz = 760, o = {}) { // sky above the horizon hz, sea below it,
   backdrop(hz, o.sky0 ?? '#8fd6f2', o.sky1 ?? '#e6f6f2', o.s0 ?? '#2fa6c4', o.s1 ?? '#0d5a7a'); ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.fillRect(0, hz - 2, W, 6);
   for (let i = 0; i < 14; i++) { const y = hz + 50 + i * ((H - hz) / 14), x = ((i * 310 + t * (24 + i * 5)) % 1500) - 200; ellipse(x, y, 90 + i * 9, 6 + i * 0.6, 'rgba(255,255,255,0.2)'); }
 }
+
+// ── v2 "stay in the story" helpers: the product is a small prop inside the scene, not a section of its own ──
+// A small UI card that pops into the scene like a sticker (no dimming, no phone, no section break). fn() draws in card-local
+// coordinates (0, 0 = top-left). The brand is only a tiny logo mark in the corner.
+function cameo(t, at, until, cx, cy, w, h, fn, rot = -0.02) {
+  const k = ease.back(seg(t, at, at + 0.4)), out = ease.in(seg(t, until - 0.25, until)); if (k <= 0 || out >= 1) return;
+  ctx.save(); ctx.translate(cx, cy + sine(t, 2.2, 5)); ctx.rotate(rot); const s = clamp(k) * (1 - out * 0.35); ctx.scale(s, s); ctx.globalAlpha *= 1 - out;
+  ctx.shadowColor = 'rgba(0,0,0,0.38)'; ctx.shadowBlur = 44; ctx.shadowOffsetY = 18; fillRR(-w / 2, -h / 2, w, h, 30, '#fff'); ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0; strokeRR(-w / 2, -h / 2, w, h, 30, LLINE, 2);
+  ctx.translate(-w / 2, -h / 2); if (LOGO) ctx.drawImage(LOGO, w - 58, 16, 36, 36); fn(); ctx.restore();
+}
+// The only "ad" element: a small tag on the closing frame, after the story has paid off.
+function endTag(t, at) {
+  const k = ease.out(seg(t, at, at + 0.4)); if (k <= 0) return; ctx.save(); ctx.globalAlpha = k; ctx.translate(0, (1 - k) * 40);
+  fillRR(150, 1585, 780, 170, 34, 'rgba(14,16,28,0.88)'); text(BRAND.url, CX, 1640, 44, 800, '#fff', 'center', 0.01); text('Half off your first month · monthly plans only', CX, 1695, 24, 600, '#9ff0c0', 'center', 0.01); text('Not valid on the Pay-Per-Use Wallet', CX, 1730, 18, 500, MUTED, 'center', 0.02); ctx.restore();
+}

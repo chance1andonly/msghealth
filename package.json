@@ -45,7 +45,12 @@
     "render:pigeon": "ENTRY=pigeon.html node scripts/render.mjs",
     "render:bottle": "ENTRY=bottle.html node scripts/render.mjs",
     "render:eliza": "ENTRY=eliza.html node scripts/render.mjs",
-    "render:wowsig": "ENTRY=wowsig.html node scripts/render.mjs"
+    "render:wowsig": "ENTRY=wowsig.html node scripts/render.mjs",
+    "render:ducks2": "ENTRY=ducks2.html node scripts/render.mjs",
+    "render:pigeon2": "ENTRY=pigeon2.html node scripts/render.mjs",
+    "render:bottle2": "ENTRY=bottle2.html node scripts/render.mjs",
+    "render:eliza2": "ENTRY=eliza2.html node scripts/render.mjs",
+    "render:wowsig2": "ENTRY=wowsig2.html node scripts/render.mjs"
   },
   "repository": {
     "type": "git",

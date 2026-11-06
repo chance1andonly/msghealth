@@ -1,0 +1,63 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "In twenty eighteen, a message in a bottle washed up in Australia.",
+   "caps": [
+    "In *2018,* a message in a bottle",
+    "washed up in *Australia.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "It was thrown overboard from a German ship in eighteen eighty-six.",
+   "caps": [
+    "It was thrown overboard",
+    "from a German ship in *1886.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "One hundred and thirty-one years at sea.",
+   "caps": [
+    "*131 years* at sea."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "The note asked the finder to write back.",
+   "caps": [
+    "The note asked the finder",
+    "to *write back.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Their follow-up plan? More bottles.",
+   "caps": [
+    "Their follow-up plan?",
+    "*More bottles.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "Message Health would have sent it by text and email. In seconds. Not a hundred and thirty-one years.",
+   "caps": [
+    "*MsgHealth* would've sent it",
+    "by *text* and *email.* In *seconds.*",
+    "Not *131 years.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Somewhere, a bottle is still waiting for a reply.",
+   "caps": [
+    "Somewhere, a bottle is",
+    "still *waiting* for a reply."
+   ],
+   "gap": 0.3
+  }
+ ]
+}

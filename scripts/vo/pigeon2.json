@@ -1,0 +1,64 @@
+{
+ "voice": "am_michael",
+ "speed": 1.1,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "The US once tried to guide missiles with pigeons.",
+   "caps": [
+    "The US once tried to guide",
+    "missiles with *pigeons.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "A psychologist trained them to peck at a picture of the target.",
+   "caps": [
+    "A psychologist *trained* them",
+    "to peck at a *picture*",
+    "of the target."
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "It worked. Pigeons pecked all day, and never complained.",
+   "caps": [
+    "It *worked.*",
+    "Pigeons pecked all day,",
+    "never *complained.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Then the project was cancelled.",
+   "caps": [
+    "Then the project was *cancelled.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Nobody told the pigeons.",
+   "caps": [
+    "Nobody told *the pigeons.*"
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "These days, Message Health's workflow builder does the pecking. It doesn't need grain.",
+   "caps": [
+    "These days, *MsgHealth's*",
+    "workflow builder does the *pecking.*",
+    "It doesn't need *grain.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The pigeons are still pecking, by the way.",
+   "caps": [
+    "The pigeons are *still pecking,*",
+    "by the way."
+   ],
+   "gap": 0.3
+  }
+ ]
+}
