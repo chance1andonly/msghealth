@@ -1,0 +1,53 @@
+{
+ "voice": "am_adam",
+ "speed": 0.86,
+ "start": 0.2,
+ "lines": [
+  {
+   "say": "Remember November twenty twenty-six.",
+   "caps": [
+    "*Remember* November *2026.*"
+   ],
+   "gap": 1
+  },
+  {
+   "say": "Remember to confirm Saturday's appointments.",
+   "caps": [
+    "*Remember* to confirm",
+    "Saturday's *appointments.*"
+   ],
+   "gap": 0.9
+  },
+  {
+   "say": "Remember that someone will cancel on Friday at five.",
+   "caps": [
+    "*Remember* that someone",
+    "will cancel on Friday at *five.*"
+   ],
+   "gap": 0.9
+  },
+  {
+   "say": "Remember to eat. You skipped lunch again.",
+   "caps": [
+    "*Remember* to eat.",
+    "You skipped *lunch* again."
+   ],
+   "gap": 0.9
+  },
+  {
+   "say": "Remember November twenty twenty-six.",
+   "caps": [
+    "*Remember* November *2026.*"
+   ],
+   "gap": 1.2
+  },
+  {
+   "say": "Tag someone who needs a reminder.",
+   "caps": [
+    "*Tag* someone who",
+    "needs a *reminder.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

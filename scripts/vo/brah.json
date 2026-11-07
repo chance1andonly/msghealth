@@ -1,0 +1,58 @@
+{
+ "voice": "am_michael",
+ "speed": 0.95,
+ "start": 0.2,
+ "lines": [
+  {
+   "say": "Me versus everything that ruins my week.",
+   "caps": [
+    "Me *versus* everything",
+    "that ruins my *week.*"
+   ],
+   "gap": 0.9
+  },
+  {
+   "say": "What's up, brah.",
+   "caps": [
+    "What's up, *brah.*"
+   ],
+   "gap": 1.45
+  },
+  {
+   "say": "What's up, brah.",
+   "caps": [
+    "What's up, *brah.*"
+   ],
+   "gap": 1.45
+  },
+  {
+   "say": "What's up, brah.",
+   "caps": [
+    "What's up, *brah.*"
+   ],
+   "gap": 1.45
+  },
+  {
+   "say": "What's up, brah.",
+   "caps": [
+    "What's up, *brah.*"
+   ],
+   "gap": 1.45
+  },
+  {
+   "say": "What's up, brah.",
+   "caps": [
+    "What's up, *brah.*"
+   ],
+   "gap": 2.2
+  },
+  {
+   "say": "Tag a small business owner who has faced all five.",
+   "caps": [
+    "*Tag* a small business owner",
+    "who has faced all *five.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

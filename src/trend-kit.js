@@ -13,7 +13,7 @@ function buddy(x, y, h, seed, o = {}) {
   if (!o.noShadow) shadow(x, y, w * 0.95);
   fillRR(x - w * 0.36, y - h * 0.46, w * 0.32, h * 0.46, w * 0.06, pants); fillRR(x + w * 0.04, y - h * 0.46, w * 0.32, h * 0.46, w * 0.06, pants); fillRR(x - w * 0.42, y - h * 0.035, w * 0.4, h * 0.035, h * 0.015, '#2b2b30'); fillRR(x + w * 0.02, y - h * 0.035, w * 0.4, h * 0.035, h * 0.015, '#2b2b30');
   fillRR(x - w * 0.58, sy, w * 0.18, h * 0.34, w * 0.09, shirt); circle(x - w * 0.5, sy + h * 0.35, w * 0.09, skin);
-  fillRR(x - w / 2, sy - h * 0.02, w, h * 0.35, w * 0.22, shirt);
+  fillRR(x - w / 2, sy - h * 0.02, w, h * 0.35, w * 0.22, shirt); if (o.apron) { fillRR(x - w * 0.34, sy + h * 0.06, w * 0.68, h * 0.28, w * 0.1, '#2a3a5a'); line(x - w * 0.3, sy + h * 0.02, x - w * 0.12, sy + h * 0.1, '#2a3a5a', w * 0.06); line(x + w * 0.3, sy + h * 0.02, x + w * 0.12, sy + h * 0.1, '#2a3a5a', w * 0.06); }
   const E = [lerp(x + w * 0.5, shx + h * 0.17, k), lerp(shy + h * 0.17, shy + h * 0.02, k)], Hd = [lerp(x + w * 0.58, E[0] + h * 0.015, k), lerp(y - h * 0.41, E[1] - h * 0.17, k)];
   line(shx, shy, E[0], E[1], shirt, w * 0.2); line(E[0], E[1], Hd[0], Hd[1], skin, w * 0.17); circle(Hd[0], Hd[1], w * 0.115, skin); const bx = lerp(shx, E[0], 0.55), by = lerp(shy, E[1], 0.55);
   if (k > 0.3) circle(bx, by - h * 0.03 * k, h * 0.05 * k, shirt);

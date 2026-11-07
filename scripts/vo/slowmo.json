@@ -1,0 +1,66 @@
+{
+ "voice": "am_michael",
+ "speed": 0.9,
+ "start": 0.2,
+ "lines": [
+  {
+   "say": "It is four fifty-nine.",
+   "caps": [
+    "It is *4:59.*"
+   ],
+   "gap": 0.8
+  },
+  {
+   "say": "The sign says we close at five.",
+   "caps": [
+    "The sign says",
+    "we close at *five.*"
+   ],
+   "gap": 0.9
+  },
+  {
+   "say": "Then. In slow motion.",
+   "caps": [
+    "Then. In *slow motion.*"
+   ],
+   "gap": 1.6
+  },
+  {
+   "say": "Just a quick question.",
+   "caps": [
+    "Just a quick *question.*"
+   ],
+   "gap": 1.3
+  },
+  {
+   "say": "I have a coupon.",
+   "caps": [
+    "I have a *coupon.*"
+   ],
+   "gap": 1.3
+  },
+  {
+   "say": "It will only take five minutes.",
+   "caps": [
+    "It will only take",
+    "*five minutes.*"
+   ],
+   "gap": 1.5
+  },
+  {
+   "say": "Pray for me.",
+   "caps": [
+    "*Pray* for me."
+   ],
+   "gap": 2.2
+  },
+  {
+   "say": "Tag the owner who has lived this.",
+   "caps": [
+    "*Tag* the owner",
+    "who has *lived this.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

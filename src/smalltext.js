@@ -25,6 +25,6 @@ function words(t) {
   lines.forEach(([a, b], i) => { const e = enter(t, a, b, 0.55) ; if (e <= 0) return; const rows = VO_CLIPS[i].chunks.map(([s]) => plain(s)); withFade(e, () => { const y0 = 1440 - (rows.length - 1) * 26; rows.forEach((r, k) => text(r, CX, y0 + k * 52, 36, 600, 'rgba(255,255,255,0.92)', 'center', 0.02)); }); });
   withFade(seg(t, T.l3 + 0.6, T.l3 + 1.2), () => heartShape(CX, 1560, 40, '#ff6f8a'));
 }
-const SCENES = [[0, 999, (t) => { scene(t); words(t); watermark(0.7); }]];
+const SCENES = [[0, 999, (t) => { scene(t); words(t); }]];
 cue(T.l0, 'tap', 0.4); cue(T.l1, 'tap', 0.4); cue(T.l2, 'tap', 0.4); cue(T.l3, 'ding', 0.6);
 boot({ duration: DURATION, scenes: SCENES, brandAt: 999, hideCaption: () => true }, 'smalltext');
