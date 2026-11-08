@@ -35,6 +35,7 @@ const SY = 900; // vertical centre of the stage
 const K = (t, a, b, e = ease.inOut) => e(seg(t, a, b));
 function mono(s, x, y, size, col, align = 'left', weight = 500, track = 0.08) { ctx.font = `${weight} ${size}px '${MONO}'`; ctx.letterSpacing = `${(size * track).toFixed(2)}px`; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillStyle = col; ctx.fillText(s, x, y); }
 function monoW(s, size, weight = 500, track = 0.08) { ctx.font = `${weight} ${size}px '${MONO}'`; ctx.letterSpacing = `${(size * track).toFixed(2)}px`; return ctx.measureText(s).width; }
+const hexMix = (a, b, k) => '#' + [16, 8, 0].map((sh) => Math.round(lerp((parseInt(a.slice(1), 16) >> sh) & 255, (parseInt(b.slice(1), 16) >> sh) & 255, k)).toString(16).padStart(2, '0')).join('');
 function lr(a, b, k) { return a.map((v, i) => lerp(v, b[i], k)); } // lerp arrays (rects)
 function panel(x, y, w, h, r = 28, a = 1, glowCol = null) {
   ctx.save(); ctx.globalAlpha *= a;
@@ -56,28 +57,53 @@ function background(t) {
 }
 function grain(t) { if (!GRAIN) return; const f = Math.floor(t * 30); ctx.save(); ctx.globalAlpha = 0.07; ctx.globalCompositeOperation = 'overlay'; const ox = (hash(f) * 256) | 0, oy = (hash(f + 7) * 256) | 0; for (let x = -ox; x < W; x += 256) for (let y = -oy; y < H; y += 256) ctx.drawImage(GRAIN, x, y); ctx.restore(); }
 
-// ── 1 · title → particles → dot ──────────────────────────────────────────────
-const TITLE = [['Try', 'to', 'spot'], ['a', 'single', 'cut'], ['in', 'this', 'video.']];
-let GLYPHS = null; // [{ch, x, y, line, wi, accent}]
+// ── shared "grow from something" helpers ─────────────────────────────────────
+function clipRect(r, fn) { ctx.save(); ctx.beginPath(); ctx.rect(...r); ctx.clip(); fn(); ctx.restore(); }
+function clipCircle(x, y, r, fn) { if (r <= 0) return; ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.clip(); fn(); ctx.restore(); }
+function clipOutside(x, y, r, fn) { ctx.save(); ctx.beginPath(); ctx.rect(-50, -50, W + 100, H + 100); ctx.arc(x, y, Math.max(0, r), 0, Math.PI * 2, true); ctx.clip('evenodd'); fn(); ctx.restore(); }
+// a pill that grows out of an anchor point (ax, ay) into its final rect; its label is revealed inside it
+function growPill(k, ax, ay, rect, fill, stroke, drawLabel) {
+  if (k <= 0) return; const r = lr([ax, ay, 0, 0], rect, k), rad = Math.min(r[2], r[3]) / 2;
+  fillRR(...r, rad, fill); if (stroke) strokeRR(...r, rad, stroke, 1.5); if (k > 0.35) clipRect(r, drawLabel);
+}
+
+// ── 1 · the dot → a caret that types the title → particles → the dot ────────
+const TITLE = [['Try', 'to', 'spot'], ['a', 'single', 'cut'], ['in', 'this', 'video.']], TSIZE = 104;
+let GLYPHS = null, CKEYS = null;
 function layoutTitle() {
-  GLYPHS = []; const size = 104; font(size, 700, -0.035);
-  TITLE.forEach((ln, li) => { const full = ln.join(' '), wFull = ctx.measureText(full).width; let x = CX - wFull / 2; const y = 700 + li * 124;
-    ln.forEach((wd, wi) => { for (const ch of wd) { const cw = ctx.measureText(ch).width; GLYPHS.push({ ch, x: x + cw / 2, y, li, wi, acc: wd === 'cut' }); x += cw; } x += ctx.measureText(' ').width; }); });
+  GLYPHS = []; font(TSIZE, 700, -0.035);
+  TITLE.forEach((ln, li) => { const wFull = ctx.measureText(ln.join(' ')).width; let x = CX - wFull / 2; const y = 700 + li * 124;
+    ln.forEach((wd, wi) => { const wordAt = li < 2 ? T.title + (li * 3 + wi) * 0.17 : T.title2 + wi * 0.16; [...wd].forEach((ch, ci) => { const cw = ctx.measureText(ch).width; GLYPHS.push({ ch, x: x + cw / 2, l: x, r: x + cw, y, li, acc: wd === 'cut', at: wordAt + ci * 0.03 }); x += cw; }); x += ctx.measureText(' ').width; }); });
+  // caret keyframes: it sits after the last typed glyph, and slides to the next line before typing it
+  CKEYS = [{ t: 0.42, x: GLYPHS[0].l - 12, y: GLYPHS[0].y }];
+  GLYPHS.forEach((g, i) => { const last = CKEYS[CKEYS.length - 1];
+    if (i && GLYPHS[i - 1].li !== g.li) { CKEYS.push({ t: g.at - 0.2, x: last.x, y: last.y }, { t: g.at - 0.02, x: g.l - 12, y: g.y }); }
+    else CKEYS.push({ t: g.at, x: last.x, y: last.y });
+    CKEYS.push({ t: g.at + 0.05, x: g.r + 12, y: g.y }); });
+}
+function caretAt(t) { if (t <= CKEYS[0].t) return [CKEYS[0].x, CKEYS[0].y]; for (let i = 1; i < CKEYS.length; i++) { const a = CKEYS[i - 1], b = CKEYS[i]; if (t < b.t) { const k = ease.inOut(seg(t, a.t, b.t)); return [lerp(a.x, b.x, k), lerp(a.y, b.y, k)]; } } const e = CKEYS[CKEYS.length - 1]; return [e.x, e.y]; }
+const HERO_END = () => T.collapse + 0.95; // after this the dot is the ECG pen
+function hero(t) { // frame 0 starts on this dot: it becomes the caret, types the title, then becomes the dot again
+  if (t >= HERO_END()) return; if (!GLYPHS) layoutTitle();
+  const mi = K(t, 0.15, 0.42), mo = K(t, T.collapse + 0.1, HERO_END());
+  const typed = caretAt(Math.min(t, T.collapse + 0.1)); let [x, y] = mi < 1 ? [lerp(CX, typed[0], mi), lerp(SY, typed[1], mi)] : typed; x = lerp(x, CX, mo); y = lerp(y, SY, mo);
+  const w = lerp(lerp(30, 8, mi), 30, mo), h = lerp(lerp(30, 100, mi), 30, mo), done = GLYPHS[GLYPHS.length - 1].at + 0.1;
+  const soft = t > done && mo <= 0 ? 0.55 + 0.45 * (0.5 + 0.5 * Math.cos((t - done) * 6)) : 1; // a soft pulse, never a hard blink
+  glow(x, y, 90, '#ffffff', 0.22); ctx.save(); ctx.globalAlpha *= soft; fillRR(x - w / 2, y - h / 2, w, h, Math.min(w, h) / 2, mi > 0.5 && mo < 0.5 ? ACC : '#fff'); ctx.restore();
 }
 function sceneTitle(t) {
   if (t > T.dotEnd + 0.05) return; if (!GLYPHS) layoutTitle();
-  const size = 104;
   GLYPHS.forEach((g, i) => {
-    const wordAt = g.li < 2 ? T.title + (g.li * 3 + g.wi) * 0.17 : T.title2 + g.wi * 0.16;
-    const a = K(t, wordAt, wordAt + 0.4, ease.out); if (a <= 0) return;
+    const a = K(t, g.at, g.at + 0.14, ease.out); if (a <= 0) return;
     // collapse: each glyph spirals into the dot, outer glyphs a touch later
     const d = Math.hypot(g.x - CX, g.y - SY), st = T.collapse + d / 2400 + hash(i) * 0.12, c = K(t, st, st + 0.8, (u) => u * u * (3 - 2 * u));
     const ang = Math.atan2(g.y - SY, g.x - CX) + c * c * 2.4, rad = d * (1 - ease.in(c));
-    const x = c > 0 ? CX + Math.cos(ang) * rad : g.x, y = c > 0 ? SY + Math.sin(ang) * rad : g.y + (1 - a) * 40;
-    const s = 1 - 0.92 * ease.in(c);
-    ctx.save(); ctx.translate(x, y); ctx.rotate(c * (hash(i + 3) - 0.5) * 4); ctx.scale(s, s); ctx.globalAlpha = a * (1 - seg(c, 0.85, 1));
-    if (a < 1) ctx.filter = `blur(${((1 - a) * 10).toFixed(1)}px)`;
-    text(g.ch, 0, 0, size, 700, g.acc ? ACC : INK, 'center', -0.035); ctx.filter = 'none'; ctx.restore();
+    // typing: the glyph grows out of the caret (from its left edge)
+    const gx = lerp(g.l, g.x, a), s0 = lerp(0.15, 1, a);
+    const x = c > 0 ? CX + Math.cos(ang) * rad : gx, y = c > 0 ? SY + Math.sin(ang) * rad : g.y;
+    const s = s0 * (1 - 0.92 * ease.in(c));
+    ctx.save(); ctx.translate(x, y); ctx.rotate(c * (hash(i + 3) - 0.5) * 4); ctx.scale(s, s); ctx.globalAlpha = 1 - seg(c, 0.85, 1);
+    text(g.ch, 0, 0, TSIZE, 700, g.acc ? ACC : INK, 'center', -0.035); ctx.restore();
   });
 }
 
@@ -95,156 +121,196 @@ function traceECG(t, E, penX, x0, col, lw, alpha, flatBefore = false) {
   ctx.stroke(); ctx.restore();
 }
 function sceneDot(t) {
-  if (t < T.collapse + 0.55 || t > T.cust + 0.6) return;
-  const appear = K(t, T.collapse + 0.55, T.dotEnd, ease.out);
+  if (t < HERO_END() || t > T.cust + 0.6) return;
   const px = penX1(t), py = SY + ecgY(E1, t);
-  const breathe = t < T.pulse ? 1 + 0.12 * Math.sin((t - T.dotEnd) * 4) * seg(t, T.dotEnd, T.dotEnd + 0.4) : 1;
-  // the trace behind the pen; it fades at the left edge and dissolves into beads when the customers arrive
-  if (t > E1.start) { const fade = 1 - seg(t, T.cust, T.cust + 0.35); ctx.save(); const gr = ctx.createLinearGradient(40, 0, px, 0); gr.addColorStop(0, rgba('#ffffff', 0)); gr.addColorStop(0.3, rgba('#ffffff', 0.85)); gr.addColorStop(1, '#ffffff'); traceECG(t, E1, px, 40, gr, 5, fade); ctx.restore(); }
-  if (t < T.cust) { // the pen
-    const r = 15 * appear * breathe; glow(px, py, 90, '#ffffff', 0.25 * appear); circle(px, py, r, '#fff');
-    if (t > T.pulse - 0.3) { const ph = ((t - E1.start) * BEAT) % 1; const k = seg(ph, 0.34, 0.9); if (t > E1.start) ring(px, py, 15 + k * 70, rgba('#ffffff', 0.45 * (1 - k)), 3); }
+  const breathe = t < T.pulse ? 1 + 0.12 * Math.sin((t - HERO_END()) * 4) * seg(t, HERO_END(), HERO_END() + 0.4) : 1;
+  // the trace comes out of the pen; it dissolves into beads when the customers arrive (the beads are the trace)
+  if (t > E1.start) { const fade = 1 - seg(t, T.cust, T.cust + 0.3); const gr = ctx.createLinearGradient(40, 0, px, 0); gr.addColorStop(0, rgba('#ffffff', 0)); gr.addColorStop(0.3, rgba('#ffffff', 0.85)); gr.addColorStop(1, '#ffffff'); traceECG(t, E1, px, 40, gr, 5, fade); }
+  if (t < T.cust) {
+    glow(px, py, 90, '#ffffff', 0.25); circle(px, py, 15 * breathe, '#fff');
+    if (t > E1.start) { const ph = ((t - E1.start) * BEAT) % 1; const k = seg(ph, 0.34, 0.9); ring(px, py, 15 + k * 70, rgba('#ffffff', 0.45 * (1 - k)), 3); }
   }
 }
 
-// ── 3 · beads → customers ────────────────────────────────────────────────────
-const CUST = []; // grid of 20 customers
+// ── 3 · beads → customers → the quiet ones → Jordan ──────────────────────────
+const CUST = [];
 const PAL = ['#6d66ff', '#e5568f', '#f08a3c', '#14b8a6', '#3b82f6', '#a855f7', '#22c55e', '#eab308'];
 const INIT = ['PR', 'MT', 'AV', 'DL', 'SK', 'NO', 'EL', 'JO', 'RA', 'LI', 'KM', 'TS', 'BE', 'CH', 'ZA', 'OM', 'IV', 'HU', 'FE', 'GA'];
 const QUIET = [4, 7, 13, 16], JORDAN = 7;
 for (let i = 0; i < 20; i++) { const c = i % 5, r = Math.floor(i / 5); CUST.push({ i, x: CX + (c - 2) * 178, y: SY + (r - 1.5) * 178, col: PAL[i % PAL.length], ini: INIT[i] }); }
-const BEADX = Array.from({ length: 20 }, (_, k) => lerp(120, 740, k / 19)); // bead sample positions on the trace
-const ORDER = (() => { const cols = [...Array(20).keys()].filter((i) => i !== JORDAN).sort((a, b) => (a % 5) - (b % 5) || Math.floor(a / 5) - Math.floor(b / 5)); return cols; })();
-function beadSource(i) { // where customer i comes from on the trace (frozen at T.cust)
+const BEADX = Array.from({ length: 20 }, (_, k) => lerp(120, 740, k / 19));
+const ORDER = [...Array(20).keys()].filter((i) => i !== JORDAN).sort((a, b) => (a % 5) - (b % 5) || Math.floor(a / 5) - Math.floor(b / 5));
+function beadSource(i) { // where customer i comes from on the trace (frozen at T.cust); Jordan is the pen itself
   if (i === JORDAN) return [penX1(T.cust), SY + ecgY(E1, T.cust)];
   const k = ORDER.indexOf(i), x = BEADX[Math.min(18, k)], ts = T.cust - (penX1(T.cust) - x) / E1.speed; return [x, SY + ecgY(E1, ts)];
 }
-function custState(t, c) {
+const RADAR_C = [CUST[JORDAN].x, CUST[JORDAN].y + 28], RADAR_MAX = 1300;
+function custBase(t, c) {
   const k = c.i === JORDAN ? 0 : ORDER.indexOf(c.i), st = T.cust + k * 0.022, f = K(t, st, st + 0.85, ease.inOut);
   const [sx, sy] = beadSource(c.i); const arc = Math.sin(f * Math.PI) * (c.y < SY ? -60 : 60);
-  let x = lerp(sx, c.x, f), y = lerp(sy, c.y, f) + arc, r = lerp(6, 50, ease.out(f)), a = 1;
+  let x = lerp(sx, c.x, f), y = lerp(sy, c.y, f) + arc, r = lerp(6, 50, ease.out(f));
   const isQ = QUIET.includes(c.i), q = isQ ? K(t, T.quiet + QUIET.indexOf(c.i) * 0.14, T.quiet + 0.6 + QUIET.indexOf(c.i) * 0.14) : 0, lv = isQ ? K(t, T.leave, T.leave + 1.0) : 0;
   if (isQ) { y += 10 * q + 18 * lv; x += (c.x < CX ? -1 : c.x > CX ? 1 : 0) * 14 * lv; }
-  // focus: everyone but Jordan drifts out and fades; Jordan grows into the score ring
-  const fo = K(t, T.focus, T.focus + 0.95);
-  if (c.i !== JORDAN) { x = lerp(x, CX + (x - CX) * 1.35, fo); y = lerp(y, SY + (y - SY) * 1.35, fo); a = 1 - fo; r *= 1 - 0.3 * fo; }
-  else { x = lerp(x, CX, fo); y = lerp(y, SY - 40, fo); r = lerp(r, 160, fo); }
-  return { x, y, r, f, q, lv, a, fo };
+  return { x, y, r, f, q, lv };
 }
+function custState(t, c) {
+  const s = custBase(t, c), fo = K(t, T.focus, T.focus + 0.95); s.fo = fo; s.a = 1;
+  const jb = custBase(t, CUST[JORDAN]), jx = lerp(jb.x, CX, fo), jy = lerp(jb.y, SY - 40, fo);
+  if (c.i === JORDAN) { s.x = jx; s.y = jy; s.r = lerp(s.r, 160, fo); }
+  else { // everyone else is pulled into Jordan (nearest first) and becomes part of the score
+    const d = Math.hypot(c.x - CUST[JORDAN].x, c.y - CUST[JORDAN].y), st = T.focus - 0.1 + d / 900 * 0.3, ab = K(t, st, st + 0.85, ease.inOut);
+    s.x = lerp(s.x, jx, ab); s.y = lerp(s.y, jy, ab); s.r *= 1 - 0.85 * ab; s.a = 1 - seg(ab, 0.85, 1); s.ab = ab;
+  }
+  return s;
+}
+const radarHitAt = (c) => T.radar + (Math.hypot(c.x - RADAR_C[0], c.y - RADAR_C[1]) - 60) / RADAR_MAX * 0.9;
 function sceneCustomers(t) {
   if (t < T.cust || t > T.card + 1.2) return;
-  const radarR = lerp(0, 1150, K(t, T.radar, T.radar + 0.9, ease.out)), radarOn = t > T.radar && t < T.radar + 1.1;
-  if (radarOn) { const ra = 1 - seg(t, T.radar + 0.6, T.radar + 1.05); ctx.save(); ctx.globalAlpha = ra; ring(CX, SY, radarR, rgba(ACC, 0.7), 3); const gr = ctx.createRadialGradient(CX, SY, Math.max(0, radarR - 140), CX, SY, radarR); gr.addColorStop(0, rgba(ACC, 0)); gr.addColorStop(1, rgba(ACC, 0.16)); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(CX, SY, radarR, 0, 7); ctx.fill(); ctx.restore(); }
+  // the radar grows out of Jordan's dashed outline
+  const rk = K(t, T.radar, T.radar + 0.9, ease.out), radarR = lerp(60, RADAR_MAX, rk), radarOn = t > T.radar && t < T.radar + 1.1;
+  if (radarOn) { const ra = 1 - seg(t, T.radar + 0.6, T.radar + 1.05); ctx.save(); ctx.globalAlpha = ra; ring(RADAR_C[0], RADAR_C[1], radarR, rgba(ACC, 0.75), 3); const gr = ctx.createRadialGradient(RADAR_C[0], RADAR_C[1], Math.max(0, radarR - 160), RADAR_C[0], RADAR_C[1], radarR); gr.addColorStop(0, rgba(ACC, 0)); gr.addColorStop(1, rgba(ACC, 0.16)); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(RADAR_C[0], RADAR_C[1], radarR, 0, 7); ctx.fill(); ctx.restore(); }
   CUST.forEach((c) => {
     const s = custState(t, c); if (s.a <= 0.01 || s.f <= 0) return;
-    const isQ = QUIET.includes(c.i), col = isQ ? mix(c.col, '#34323f', s.q) : c.col, hit = radarOn || t > T.radar ? Math.hypot(c.x - CX, c.y - SY) < radarR : false;
-    ctx.save(); ctx.globalAlpha *= s.a * (isQ ? 1 - 0.35 * s.lv : 1);
-    if (c.i === JORDAN && s.fo > 0) { scoreRing(t, s); ctx.restore(); return; }
-    // heartbeat ring on the living ones
-    if (s.f > 0.9) { const ph = ((t * 0.8 + hash(c.i) * 3) % 1.6) / 1.6, al = (1 - s.q) * (1 - ph) * 0.35; if (al > 0.01) ring(s.x, s.y, s.r + ph * 26, rgba(c.col, al), 2.5); }
+    const isQ = QUIET.includes(c.i), col = isQ ? mix(c.col, '#34323f', s.q) : c.col, hk = isQ ? ease.back(clamp((t - radarHitAt(c)) / 0.3)) : 0;
+    ctx.save(); ctx.globalAlpha *= s.a * (isQ ? 1 - 0.35 * s.lv * (1 - s.fo) : 1);
+    if (c.i === JORDAN && s.fo > 0) { scoreRing(t, s, hk); ctx.restore(); return; }
+    if (s.f > 0.9) { const ph = ((t * 0.8 + hash(c.i) * 3) % 1.6) / 1.6, al = (1 - s.q) * (1 - ph) * 0.35 * (1 - (s.ab || 0)); if (al > 0.01) ring(s.x, s.y, s.r + ph * 26, rgba(c.col, al), 2.5); }
     if (s.f < 1) glow(s.x, s.y, s.r * 3, '#ffffff', 0.25 * (1 - s.f));
+    if (s.ab > 0) glow(s.x, s.y, s.r * 2.5, c.col, 0.4 * s.ab);
     circle(s.x, s.y, s.r, s.f < 0.5 ? mix('#ffffff', col, s.f * 2) : col);
-    if (s.f > 0.6) { ctx.save(); ctx.globalAlpha *= seg(s.f, 0.6, 1) * (isQ ? 1 - 0.5 * s.q : 1); text(c.ini, s.x, s.y + 1, s.r * 0.66, 700, '#fff', 'center', 0); ctx.restore(); }
-    if (isQ && s.lv > 0) { ctx.save(); ctx.setLineDash([8, 9]); ctx.lineDashOffset = -t * 20; ring(s.x, s.y, s.r + 10, rgba('#ffffff', 0.35 * s.lv), 2); ctx.restore(); }
-    if (isQ && hit) { const h = ease.back(clamp((t - (T.radar + Math.hypot(c.x - CX, c.y - SY) / 1150 * 0.9)) / 0.3)); ring(s.x, s.y, s.r + 10, rgba(RD, h), 4); circle(s.x + s.r * 0.75, s.y - s.r * 0.75, 13 * h, RD); text('!', s.x + s.r * 0.75, s.y - s.r * 0.75 + 1, 18 * h, 800, '#fff', 'center', 0); }
+    if (s.f > 0.6) { ctx.save(); ctx.globalAlpha *= seg(s.f, 0.6, 1) * (isQ ? 1 - 0.5 * s.q : 1) * (1 - (s.ab || 0)); text(c.ini, s.x, s.y + 1, s.r * 0.66, 700, '#fff', 'center', 0); ctx.restore(); }
+    if (isQ && s.lv > 0 && hk < 1) { ctx.save(); ctx.setLineDash([8, 9]); ctx.lineDashOffset = -t * 20; ring(s.x, s.y, s.r + 10, rgba('#ffffff', 0.35 * s.lv * (1 - hk)), 2); ctx.restore(); }
+    if (hk > 0) { ring(s.x, s.y, s.r + 10, rgba(RD, Math.min(1, hk)), 4); const bx = s.x + (s.r + 10) * 0.7071, by = s.y - (s.r + 10) * 0.7071; circle(bx, by, 13 * hk, RD); text('!', bx, by + 1, 18 * hk, 800, '#fff', 'center', 0); } // the badge grows out of the red ring
     ctx.restore();
   });
-  // Jordan's note, before the focus
-  const j = CUST[JORDAN], jl = K(t, T.leave + 0.25, T.leave + 0.6, ease.out) * (1 - K(t, T.focus - 0.1, T.focus + 0.3));
-  if (jl > 0) { const s = custState(t, j); ctx.save(); ctx.globalAlpha = jl; const lb = 'LAST VISIT 41 DAYS AGO'; const w = monoW(lb, 20) + 36; fillRR(s.x - w / 2, s.y + 70, w, 40, 20, 'rgba(12,11,17,0.85)'); strokeRR(s.x - w / 2, s.y + 70, w, 40, 20, rgba(RD, 0.5), 1.5); mono(lb, s.x, s.y + 91, 20, '#ffb1aa', 'center'); ctx.restore(); }
+  // Jordan's note grows out of the bottom of the avatar and slides back into it at the focus
+  const jl = K(t, T.leave + 0.25, T.leave + 0.65, ease.out) * (1 - K(t, T.focus - 0.35, T.focus, ease.in));
+  if (jl > 0) { const s = custBase(t, CUST[JORDAN]), lb = 'LAST VISIT 41 DAYS AGO', w = monoW(lb, 20) + 36; growPill(jl, s.x, s.y + s.r, [s.x - w / 2, s.y + 70, w, 40], 'rgba(12,11,17,0.9)', rgba(RD, 0.5), () => mono(lb, s.x, s.y + 91, 20, '#ffb1aa', 'center')); }
 }
 
 // ── 4 · Jordan's score ring → the client-health card ─────────────────────────
 const CARD0 = [110, 500, 860, 690], ROWY = (i) => 640 + i * 118, RING1 = [880, 640, 34];
 const ROWS = [['Jordan K.', 'Cut & colour · since 2023', 38, JORDAN], ['Priya S.', 'Colour · every 6 weeks', 84, 0], ['Marcus T.', 'Cut · every 4 weeks', 77, 1], ['Ava R.', 'Trim · monthly', 58, 2], ['Dana L.', 'Cut · every 3 weeks', 92, 3]];
-function ringGeom(t) { // the score ring centre/radius/line width across the focus and the card morph
+function ringGeom(t) {
   const s = custState(t, CUST[JORDAN]), m = K(t, T.card, T.card + 0.95);
-  return { x: lerp(s.x, RING1[0], m), y: lerp(s.y, RING1[1], m), r: lerp(s.r, RING1[2], m), lw: lerp(lerp(6, 20, s.fo), 7, m), m };
+  return { x: lerp(s.x, RING1[0], m), y: lerp(s.y, RING1[1], m), r: lerp(s.r + 10 * (1 - s.fo), RING1[2], m), lw: lerp(lerp(4, 20, s.fo), 7, m), m, fo: s.fo };
 }
-function scoreRing(t, s) {
-  const g = ringGeom(t), fill = K(t, T.score + 0.1, T.score + 1.2, ease.out), v = Math.round(38 * fill);
-  if (g.m <= 0) {
-    const ini = 1 - seg(s.fo, 0.2, 0.6); circle(g.x, g.y, g.r - g.lw / 2 - 2, mix('#34323f', '#17141f', s.fo));
-    if (ini > 0) { ctx.save(); ctx.globalAlpha *= ini; text('JO', g.x, g.y + 1, g.r * 0.62, 700, '#fff', 'center', 0); ctx.restore(); }
-    arcRing(g.x, g.y, g.r, g.lw, 0.38 * fill, RD, rgba('#ffffff', 0.08 * s.fo + 0.0));
-    if (s.fo > 0.5 && fill <= 0) ring(g.x, g.y, g.r, rgba(RD, s.fo), g.lw * 0.4);
-    const n = seg(t, T.score, T.score + 0.3); if (n > 0) { ctx.save(); ctx.globalAlpha *= n; ctx.shadowColor = RD; ctx.shadowBlur = 30 * fill; text(String(v), g.x, g.y - 6, 118, 800, '#fff', 'center', -0.04); ctx.restore(); mono('HEALTH SCORE', g.x, g.y + 70, 20, rgba('#ffffff', 0.55 * n), 'center'); }
-  }
+function scoreRing(t, s, hk = 1) { // Jordan's red radar ring thickens into the score ring; the initials roll out, the score rolls in
+  const g = ringGeom(t); if (g.m > 0) return;
+  const fill = K(t, T.score + 0.1, T.score + 1.2, ease.out), roll = K(t, T.score - 0.1, T.score + 0.35, ease.inOut), inner = g.r - g.lw / 2 - 2;
+  circle(g.x, g.y, inner, mix('#34323f', '#17141f', s.fo));
+  clipCircle(g.x, g.y, inner, () => {
+    text('JO', g.x, g.y + 1 - roll * inner * 1.3, Math.max(20, g.r * 0.62), 700, rgba('#ffffff', 0.5), 'center', 0);
+    if (roll > 0) { const v = Math.round(38 * fill), dy = (1 - roll) * inner * 1.4; ctx.save(); ctx.shadowColor = RD; ctx.shadowBlur = 30 * fill; text(String(v), g.x, g.y - 6 + dy, 118, 800, '#fff', 'center', -0.04); ctx.restore(); mono('HEALTH SCORE', g.x, g.y + 70 + dy, 20, rgba('#ffffff', 0.55), 'center'); }
+  });
+  ring(g.x, g.y, g.r, rgba(RD, 1 - 0.88 * fill), g.lw); // the red ring dims into the track…
+  arcRing(g.x, g.y, g.r, g.lw, 0.38 * fill, RD, 'rgba(0,0,0,0)'); // …while the score arc grows over it
+  const b = (1 - s.fo) * hk; if (b > 0.02) { const bx = g.x + g.r * 0.7071, by = g.y - g.r * 0.7071; circle(bx, by, 13 * b, RD); }
 }
+const RISK_W = () => tw('AT RISK', 19, 800, 0.1) + 19 * 1.4;
 function sceneCard(t) {
   if (t < T.card || t > T.tiles + 0.02) return;
   const g = ringGeom(t), m = g.m;
   // the card grows out of the ring: same centre, circle → rounded rect
-  const from = [g.x - g.r, g.y - g.r, g.r * 2, g.r * 2];
-  const fold = K(t, T.reach - 0.05, T.reach + 0.6), toChat = [110, 380, 860, 160];
-  const cal = K(t, T.booking, T.booking + 0.8);
-  let rect = lr(lr(from, CARD0, m), toChat, fold); rect = lr(rect, CALR, cal);
+  const from = [g.x - g.r, g.y - g.r, g.r * 2, g.r * 2], fold = K(t, T.reach - 0.05, T.reach + 0.6), cal = K(t, T.booking, T.booking + 0.8);
+  let rect = lr(lr(from, CARD0, m), [110, 380, 860, 160], fold); rect = lr(rect, CALR, cal);
   panel(...rect, lerp(g.r, 28, m), clamp(m * 3));
-  const shift = lerp(0, 460 - ROWY(0), fold); // rows ride up as the card folds to the chat header
-  // Jordan's ring travels into row 1 (it never disappears)
-  { const yy = m < 1 ? g.y : ROWY(0) + shift; ctx.save(); ctx.globalAlpha *= 1 - cal; if (m < 1) circle(g.x, yy, g.r - g.lw / 2 - 2, '#17141f'); arcRing(g.x, yy, g.r, g.lw, 0.38, RD); text('38', g.x, yy + (m < 1 ? lerp(-6, 1, m) : 1), lerp(118, 24, m), 800, INK, 'center', 0); ctx.restore(); }
-  const inside = seg(m, 0.55, 1);
-  if (inside <= 0) return;
-  ctx.save(); ctx.globalAlpha *= inside;
-  withFade(1 - fold, () => { text('Client health', 160, 560, 34, 700, INK, 'left'); const lp = 0.5 + 0.5 * Math.sin(t * 5); circle(830, 560, 7, rgba(GRN, 0.5 + 0.5 * lp)); mono('LIVE', 848, 561, 20, GRN, 'left', 700); ctx.fillStyle = LINE; ctx.fillRect(140, 596, 800, 2); });
-  ROWS.forEach(([n, sub, sc, ci], i) => {
-    const open = i === 0 ? 1 : K(t, T.card + 0.55 + i * 0.08, T.card + 1.0 + i * 0.08, ease.out), close = i === 0 ? 0 : K(t, T.reach - 0.05 + (4 - i) * 0.04, T.reach + 0.35 + (4 - i) * 0.04);
-    if (open <= 0 || close >= 1) return; const y = lerp(ROWY(0), ROWY(i), open * (1 - close)) + shift;
-    ctx.save(); ctx.globalAlpha *= (i === 0 ? 1 : open * (1 - close)) * (1 - cal);
-    if (i === 0) { const risk = K(t, T.slips, T.slips + 0.4); if (risk > 0) { fillRR(124, y - 54, 832, 108, 20, rgba(RD, 0.10 * risk)); strokeRR(124, y - 54, 832, 108, 20, rgba(RD, 0.45 * risk), 2); } }
-    avatar(196, y, 36, i === 0 ? 'JO' : n.slice(0, 2).toUpperCase(), i === 0 ? CUST[JORDAN].col : PAL[(ci + 1) % PAL.length]);
-    text(n, 252, y - 16, 32, 700, INK, 'left');
-    const risk = i === 0 ? K(t, T.slips + 0.1, T.slips + 0.5) : 0; const subS = risk > 0.5 ? 'No reply · visit overdue' : sub;
-    text(subS, 252, y + 22, 23, 500, risk > 0.5 ? '#ffb1aa' : DIMI, 'left');
-    if (i === 0 && risk > 0) { ctx.save(); ctx.globalAlpha *= risk; xf(700, y, ease.back(risk), 0, () => tag(790, y, 'AT RISK', RD, true, 19)); ctx.restore(); }
-    if (i > 0) { const f = K(t, T.card + 0.75 + i * 0.08, T.card + 1.5 + i * 0.08, ease.out); arcRing(880, y, 34, 7, sc / 100 * f, scoreCol(sc)); text(String(Math.round(sc * f)), 880, y + 1, 24, 800, INK, 'center', 0); }
-    ctx.restore();
+  const shift = lerp(0, 460 - ROWY(0), fold), ry0 = m < 1 ? g.y : ROWY(0) + shift;
+  // everything inside is revealed by a circle that grows out of the ring, clipped to the panel; the calendar later wipes it out the same way
+  const revR = lerp(0, 1100, K(t, T.card + 0.25, T.card + 1.05, ease.in)), calR = calRevealR(t);
+  ctx.save(); ctx.beginPath(); ctx.roundRect(...rect, 28); ctx.clip();
+  clipOutside(BLOCK_C[0], BLOCK_C[1], calR, () => {
+    clipCircle(g.x, ry0, revR, () => {
+      const hy = 560 + shift - 90 * fold; text('Client health', 160, hy, 34, 700, INK, 'left'); const lp = 0.5 + 0.5 * Math.sin(t * 5); circle(830, hy, 7, rgba(GRN, 0.5 + 0.5 * lp)); mono('LIVE', 848, hy + 1, 20, GRN, 'left', 700); ctx.fillStyle = LINE; ctx.fillRect(140, hy + 36, 800, 2);
+      for (let i = 4; i >= 0; i--) row(t, i, shift);
+    });
+    // Jordan's ring travels into row 1 (it never disappears), drawn on top of the rows
+    if (m > 0) { if (m < 1) circle(g.x, ry0, g.r - g.lw / 2 - 2, '#17141f'); arcRing(g.x, ry0, g.r, g.lw, 0.38, RD); text('38', g.x, ry0 + (m < 1 ? lerp(-6, 1, m) : 1), lerp(118, 24, m), 800, INK, 'center', 0); }
   });
   ctx.restore();
 }
-// the ring before the card exists (focus → score)
-function sceneRingOnly(t) { if (t < T.card || t > T.card + 1) return; const g = ringGeom(t); if (g.m >= 1) return; }
-
-// ── 5 · the automation flow → message → reply → booking ──────────────────────
-const NODES = [['Send a text', 700], ['Email if no reply', 880], ['Offer a booking', 1060]];
-const SMS_RECT = [330, 660, 420, 84], OUT_RECT = [300, 590, 640, 170], IN_RECT = [140, 800, 560, 110], BLOCK = [656, 699, 138, 112];
-function sceneFlow(t) {
-  if (t < T.reach || t > T.tiles + 0.6) return;
-  const draw = K(t, T.reach + 0.35, T.reach + 1.7, (u) => u), out = K(t, T.text, T.text + 0.45);
-  const y0 = 540, y1 = lerp(y0, 1060, draw);
-  ctx.save(); ctx.globalAlpha *= 1 - out;
-  ctx.strokeStyle = rgba(ACC, 0.8); ctx.lineWidth = 4; ctx.shadowColor = ACC; ctx.shadowBlur = 16; ctx.beginPath(); ctx.moveTo(CX, y0); ctx.lineTo(CX, y1); ctx.stroke(); ctx.shadowBlur = 0;
-  if (draw > 0 && draw < 1) circle(CX, y1, 9, '#fff');
-  mono('WIN-BACK AUTOMATION', CX + 40, 590, 18, rgba(ACC, 0.9 * seg(draw, 0, 0.1)), 'left', 700);
-  NODES.forEach(([s, y], i) => { const k = ease.back(clamp((y1 - y + 30) / 60)); if (k <= 0 || (i === 0 && out > 0)) return; xf(CX, y, k, 0, () => { panel(CX - 210, y - 42, 420, 84, 42, 1, rgba(ACC, 0.35)); circle(CX - 166, y, 20, rgba(ACC, 0.22)); mono(String(i + 1).padStart(2, '0'), CX - 166, y + 1, 18, ACC, 'center', 700); text(s, CX - 130, y + 1, 30, 600, INK, 'left'); }); });
+function row(t, i, shift) {
+  const [n, sub, sc, ci] = ROWS[i];
+  const open = i === 0 ? 1 : K(t, T.card + 0.55 + i * 0.08, T.card + 1.0 + i * 0.08, ease.out), close = i === 0 ? 0 : K(t, T.reach - 0.05 + (4 - i) * 0.04, T.reach + 0.35 + (4 - i) * 0.04);
+  if (open <= 0 || close >= 1) return; const y = lerp(ROWY(0), ROWY(i), open * (1 - close)) + shift; // rows slide out from under row 1, and back under it
+  ctx.save();
+  fillRR(124, y - 54, 832, 108, 20, '#1c1a23'); // opaque (panel colour) so a row hides the ones still tucked under it
+  if (i === 0) { const tint = K(t, T.slips, T.slips + 0.6, ease.in); if (tint > 0) clipCircle(880, y, tint * 900, () => { fillRR(124, y - 54, 832, 108, 20, rgba(RD, 0.10)); strokeRR(124, y - 54, 832, 108, 20, rgba(RD, 0.45), 2); }); }
+  avatar(196, y, 36, i === 0 ? 'JO' : n.slice(0, 2).toUpperCase(), i === 0 ? '#34323f' : PAL[(ci + 1) % PAL.length]);
+  text(n, 252, y - 16, 32, 700, INK, 'left');
+  const sw = i === 0 ? K(t, T.slips + 0.15, T.slips + 0.5) : 0; // the sub-line rolls over to the warning
+  clipRect([240, y + 2, 520, 42], () => { text(sub, 252, y + 22 - sw * 40, 23, 500, DIMI, 'left'); if (sw > 0) text('No reply · visit overdue', 252, y + 62 - sw * 40, 23, 500, '#ffb1aa', 'left'); });
+  if (i === 0) { const rk = K(t, T.slips + 0.1, T.slips + 0.5, ease.out), w = RISK_W(), right = 880 - 34 - 16; growPill(rk, right, y, [right - w, y - 17, w, 34], RD, null, () => text('AT RISK', right - w / 2, y + 1, 19, 800, '#fff', 'center', 0.1)); }
+  if (i > 0 && open > 0.25) { const f = K(t, T.card + 0.75 + i * 0.08, T.card + 1.5 + i * 0.08, ease.out); arcRing(880, y, 34, 7, sc / 100 * f, scoreCol(sc)); text(String(Math.round(sc * f)), 880, y + 1, 24, 800, INK, 'center', 0); }
   ctx.restore();
-  // node 01 becomes the outgoing text
-  if (out > 0) {
-    const b = K(t, T.booking, T.booking + 0.5), r = lr(SMS_RECT, OUT_RECT, out);
-    ctx.save(); ctx.globalAlpha *= 1 - b; fillRR(...r, lerp(42, 34, out), mix('#1c1a26', '#5b54f0', out)); ctx.globalAlpha *= seg(out, 0.5, 1);
-    text('Hey Jordan, we miss you! Want', r[0] + 36, r[1] + 58, 31, 500, '#fff', 'left'); text('your usual, Thursday at 10?', r[0] + 36, r[1] + 106, 31, 500, '#fff', 'left'); mono('SMS · DELIVERED', r[0] + r[2] - 24, r[1] + r[3] + 26, 17, rgba('#ffffff', 0.45), 'right'); ctx.restore();
-  }
-  // the reply, which then becomes the calendar block
-  const rp = K(t, T.reply, T.reply + 0.45, ease.out);
-  if (rp > 0) { const bk = K(t, T.booking + 0.1, T.booking + 0.8), r = lr(lr([140, 855, 40, 0], IN_RECT, rp), BLOCK, bk);
-    ctx.save(); ctx.globalAlpha *= 1 - seg(t, T.tiles + 0.1, T.tiles + 0.5); fillRR(...r, lerp(30, 14, bk), mix('#26232f', '#5b54f0', bk));
-    if (bk < 0.5) { ctx.globalAlpha *= seg(rp, 0.5, 1) * (1 - bk * 2); text('Yes please! Thursday works.', r[0] + 32, r[1] + r[3] / 2 + 1, 31, 500, '#fff', 'left'); }
-    else { ctx.globalAlpha *= (bk - 0.5) * 2; text('Jordan', r[0] + 14, r[1] + 34, 22, 700, '#fff', 'left', 0); mono('10:00', r[0] + 14, r[1] + 66, 16, rgba('#ffffff', 0.7), 'left'); const c = ease.back(seg(t, T.booking + 0.75, T.booking + 1.05)); if (c > 0) { circle(r[0] + r[2] - 8, r[1] + 8, 18 * c, GRN); check(r[0] + r[2] - 8, r[1] + 9, 18 * c, '#fff', 3.5); } }
-    ctx.restore(); }
 }
-// the chat header (the folded card) and the calendar around the booking
+
+// ── 5 · the automation flow grows out of the AT RISK tag → message → reply → booking ─
+const NODES = [['Send a text', 700], ['Email if no reply', 880], ['Offer a booking', 1060]];
+const OUT_RECT = [300, 590, 640, 170], IN_RECT = [140, 800, 560, 110], BLOCK = [656, 699, 138, 112], BLOCK_C = [725, 755];
+let FLOWP = null;
+function flowPath() { // from the bottom of the AT RISK tag, down, curving to the centre line, down through the nodes
+  if (FLOWP) return FLOWP; const w = RISK_W(), tx = 880 - 34 - 16 - w / 2, pts = [];
+  for (let y = 478; y <= 540; y += 4) pts.push([tx, y]);
+  for (let k = 1; k <= 40; k++) { const u = k / 40, a = 1 - u; pts.push([a * a * a * tx + 3 * a * a * u * tx + 3 * a * u * u * CX + u * u * u * CX, a * a * a * 540 + 3 * a * a * u * 600 + 3 * a * u * u * 580 + u * u * u * 650]); }
+  for (let y = 654; y <= 1060; y += 4) pts.push([CX, y]);
+  const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+  return (FLOWP = { pts, L, total: L[L.length - 1], at: (y) => L[pts.findIndex((p, i) => i > 50 && p[1] >= y)] });
+}
+function strokeSub(P, s0, s1) { ctx.beginPath(); let on = false; for (let i = 0; i < P.pts.length; i++) { if (P.L[i] < s0 || P.L[i] > s1) continue; on ? ctx.lineTo(...P.pts[i]) : ctx.moveTo(...P.pts[i]); on = true; } ctx.stroke(); }
+function pointAt(P, s) { const i = Math.max(0, P.L.findIndex((l) => l >= s)); return P.pts[i] || P.pts[P.pts.length - 1]; }
+function sceneFlow(t) {
+  if (t < T.reach + 0.5 || t > T.tiles + 0.6) return;
+  const P = flowPath(), draw = K(t, T.reach + 0.6, T.reach + 1.9, (u) => u), ret = K(t, T.text - 0.05, T.text + 0.4, ease.inOut), out = K(t, T.text, T.text + 0.45);
+  const n1 = P.at(NODES[0][1]), s1 = lerp(draw * P.total, n1, ret), s0 = lerp(0, n1, ret); // after the text goes out, the line retracts into node 01
+  ctx.save(); ctx.strokeStyle = rgba(ACC, 0.85); ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowColor = ACC; ctx.shadowBlur = 16; if (s1 > s0 + 1) strokeSub(P, s0, s1); ctx.restore();
+  if (draw > 0 && draw < 1 && ret <= 0) { const [x, y] = pointAt(P, s1); glow(x, y, 50, ACC, 0.5); circle(x, y, 9, '#fff'); }
+  // the label is wiped out of the spine
+  const lw = monoW('WIN-BACK AUTOMATION', 18, 700), lk = clamp((draw * P.total - P.at(790)) / 160) * (1 - ret);
+  if (lk > 0) clipRect([CX - 40 - lw * lk, 770, lw * lk + 2, 40], () => mono('WIN-BACK AUTOMATION', CX - 40, 791, 18, rgba(ACC, 0.95), 'right', 700));
+  NODES.forEach(([s, y], i) => { // each node grows sideways out of the spine as the pen reaches it (and shrinks back into it)
+    let k = ease.out(clamp((draw * P.total - P.at(y) + 10) / 90)); if (i > 0) k *= 1 - ret; if (k <= 0 || (i === 0 && out > 0)) return;
+    const r = [CX - 210 * k, y - 42, 420 * k, 84]; panel(...r, 42, 1, rgba(ACC, 0.35)); if (k > 0.5) clipRect(r, () => { circle(CX - 166, y, 20, rgba(ACC, 0.22)); mono(String(i + 1).padStart(2, '0'), CX - 166, y + 1, 18, ACC, 'center', 700); text(s, CX - 130, y + 1, 30, 600, INK, 'left'); });
+  });
+  // node 01 becomes the outgoing text (typed in), which later folds into the booking
+  const bk = K(t, T.booking + 0.1, T.booking + 0.8);
+  if (out > 0) {
+    const r = lr(lr([CX - 210, NODES[0][1] - 42, 420, 84], OUT_RECT, out), BLOCK, bk);
+    ctx.save(); ctx.globalAlpha *= 1 - seg(bk, 0.75, 1); fillRR(...r, lerp(lerp(42, 34, out), 14, bk), mix('#1c1a26', '#5b54f0', Math.max(out, bk)));
+    if (bk < 0.3) clipRect(r, () => { const msg = ['Hey Jordan, we miss you! Want', 'your usual, Thursday at 10?'], n = Math.floor(seg(t, T.text + 0.3, T.text + 1.0) * 56); let left = n; msg.forEach((ln, j) => { const s = ln.slice(0, Math.max(0, left)); left -= ln.length; text(s, r[0] + 36, r[1] + 58 + j * 48, 31, 500, '#fff', 'left'); }); });
+    const dk = seg(t, T.text + 0.9, T.text + 1.2) * (1 - bk * 3); if (dk > 0) { const mw = monoW('SMS · DELIVERED', 17); clipRect([r[0] + r[2] - 24 - mw * dk, r[1] + r[3] + 8, mw * dk, 36], () => mono('SMS · DELIVERED', r[0] + r[2] - 24, r[1] + r[3] + 26, 17, rgba('#ffffff', 0.5), 'right')); }
+    ctx.restore();
+  }
+  // the reply grows out of Jordan's avatar in the header, then becomes the calendar block
+  const rp = K(t, T.reply, T.reply + 0.5, ease.inOut);
+  if (rp > 0) {
+    const r0 = lr([160, 424, 72, 72], IN_RECT, rp), r = lr(r0, BLOCK, bk), rad = lerp(lerp(36, 30, rp), 14, bk), shrink = K(t, T.tiles - 0.15, T.tiles + 0.2, ease.in);
+    const rr2 = lr(r, [BLOCK_C[0] - 10, BLOCK_C[1] - 10, 20, 20], shrink); if (shrink >= 1) return;
+    ctx.save(); fillRR(...rr2, lerp(rad, 10, shrink), mix(hexMix('#34323f', '#26232f', seg(rp, 0, 0.6)), '#5b54f0', bk));
+    if (bk < 0.5) clipRect(rr2, () => { const s = 'Yes please! Thursday works.'; text(s.slice(0, Math.floor(seg(t, T.reply + 0.35, T.reply + 0.8) * s.length)), r[0] + 32, r[1] + r[3] / 2 + 1, 31, 500, '#fff', 'left'); });
+    else if (shrink < 0.5) clipRect(rr2, () => { text('Jordan', r[0] + 14, r[1] + 34, 22, 700, '#fff', 'left', 0); mono('10:00', r[0] + 14, r[1] + 66, 16, rgba('#ffffff', 0.7), 'left'); });
+    const c = ease.back(seg(t, T.booking + 0.75, T.booking + 1.05)) * (1 - shrink); if (c > 0) { circle(r[0] + r[2] - 8, r[1] + 8, 18 * c, GRN); check(r[0] + r[2] - 8, r[1] + 9, 18 * c, '#fff', 3.5); } // grows out of the block's corner
+    ctx.restore();
+  }
+}
+// the calendar is revealed by a circle growing out of the booking block (and wipes the chat header away)
+const calRevealR = (t) => lerp(0, 1500, K(t, T.booking + 0.5, T.booking + 1.3, ease.in));
 const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI'], HOURS = ['9', '10', '11', '12', '1'];
 const BUSY = [[0, 0], [0, 2], [1, 1], [1, 3], [2, 0], [2, 4], [3, 3], [4, 1], [4, 2], [3, 0]];
 function sceneChatCal(t) {
-  if (t < T.reach + 0.4 || t > T.tiles + 0.8) return;
-  const hdr = K(t, T.reach + 0.35, T.reach + 0.7) * (1 - K(t, T.booking, T.booking + 0.35)), cal = K(t, T.booking + 0.15, T.booking + 0.8), gone = K(t, T.tiles - 0.05, T.tiles + 0.35);
-  if (cal <= 0) return;
-  ctx.save(); ctx.globalAlpha *= cal * (1 - gone);
-  text('This week', 160, 450, 34, 700, INK, 'left'); const ch = ease.back(seg(t, T.booking + 0.9, T.booking + 1.2)); if (ch > 0) xf(860, 450, ch, 0, () => tag(930, 450, 'THU 10:00 BOOKED', GRN, false, 17));
-  DAYS.forEach((d, i) => mono(d, 200 + i * 150 + 75, 540, 18, DIMI, 'center', 700));
-  HOURS.forEach((h, j) => { mono(h.padStart(2, '0'), 172, 575 + j * 120 + 22, 16, DIMI, 'center'); ctx.fillStyle = 'rgba(255,255,255,0.06)'; ctx.fillRect(200, 575 + j * 120, 750, 1.5); });
-  for (let i = 0; i <= 5; i++) { ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fillRect(200 + i * 150, 575, 1.5, 600); }
-  BUSY.forEach(([c, r], k) => { const e = ease.out(seg(t, T.booking + 0.3 + k * 0.05, T.booking + 0.7 + k * 0.05)); if (e <= 0) return; ctx.save(); ctx.globalAlpha *= e; fillRR(206 + c * 150, 579 + r * 120, 138, 112, 14, 'rgba(255,255,255,0.07)'); ctx.restore(); });
+  if (t < T.booking + 0.5 || t > T.tiles + 0.8) return;
+  const R = calRevealR(t), gone = K(t, T.tiles - 0.05, T.tiles + 0.35); if (R <= 0) return;
+  ctx.save(); ctx.globalAlpha *= 1 - gone;
+  clipCircle(BLOCK_C[0], BLOCK_C[1], R, () => {
+    text('This week', 160, 450, 34, 700, INK, 'left');
+    DAYS.forEach((d, i) => mono(d, 200 + i * 150 + 75, 540, 18, DIMI, 'center', 700));
+    HOURS.forEach((h, j) => { mono(h.padStart(2, '0'), 172, 575 + j * 120 + 22, 16, DIMI, 'center'); ctx.fillStyle = 'rgba(255,255,255,0.06)'; ctx.fillRect(200, 575 + j * 120, 750, 1.5); });
+    for (let i = 0; i <= 5; i++) { ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fillRect(200 + i * 150, 575, 1.5, 600); }
+    BUSY.forEach(([c, r]) => fillRR(206 + c * 150, 579 + r * 120, 138, 112, 14, 'rgba(255,255,255,0.07)'));
+  });
+  // the "booked" chip grows out of the block's check badge and settles in the header
+  const ch = K(t, T.booking + 1.0, T.booking + 1.45, ease.inOut);
+  if (ch > 0) { const w = tw('THU 10:00 BOOKED', 17, 800, 0.1) + 17 * 1.4, r = lr([BLOCK[0] + BLOCK[2] - 26, BLOCK[1] - 10, 36, 36], [930 - w, 450 - 15, w, 30], ch); fillRR(...r, 15, rgba(GRN, lerp(1, 0.14, ch))); strokeRR(...r, 15, rgba(GRN, 0.45), 1.5); if (ch > 0.6) clipRect(r, () => text('THU 10:00 BOOKED', 930 - w / 2, 451, 17, 800, GRN, 'center', 0.1)); }
   ctx.restore();
 }
 
@@ -252,28 +318,40 @@ function sceneChatCal(t) {
 const CALR = [110, 380, 860, 820];
 const TILE_FROM = [[110, 380, 860, 280], [110, 660, 430, 540], [540, 660, 430, 540]], TILE_TO = [[110, 380, 860, 250], [110, 660, 420, 540], [550, 660, 420, 540]];
 function tileRects(t) {
-  const sp = K(t, T.tiles, T.tiles + 0.7), join = K(t, T.same, T.same + 0.7), flat = K(t, T.flat, T.flat + 0.7, ease.inOut);
+  const sp = K(t, T.tiles - 0.1, T.tiles + 0.6), join = K(t, T.same, T.same + 0.7), flat = K(t, T.flat, T.flat + 0.7, ease.inOut);
   return TILE_FROM.map((f, i) => lr(lr(lr(f, TILE_TO[i], sp), f, join), [110, SY - 2, 860, 4], flat));
 }
+const SEED_COL = ['#ffb400', ACC, GRN];
+function seedTargets(rs) { return [[rs[0][0] + 80, rs[0][1] + 140], [rs[1][0] + rs[1][2] / 2, rs[1][1] + 138], [rs[2][0] + 52, rs[2][1] + 200]]; }
 function sceneTiles(t) {
-  if (t < T.tiles || t > T.back + 0.5) return;
-  const rs = tileRects(t), join = K(t, T.same, T.same + 0.7), flat = K(t, T.flat, T.flat + 0.7), cont = 1 - seg(flat, 0, 0.35);
+  if (t < T.tiles - 0.1 || t > T.back + 0.5) return;
+  const rs = tileRects(t), join = K(t, T.same, T.same + 0.7), flat = K(t, T.flat, T.flat + 0.7);
   if (flat > 0.98) return;
-  if (join >= 0.999) panel(...lr(CALR, [110, SY - 2, 860, 4], flat), lerp(28, 2, flat), 1, rgba(ACC, 0.25 * (1 - flat))); else rs.forEach((r) => panel(...r, lerp(28, 2, flat), 1, join > 0.5 ? rgba(ACC, 0.2) : null));
-  if (cont <= 0) return; ctx.save(); ctx.globalAlpha *= cont;
+  if (join >= 0.999) panel(...lr(CALR, [110, SY - 2, 860, 4], flat), lerp(28, 2, flat), 1, rgba(ACC, 0.25 * (1 - flat))); else rs.forEach((r) => panel(...r, 28, 1, join > 0.5 ? rgba(ACC, 0.2) : null));
+  // the booking block (now a dot) splits into three seeds, one per tile
+  const sk = K(t, T.tiles + 0.2, T.tiles + 0.6, ease.inOut), tg = seedTargets(rs);
+  if (sk > 0 && sk < 1) tg.forEach(([x, y], i) => { const px = lerp(BLOCK_C[0], x, sk), py = lerp(BLOCK_C[1], y, sk) - Math.sin(sk * Math.PI) * 80; glow(px, py, 40, SEED_COL[i], 0.6); circle(px, py, 10, SEED_COL[i]); });
+  const cont = 1 - seg(flat, 0, 0.35); if (cont <= 0) return;
+  ctx.save(); ctx.globalAlpha *= cont;
   if (flat > 0) { const h = lerp(820, 4, flat); ctx.translate(0, lerp(790, SY, flat)); ctx.scale(1, Math.max(0.01, h / 820)); ctx.translate(0, -790); } // squash with the panel, like a CRT switching off
-  // reviews
-  const [rx, ry, rw] = rs[0]; mono('REVIEWS', rx + 40, ry + 50, 18, DIMI, 'left', 700);
-  for (let i = 0; i < 5; i++) { const e = ease.back(seg(t, T.tiles + 0.25 + i * 0.1, T.tiles + 0.55 + i * 0.1)); star(rx + 80 + i * 92, ry + 140, 40 * e, '#ffb400'); }
-  const rv = seg(t, T.tiles + 0.8, T.tiles + 1.1); withFade(rv, () => { text('4.9', rx + rw - 60, ry + 128, 64, 800, INK, 'right', -0.03); text('Jordan left 5 stars', rx + rw - 60, ry + 180, 24, 500, DIMI, 'right'); });
-  // loyalty
-  const [lx, ly, lw] = rs[1], lp = K(t, T.tiles + 0.75, T.tiles + 1.6, ease.out); mono('LOYALTY', lx + 40, ly + 50, 18, DIMI, 'left', 700);
-  withFade(seg(t, T.tiles + 0.6, T.tiles + 0.9), () => { arcRing(lx + lw / 2, ly + 250, 112, 16, lerp(0.86, 1, lp), lp > 0.98 ? GRN : ACC); text(String(Math.round(lerp(430, 500, lp))), lx + lw / 2, ly + 240, 60, 800, INK, 'center', -0.03); mono('/ 500 PTS', lx + lw / 2, ly + 290, 18, DIMI, 'center'); });
-  const rw2 = ease.back(seg(t, T.tiles + 1.6, T.tiles + 1.9)); if (rw2 > 0) xf(lx + lw / 2, ly + 440, rw2, 0, () => tag(lx + lw / 2 + 140, ly + 440, 'REWARD UNLOCKED', GRN, false, 18));
-  // payments
-  const [px, py, pw] = rs[2]; mono('PAYMENTS', px + 40, py + 50, 18, DIMI, 'left', 700);
-  withFade(seg(t, T.tiles + 1.2, T.tiles + 1.5), () => { text('$65.00', px + 40, py + 200, 76, 800, INK, 'left', -0.03); text('Jordan · cut & colour', px + 40, py + 262, 24, 500, DIMI, 'left'); });
-  const pd = ease.back(seg(t, T.tiles + 1.55, T.tiles + 1.85)); if (pd > 0) xf(px + 120, py + 440, pd, 0, () => { fillRR(px + 40, py + 405, 170, 70, 35, rgba(GRN, 0.16)); strokeRR(px + 40, py + 405, 170, 70, 35, GRN, 2); circle(px + 80, py + 440, 16, GRN); check(px + 80, py + 441, 16, '#fff', 3.5); text('Paid', px + 108, py + 441, 30, 700, '#c6f6d8', 'left', 0); });
+  const A = T.tiles + 0.6; // seeds land
+  const label = (s, r) => { const w = monoW(s, 18, 700), k = K(t, T.tiles + 0.3, T.tiles + 0.7, ease.out); clipRect([r[0], r[1] + 30, 40 + w * k, 40], () => mono(s, r[0] + 40, r[1] + 50, 18, DIMI, 'left', 700)); }; // wiped out of the tile edge
+  // reviews: the seed becomes star 1, the other stars slide out of it, the rating is wiped out of star 5
+  const [rx, ry, rw] = rs[0]; label('REVIEWS', rs[0]);
+  const s1 = ease.back(seg(t, A, A + 0.25)); if (s1 > 0) { for (let i = 4; i >= 1; i--) { const k = K(t, A + 0.15 + i * 0.07, A + 0.45 + i * 0.07, ease.out); if (k > 0) star(lerp(rx + 80, rx + 80 + i * 92, k), ry + 140, 40, '#ffb400'); } star(rx + 80, ry + 140, lerp(10, 40, s1), '#ffb400'); }
+  const rv = K(t, A + 0.6, A + 0.95, ease.out); if (rv > 0) clipRect([rx + 480, ry, (rw - 480) * rv, 250], () => { text('4.9', rx + rw - 60, ry + 128, 64, 800, INK, 'right', -0.03); text('Jordan left 5 stars', rx + rw - 60, ry + 180, 24, 500, DIMI, 'right'); });
+  // loyalty: the seed lands on top of the ring and draws it; the points roll up inside it; the reward grows out of its base
+  const [lx, ly, lw] = rs[1], cx = lx + lw / 2, cy = ly + 250; label('LOYALTY', rs[1]);
+  const tr = K(t, A, A + 0.35, ease.inOut), lp = K(t, A + 0.3, A + 1.1, ease.out);
+  if (tr > 0) { ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, 112, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * tr); ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 16; ctx.stroke(); ctx.restore(); arcRing(cx, cy, 112, 16, lerp(0, lerp(0.86, 1, seg(lp, 0.55, 1)), seg(lp, 0, 0.55)), lp > 0.98 ? GRN : ACC, 'rgba(0,0,0,0)');
+    const ru = K(t, A + 0.2, A + 0.55, ease.out); clipCircle(cx, cy, 96, () => { text(String(Math.round(lerp(0, 500, lp))), cx, cy - 10 + (1 - ru) * 110, 60, 800, INK, 'center', -0.03); mono('/ 500 PTS', cx, cy + 40 + (1 - ru) * 110, 18, DIMI, 'center'); }); }
+  const rk = K(t, A + 1.0, A + 1.3, ease.out), rwid = tw('REWARD UNLOCKED', 18, 800, 0.1) + 18 * 1.4; growPill(rk, cx, cy + 120, [cx - rwid / 2, ly + 440 - 16, rwid, 32], rgba(GRN, 0.14), rgba(GRN, 0.45), () => text('REWARD UNLOCKED', cx, ly + 441, 18, 800, GRN, 'center', 0.1));
+  // payments: the seed is the caret that types the amount; "Paid" grows out of the amount
+  const [px, py] = rs[2]; label('PAYMENTS', rs[2]);
+  const amt = '$65.00', ty = seg(t, A, A + 0.45), n = Math.ceil(ty * amt.length);
+  if (ty > 0) { const s = amt.slice(0, n); text(s, px + 40, py + 200, 76, 800, INK, 'left', -0.03); if (ty < 1) { const cxp = px + 40 + tw(s, 76, 800, -0.03) + 10; fillRR(cxp, py + 165, 7, 70, 3.5, GRN); } }
+  const sb = K(t, A + 0.4, A + 0.75, ease.out); if (sb > 0) clipRect([px + 40, py + 240, 300 * sb, 44], () => text('Jordan · cut & colour', px + 40, py + 262, 24, 500, DIMI, 'left'));
+  const pd = K(t, A + 0.8, A + 1.15, ease.out); growPill(pd, px + 40, py + 236, [px + 40, py + 405, 170, 70], rgba(GRN, 0.16), GRN, () => { circle(px + 80, py + 440, 16, GRN); check(px + 80, py + 441, 16, '#fff', 3.5); text('Paid', px + 108, py + 441, 30, 700, '#c6f6d8', 'left', 0); });
   ctx.restore();
 }
 
@@ -282,18 +360,20 @@ const LOGO_S = 1.08, LOGO_C = [CX, 730];
 const LP = { L: [[101, 82], [236, 251], [100, 389], [101, 82]], R: [[252, 301], [397, 105], [399, 410], [326, 328]] }; // stroke trace of assets/logo.png (512-unit box)
 function resample(pts, n) { const seglen = []; let tot = 0; for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seglen.push(d); tot += d; } const out = []; for (let k = 0; k < n; k++) { let d = (k / (n - 1)) * tot, i = 0; while (i < seglen.length - 1 && d > seglen[i]) { d -= seglen[i]; i++; } const f = seglen[i] ? d / seglen[i] : 0; out.push([lerp(pts[i][0], pts[i + 1][0], f), lerp(pts[i][1], pts[i + 1][1], f)]); } return out; }
 const NL = 120, NR = 120;
-const TGT = [...resample(LP.L, NL), ...resample(LP.R, NR)].map(([x, y]) => [LOGO_C[0] + (x - 256) * LOGO_S, LOGO_C[1] + (y - 256) * LOGO_S]);
+const LPX = ([x, y]) => [LOGO_C[0] + (x - 256) * LOGO_S, LOGO_C[1] + (y - 256) * LOGO_S];
+const TGT = [...resample(LP.L, NL), ...resample(LP.R, NR)].map(LPX);
 const penX2 = 970;
 function srcTrace(t) { const pts = []; for (let k = 0; k < NL + NR; k++) { const x = lerp(110, 970, k / (NL + NR - 1)); const ts = t - (penX2 - x) / E2.speed; pts.push([x, SY + ecgY(E2, ts)]); } return pts; }
 function sceneLine(t) {
   if (t < T.back - 0.2 || t > T.logoDone + 0.4) return;
   const m = K(t, T.logo, T.logoDone - 0.1, ease.inOut), colA = mix(GRN, ACC2, m);
   if (m <= 0) {
-    // the flattened card is now the baseline; the pulse enters from the right
-    ctx.save(); ctx.shadowColor = GRN; ctx.shadowBlur = 20; const gr = ctx.createLinearGradient(110, 0, 970, 0); gr.addColorStop(0, rgba(GRN, 0.15)); gr.addColorStop(0.5, rgba(GRN, 0.9)); gr.addColorStop(1, GRN);
-    traceECG(t, E2, penX2, 110, gr, 5, 1, true); ctx.restore(); const py = SY + ecgY(E2, t); glow(penX2, py, 80, GRN, 0.35); circle(penX2, py, 12, '#eafff2');
-    // Jordan's score climbs back
-    const up = K(t, T.back + 0.2, T.back + 1.8, ease.out), v = Math.round(lerp(38, 86, up)); ctx.save(); ctx.globalAlpha = seg(t, T.back, T.back + 0.3) * (1 - seg(t, T.logo - 0.25, T.logo)); ctx.shadowColor = scoreCol(v); ctx.shadowBlur = 40; text(String(v), CX, 560, 170, 800, scoreCol(v), 'center', -0.04); ctx.shadowBlur = 0; mono('JORDAN · HEALTH SCORE', CX, 670, 22, DIMI, 'center'); ctx.restore();
+    // the flattened card is now the baseline; the pen grows out of its right end and the pulse comes back
+    const gr = ctx.createLinearGradient(110, 0, 970, 0); gr.addColorStop(0, rgba(GRN, 0.15)); gr.addColorStop(0.5, rgba(GRN, 0.9)); gr.addColorStop(1, GRN);
+    traceECG(t, E2, penX2, 110, gr, 5, 1, true); const py = SY + ecgY(E2, t), pk = ease.back(seg(t, T.back - 0.15, T.back + 0.2)); glow(penX2, py, 80, GRN, 0.35 * pk); circle(penX2, py, 12 * pk, '#eafff2');
+    // Jordan's score rises out of the line, climbs back, then sinks back into it
+    const up = K(t, T.back + 0.2, T.back + 1.8, ease.out), v = Math.round(lerp(38, 86, up)), rise = K(t, T.back + 0.05, T.back + 0.6, ease.out) * (1 - K(t, T.logo - 0.6, T.logo - 0.05, ease.in));
+    if (rise > 0) clipRect([0, 0, W, SY - 16], () => { const dy = (1 - rise) * 460; ctx.save(); ctx.shadowColor = scoreCol(v); ctx.shadowBlur = 40; text(String(v), CX, 560 + dy, 170, 800, scoreCol(v), 'center', -0.04); ctx.restore(); mono('JORDAN · HEALTH SCORE', CX, 670 + dy, 22, DIMI, 'center'); });
     return;
   }
   const src = srcTrace(T.logo), lw = lerp(5, 62.3 * LOGO_S, ease.in(m)), fadeOut = seg(t, T.logoDone - 0.25, T.logoDone + 0.1);
@@ -304,26 +384,33 @@ function sceneLine(t) {
   if (m < 0.6) { ctx.globalAlpha *= 1 - m / 0.6; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(...P[NL - 1]); ctx.lineTo(...P[NL]); ctx.stroke(); }
   ctx.restore();
 }
+const DROP = LPX([392, 412]); // the bottom of the logo's right stroke
 function sceneLogo(t) {
   if (t < T.logoDone - 0.3 || t > T.endDone) return;
   const a = seg(t, T.logoDone - 0.3, T.logoDone + 0.1), sz = 512 * LOGO_S;
   const pulse = 1 + 0.025 * Math.exp(-(t - T.logoDone) * 5) * Math.sin((t - T.logoDone) * 30) * (t > T.logoDone ? 1 : 0);
   ctx.save(); ctx.globalAlpha *= a; glow(LOGO_C[0], LOGO_C[1], 420, ACC2, 0.35); xf(LOGO_C[0], LOGO_C[1], pulse, 0, () => { if (LOGO) ctx.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz); }); ctx.restore();
-  // the wordmark rises letter by letter, then its underline draws
-  const wm = 'MsgHealth', size = 120; font(size, 800, -0.04); const total = ctx.measureText(wm).width; let x = CX - total / 2; const y = 1060;
-  for (let i = 0; i < wm.length; i++) { const ch = wm[i]; font(size, 800, -0.04); const cw = ctx.measureText(ch).width; const k = ease.out(seg(t, T.word + i * 0.045, T.word + 0.35 + i * 0.045)); if (k > 0) { ctx.save(); ctx.globalAlpha *= k; ctx.save(); ctx.beginPath(); ctx.rect(0, y - 90, W, 150); ctx.clip(); text(ch, x + cw / 2, y + (1 - k) * 110, size, 800, INK, 'center', -0.04); ctx.restore(); ctx.restore(); } x += cw; }
-  const ul = ease.inOut(seg(t, T.word + 0.55, T.word + 1.0)), ux = CX - total / 2, uw = total * ul;
-  // the underline becomes the button
-  const b = K(t, T.keep - 0.1, T.keep + 0.5, ease.inOut), r = lr([ux, 1132, Math.max(uw, 0.1), 7], [230, 1150, 620, 116], b);
-  if (ul > 0) { ctx.save(); if (b > 0.3) { ctx.shadowColor = ACC2; ctx.shadowBlur = 50 * b; } fillRR(...r, lerp(3.5, 58, b), mix('#6d66ff', '#4f46e5', b)); ctx.restore(); }
-  if (b > 0.5) { ctx.save(); ctx.globalAlpha *= (b - 0.5) * 2; text('Comment “KEEP”', CX, 1150 + 59, 46, 800, '#fff', 'center'); ctx.restore(); }
-  const tg = ease.back(seg(t, T.audit, T.audit + 0.35)) * (1 - seg(t, T.url - 0.1, T.url + 0.2)); if (tg > 0) xf(CX, 1312, tg, 0, () => { const s = 'FREE RETENTION AUDIT', w = monoW(s, 22, 700) + 50; fillRR(CX - w / 2, 1290, w, 46, 23, rgba(GRN, 0.14)); strokeRR(CX - w / 2, 1290, w, 46, 23, rgba(GRN, 0.6), 1.5); mono(s, CX, 1314, 22, '#bdf5d3', 'center', 700); });
-  const u = seg(t, T.url, T.url + 0.7); if (u > 0) { const s = 'msghealth.net', n = Math.ceil(s.length * u); mono(s.slice(0, n) + (u < 1 || Math.floor(t * 3) % 2 ? '' : '_'), CX, 1316, 42, ACC, 'center', 700, 0.02); }
+  // a drop falls from the logo, lands, and spreads into the underline; the wordmark rises out of the underline
+  const wm = 'MsgHealth', size = 120; font(size, 800, -0.04); const total = ctx.measureText(wm).width, ux = CX - total / 2, UY = 1128;
+  const fall = seg(t, T.word, T.word + 0.32), spread = K(t, T.word + 0.3, T.word + 0.7, ease.out), b = K(t, T.keep - 0.1, T.keep + 0.5, ease.inOut);
+  if (fall > 0 && spread <= 0) { const y = lerp(DROP[1], UY + 3.5, ease.in(fall)); circle(DROP[0], y, 9, ACC2); glow(DROP[0], y, 40, ACC2, 0.4); }
+  let x = ux; const yb = 1060;
+  for (let i = 0; i < wm.length; i++) { font(size, 800, -0.04); const cw = ctx.measureText(wm[i]).width, k = ease.out(seg(t, T.word + 0.5 + i * 0.045, T.word + 0.85 + i * 0.045)); if (k > 0) clipRect([0, yb - 110, W, UY - 4 - (yb - 110)], () => text(wm[i], x + cw / 2, yb + (1 - k) * 140, size, 800, INK, 'center', -0.04)); x += cw; }
+  if (spread > 0) {
+    const ul = lr([DROP[0] - 9, UY, 18, 7], [ux, UY, total, 7], spread), r = lr(ul, [230, 1150, 620, 116], b); // the underline becomes the button
+    ctx.save(); if (b > 0.3) { ctx.shadowColor = ACC2; ctx.shadowBlur = 50 * b; } fillRR(...r, lerp(3.5, 58, b), mix('#6d66ff', '#4f46e5', b)); ctx.restore();
+    const tk = K(t, T.keep + 0.25, T.keep + 0.65, ease.out); if (tk > 0) clipRect([CX - 310 * tk, 1150, 620 * tk, 116], () => text('Comment “KEEP”', CX, 1150 + 59, 46, 800, '#fff', 'center'));
+  }
+  // the offer tag grows out of the bottom of the button, then shrinks into the caret that types the URL
+  const s = 'FREE RETENTION AUDIT', w = monoW(s, 22, 700) + 50, tagR = [CX - w / 2, 1290, w, 46], g = K(t, T.audit, T.audit + 0.4, ease.out), toC = K(t, T.url - 0.35, T.url - 0.02, ease.inOut);
+  const url = 'msghealth.net', uw = monoW(url, 42, 700, 0.02), ux0 = CX - uw / 2, ty = seg(t, T.url, T.url + 0.7), typed = url.slice(0, Math.ceil(url.length * ty)), cx = ux0 + monoW(typed, 42, 700, 0.02) + 6;
+  if (g > 0 && toC < 1) { const r = lr(lr([CX - 3, 1266, 6, 6], tagR, g), [ux0 - 4, 1294, 6, 44], toC); fillRR(...r, Math.min(r[2], r[3]) / 2, mix('#16302a', ACC, toC)); strokeRR(...r, Math.min(r[2], r[3]) / 2, rgba(GRN, 0.6 * (1 - toC)), 1.5); if (g > 0.4 && toC < 0.3) clipRect(r, () => mono(s, CX, 1314, 22, '#bdf5d3', 'center', 700)); }
+  if (toC >= 1) { mono(typed, ux0, 1316, 42, ACC, 'left', 700, 0.02); const soft = ty < 1 ? 1 : 0.55 + 0.45 * (0.5 + 0.5 * Math.cos((t - T.url - 0.7) * 6)); ctx.save(); ctx.globalAlpha *= soft; fillRR(cx, 1294, 6, 44, 3, ACC); ctx.restore(); }
 }
 
 // ── 8 · HUD + captions ───────────────────────────────────────────────────────
 function hud(t) {
-  const a = 0.75 * seg(t, 0, 0.4);
+  const a = 0.75;
   ctx.save(); ctx.globalAlpha = a; const blink = Math.floor(t * 1.6) % 2 === 0 ? 1 : 0.35;
   circle(76, 112, 9, rgba('#ff4d4d', blink)); mono('TAKE 01', 98, 113, 24, INK, 'left', 700);
   const flash = t > T.cuts ? Math.max(seg(t, T.cuts, T.cuts + 0.2) * (1 - seg(t, T.cuts + 0.9, T.cuts + 1.6)), seg(t, T.endDone, T.endDone + 0.3)) : 0;
@@ -352,17 +439,17 @@ function world(t, fn) { // camera: gentle push-ins; the final collapse scales th
 }
 function scene(t) {
   background(t);
-  world(t, () => { sceneTitle(t); sceneDot(t); sceneCustomers(t); sceneCard(t); sceneFlow(t); sceneChatCal(t); sceneTiles(t); sceneLine(t); sceneLogo(t); });
+  world(t, () => { sceneTitle(t); hero(t); sceneDot(t); sceneCustomers(t); sceneCard(t); sceneTiles(t); sceneChatCal(t); sceneFlow(t); sceneLine(t); sceneLogo(t); });
   grain(t);
 }
 
 // ── sound ────────────────────────────────────────────────────────────────────
-cue(T.title, 'swoosh', 0.5); cue(T.title2 + 0.3, 'tap', 0.5); cue(T.collapse + 0.1, 'whoosh', 0.9); cue(T.dotEnd - 0.05, 'snap', 0.6);
+cue(0.15, 'swoosh', 0.4); [0, 1, 2, 3, 4, 5].forEach((k) => cue(T.title + k * 0.17, 'key', 0.3)); [0, 1, 2].forEach((k) => cue(T.title2 + k * 0.16, 'key', 0.3)); cue(T.collapse + 0.1, 'whoosh', 0.9); cue(T.dotEnd - 0.05, 'snap', 0.6);
 for (let b = 0; b < 12; b++) { const at = E1.start + (b + 0.345) / BEAT; if (at < T.cust) cue(at, 'beep', 0.55); }
 cue(T.cust, 'whoosh', 0.8); for (let i = 0; i < 6; i++) cue(T.cust + 0.5 + i * 0.07, 'tap', 0.3); cue(T.quiet + 0.1, 'swish', 0.4);
-cue(T.radar, 'transition', 0.7); QUIET.forEach((q, i) => cue(T.radar + Math.hypot(CUST[q].x - CX, CUST[q].y - SY) / 1150 * 0.9, 'ding', 0.45)); cue(T.focus, 'whoosh', 0.7);
+cue(T.radar, 'transition', 0.7); QUIET.forEach((q) => cue(radarHitAt(CUST[q]), 'ding', 0.45)); cue(T.focus, 'whoosh', 0.7);
 for (let i = 0; i < 6; i++) cue(T.score + 0.12 + i * 0.16, 'key', 0.45); cue(T.card, 'swoosh', 0.7); for (let i = 1; i < 5; i++) cue(T.card + 0.55 + i * 0.08, 'tap', 0.35);
-cue(T.slips + 0.1, 'punch', 0.6); cue(T.reach, 'swoosh', 0.6); NODES.forEach((n, i) => cue(T.reach + 0.35 + 1.35 * (n[1] - 540) / 520, 'tap', 0.55));
+cue(T.slips + 0.1, 'punch', 0.6); cue(T.reach, 'swoosh', 0.6); [0.5, 0.75, 1.0].forEach((f) => cue(T.reach + 0.6 + 1.3 * f - 0.05, 'tap', 0.55));
 cue(T.text, 'notification', 0.7); cue(T.reply, 'notification', 0.7); cue(T.booking + 0.1, 'swoosh', 0.6); cue(T.booking + 0.78, 'ding', 0.7);
 cue(T.tiles, 'whoosh', 0.6); for (let i = 0; i < 5; i++) cue(T.tiles + 0.25 + i * 0.1, 'tap', 0.35); cue(T.tiles + 1.6, 'ding', 0.6);
 cue(T.same, 'swoosh', 0.5); cue(T.flat, 'whoosh', 0.7);

@@ -8,11 +8,11 @@ window.VO_CLIPS = [
   { dur: 2.68, chunks: [["He gave the puddings", 0.0], ["to *charity,* and *flew for years.*", 0.94]] }, // 04
   { dur: 2.12, chunks: [["People will do", 0.0], ["*wild things* for a *reward.*", 1.01]] }, // 05
   { dur: 2.57, chunks: [["Your *regulars* would too,", 0.0], ["if you gave them a *reason.*", 1.36]] }, // 06
-  { dur: 1.94, chunks: [["*MsgHealth* tracks", 0.0], ["*loyalty* for you.", 0.85]] }, // 07
+  { dur: 1.975, chunks: [["*MsgHealth* tracks", 0.0], ["*loyalty* for you.", 1.04]] }, // 07
   { dur: 3.13, chunks: [["Every visit earns *points.*", 0.0], ["Every reward brings them *back.*", 1.63]] }, // 08
   { dur: 1.42, chunks: [["Want to see who's *slipping away?*", 0.0]] }, // 09
   { dur: 2.23, chunks: [["Comment *KEEP* for a", 0.0], ["*free retention audit.*", 0.83]] }, // 10
   { dur: 1.31, chunks: [["*msghealth.net*", 0.0]] }, // 11
 ];
-window.VO_AT = [0.3, 4.25, 8.27, 11.56, 15.44, 18.72, 21.34, 24.52, 26.86, 30.59, 32.36, 34.99];
-window.VO_TEXT = ["In nineteen ninety-nine, an engineer noticed a pudding promotion.", "Buy pudding cups, collect barcodes, trade them for airline miles.", "The math worked. So he bought twelve thousand puddings.", "That was over a million miles, for about three thousand dollars.", "He gave the puddings to charity, and flew for years.", "People will do wild things for a reward.", "Your regulars would too, if you gave them a reason.", "Message Health tracks loyalty for you.", "Every visit earns points. Every reward brings them back.", "Want to see who's slipping away?", "Comment keep, for a free retention audit.", "Message Health dot net."];
+window.VO_AT = [0.3, 4.25, 8.27, 11.56, 15.44, 18.72, 21.34, 24.52, 26.89, 30.62, 32.39, 35.02];
+window.VO_TEXT = ["In nineteen ninety-nine, an engineer noticed a pudding promotion.", "Buy pudding cups, collect barcodes, trade them for airline miles.", "The math worked. So he bought twelve thousand puddings.", "That was over a million miles, for about three thousand dollars.", "He gave the puddings to charity, and flew for years.", "People will do wild things for a reward.", "Your regulars would too, if you gave them a reason.", "Message Health tracks loyaltee for you.", "Every visit earns points. Every reward brings them back.", "Want to see who's slipping away?", "Comment keep, for a free retention audit.", "Message Health dot net."];

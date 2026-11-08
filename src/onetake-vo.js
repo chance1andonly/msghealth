@@ -10,11 +10,11 @@ window.VO_CLIPS = [
   { dur: 1.905, chunks: [["Every client gets", 0.0], ["a live *health score.*", 0.87]] }, // 06
   { dur: 2.2, chunks: [["When someone *slips,*", 0.0], ["it *reaches out* for you.", 0.87]] }, // 07
   { dur: 1.87, chunks: [["A *text.*", 0.0], ["A *reply.*", 0.4], ["A *booking.*", 1.28]] }, // 08
-  { dur: 2.75, chunks: [["*Reviews,* *loyalty* and *payments,*", 0.0], ["in the same place.", 1.84]] }, // 09
+  { dur: 2.86, chunks: [["*Reviews,* *loyalty* and *payments,*", 0.0], ["in the same place.", 1.93]] }, // 09
   { dur: 1.2, chunks: [["And the *pulse* comes back.", 0.0]] }, // 10
   { dur: 2.655, chunks: [["No gaps.", 0.0], ["No lost customers.", 0.56], ["No *cuts.*", 1.97]] }, // 11
   { dur: 2.285, chunks: [["Comment *KEEP*", 0.0], ["for a *free retention audit.*", 0.81]] }, // 12
   { dur: 1.39, chunks: [["*msghealth.net*", 0.0]] }, // 13
 ];
-window.VO_AT = [0.4, 3.16, 5.38, 8.42, 11.68, 14.8, 16.96, 19.87, 22.97, 25.84, 29.59, 31.99, 35.64, 38.42];
-window.VO_TEXT = ["Try to spot a single cut in this video.", "You won't find one.", "Watch the dot. It has a pulse.", "Every business has one. Your customers.", "Some go quiet, long before they leave.", "Message Health catches it.", "Every client gets a live health score.", "When someone slips, it reaches out for you.", "A text. A reply. A booking.", "Reviews, loyalty and payments, in the same place.", "And the pulse comes back.", "No gaps. No lost customers. No cuts.", "Comment keep, for a free retention audit.", "Message Health dot net."];
+window.VO_AT = [0.4, 3.16, 5.38, 8.42, 11.68, 14.8, 16.96, 19.87, 22.97, 25.84, 29.7, 32.1, 35.75, 38.54];
+window.VO_TEXT = ["Try to spot a single cut in this video.", "You won't find one.", "Watch the dot. It has a pulse.", "Every business has one. Your customers.", "Some go quiet, long before they leave.", "Message Health catches it.", "Every client gets a live health score.", "When someone slips, it reaches out for you.", "A text. A reply. A booking.", "Reviews, loyaltee and payments, in the same place.", "And the pulse comes back.", "No gaps. No lost customers. No cuts.", "Comment keep, for a free retention audit.", "Message Health dot net."];
