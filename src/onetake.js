@@ -21,7 +21,10 @@ T.dotEnd = T.collapse + 1.15;                 // particles finish converging int
 T.radar = T.brand; T.focus = T.brand + 0.85;  // radar sweep, then focus on Jordan
 T.card = T.live + 0.05;                       // ring → client-health card
 T.flat = T.back - 0.75;                       // tiles flatten into a line
-T.logo = T.gaps + 0.05; T.logoDone = T.logo + 1.55; T.word = T.logoDone - 0.05;
+T.logo = T.gaps + 0.05;
+// the logo is pumped full by the heartbeat: each spike that scrolls under the logo raises the fill; two spikes fill it
+T.pumps = (() => { const out = []; for (let n = 0; n < 40 && out.length < 2; n++) { const R = T.back - 0.1 + (n + 0.345) / 1.3, a = R + (970 - 709) / 430, b = R + (970 - 371) / 430; if (a >= T.logo + 0.3) out.push([a, b]); } return out; })();
+T.logoDone = T.pumps[1][1] + 0.05; T.ul0 = T.logoDone - 0.15; T.ul1 = T.logoDone + 0.6; T.word = T.ul1 - 0.25;
 T.end = V[13] + 1.55; T.endDone = T.end + 1.1;
 const DURATION = +(T.endDone + 1.1).toFixed(2);
 window.CUES = T; window.SFX = []; const cue = (t, kind, gain) => window.SFX.push({ t, kind, gain });
@@ -389,64 +392,60 @@ const penX2 = 970;
 let SRC = null; // the heartbeat at the moment it starts to form the logo, resampled evenly along its length
 function srcTrace() { if (SRC) return SRC; const pts = []; for (let x = 110; x <= 970; x += 2) { const ts = T.logo - (penX2 - x) / E2.speed; pts.push([x, SY + ecgY(E2, ts)]); } return (SRC = resample(pts, NL + NR)); }
 let MASK = null;
+const UY = 1128, WM_SIZE = 120;
+const wmWidth = () => tw('MsgHealth', WM_SIZE, 800, -0.04);
+const LOGO_TOP = LPX([0, 60])[1], LOGO_BOT = LPX([0, 432])[1];
+function fillLevel(t) { const u = seg(t, T.pumps[0][0], T.pumps[1][1]), sm = u * u * u * (u * (u * 6 - 15) + 10); return clamp(0.85 * sm + 0.15 * T.pumps.reduce((acc, [a, b]) => acc + 0.5 * ease.inOut(seg(t, a, b)), 0)); } // one continuous rise, nudged by each beat
 function sceneLine(t) {
-  if (t < T.back - 0.2 || t > T.logoDone + 0.05) return;
-  const m = K(t, T.logo, T.logo + 1.0, (u) => u);
-  if (m <= 0) {
-    // the flattened card is now the baseline; the pen grows out of its right end and the pulse comes back
-    const gr = ctx.createLinearGradient(110, 0, 970, 0); gr.addColorStop(0, rgba(GRN, 0.15)); gr.addColorStop(0.5, rgba(GRN, 0.9)); gr.addColorStop(1, GRN);
-    traceECG(t, E2, penX2, 110, gr, 5, 1, true); const py = SY + ecgY(E2, t), pk = ease.back(seg(t, T.back - 0.15, T.back + 0.2)); glow(penX2, py, 80, GRN, 0.35 * pk); circle(penX2, py, 12 * pk, '#eafff2');
-    // Jordan's score rises out of the line, climbs back, then sinks back into it
+  if (t < T.back - 0.2 || t > T.ul1) return;
+  // the line: the flattened card, beating again. It sinks a little below the logo, keeps beating while the logo fills,
+  // then contracts into the wordmark's underline (its beat settling as it does).
+  const dn = K(t, T.logo - 0.1, T.logo + 0.45, ease.inOut), ul = K(t, T.ul0, T.ul1, ease.inOut), base = lerp(lerp(SY, 1010, dn), UY + 3.5, ul);
+  const x0 = lerp(110, CX - wmWidth() / 2, ul), x1 = lerp(970, CX + wmWidth() / 2, ul), amp = 1 - ul;
+  const col = hexMix(GRN, '#6d66ff', K(t, T.logo, T.ul1)), lw = lerp(5, 7, ul);
+  const Y = (X) => { const ts = t - (penX2 - X) / E2.speed; return base + ecgY(E2, ts) * amp; }, MAPX = (X) => lerp(x0, x1, (X - 110) / 860);
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.shadowColor = col; ctx.shadowBlur = 18;
+  ctx.globalAlpha *= 1; ctx.beginPath(); for (let X = 110; X <= 970; X += 3) { const x = MAPX(X), y = Y(X); X === 110 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); ctx.restore();
+  // the pen at the right end; it grows out of the line's end, and is absorbed as the line becomes the underline
+  const py = Y(970), pk = ease.back(seg(t, T.back - 0.15, T.back + 0.2)) * (1 - ul); if (pk > 0.01) { glow(x1, py, 80, col, 0.35 * pk); circle(x1, py, 12 * pk, '#eafff2'); }
     // Jordan's score ring buds off the pen, floats up, climbs from 38 to 86, then returns into the pen before the logo
     const out = K(t, T.back + 0.1, T.back + 0.75, ease.inOut) * (1 - K(t, T.logo - 0.65, T.logo - 0.08, ease.inOut));
     if (out > 0) {
       const up = K(t, T.back + 0.7, T.back + 1.9, ease.out), v = Math.round(lerp(38, 86, up)), col = scoreCol(v);
-      const x = lerp(penX2, CX, out), y = lerp(py, 560, out) - Math.sin(out * Math.PI) * 70, r = lerp(12 * pk, 130, out), lw = lerp(3, 16, out);
-      if (out < 0.25) { ctx.save(); ctx.strokeStyle = '#eafff2'; ctx.lineWidth = lerp(12, 0, out * 4); ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(penX2, py); ctx.lineTo(x, y); ctx.stroke(); ctx.restore(); } // the bud's neck
+      const x = lerp(x1, CX, out), y = lerp(py, 560, out) - Math.sin(out * Math.PI) * 70, r = lerp(12 * pk, 130, out), lw = lerp(3, 16, out);
+      if (out < 0.25) { ctx.save(); ctx.strokeStyle = '#eafff2'; ctx.lineWidth = lerp(12, 0, out * 4); ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x1, py); ctx.lineTo(x, y); ctx.stroke(); ctx.restore(); } // the bud's neck
       circle(x, y, r, '#17141f'); ring(x, y, r, rgba('#ffffff', 0.08 * out), lw); arcRing(x, y, r, lw, (v / 100) * seg(out, 0.4, 1), col, 'rgba(0,0,0,0)'); glow(x, y, r * 1.8, col, 0.18 * out);
       const nr = K(t, T.back + 0.5, T.back + 0.85, ease.out) * (1 - K(t, T.logo - 0.95, T.logo - 0.7, ease.in));
       if (nr > 0) clipCircle(x, y, r - lw / 2 - 2, () => { ctx.save(); ctx.shadowColor = col; ctx.shadowBlur = 30; text(String(v), x, y + 4 + (1 - nr) * r * 1.5, 96, 800, col, 'center', -0.04); ctx.restore(); });
       const lk = K(t, T.back + 0.8, T.back + 1.15, ease.out) * (1 - K(t, T.logo - 1.2, T.logo - 0.95, ease.in)), lb = 'JORDAN · HEALTH SCORE', lwid = monoW(lb, 20) + 40;
       growPill(lk, x, y + r, [x - lwid / 2, y + r + 26, lwid, 40], 'rgba(12,11,17,0.9)', rgba(col, 0.5), () => mono(lb, x, y + r + 47, 20, DIMI, 'center')); // the label grows out of the bottom of the ring
     }
-    return;
-  }
-  // 1) the line glides into the logo's centre-line, sweeping left to right (smootherstep per point, staggered along the line)
-  const src = srcTrace(), sm = (u) => u * u * u * (u * (u * 6 - 15) + 10), N = NL + NR;
-  const P = src.map((p, k) => { const st = (k / N) * 0.5, f = sm(clamp((m - st) / 0.5)); return [lerp(p[0], TGT[k][0], f), lerp(p[1], TGT[k][1], f)]; }); // the line peels off left to right and winds into the logo
-  const inf = K(t, T.logo + 0.85, T.logoDone, ease.inOut), col = hexMix(GRN, '#8f88ff', clamp(m * 1.4));
-  // 2) then it inflates: a widening stroke of the centre-line masks the real logo image
-  if (inf > 0 && LOGO) {
+  // the logo fills with each beat: a liquid level rises inside the real logo shape, its surface rippling as a spike passes under it
+  const lvl = fillLevel(t);
+  if (lvl > 0 && t < T.logoDone && LOGO) {
     if (!MASK) { MASK = document.createElement('canvas'); MASK.width = W; MASK.height = H; }
     const mc = MASK.getContext('2d'); mc.setTransform(1, 0, 0, 1, 0, 0); mc.globalCompositeOperation = 'source-over'; mc.clearRect(0, 0, W, H);
-    mc.strokeStyle = '#fff'; mc.lineWidth = lerp(6, MASK_W, inf) * LOGO_S; mc.lineJoin = 'round'; mc.lineCap = 'round';
-    [TGT.slice(0, NL), TGT.slice(NL)].forEach((seg2) => { mc.beginPath(); seg2.forEach(([x, y], i) => (i ? mc.lineTo(x, y) : mc.moveTo(x, y))); mc.stroke(); });
-    mc.globalCompositeOperation = 'source-in'; const sz = 512 * LOGO_S; mc.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz);
-    ctx.save(); ctx.shadowColor = rgba(ACC2, 0.6); ctx.shadowBlur = 24 * inf; ctx.drawImage(MASK, 0, 0); ctx.restore(); // drawn under the same camera transform as everything else
+    const surf = lerp(LOGO_BOT + 20, LOGO_TOP - 40, lvl), surge = T.pumps.reduce((acc, [a, b]) => acc + Math.sin(Math.PI * seg(t, a, b)), 0), A = (3 + 7 * surge) * (1 - seg(lvl, 0.9, 1)), FE = 46;
+    const sy = (x) => surf + Math.sin(x * 0.012 + t * 4.0) * A + Math.sin(x * 0.027 - t * 2.6) * A * 0.4;
+    const fg = mc.createLinearGradient(0, surf - FE, 0, surf + FE * 0.6); fg.addColorStop(0, 'rgba(255,255,255,0)'); fg.addColorStop(1, '#fff'); // a soft, glowing surface rather than a hard cut
+    mc.beginPath(); mc.moveTo(0, H); for (let x = 0; x <= W; x += 6) mc.lineTo(x, sy(x) - FE); mc.lineTo(W, H); mc.closePath(); mc.fillStyle = fg; mc.fill();
+    const sz = 512 * LOGO_S; mc.globalCompositeOperation = 'source-in'; mc.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz);
+    mc.globalCompositeOperation = 'source-atop'; const lg = mc.createLinearGradient(0, surf - FE, 0, surf + 30); lg.addColorStop(0, 'rgba(210,206,255,0)'); lg.addColorStop(0.55, 'rgba(210,206,255,0.55)'); lg.addColorStop(1, 'rgba(210,206,255,0)'); mc.fillStyle = lg; mc.fillRect(0, surf - FE - 20, W, FE + 60); // a light band riding the surface
+    ctx.save(); ctx.shadowColor = rgba(ACC2, 0.6); ctx.shadowBlur = 24 * lvl; ctx.drawImage(MASK, 0, 0); ctx.restore();
   }
-  const la = 1 - seg(inf, 0.15, 0.6); if (la <= 0) return;
-  ctx.save(); ctx.globalAlpha *= la; ctx.strokeStyle = col; ctx.lineWidth = lerp(5, 8, clamp(m * 1.5)); ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.shadowColor = col; ctx.shadowBlur = 24;
-  const path = (a2, b2) => { ctx.beginPath(); P.slice(a2, b2).forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke(); };
-  path(0, NL); path(NL, N);
-  { const pr = 12 * (1 - seg(m, 0.55, 1)); if (pr > 0.3) { glow(...P[N - 1], 70, col, 0.3); circle(...P[N - 1], pr, '#eef'); } } // the pen rides the end of the line in
-  const bridge = 1 - seg(m, 0.25, 0.75); if (bridge > 0) { ctx.globalAlpha *= bridge; ctx.beginPath(); ctx.moveTo(...P[NL - 1]); ctx.lineTo(...P[NL]); ctx.stroke(); } // the bit of line between the two shapes lets go
-  ctx.restore();
 }
-const DROP = LPX([392, 412]); // the bottom of the logo's right stroke
 function sceneLogo(t) {
-  if (t < T.word || t > T.endDone) return;
+  if (t < T.logoDone - 0.01 || t > T.endDone) return;
   const sz = 512 * LOGO_S, png = t >= T.logoDone; // before this, sceneLine's mask shows the same image
   const pulse = 1 + 0.025 * Math.exp(-(t - T.logoDone) * 5) * Math.sin((t - T.logoDone) * 30) * (t > T.logoDone ? 1 : 0);
   if (png) { glow(LOGO_C[0], LOGO_C[1], 420, ACC2, 0.22 * ease.out(seg(t, T.logoDone, T.logoDone + 0.6))); ctx.save(); ctx.shadowColor = rgba(ACC2, 0.6); ctx.shadowBlur = 24; xf(LOGO_C[0], LOGO_C[1], pulse, 0, () => { if (LOGO) ctx.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz); }); ctx.restore(); }
-  // a drop falls from the logo, lands, and spreads into the underline; the wordmark rises out of the underline
-  const wm = 'MsgHealth', size = 120; font(size, 800, -0.04); const total = ctx.measureText(wm).width, ux = CX - total / 2, UY = 1128;
-  const fall = seg(t, T.word, T.word + 0.32), spread = K(t, T.word + 0.3, T.word + 0.7, ease.out), b = K(t, T.keep - 0.1, T.keep + 0.5, ease.inOut);
-  if (fall > 0 && spread <= 0) { const y = lerp(DROP[1], UY + 3.5, ease.in(fall)); circle(DROP[0], y, 9, ACC2); glow(DROP[0], y, 40, ACC2, 0.4); }
+  // the wordmark rises out of the underline (which was the heartbeat line); the underline becomes the button
+  const total = wmWidth(), ux = CX - total / 2, b = K(t, T.keep - 0.1, T.keep + 0.5, ease.inOut);
   let x = ux; const yb = 1060;
-  for (let i = 0; i < wm.length; i++) { font(size, 800, -0.04); const cw = ctx.measureText(wm[i]).width, k = ease.out(seg(t, T.word + 0.5 + i * 0.045, T.word + 0.85 + i * 0.045)); if (k > 0) clipRect([0, yb - 110, W, UY - 4 - (yb - 110)], () => text(wm[i], x + cw / 2, yb + (1 - k) * 140, size, 800, INK, 'center', -0.04)); x += cw; }
-  if (spread > 0) {
-    const ul = lr([DROP[0] - 9, UY, 18, 7], [ux, UY, total, 7], spread), r = lr(ul, [230, 1150, 620, 116], b); // the underline becomes the button
-    ctx.save(); if (b > 0.3) { ctx.shadowColor = ACC2; ctx.shadowBlur = 50 * b; } fillRR(...r, lerp(3.5, 58, b), mix('#6d66ff', '#4f46e5', b)); ctx.restore();
+  for (let i = 0; i < 9; i++) { const ch = 'MsgHealth'[i], cw = tw(ch, WM_SIZE, 800, -0.04), k = ease.out(seg(t, T.word + i * 0.04, T.word + 0.32 + i * 0.04)); if (k > 0) clipRect([0, yb - 110, W, UY - 4 - (yb - 110)], () => text(ch, x + cw / 2, yb + (1 - k) * 140, WM_SIZE, 800, INK, 'center', -0.04)); x += cw; }
+  if (t >= T.ul1) {
+    const r = lr([ux, UY, total, 7], [230, 1150, 620, 116], b);
+    ctx.save(); if (b > 0.3) { ctx.shadowColor = ACC2; ctx.shadowBlur = 50 * b; } else { ctx.shadowColor = '#6d66ff'; ctx.shadowBlur = 18; } fillRR(...r, lerp(3.5, 58, b), mix('#6d66ff', '#4f46e5', b)); ctx.restore();
     const tk = K(t, T.keep + 0.25, T.keep + 0.65, ease.out); if (tk > 0) clipRect([CX - 310 * tk, 1150, 620 * tk, 116], () => text('Comment “KEEP”', CX, 1150 + 59, 46, 800, '#fff', 'center'));
   }
   // the offer tag grows out of the bottom of the button, then shrinks into the caret that types the URL
@@ -501,8 +500,8 @@ cue(T.slips + 0.1, 'punch', 0.6); cue(T.reach, 'swoosh', 0.6); [0.5, 0.75, 1.0].
 cue(T.text, 'notification', 0.7); cue(T.reply, 'notification', 0.7); cue(T.booking + 0.1, 'swoosh', 0.6); cue(T.booking + 0.78, 'ding', 0.7);
 cue(T.tiles, 'whoosh', 0.6); for (let i = 0; i < 5; i++) cue(T.tiles + 0.25 + i * 0.1, 'tap', 0.35); cue(T.tiles + 1.6, 'ding', 0.6);
 cue(T.same, 'swoosh', 0.5); cue(T.flat, 'whoosh', 0.7);
-for (let b = 0; b < 8; b++) { const at = E2.start + (b + 0.345) / BEAT + 0; if (at < T.logo) cue(at + 0, 'beep', 0.55); }
-cue(T.logo - 1.55, 'riser', 0.6); cue(T.logoDone - 0.1, 'transitionHit', 0.9); for (let i = 0; i < 9; i++) cue(T.word + i * 0.045, 'key', 0.25);
+for (let b = 0; b < 14; b++) { const at = E2.start + (b + 0.345) / BEAT; if (at < T.ul0) cue(at, 'beep', 0.55); }
+T.pumps.forEach(([a, b]) => cue(a + 0.1, 'swoosh', 0.45)); cue(T.logoDone - 0.1, 'transitionHit', 0.8); for (let i = 0; i < 9; i++) cue(T.word + i * 0.04, 'key', 0.25);
 cue(T.keep, 'swoosh', 0.6); cue(T.audit, 'tap', 0.6); for (let i = 0; i < 13; i++) cue(T.url + i * 0.054, 'key', 0.3); cue(T.end, 'whoosh', 0.8); cue(T.endDone - 0.1, 'snap', 0.6);
 
 // ── boot: renderFrame (with sub-frame motion blur when rendering), ready, player ─
