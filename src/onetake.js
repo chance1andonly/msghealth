@@ -120,16 +120,31 @@ function traceECG(t, E, penX, x0, col, lw, alpha, flatBefore = false) {
   for (let x = penX; x >= x0; x -= 3) { const ts = t - (penX - x) / E.speed; if (ts < E.start && !flatBefore) break; const y = SY + ecgY(E, ts); on ? ctx.lineTo(x, y) : ctx.moveTo(x, y); on = true; }
   ctx.stroke(); ctx.restore();
 }
+// After "your customers" the pen leaves the line, reels it in, and walks along the first row of the grid, leaving a dot at each seat.
+const COLX = (c) => CX + (c - 2) * 178, ROW0Y = SY - 1.5 * 178;
+const DEP = (c) => T.cust + 0.4 + (4 - c) * 0.17; // when the pen reaches column c of the first row
+const PEN0 = () => [penX1(T.cust), SY + ecgY(E1, T.cust)];
+function penPos(t) {
+  if (t <= T.cust) return [penX1(t), SY + ecgY(E1, t)];
+  const p0 = PEN0();
+  if (t < DEP(4)) { const k = ease.inOut(seg(t, T.cust, DEP(4))); return [lerp(p0[0], COLX(4), k), lerp(p0[1], ROW0Y, k) - Math.sin(k * Math.PI) * 90]; }
+  for (let c = 3; c >= 0; c--) if (t < DEP(c)) { const k = ease.inOut(seg(t, DEP(c + 1), DEP(c))); return [lerp(COLX(c + 1), COLX(c), k), ROW0Y - Math.sin(k * Math.PI) * 26]; }
+  return [COLX(0), ROW0Y];
+}
 function sceneDot(t) {
-  if (t < HERO_END() || t > T.cust + 0.6) return;
-  const px = penX1(t), py = SY + ecgY(E1, t);
+  if (t < HERO_END() || t > DEP(0)) return;
+  const [px, py] = penPos(t);
   const breathe = t < T.pulse ? 1 + 0.12 * Math.sin((t - HERO_END()) * 4) * seg(t, HERO_END(), HERO_END() + 0.4) : 1;
-  // the trace comes out of the pen; it dissolves into beads when the customers arrive (the beads are the trace)
-  if (t > E1.start) { const fade = 1 - seg(t, T.cust, T.cust + 0.3); const gr = ctx.createLinearGradient(40, 0, px, 0); gr.addColorStop(0, rgba('#ffffff', 0)); gr.addColorStop(0.3, rgba('#ffffff', 0.85)); gr.addColorStop(1, '#ffffff'); traceECG(t, E1, px, 40, gr, 5, fade); }
-  if (t < T.cust) {
-    glow(px, py, 90, '#ffffff', 0.25); circle(px, py, 15 * breathe, '#fff');
-    if (t > E1.start) { const ph = ((t - E1.start) * BEAT) % 1; const k = seg(ph, 0.34, 0.9); ring(px, py, 15 + k * 70, rgba('#ffffff', 0.45 * (1 - k)), 3); }
+  if (t > E1.start && t <= T.cust) { const gr = ctx.createLinearGradient(40, 0, px, 0); gr.addColorStop(0, rgba('#ffffff', 0)); gr.addColorStop(0.3, rgba('#ffffff', 0.85)); gr.addColorStop(1, '#ffffff'); traceECG(t, E1, px, 40, gr, 5, 1); }
+  if (t > T.cust) { // the line is reeled into the pen as it leaves: the frozen trace plus a tail to the pen, eaten from the far end
+    const p0 = PEN0(), pts = []; for (let x = 40; x <= p0[0]; x += 4) pts.push([x, SY + ecgY(E1, T.cust - (p0[0] - x) / E1.speed)]); pts.push(p0, [px, py]);
+    const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    const s0 = L[L.length - 1] * K(t, T.cust, DEP(3), ease.in);
+    ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 5; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.shadowColor = '#fff'; ctx.shadowBlur = 18; ctx.beginPath(); let on = false;
+    pts.forEach((p, i) => { if (L[i] < s0) return; on ? ctx.lineTo(...p) : (i > 0 ? (ctx.moveTo(...lr(pts[i - 1], p, (s0 - L[i - 1]) / Math.max(1e-6, L[i] - L[i - 1]))), ctx.lineTo(...p)) : ctx.moveTo(...p)); on = true; }); ctx.stroke(); ctx.restore();
   }
+  glow(px, py, 90, '#ffffff', 0.25); circle(px, py, 15 * breathe, '#fff');
+  if (t > E1.start && t < T.cust) { const ph = ((t - E1.start) * BEAT) % 1; const k = seg(ph, 0.34, 0.9); ring(px, py, 15 + k * 70, rgba('#ffffff', 0.45 * (1 - k)), 3); }
 }
 
 // ── 3 · beads → customers → the quiet ones → Jordan ──────────────────────────
@@ -138,20 +153,22 @@ const PAL = ['#6d66ff', '#e5568f', '#f08a3c', '#14b8a6', '#3b82f6', '#a855f7', '
 const INIT = ['PR', 'MT', 'AV', 'DL', 'SK', 'NO', 'EL', 'JO', 'RA', 'LI', 'KM', 'TS', 'BE', 'CH', 'ZA', 'OM', 'IV', 'HU', 'FE', 'GA'];
 const QUIET = [4, 7, 13, 16], JORDAN = 7;
 for (let i = 0; i < 20; i++) { const c = i % 5, r = Math.floor(i / 5); CUST.push({ i, x: CX + (c - 2) * 178, y: SY + (r - 1.5) * 178, col: PAL[i % PAL.length], ini: INIT[i] }); }
-const BEADX = Array.from({ length: 20 }, (_, k) => lerp(120, 740, k / 19));
-const ORDER = [...Array(20).keys()].filter((i) => i !== JORDAN).sort((a, b) => (a % 5) - (b % 5) || Math.floor(a / 5) - Math.floor(b / 5));
-function beadSource(i) { // where customer i comes from on the trace (frozen at T.cust); Jordan is the pen itself
-  if (i === JORDAN) return [penX1(T.cust), SY + ecgY(E1, T.cust)];
-  const k = ORDER.indexOf(i), x = BEADX[Math.min(18, k)], ts = T.cust - (penX1(T.cust) - x) / E1.speed; return [x, SY + ecgY(E1, ts)];
-}
 const RADAR_C = [CUST[JORDAN].x, CUST[JORDAN].y + 28], RADAR_MAX = 1300;
 function custBase(t, c) {
-  const k = c.i === JORDAN ? 0 : ORDER.indexOf(c.i), st = T.cust + k * 0.022, f = K(t, st, st + 0.85, ease.inOut);
-  const [sx, sy] = beadSource(c.i); const arc = Math.sin(f * Math.PI) * (c.y < SY ? -60 : 60);
-  let x = lerp(sx, c.x, f), y = lerp(sy, c.y, f) + arc, r = lerp(6, 50, ease.out(f));
+  // first row: left behind by the pen; rows below: each drips out of the dot above it
+  const col = c.i % 5, rw = Math.floor(c.i / 5); let x = c.x, y = c.y, r, f, show = true, neck = null;
+  if (rw === 0) { const d = DEP(col); show = t >= d; const g = seg(t, d, d + 0.35); f = g; r = lerp(15, 50, ease.back(g)); }
+  else {
+    const ds = DEP(col) + 0.22 + (rw - 1) * 0.26, py = c.y - 178, st = seg(t, ds, ds + 0.14), fall = seg(t, ds + 0.14, ds + 0.34), land = seg(t, ds + 0.34, ds + 0.62);
+    show = t >= ds; f = land;
+    if (fall <= 0) { y = py + 40 + 46 * ease.out(st); r = lerp(4, 15, st); neck = { x, y0: py + 30, y1: y, w: lerp(6, 11, st) }; } // a bead swells out of the bottom of the dot above
+    else if (land <= 0) { y = lerp(py + 86, c.y, ease.in(fall)); r = lerp(15, 13, fall); neck = { x, y0: py + 30 + 56 * fall, y1: y, w: 11 * (1 - fall) }; } // it lets go and falls, the neck snapping back
+    else { r = lerp(13, 50, ease.back(land)); y = c.y + 6 * (1 - ease.out(land)); }
+  }
+  if (!show) r = 0;
   const isQ = QUIET.includes(c.i), q = isQ ? K(t, T.quiet + QUIET.indexOf(c.i) * 0.14, T.quiet + 0.6 + QUIET.indexOf(c.i) * 0.14) : 0, lv = isQ ? K(t, T.leave, T.leave + 1.0) : 0;
   if (isQ) { y += 10 * q + 18 * lv; x += (c.x < CX ? -1 : c.x > CX ? 1 : 0) * 14 * lv; }
-  return { x, y, r, f, q, lv };
+  return { x, y, r, f, q, lv, show, neck };
 }
 function custState(t, c) {
   const s = custBase(t, c), fo = K(t, T.focus, T.focus + 0.95); s.fo = fo; s.a = 1;
@@ -170,8 +187,9 @@ function sceneCustomers(t) {
   const rk = K(t, T.radar, T.radar + 0.9, ease.out), radarR = lerp(60, RADAR_MAX, rk), radarOn = t > T.radar && t < T.radar + 1.1;
   if (radarOn) { const ra = 1 - seg(t, T.radar + 0.6, T.radar + 1.05); ctx.save(); ctx.globalAlpha = ra; ring(RADAR_C[0], RADAR_C[1], radarR, rgba(ACC, 0.75), 3); const gr = ctx.createRadialGradient(RADAR_C[0], RADAR_C[1], Math.max(0, radarR - 160), RADAR_C[0], RADAR_C[1], radarR); gr.addColorStop(0, rgba(ACC, 0)); gr.addColorStop(1, rgba(ACC, 0.16)); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(RADAR_C[0], RADAR_C[1], radarR, 0, 7); ctx.fill(); ctx.restore(); }
   CUST.forEach((c) => {
-    const s = custState(t, c); if (s.a <= 0.01 || s.f <= 0) return;
-    const isQ = QUIET.includes(c.i), col = isQ ? mix(c.col, '#34323f', s.q) : c.col, hk = isQ ? ease.back(clamp((t - radarHitAt(c)) / 0.3)) : 0;
+    const s = custState(t, c); if (s.a <= 0.01 || !s.show) return;
+    if (s.neck && s.neck.w > 0.3) { const n = s.neck; ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineCap = 'round'; ctx.lineWidth = n.w; ctx.beginPath(); ctx.moveTo(n.x, n.y0); ctx.lineTo(n.x, n.y1); ctx.stroke(); ctx.restore(); }
+    const isQ = QUIET.includes(c.i), col = isQ ? hexMix(c.col, '#34323f', s.q) : c.col, hk = isQ ? ease.back(clamp((t - radarHitAt(c)) / 0.3)) : 0;
     ctx.save(); ctx.globalAlpha *= s.a * (isQ ? 1 - 0.35 * s.lv * (1 - s.fo) : 1);
     if (c.i === JORDAN && s.fo > 0) { scoreRing(t, s, hk); ctx.restore(); return; }
     if (s.f > 0.9) { const ph = ((t * 0.8 + hash(c.i) * 3) % 1.6) / 1.6, al = (1 - s.q) * (1 - ph) * 0.35 * (1 - (s.ab || 0)); if (al > 0.01) ring(s.x, s.y, s.r + ph * 26, rgba(c.col, al), 2.5); }
@@ -212,22 +230,23 @@ function sceneCard(t) {
   if (t < T.card || t > T.tiles + 0.02) return;
   const g = ringGeom(t), m = g.m;
   // the card grows out of the ring: same centre, circle → rounded rect
-  const from = [g.x - g.r, g.y - g.r, g.r * 2, g.r * 2], fold = K(t, T.reach - 0.05, T.reach + 0.6), cal = K(t, T.booking, T.booking + 0.8);
+  const ro = g.r + g.lw / 2 + 2, from = [g.x - ro, g.y - ro, ro * 2, ro * 2], fold = K(t, T.reach - 0.05, T.reach + 0.6), cal = K(t, T.booking, T.booking + 0.8);
   let rect = lr(lr(from, CARD0, m), [110, 380, 860, 160], fold); rect = lr(rect, CALR, cal);
-  panel(...rect, lerp(g.r, 28, m), clamp(m * 3));
+  const rad = Math.min(lerp(ro, 28, ease.out(m)), rect[2] / 2, rect[3] / 2); // starts as the ring's own circle, so nothing is cut
+  panel(...rect, rad, clamp(m * 3));
   const shift = lerp(0, 460 - ROWY(0), fold), ry0 = m < 1 ? g.y : ROWY(0) + shift;
   // everything inside is revealed by a circle that grows out of the ring, clipped to the panel; the calendar later wipes it out the same way
   const revR = lerp(0, 1100, K(t, T.card + 0.25, T.card + 1.05, ease.in)), calR = calRevealR(t);
-  ctx.save(); ctx.beginPath(); ctx.roundRect(...rect, 28); ctx.clip();
+  ctx.save(); ctx.beginPath(); ctx.roundRect(...rect, rad); ctx.clip();
   clipOutside(BLOCK_C[0], BLOCK_C[1], calR, () => {
     clipCircle(g.x, ry0, revR, () => {
       const hy = 560 + shift - 90 * fold; text('Client health', 160, hy, 34, 700, INK, 'left'); const lp = 0.5 + 0.5 * Math.sin(t * 5); circle(830, hy, 7, rgba(GRN, 0.5 + 0.5 * lp)); mono('LIVE', 848, hy + 1, 20, GRN, 'left', 700); ctx.fillStyle = LINE; ctx.fillRect(140, hy + 36, 800, 2);
       for (let i = 4; i >= 0; i--) row(t, i, shift);
     });
-    // Jordan's ring travels into row 1 (it never disappears), drawn on top of the rows
-    if (m > 0) { if (m < 1) circle(g.x, ry0, g.r - g.lw / 2 - 2, '#17141f'); arcRing(g.x, ry0, g.r, g.lw, 0.38, RD); text('38', g.x, ry0 + (m < 1 ? lerp(-6, 1, m) : 1), lerp(118, 24, m), 800, INK, 'center', 0); }
   });
   ctx.restore();
+  // Jordan's ring travels into row 1 (it never disappears), drawn on top and never clipped by the card
+  if (m > 0) clipOutside(BLOCK_C[0], BLOCK_C[1], calR, () => { if (m < 1) circle(g.x, ry0, g.r - g.lw / 2 - 2, '#17141f'); arcRing(g.x, ry0, g.r, g.lw, 0.38, RD); text('38', g.x, ry0 + (m < 1 ? lerp(-6, 1, m) : 1), lerp(118, 24, m), 800, INK, 'center', 0); });
 }
 function row(t, i, shift) {
   const [n, sub, sc, ci] = ROWS[i];
@@ -253,9 +272,9 @@ function flowPath() { // from the bottom of the AT RISK tag, down, curving to th
   if (FLOWP) return FLOWP; const w = RISK_W(), tx = 880 - 34 - 16 - w / 2, pts = [];
   for (let y = 478; y <= 540; y += 4) pts.push([tx, y]);
   for (let k = 1; k <= 40; k++) { const u = k / 40, a = 1 - u; pts.push([a * a * a * tx + 3 * a * a * u * tx + 3 * a * u * u * CX + u * u * u * CX, a * a * a * 540 + 3 * a * a * u * 600 + 3 * a * u * u * 580 + u * u * u * 650]); }
-  for (let y = 654; y <= 1060; y += 4) pts.push([CX, y]);
+  for (let y = 654; y <= 1130; y += 4) pts.push([CX, y]);
   const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
-  return (FLOWP = { pts, L, total: L[L.length - 1], at: (y) => L[pts.findIndex((p, i) => i > 50 && p[1] >= y)] });
+  return (FLOWP = { pts, L, total: L[L.length - 1], at: (y) => { const i = pts.findIndex((p, j) => j > 50 && p[1] >= y); return i < 0 ? L[L.length - 1] : L[i]; } });
 }
 function strokeSub(P, s0, s1) { ctx.beginPath(); let on = false; for (let i = 0; i < P.pts.length; i++) { if (P.L[i] < s0 || P.L[i] > s1) continue; on ? ctx.lineTo(...P.pts[i]) : ctx.moveTo(...P.pts[i]); on = true; } ctx.stroke(); }
 function pointAt(P, s) { const i = Math.max(0, P.L.findIndex((l) => l >= s)); return P.pts[i] || P.pts[P.pts.length - 1]; }
@@ -277,6 +296,7 @@ function sceneFlow(t) {
   if (out > 0) {
     const r = lr(lr([CX - 210, NODES[0][1] - 42, 420, 84], OUT_RECT, out), BLOCK, bk);
     ctx.save(); ctx.globalAlpha *= 1 - seg(bk, 0.75, 1); fillRR(...r, lerp(lerp(42, 34, out), 14, bk), mix('#1c1a26', '#5b54f0', Math.max(out, bk)));
+    { const nf = 1 - seg(out, 0, 0.45); if (nf > 0) clipRect(r, () => { ctx.save(); ctx.globalAlpha *= nf; strokeRR(...r, 42, rgba('#ffffff', 0.12), 2); circle(CX - 166, NODES[0][1], 20, rgba(ACC, 0.22)); mono('01', CX - 166, NODES[0][1] + 1, 18, ACC, 'center', 700); text(NODES[0][0], CX - 130, NODES[0][1] + 1, 30, 600, INK, 'left'); ctx.restore(); }); } // node 01's label hands over to the message
     if (bk < 0.3) clipRect(r, () => { const msg = ['Hey Jordan, we miss you! Want', 'your usual, Thursday at 10?'], n = Math.floor(seg(t, T.text + 0.3, T.text + 1.0) * 56); let left = n; msg.forEach((ln, j) => { const s = ln.slice(0, Math.max(0, left)); left -= ln.length; text(s, r[0] + 36, r[1] + 58 + j * 48, 31, 500, '#fff', 'left'); }); });
     const dk = seg(t, T.text + 0.9, T.text + 1.2) * (1 - bk * 3); if (dk > 0) { const mw = monoW('SMS · DELIVERED', 17); clipRect([r[0] + r[2] - 24 - mw * dk, r[1] + r[3] + 8, mw * dk, 36], () => mono('SMS · DELIVERED', r[0] + r[2] - 24, r[1] + r[3] + 26, 17, rgba('#ffffff', 0.5), 'right')); }
     ctx.restore();
@@ -327,7 +347,7 @@ function sceneTiles(t) {
   if (t < T.tiles - 0.1 || t > T.back + 0.5) return;
   const rs = tileRects(t), join = K(t, T.same, T.same + 0.7), flat = K(t, T.flat, T.flat + 0.7);
   if (flat > 0.98) return;
-  if (join >= 0.999) panel(...lr(CALR, [110, SY - 2, 860, 4], flat), lerp(28, 2, flat), 1, rgba(ACC, 0.25 * (1 - flat))); else rs.forEach((r) => panel(...r, 28, 1, join > 0.5 ? rgba(ACC, 0.2) : null));
+  if (join >= 0.999) panel(...lr(CALR, [110, SY - 2, 860, 4], flat), lerp(28, 2, flat), 1, rgba(ACC, 0.2 * (1 - flat))); else rs.forEach((r) => panel(...r, 28, 1, rgba(ACC, 0.2 * seg(join, 0.1, 0.9))));
   // the booking block (now a dot) splits into three seeds, one per tile
   const sk = K(t, T.tiles + 0.2, T.tiles + 0.6, ease.inOut), tg = seedTargets(rs);
   if (sk > 0 && sk < 1) tg.forEach(([x, y], i) => { const px = lerp(BLOCK_C[0], x, sk), py = lerp(BLOCK_C[1], y, sk) - Math.sin(sk * Math.PI) * 80; glow(px, py, 40, SEED_COL[i], 0.6); circle(px, py, 10, SEED_COL[i]); });
@@ -377,8 +397,18 @@ function sceneLine(t) {
     const gr = ctx.createLinearGradient(110, 0, 970, 0); gr.addColorStop(0, rgba(GRN, 0.15)); gr.addColorStop(0.5, rgba(GRN, 0.9)); gr.addColorStop(1, GRN);
     traceECG(t, E2, penX2, 110, gr, 5, 1, true); const py = SY + ecgY(E2, t), pk = ease.back(seg(t, T.back - 0.15, T.back + 0.2)); glow(penX2, py, 80, GRN, 0.35 * pk); circle(penX2, py, 12 * pk, '#eafff2');
     // Jordan's score rises out of the line, climbs back, then sinks back into it
-    const up = K(t, T.back + 0.2, T.back + 1.8, ease.out), v = Math.round(lerp(38, 86, up)), rise = K(t, T.back + 0.05, T.back + 0.6, ease.out) * (1 - K(t, T.logo - 0.6, T.logo - 0.05, ease.in));
-    if (rise > 0) clipRect([0, 0, W, SY - 16], () => { const dy = (1 - rise) * 460; ctx.save(); ctx.shadowColor = scoreCol(v); ctx.shadowBlur = 40; text(String(v), CX, 560 + dy, 170, 800, scoreCol(v), 'center', -0.04); ctx.restore(); mono('JORDAN · HEALTH SCORE', CX, 670 + dy, 22, DIMI, 'center'); });
+    // Jordan's score ring buds off the pen, floats up, climbs from 38 to 86, then returns into the pen before the logo
+    const out = K(t, T.back + 0.1, T.back + 0.75, ease.inOut) * (1 - K(t, T.logo - 0.65, T.logo - 0.08, ease.inOut));
+    if (out > 0) {
+      const up = K(t, T.back + 0.7, T.back + 1.9, ease.out), v = Math.round(lerp(38, 86, up)), col = scoreCol(v);
+      const x = lerp(penX2, CX, out), y = lerp(py, 560, out) - Math.sin(out * Math.PI) * 70, r = lerp(12 * pk, 130, out), lw = lerp(3, 16, out);
+      if (out < 0.25) { ctx.save(); ctx.strokeStyle = '#eafff2'; ctx.lineWidth = lerp(12, 0, out * 4); ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(penX2, py); ctx.lineTo(x, y); ctx.stroke(); ctx.restore(); } // the bud's neck
+      circle(x, y, r, '#17141f'); ring(x, y, r, rgba('#ffffff', 0.08 * out), lw); arcRing(x, y, r, lw, (v / 100) * seg(out, 0.4, 1), col, 'rgba(0,0,0,0)'); glow(x, y, r * 1.8, col, 0.18 * out);
+      const nr = K(t, T.back + 0.5, T.back + 0.85, ease.out) * (1 - K(t, T.logo - 0.95, T.logo - 0.7, ease.in));
+      if (nr > 0) clipCircle(x, y, r - lw / 2 - 2, () => { ctx.save(); ctx.shadowColor = col; ctx.shadowBlur = 30; text(String(v), x, y + 4 + (1 - nr) * r * 1.5, 96, 800, col, 'center', -0.04); ctx.restore(); });
+      const lk = K(t, T.back + 0.8, T.back + 1.15, ease.out) * (1 - K(t, T.logo - 1.2, T.logo - 0.95, ease.in)), lb = 'JORDAN · HEALTH SCORE', lwid = monoW(lb, 20) + 40;
+      growPill(lk, x, y + r, [x - lwid / 2, y + r + 26, lwid, 40], 'rgba(12,11,17,0.9)', rgba(col, 0.5), () => mono(lb, x, y + r + 47, 20, DIMI, 'center')); // the label grows out of the bottom of the ring
+    }
     return;
   }
   // 1) the line glides into the logo's centre-line, sweeping left to right (smootherstep per point, staggered along the line)
@@ -464,7 +494,7 @@ function scene(t) {
 // ── sound ────────────────────────────────────────────────────────────────────
 cue(0.15, 'swoosh', 0.4); [0, 1, 2, 3, 4, 5].forEach((k) => cue(T.title + k * 0.17, 'key', 0.3)); [0, 1, 2].forEach((k) => cue(T.title2 + k * 0.16, 'key', 0.3)); cue(T.collapse + 0.1, 'whoosh', 0.9); cue(T.dotEnd - 0.05, 'snap', 0.6);
 for (let b = 0; b < 12; b++) { const at = E1.start + (b + 0.345) / BEAT; if (at < T.cust) cue(at, 'beep', 0.55); }
-cue(T.cust, 'whoosh', 0.8); for (let i = 0; i < 6; i++) cue(T.cust + 0.5 + i * 0.07, 'tap', 0.3); cue(T.quiet + 0.1, 'swish', 0.4);
+cue(T.cust, 'swoosh', 0.6); for (let c = 4; c >= 0; c--) { cue(DEP(c), 'tap', 0.45); for (let r = 1; r < 4; r++) cue(DEP(c) + 0.22 + (r - 1) * 0.26 + 0.34, 'tap', 0.2); } cue(T.quiet + 0.1, 'swish', 0.4);
 cue(T.radar, 'transition', 0.7); QUIET.forEach((q) => cue(radarHitAt(CUST[q]), 'ding', 0.45)); cue(T.focus, 'whoosh', 0.7);
 for (let i = 0; i < 6; i++) cue(T.score + 0.12 + i * 0.16, 'key', 0.45); cue(T.card, 'swoosh', 0.7); for (let i = 1; i < 5; i++) cue(T.card + 0.55 + i * 0.08, 'tap', 0.35);
 cue(T.slips + 0.1, 'punch', 0.6); cue(T.reach, 'swoosh', 0.6); [0.5, 0.75, 1.0].forEach((f) => cue(T.reach + 0.6 + 1.3 * f - 0.05, 'tap', 0.55));
