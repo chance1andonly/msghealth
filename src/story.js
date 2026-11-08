@@ -313,7 +313,7 @@ function sceneBedroom(t) {
   founder(430, 1560, 820, { arm: 'down', look: hwk ? -0.6 : 0.9, mouth: churn && !hwk ? 'open' : t >= word(13, 0) && t < L(14) ? 'smile' : 'flat', bob: Math.sin(t * 2.2) * 4 });
   fillRR(30, 1190, 1020, 36, 10, '#8a6a4a'); fillRR(50, 1226, 980, 700, 0, '#6b4e36'); fillRR(50, 1226, 980, 14, 0, 'rgba(0,0,0,0.18)');
   // laptop (lid seen from behind) in front of him
-  fillRR(430 - 175, 1190 - 215, 350, 215, 16, '#c3c8d0'); strokeRR(430 - 175, 1190 - 215, 350, 215, 16, '#9aa0aa', 4); heartS(430, 1090, 46, C.primary); fillRR(430 - 190, 1180, 380, 14, 6, '#9aa0aa');
+  fillRR(430 - 175, 1190 - 215, 350, 215, 16, '#c3c8d0'); strokeRR(430 - 175, 1190 - 215, 350, 215, 16, '#9aa0aa', 4); if (LOGO) ctx.drawImage(LOGO, 430 - 40, 1082 - 40, 80, 80); fillRR(430 - 190, 1180, 380, 14, 6, '#9aa0aa');
   // monitor facing us
   const mx = 820, my = 860, mw = 320, mh = 220;
   fillRR(mx - 18, my + mh, 36, 1190 - my - mh, 4, '#3a3a46'); fillRR(mx - 80, 1176, 160, 16, 6, '#3a3a46');
