@@ -473,7 +473,7 @@ function sceneLogo(t) {
     const op = K(t, T.link, T.link + 0.55, ease.inOut), r = [ux, UY, total, lerp(7, 104, op)];
     ctx.save(); ctx.shadowColor = op > 0.2 ? ACC2 : '#6d66ff'; ctx.shadowBlur = lerp(18, 44, op); fillRR(...r, lerp(3.5, 26, op), mix('#6d66ff', '#4f46e5', op)); ctx.restore();
     if (op > 0) { ctx.save(); ctx.globalAlpha *= 0.9; fillRR(ux, UY, total, 7, 3.5, '#8f88ff'); ctx.restore(); } // the baseline stays on top as the link opens beneath it
-    if (op > 0.35) clipRect([ux, UY + 8, total, r[3] - 8], () => { const ty = seg(t, T.link + 0.25, T.link + 0.85), s2 = 'msghealth.net'; text(s2.slice(0, Math.ceil(s2.length * ty)), CX - tw(s2, 50, 800, -0.02) / 2, UY + 8 + 52, 50, 800, '#fff', 'left', -0.02); // typed from a fixed left edge, so the text doesn't re-centre with every letter });
+    if (op > 0.35) clipRect([ux, UY + 8, total, r[3] - 8], () => { const ty = seg(t, T.link + 0.25, T.link + 0.85), s2 = 'msghealth.net'; text(s2.slice(0, Math.ceil(s2.length * ty)), CX - tw(s2, 50, 800, -0.02) / 2, UY + 8 + 52, 50, 800, '#fff', 'left', -0.02); });
   }
 }
 
