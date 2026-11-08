@@ -221,11 +221,12 @@ function endCard(t, at, tapAt, urlAt) {
 }
 
 // ── boot: renderFrame, ready, text audit hook and the browser player ─────────
-// cfg: { duration, scenes: [[from, to, fn(t)]], brandAt, hideCaption(t, cap), after(t) (drawn over everything, under captions) }
+// cfg: { duration, scenes: [[from, to, fn(t)]], brandAt, hideCaption(t, cap), after(t) (drawn over everything, under captions),
+//        noVoice (no voiceover clips: the timeline in *-vo.js still drives the captions) }
 function boot(cfg, voDir) {
   const caps = buildCaps(cfg.brandAt);
   window.DURATION = cfg.duration;
-  window.VO = VO_AT.map((at, i) => ({ at, file: `assets/audio/${voDir}/vo-${String(i).padStart(2, '0')}.wav`, dur: VO_CLIPS[i].dur }));
+  window.VO = cfg.noVoice ? [] : VO_AT.map((at, i) => ({ at, file: `assets/audio/${voDir}/vo-${String(i).padStart(2, '0')}.wav`, dur: VO_CLIPS[i].dur }));
   window.renderFrame = (t) => {
     ctx = MAIN;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over'; ctx.shadowBlur = 0; ctx.shadowColor = 'transparent'; ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';

@@ -72,8 +72,13 @@ kinds.forEach((k, ki) => {
     fxIn.push(`[${k}d${i}]`);
   });
 });
-graph.push(`${voIn.join('')}amix=inputs=${voIn.length}:normalize=0:duration=longest,apad=whole_dur=${DUR},asplit=2[voice][key]`);
-graph.push(`[0:a][key]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=280:makeup=1[duck]`);
+if (voIn.length) {
+  graph.push(`${voIn.join('')}amix=inputs=${voIn.length}:normalize=0:duration=longest,apad=whole_dur=${DUR},asplit=2[voice][key]`);
+  graph.push(`[0:a][key]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=280:makeup=1[duck]`);
+} else { // no voiceover (it's recorded separately): music sits at a steady, voice-friendly level
+  graph.push(`[0:a]volume=${M.noVoice ? 0.5 : 1}[duck]`);
+  graph.push(`anullsrc=r=${SR}:cl=stereo,atrim=0:${DUR.toFixed(3)}[voice]`);
+}
 graph.push(`[duck][voice]${fxIn.join('')}amix=inputs=${2 + fxIn.length}:normalize=0:duration=first,alimiter=limit=0.89:level=disabled,afade=t=out:st=${(DUR - 0.6).toFixed(3)}:d=0.6,atrim=0:${DUR.toFixed(3)}[out]`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', ...inputs, '-filter_complex', graph.join(';'), '-map', '[out]', '-ac', '2', '-c:a', 'pcm_s16le', out], { stdio: 'inherit' });
 fs.rmSync(TMP, { recursive: true, force: true });
