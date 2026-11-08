@@ -347,7 +347,7 @@ function sceneTiles(t) {
   if (t < T.tiles - 0.1 || t > T.back + 0.5) return;
   const rs = tileRects(t), join = K(t, T.same, T.same + 0.7), flat = K(t, T.flat, T.flat + 0.7);
   if (flat > 0.98) return;
-  if (join >= 0.999) panel(...lr(CALR, [110, SY - 2, 860, 4], flat), lerp(28, 2, flat), 1, rgba(ACC, 0.2 * (1 - flat))); else rs.forEach((r) => panel(...r, 28, 1, rgba(ACC, 0.2 * seg(join, 0.1, 0.9))));
+  { const one = seg(join, 0.6, 0.95); if (one > 0) panel(...lr(CALR, [110, SY - 2, 860, 4], flat), lerp(28, 2, flat), one, rgba(ACC, 0.2 * (1 - flat))); if (join < 0.999) rs.forEach((r) => panel(...r, 28, 1 - seg(join, 0.8, 1), rgba(ACC, 0.2 * seg(join, 0.1, 0.9)))); } // the three tiles melt into one card
   // the booking block (now a dot) splits into three seeds, one per tile
   const sk = K(t, T.tiles + 0.2, T.tiles + 0.6, ease.inOut), tg = seedTargets(rs);
   if (sk > 0 && sk < 1) tg.forEach(([x, y], i) => { const px = lerp(BLOCK_C[0], x, sk), py = lerp(BLOCK_C[1], y, sk) - Math.sin(sk * Math.PI) * 80; glow(px, py, 40, SEED_COL[i], 0.6); circle(px, py, 10, SEED_COL[i]); });
@@ -480,7 +480,7 @@ function captions(t) {
 // ── 9 · the end: everything collapses back into the dot ─────────────────────
 function world(t, fn) { // camera: gentle push-ins; the final collapse scales the whole world into the centre
   const push = 0.1 * K(t, T.dotEnd, T.pulse, ease.inOut) * (1 - K(t, T.pulse + 0.2, T.pulse + 1.4)) + 0.05 * K(t, T.focus, T.focus + 1) * (1 - K(t, T.card, T.card + 1));
-  const end = K(t, T.end, T.endDone - 0.15, (u) => u * u * u), drift = Math.sin(t * 0.6) * 5;
+  const end = K(t, T.end, T.endDone - 0.15, (u) => u * u * u), drift = 0; // no idle drift: canvas text snaps to whole pixels, so a slow drift made type jitter by 1px
   const s = (1 + push) * (1 - end) + 0.0001;
   ctx.save(); ctx.translate(CX, SY + drift * (1 - end)); ctx.scale(s, s); ctx.translate(-CX, -SY); ctx.globalAlpha = 1 - seg(end, 0.7, 1); fn(); ctx.restore();
   if (t > T.endDone - 0.35) { const k = ease.back(seg(t, T.endDone - 0.35, T.endDone + 0.05)); glow(CX, SY, 110, '#ffffff', 0.3 * k); circle(CX, SY, 15 * k * (1 + 0.1 * Math.sin((t - T.endDone) * 4)), '#fff'); }
