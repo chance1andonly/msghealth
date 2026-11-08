@@ -55,7 +55,8 @@
     "render:smalltext": "ENTRY=smalltext.html node scripts/render.mjs",
     "render:brah": "ENTRY=brah.html node scripts/render.mjs",
     "render:polar": "ENTRY=polar.html node scripts/render.mjs",
-    "render:slowmo": "ENTRY=slowmo.html node scripts/render.mjs"
+    "render:slowmo": "ENTRY=slowmo.html node scripts/render.mjs",
+    "render:story": "ENTRY=story.html node scripts/render.mjs"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,255 @@
+{
+ "voice": "af_heart",
+ "speed": 1.04,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "My mom is a hairdresser, and a single mother of seven.",
+   "caps": [
+    "My mom is a *hairdresser,*",
+    "and a single mother of *seven.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Seven kids. One chair. Zero room for a slow week.",
+   "caps": [
+    "*Seven* kids.",
+    "*One* chair.",
+    "Zero room for a *slow week.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "That chair paid for food, clothes, and everything in between.",
+   "caps": [
+    "That chair paid for *food,*",
+    "*clothes,*",
+    "and *everything* in between."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Including seven pairs of shoes, which they all outgrow overnight.",
+   "caps": [
+    "Including *seven pairs of shoes,*",
+    "which they all",
+    "outgrow *overnight.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Then I noticed something. Some of her regulars were disappearing.",
+   "caps": [
+    "Then I noticed something.",
+    "Some of her regulars",
+    "were *disappearing.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Nobody complained. Nobody said goodbye. Life just got busy, and they drifted.",
+   "caps": [
+    "Nobody *complained.*",
+    "Nobody said *goodbye.*",
+    "Life got busy, and they *drifted.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "By the time she noticed, the chair had been empty for months.",
+   "caps": [
+    "By the time she noticed,",
+    "the chair had been",
+    "*empty* for months."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "The only thing still booking was dust.",
+   "caps": [
+    "The only thing still booking",
+    "was *dust.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And every one of those clients was money our family was counting on.",
+   "caps": [
+    "Every one of those clients",
+    "was money our family",
+    "was *counting on.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "So I looked at the tools that already existed. A separate subscription for everything. And each one wanted a kidney.",
+   "caps": [
+    "So I looked at the tools",
+    "out there. A separate",
+    "*subscription* for everything.",
+    "And each one wanted a *kidney.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "I have two. But I was kind of attached to them.",
+   "caps": [
+    "I have two.",
+    "But I was kind of *attached.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "That software was built for businesses with marketing budgets. Not for a mom with a chair.",
+   "caps": [
+    "Built for businesses",
+    "with *marketing budgets.*",
+    "Not for a *mom* with a *chair.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "What I did have was a love of building things. I got that from her.",
+   "caps": [
+    "What I did have was",
+    "a *love of building.*",
+    "I got that from *her.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So I built it myself. I was a sophomore in high school.",
+   "caps": [
+    "So I *built it myself.*",
+    "I was a *sophomore* in high school."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "My biggest problem that week was algebra. Now it was customer churn. And yes, the homework was still due.",
+   "caps": [
+    "Biggest problem that week:",
+    "*algebra.*",
+    "Now: *customer churn.*",
+    "And yes, the homework",
+    "was *still due.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And it worked. She could finally see who was slipping away, and win them back with one simple message.",
+   "caps": [
+    "And it *worked.*",
+    "She could finally see",
+    "who was *slipping away,*",
+    "and win them back",
+    "with *one message.*"
+   ],
+   "gap": 1.6
+  },
+  {
+   "say": "That's the name. Message Health.",
+   "caps": [
+    "That's the name.",
+    "*Message Health.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Every client relationship has a pulse. How often they book. How long since their last visit. Whether they still answer your texts.",
+   "caps": [
+    "Every relationship has a *pulse.*",
+    "How often they *book.*",
+    "How long since their *last visit.*",
+    "Whether they still",
+    "*answer your texts.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "When it fades, it happens quietly. No alarms. No dramatic hospital beep. Just silence.",
+   "caps": [
+    "When it fades, it happens *quietly.*",
+    "No alarms.",
+    "No dramatic hospital beep.",
+    "Just *silence.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "But the right message, at the right time, brings it right back. A simple, we miss you, beats any ad.",
+   "caps": [
+    "But the *right message,*",
+    "at the *right time,*",
+    "brings it right back.",
+    "A simple *“we miss you”*",
+    "beats any ad."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Then I realized this wasn't just about salons.",
+   "caps": [
+    "Then I realized this",
+    "wasn't just about *salons.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Barbers. Spas. Gyms. Cleaners. Even plumbers. Yes, the leak experts have a leak.",
+   "caps": [
+    "*Barbers.* *Spas.* *Gyms.*",
+    "*Cleaners.* Even *plumbers.*",
+    "Yes, the leak experts have a *leak.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Customers don't leave with a goodbye. They just stop coming back. Rude, honestly.",
+   "caps": [
+    "Customers don't leave",
+    "with a goodbye.",
+    "They just *stop coming back.*",
+    "Rude, honestly."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "So in twenty twenty-six, I opened Message Health to everyone.",
+   "caps": [
+    "So in *2026,*",
+    "I opened it to *everyone.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Every feature is still built for her. A hardworking owner, with no time to spare, who can't afford to lose a single client.",
+   "caps": [
+    "Every feature is still",
+    "built for *her.*",
+    "A hardworking owner,",
+    "with no time to spare,",
+    "who can't afford to lose",
+    "a *single client.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "If that sounds like you, Message Health was made for you too.",
+   "caps": [
+    "If that sounds like *you,*",
+    "Message Health was",
+    "made for *you too.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.2
+  }
+ ]
+}
