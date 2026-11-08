@@ -44,7 +44,8 @@ function chair(x, y, s, col = '#c0392b') {
 // The founder is drawn from the reference photo: short textured crop with a flat fringe and faded sides, thick straight
 // brows, dark brown eyes, short goatee, black tee, silver curb chain, small stud by the ear. Mom shares the rig.
 const FOUNDER = { skin: '#e2b08c', skinShade: '#cf9874', hair: '#3a2a20', hairHi: '#5a4332', shirt: '#16161b', pants: '#2b3040', shoes: '#22222a', style: 'crop', beard: true, chain: true, stud: true };
-const MOMLOOK = { skin: '#a86c48', skinShade: '#93593a', hair: '#1b1b1f', hairHi: '#34343c', shirt: '#7c6cf0', pants: '#2c3340', shoes: '#22222a', style: 'bun', apron: true, hoops: true };
+// Mom, from her reference photo: long layered hair swept to one side (brown now), fair skin with freckles, blue-grey eyes, arched brows.
+const MOMLOOK = { skin: '#f2d0b8', skinShade: '#e2b398', hair: '#5b3b27', hairHi: '#7d5638', shirt: '#7c6cf0', pants: '#2c3340', shoes: '#22222a', style: 'long', apron: true, iris: '#6f8e99', brow: '#6b4a32', lip: '#c98577', freckles: true };
 // o: arm 'down' | 'wave' | 'think' (hand at chin) | 'heart' (hand on chest); look -1..1 (pupils left/right); mouth 'smile' | 'open' | 'flat'; wave (phase)
 function hero(x, y, h, look, o = {}) {
   const L2 = { ...look, ...o }, s = h / 1000, arm = L2.arm ?? 'down', lk = clamp(L2.look ?? 0, -1, 1);
@@ -54,6 +55,7 @@ function hero(x, y, h, look, o = {}) {
   fillRR(-96, -480, 86, 460, 26, L2.pants); fillRR(10, -480, 86, 460, 26, L2.pants); fillRR(-112, -46, 108, 46, 20, L2.shoes); fillRR(4, -46, 108, 46, 20, L2.shoes);
   // back hair (bun / long) behind everything above the shoulders
   if (L2.style === 'bun') { circle(0, -1020, 52, L2.hair); fillRR(-108, -960, 216, 150, 60, L2.hair); }
+  if (L2.style === 'long') { fillRR(-132, -1000, 264, 380, 100, L2.hair); }
   // torso (tee) + sleeves
   fillRR(-150, -782, 300, 362, 64, L2.shirt);
   if (L2.apron) { fillRR(-120, -690, 240, 300, 26, '#3a3a46'); fillRR(-60, -560, 120, 70, 12, '#4a4a58'); line(-30, -575, -30, -520, '#d9dce1', 6); line(-14, -575, -14, -520, '#d9dce1', 4); line(-120, -690, -70, -775, '#3a3a46', 14); line(120, -690, 70, -775, '#3a3a46', 14); }
@@ -72,7 +74,7 @@ function hero(x, y, h, look, o = {}) {
   if (L2.chain) { ctx.lineCap = 'round'; ctx.strokeStyle = '#d6dae0'; ctx.lineWidth = 10; ctx.beginPath(); ctx.ellipse(0, -790, 56, 52, 0, 0.12 * Math.PI, 0.88 * Math.PI); ctx.stroke(); ctx.strokeStyle = '#8c929b'; ctx.lineWidth = 4; ctx.setLineDash([7, 7]); ctx.stroke(); ctx.setLineDash([]); }
   if (arm === 'think') circle(60, -790, 36, skin); // the hand sits in front of the neck, under the chin
   // ears (+ hoops / stud), head
-  ellipse(-97, -895, 17, 29, L2.skinShade); ellipse(97, -895, 17, 29, L2.skinShade);
+  if (L2.style !== 'long') { ellipse(-97, -895, 17, 29, L2.skinShade); ellipse(97, -895, 17, 29, L2.skinShade); }
   if (L2.hoops) { ring(-97, -858, 13, '#e2b23c', 5); ring(97, -858, 13, '#e2b23c', 5); }
   ctx.beginPath(); ctx.moveTo(-95, -915); ctx.arc(0, -915, 95, Math.PI, 0); ctx.bezierCurveTo(95, -862, 82, -832, 46, -812); ctx.quadraticCurveTo(0, -792, -46, -812); ctx.bezierCurveTo(-82, -832, -95, -862, -95, -915); ctx.closePath(); ctx.fillStyle = skin; ctx.fill();
   if (L2.stud) circle(-93, -893, 5, '#eef0f3');
@@ -84,21 +86,31 @@ function hero(x, y, h, look, o = {}) {
     ctx.lineTo(-90, -928); ctx.closePath(); ctx.fill();
     ellipse(-93, -918, 12, 24, rgba(L2.hair, 0.45)); ellipse(93, -918, 12, 24, rgba(L2.hair, 0.45)); // faded sides
     ctx.strokeStyle = L2.hairHi; ctx.lineWidth = 4; ctx.lineCap = 'round'; for (let i = 0; i < 9; i++) { const hx = -64 + i * 16, hy = -1004 + Math.abs(i - 4) * 5; line(hx, hy, hx + 4, hy + 12, rgba(L2.hairHi, 0.55), 3); }
+  } else if (L2.style === 'long') {
+    ctx.moveTo(-104, -880); ctx.lineTo(-104, -935); ctx.arc(0, -930, 104, Math.PI, Math.PI * 2); ctx.lineTo(104, -900); ctx.lineTo(80, -930); ctx.quadraticCurveTo(10, -975, -50, -975); ctx.quadraticCurveTo(-70, -972, -80, -950); ctx.quadraticCurveTo(-92, -920, -92, -890); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = L2.hair; [-1, 1].forEach((d) => { ctx.beginPath(); ctx.moveTo(d * 104, -930); ctx.quadraticCurveTo(d * 72, -860, d * 84, -760); ctx.quadraticCurveTo(d * 96, -690, d * 128, -640); ctx.quadraticCurveTo(d * 150, -700, d * 140, -800); ctx.quadraticCurveTo(d * 132, -900, d * 104, -930); ctx.closePath(); ctx.fill(); });
+    [-1, 1].forEach((d) => line(d * 110, -880, d * 122, -700, rgba(L2.hairHi, 0.6), 4));
   } else {
     ctx.moveTo(-100, -880); ctx.lineTo(-100, -935); ctx.arc(0, -928, 102, Math.PI * 1.01, Math.PI * 1.99); ctx.lineTo(100, -880); ctx.lineTo(86, -900); ctx.quadraticCurveTo(70, -965, 0, -968); ctx.quadraticCurveTo(-70, -965, -86, -900); ctx.closePath(); ctx.fill();
   }
   // brows, eyes
   const browY = L2.style === 'crop' ? -936 : -932, bw = L2.style === 'crop' ? 13 : 8;
-  poly([[-76, browY + 4], [-22, browY - 3], [-20, browY + bw - 3], [-75, browY + bw + 2]], L2.style === 'crop' ? '#2a1d17' : '#1b1b1f');
-  poly([[76, browY + 4], [22, browY - 3], [20, browY + bw - 3], [75, browY + bw + 2]], L2.style === 'crop' ? '#2a1d17' : '#1b1b1f');
+  if (L2.brow) { ctx.strokeStyle = L2.brow; ctx.lineWidth = 7; ctx.lineCap = 'round'; [-1, 1].forEach((d) => { ctx.beginPath(); ctx.moveTo(d * 20, -934); ctx.quadraticCurveTo(d * 52, -952, d * 76, -930); ctx.stroke(); }); }
+  else { poly([[-76, browY + 4], [-22, browY - 3], [-20, browY + bw - 3], [-75, browY + bw + 2]], L2.style === 'crop' ? '#2a1d17' : '#1b1b1f');
+    poly([[76, browY + 4], [22, browY - 3], [20, browY + bw - 3], [75, browY + bw + 2]], L2.style === 'crop' ? '#2a1d17' : '#1b1b1f'); }
   [-46, 46].forEach((ex) => {
-    ellipse(ex, -909, 21, 10, '#f6efe8'); circle(ex + lk * 7, -909, 9.5, '#3b2618'); circle(ex + lk * 7, -909, 4.5, '#0e0806'); circle(ex + lk * 7 + 3, -912, 2.2, '#fff');
+    ellipse(ex, -909, 21, 10, '#f6efe8'); circle(ex + lk * 7, -909, 9.5, L2.iris ?? '#3b2618'); circle(ex + lk * 7, -909, 4.5, '#0e0806'); circle(ex + lk * 7 + 3, -912, 2.2, '#fff');
     ctx.strokeStyle = '#2a1d17'; ctx.lineWidth = 4; ctx.beginPath(); ctx.ellipse(ex, -906, 23, 12, 0, Math.PI * 1.05, Math.PI * 1.95); ctx.stroke();
   });
+  if (L2.freckles) { for (let i = 0; i < 12; i++) { const fx = (i % 2 ? 1 : -1) * (16 + hash(i + 3) * 40), fy = -886 + hash(i + 11) * 20; circle(fx, fy, 2, 'rgba(170,100,70,0.3)'); } ellipse(-56, -872, 18, 9, 'rgba(230,140,130,0.12)'); ellipse(56, -872, 18, 9, 'rgba(230,140,130,0.12)'); }
+  if (L2.style === 'long') {
+    ctx.fillStyle = L2.hair; ctx.beginPath(); ctx.moveTo(-50, -982); ctx.quadraticCurveTo(60, -992, 106, -930); ctx.lineTo(106, -880); ctx.quadraticCurveTo(64, -935, -14, -952); ctx.quadraticCurveTo(-46, -958, -50, -982); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = rgba(L2.hairHi, 0.75); ctx.lineWidth = 4; ctx.lineCap = 'round'; [[-36, -972, 96, -905], [-10, -980, 102, -925], [-60, -985, 40, -985]].forEach(([a, b, c, d]) => { ctx.beginPath(); ctx.moveTo(a, b); ctx.quadraticCurveTo((a + c) / 2 + 10, (b + d) / 2 - 16, c, d); ctx.stroke(); });
+  }
   // nose
   ctx.strokeStyle = L2.skinShade; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(-6, -895); ctx.quadraticCurveTo(-14, -868, -2, -862); ctx.stroke(); ellipse(0, -861, 17, 6, rgba(L2.skinShade, 0.8));
   // mouth (+ facial hair)
-  const lip = L2.style === 'crop' ? '#c88473' : '#9a4f45';
+  const lip = L2.lip ?? (L2.style === 'crop' ? '#c88473' : '#9a4f45');
   if (L2.beard) { ellipse(0, -849, 28, 5, rgba(L2.hair, 0.25)); }
   if (L2.mouth === 'open') { ellipse(0, -831, 20, 13, '#6b2a2a'); ellipse(0, -825, 12, 5, '#c0646a'); }
   else if (L2.mouth === 'smile') { ctx.strokeStyle = '#7a3a34'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(-28, -838); ctx.quadraticCurveTo(0, -818, 28, -838); ctx.stroke(); ellipse(0, -826, 18, 4, rgba(lip, 0.9)); }
@@ -112,7 +124,7 @@ function hero(x, y, h, look, o = {}) {
 function founder(x, y, h, o = {}) { hero(x, y, h, FOUNDER, o); }
 function mom(x, y, h, o = {}) { hero(x, y, h, MOMLOOK, o); }
 function thinkBubble(x, y, a, s = '?') { if (a <= 0) return; xf(x, y, clamp(a), 0, () => { circle(x - 70, y + 92, 12, '#fff'); circle(x - 44, y + 62, 18, '#fff'); fillRR(x - 60, y - 60, 120, 110, 50, '#fff'); text(s, x, y - 2, 72, 800, '#7c6cf0', 'center', 0); }); }
-function kid(x, y, h, i) { person(x, y, h, 300 + i * 7, { skin: [SKIN[3], SKIN[2], SKIN[4]][i % 3], shirt: SHIRT[(i * 3) % SHIRT.length], pants: PANTS[i % PANTS.length], hair: HAIR[i % HAIR.length], mouth: 'open', bounce: 0 }); }
+function kid(x, y, h, i) { person(x, y, h, 300 + i * 7, { skin: ['#f2d0b8', '#e2b08c', '#ecc3a6'][i % 3], shirt: SHIRT[(i * 3) % SHIRT.length], pants: PANTS[i % PANTS.length], hair: ['#5b3b27', '#3a2a20', '#7a5236', '#4a3022'][i % 4], mouth: 'open', bounce: 0 }); }
 
 // ── 1 · mom, a chair, seven kids ─────────────────────────────────────────────
 function sceneSalon(t) {
