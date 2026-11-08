@@ -15,17 +15,25 @@ const T = {
   title: V[0], title2: word(0, 1), collapse: V[1] - 0.15, dot: V[1] + 1.0, watch: V[2], pulse: word(2, 1), biz: V[3], cust: word(3, 1),
   quiet: V[4], leave: word(4, 1), brand: V[5], score: V[6], live: word(6, 1), slips: V[7], reach: word(7, 1),
   text: V[8], reply: V[8] + 0.62, booking: word(8, 2), tiles: V[9], same: word(9, 1), back: V[10], gaps: V[11], cuts: word(11, 2),
-  keep: V[12], audit: word(12, 1), url: V[13],
+  url: V[12],
 };
 T.dotEnd = T.collapse + 1.15;                 // particles finish converging into the dot
 T.radar = T.brand; T.focus = T.brand + 0.85;  // radar sweep, then focus on Jordan
 T.card = T.live + 0.05;                       // ring → client-health card
 T.flat = T.back - 0.75;                       // tiles flatten into a line
 T.logo = T.gaps + 0.05;
-// the logo is pumped full by the heartbeat: each spike that scrolls under the logo raises the fill; two spikes fill it
-T.pumps = (() => { const out = []; for (let n = 0; n < 40 && out.length < 2; n++) { const R = T.back - 0.1 + (n + 0.345) / 1.3, a = R + (970 - 709) / 430, b = R + (970 - 371) / 430; if (a >= T.logo + 0.3) out.push([a, b]); } return out; })();
-T.logoDone = T.pumps[1][1] + 0.05; T.ul0 = T.logoDone - 0.15; T.ul1 = T.logoDone + 0.6; T.word = T.ul1 - 0.25;
-T.end = V[13] + 1.55; T.endDone = T.end + 1.1;
+// The logo is built by the heartbeat: every beat shoots a dot up into it. The beat speeds up exponentially while it builds
+// (≈1.3 → 14 beats a second), then settles back to its normal rate once the last dot has landed.
+T.b0 = T.logo + 0.35; T.b1 = T.b0 + 2.2; T.b2 = T.b1 + 0.55;
+const RATE_PEAK = 14;
+function rate2(t) { if (t < T.b0) return 1.3; if (t < T.b1) return 1.3 * Math.pow(RATE_PEAK / 1.3, seg(t, T.b0, T.b1)); if (t < T.b2) return 1.3 * Math.pow(RATE_PEAK / 1.3, 1 - ease.out(seg(t, T.b1, T.b2))); return 1.3; }
+const PH = (() => { const t0 = T.back - 0.1, dt = 1 / 480, n = Math.ceil(40 * 480), a = new Float64Array(n); for (let i = 1; i < n; i++) a[i] = a[i - 1] + rate2(t0 + i * dt) * dt; return { t0, dt, a }; })();
+const phase2 = (t) => { const x = (t - PH.t0) / PH.dt; if (x <= 0) return 0; const i = Math.min(PH.a.length - 2, Math.floor(x)); return lerp(PH.a[i], PH.a[i + 1], x - i); };
+const BEATS2 = (() => { const out = []; for (let i = 1; i < PH.a.length; i++) { const k = Math.floor(PH.a[i] - 0.345), k0 = Math.floor(PH.a[i - 1] - 0.345); if (k > k0) out.push(PH.t0 + i * PH.dt); } return out; })(); // R-peak times
+T.shots = BEATS2.filter((b) => b >= T.b0 && b < T.b1); // one dot per beat while building
+T.flight = 0.34; T.logoDone = T.shots[T.shots.length - 1] + T.flight + 0.25;
+T.ul0 = Math.max(T.logoDone + 0.05, T.b2 - 0.1); T.ul1 = T.ul0 + 0.65; T.word = T.ul1 - 0.25; T.link = Math.max(T.word + 0.75, T.url - 0.2);
+T.end = T.url + 1.9; T.endDone = T.end + 1.1;
 const DURATION = +(T.endDone + 1.1).toFixed(2);
 window.CUES = T; window.SFX = []; const cue = (t, kind, gain) => window.SFX.push({ t, kind, gain });
 window.MUSIC = { bpm: 96, root: 45, brandAt: T.brand, mood: 'sneaky', bed: false, fx: 0.5 };
@@ -116,7 +124,12 @@ function ecg(u) { u = ((u % 1) + 1) % 1; return -0.10 * g1(u, 0.16, 0.03) + 0.13
 const BEAT = 1.3; // beats per second
 const E1 = { start: T.pulse - 0.28, speed: 430, amp: 150 }, E2 = { start: T.back - 0.1, speed: 430, amp: 170 };
 const penX1 = (t) => lerp(CX, 760, K(t, T.pulse - 0.3, T.pulse + 0.7));
-function ecgY(E, ts) { if (ts < E.start) return 0; const ramp = clamp((ts - E.start) * 3); return ecg((ts - E.start) * BEAT) * E.amp * ramp; }
+// The second heartbeat changes speed, so it's drawn from its actual beat times: the QRS spike keeps a fixed width (as a real
+// one does) while the P and T waves squeeze in as the beats get closer together.
+function beatShape(dt, sc) { return -0.10 * g1(dt, -0.142 * sc, 0.023 * sc) + 0.13 * g1(dt, -0.027, 0.0077) - 1.0 * g1(dt, 0, 0.0085) + 0.34 * g1(dt, 0.031, 0.0092) - 0.24 * g1(dt, 0.196 * sc, 0.035 * sc); }
+function ecg2(ts) { let lo = 0, hi = BEATS2.length - 1; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (BEATS2[m] <= ts) lo = m; else hi = m - 1; }
+  let v = 0; for (let k = Math.max(0, lo - 1); k <= Math.min(BEATS2.length - 1, lo + 2); k++) { const p = (BEATS2[k + 1] ?? BEATS2[k] + 0.769) - (BEATS2[k - 1] ?? BEATS2[k] - 0.769), sc = Math.min(1, p / 2 / 0.769); v += beatShape(ts - BEATS2[k], sc); } return v; }
+function ecgY(E, ts) { if (ts < E.start) return 0; const ramp = clamp((ts - E.start) * 3); return (E === E2 ? ecg2(ts) : ecg((ts - E.start) * BEAT)) * E.amp * ramp; }
 function traceECG(t, E, penX, x0, col, lw, alpha, flatBefore = false) {
   ctx.save(); ctx.globalAlpha *= alpha; ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.shadowColor = col; ctx.shadowBlur = 18;
   ctx.beginPath(); let on = false;
@@ -156,6 +169,14 @@ const PAL = ['#6d66ff', '#e5568f', '#f08a3c', '#14b8a6', '#3b82f6', '#a855f7', '
 const INIT = ['PR', 'MT', 'AV', 'DL', 'SK', 'NO', 'EL', 'JO', 'RA', 'LI', 'KM', 'TS', 'BE', 'CH', 'ZA', 'OM', 'IV', 'HU', 'FE', 'GA'];
 const QUIET = [4, 7, 13, 16], JORDAN = 7;
 for (let i = 0; i < 20; i++) { const c = i % 5, r = Math.floor(i / 5); CUST.push({ i, x: CX + (c - 2) * 178, y: SY + (r - 1.5) * 178, col: PAL[i % PAL.length], ini: INIT[i] }); }
+// one of the customers is, for no stated reason, a duck. Nobody mentions it. (It turns up again in the calendar: "Gerald".)
+const DUCK = 18; CUST[DUCK].col = '#ffd23f'; CUST[DUCK].duck = true;
+function duckFace(x, y, r) {
+  ctx.save(); ctx.strokeStyle = '#e0a800'; ctx.lineWidth = Math.max(1.5, r * 0.06); ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x - r * 0.05, y - r * 0.78); ctx.quadraticCurveTo(x + r * 0.1, y - r * 1.05, x + r * 0.22, y - r * 0.86); ctx.stroke(); ctx.restore(); // a tuft
+  circle(x - r * 0.18, y - r * 0.2, r * 0.13, '#1b1b20'); circle(x - r * 0.14, y - r * 0.25, r * 0.045, '#fff');
+  ellipse(x + r * 0.34, y + r * 0.1, r * 0.36, r * 0.16, '#ff8a1f'); line(x + r * 0.04, y + r * 0.12, x + r * 0.62, y + r * 0.12, '#d96a00', Math.max(1, r * 0.035));
+  ellipse(x - r * 0.42, y + r * 0.2, r * 0.13, r * 0.08, 'rgba(255,120,80,0.35)');
+}
 const RADAR_C = [CUST[JORDAN].x, CUST[JORDAN].y + 28], RADAR_MAX = 1300;
 function custBase(t, c) {
   // first row: left behind by the pen; rows below: each drips out of the dot above it
@@ -199,7 +220,7 @@ function sceneCustomers(t) {
     if (s.f < 1) glow(s.x, s.y, s.r * 3, '#ffffff', 0.25 * (1 - s.f));
     if (s.ab > 0) glow(s.x, s.y, s.r * 2.5, c.col, 0.4 * s.ab);
     circle(s.x, s.y, s.r, s.f < 0.5 ? mix('#ffffff', col, s.f * 2) : col);
-    if (s.f > 0.6) { ctx.save(); ctx.globalAlpha *= seg(s.f, 0.6, 1) * (isQ ? 1 - 0.5 * s.q : 1) * (1 - (s.ab || 0)); text(c.ini, s.x, s.y + 1, s.r * 0.66, 700, '#fff', 'center', 0); ctx.restore(); }
+    if (s.f > 0.6) { ctx.save(); ctx.globalAlpha *= seg(s.f, 0.6, 1) * (isQ ? 1 - 0.5 * s.q : 1) * (1 - (s.ab || 0)); if (c.duck) duckFace(s.x, s.y, s.r); else text(c.ini, s.x, s.y + 1, s.r * 0.66, 700, '#fff', 'center', 0); ctx.restore(); }
     if (isQ && s.lv > 0 && hk < 1) { ctx.save(); ctx.setLineDash([8, 9]); ctx.lineDashOffset = -t * 20; ring(s.x, s.y, s.r + 10, rgba('#ffffff', 0.35 * s.lv * (1 - hk)), 2); ctx.restore(); }
     if (hk > 0) { ring(s.x, s.y, s.r + 10, rgba(RD, Math.min(1, hk)), 4); const bx = s.x + (s.r + 10) * 0.7071, by = s.y - (s.r + 10) * 0.7071; circle(bx, by, 13 * hk, RD); text('!', bx, by + 1, 18 * hk, 800, '#fff', 'center', 0); } // the badge grows out of the red ring
     ctx.restore();
@@ -330,6 +351,7 @@ function sceneChatCal(t) {
     HOURS.forEach((h, j) => { mono(h.padStart(2, '0'), 172, 575 + j * 120 + 22, 16, DIMI, 'center'); ctx.fillStyle = 'rgba(255,255,255,0.06)'; ctx.fillRect(200, 575 + j * 120, 750, 1.5); });
     for (let i = 0; i <= 5; i++) { ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fillRect(200 + i * 150, 575, 1.5, 600); }
     BUSY.forEach(([c, r]) => fillRR(206 + c * 150, 579 + r * 120, 138, 112, 14, 'rgba(255,255,255,0.07)'));
+    { const bx = 206 + 2 * 150 + 69, by = 579 + 4 * 120; circle(bx, by + 44, 26, '#ffd23f'); duckFace(bx, by + 44, 26); mono('GERALD', bx, by + 92, 15, 'rgba(255,255,255,0.55)', 'center', 700); } // the duck has an appointment
   });
   // the "booked" chip grows out of the block's check badge and settles in the header
   const ch = K(t, T.booking + 1.0, T.booking + 1.45, ease.inOut);
@@ -395,7 +417,6 @@ let MASK = null;
 const UY = 1128, WM_SIZE = 120;
 const wmWidth = () => tw('MsgHealth', WM_SIZE, 800, -0.04);
 const LOGO_TOP = LPX([0, 60])[1], LOGO_BOT = LPX([0, 432])[1];
-function fillLevel(t) { const u = seg(t, T.pumps[0][0], T.pumps[1][1]), sm = u * u * u * (u * (u * 6 - 15) + 10); return clamp(0.85 * sm + 0.15 * T.pumps.reduce((acc, [a, b]) => acc + 0.5 * ease.inOut(seg(t, a, b)), 0)); } // one continuous rise, nudged by each beat
 function sceneLine(t) {
   if (t < T.back - 0.2 || t > T.ul1) return;
   // the line: the flattened card, beating again. It sinks a little below the logo, keeps beating while the logo fills,
@@ -405,7 +426,7 @@ function sceneLine(t) {
   const col = hexMix(GRN, '#6d66ff', K(t, T.logo, T.ul1)), lw = lerp(5, 7, ul);
   const Y = (X) => { const ts = t - (penX2 - X) / E2.speed; return base + ecgY(E2, ts) * amp; }, MAPX = (X) => lerp(x0, x1, (X - 110) / 860);
   ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.shadowColor = col; ctx.shadowBlur = 18;
-  ctx.globalAlpha *= 1; ctx.beginPath(); for (let X = 110; X <= 970; X += 3) { const x = MAPX(X), y = Y(X); X === 110 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); ctx.restore();
+  ctx.globalAlpha *= 1; ctx.beginPath(); for (let X = 110; X <= 970; X += 2) { const x = MAPX(X), y = Y(X); X === 110 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); ctx.restore();
   // the pen at the right end; it grows out of the line's end, and is absorbed as the line becomes the underline
   const py = Y(970), pk = ease.back(seg(t, T.back - 0.15, T.back + 0.2)) * (1 - ul); if (pk > 0.01) { glow(x1, py, 80, col, 0.35 * pk); circle(x1, py, 12 * pk, '#eafff2'); }
     // Jordan's score ring buds off the pen, floats up, climbs from 38 to 86, then returns into the pen before the logo
@@ -420,39 +441,39 @@ function sceneLine(t) {
       const lk = K(t, T.back + 0.8, T.back + 1.15, ease.out) * (1 - K(t, T.logo - 1.2, T.logo - 0.95, ease.in)), lb = 'JORDAN · HEALTH SCORE', lwid = monoW(lb, 20) + 40;
       growPill(lk, x, y + r, [x - lwid / 2, y + r + 26, lwid, 40], 'rgba(12,11,17,0.9)', rgba(col, 0.5), () => mono(lb, x, y + r + 47, 20, DIMI, 'center')); // the label grows out of the bottom of the ring
     }
-  // the logo fills with each beat: a liquid level rises inside the real logo shape, its surface rippling as a spike passes under it
-  const lvl = fillLevel(t);
-  if (lvl > 0 && t < T.logoDone && LOGO) {
+  // every beat (while building) shoots a dot from the spike's tip up into the logo; where it lands it bursts open a disc of the real logo
+  if (t >= T.b0 - 0.05 && t < T.logoDone + 0.02 && LOGO) {
     if (!MASK) { MASK = document.createElement('canvas'); MASK.width = W; MASK.height = H; }
-    const mc = MASK.getContext('2d'); mc.setTransform(1, 0, 0, 1, 0, 0); mc.globalCompositeOperation = 'source-over'; mc.clearRect(0, 0, W, H);
-    const surf = lerp(LOGO_BOT + 20, LOGO_TOP - 40, lvl), surge = T.pumps.reduce((acc, [a, b]) => acc + Math.sin(Math.PI * seg(t, a, b)), 0), A = (3 + 7 * surge) * (1 - seg(lvl, 0.9, 1)), FE = 46;
-    const sy = (x) => surf + Math.sin(x * 0.012 + t * 4.0) * A + Math.sin(x * 0.027 - t * 2.6) * A * 0.4;
-    const fg = mc.createLinearGradient(0, surf - FE, 0, surf + FE * 0.6); fg.addColorStop(0, 'rgba(255,255,255,0)'); fg.addColorStop(1, '#fff'); // a soft, glowing surface rather than a hard cut
-    mc.beginPath(); mc.moveTo(0, H); for (let x = 0; x <= W; x += 6) mc.lineTo(x, sy(x) - FE); mc.lineTo(W, H); mc.closePath(); mc.fillStyle = fg; mc.fill();
-    const sz = 512 * LOGO_S; mc.globalCompositeOperation = 'source-in'; mc.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz);
-    mc.globalCompositeOperation = 'source-atop'; const lg = mc.createLinearGradient(0, surf - FE, 0, surf + 30); lg.addColorStop(0, 'rgba(210,206,255,0)'); lg.addColorStop(0.55, 'rgba(210,206,255,0.55)'); lg.addColorStop(1, 'rgba(210,206,255,0)'); mc.fillStyle = lg; mc.fillRect(0, surf - FE - 20, W, FE + 60); // a light band riding the surface
-    ctx.save(); ctx.shadowColor = rgba(ACC2, 0.6); ctx.shadowBlur = 24 * lvl; ctx.drawImage(MASK, 0, 0); ctx.restore();
+    const mc = MASK.getContext('2d'); mc.setTransform(1, 0, 0, 1, 0, 0); mc.globalCompositeOperation = 'source-over'; mc.clearRect(0, 0, W, H); let any = false;
+    T.shots.forEach((at, i) => { const land = at + T.flight, k = seg(t, land, land + 0.28); if (k <= 0) return; any = true; const [lx, ly] = SHOT_TGT[i]; mc.beginPath(); mc.arc(lx, ly, SHOT_R * ease.back(k), 0, Math.PI * 2); mc.fillStyle = '#fff'; mc.fill(); });
+    if (any) { const sz = 512 * LOGO_S; mc.globalCompositeOperation = 'source-in'; mc.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz); ctx.save(); ctx.shadowColor = rgba(ACC2, 0.6); ctx.shadowBlur = 24; ctx.drawImage(MASK, 0, 0); ctx.restore(); }
+    T.shots.forEach((at, i) => {
+      const f = seg(t, at, at + T.flight), land = at + T.flight, [lx, ly] = SHOT_TGT[i];
+      if (f > 0 && f < 1) { const u = ease.inOut(f), sx = x1, sy0 = base - E2.amp * amp, x = lerp(sx, lx, u), y = lerp(sy0, ly, u) - Math.sin(u * Math.PI) * 120; // the dot flies on an arc from the spike's tip
+        ctx.save(); ctx.strokeStyle = rgba('#c7c3ff', 0.35); ctx.lineWidth = 3; ctx.lineCap = 'round'; const pu = Math.max(0, u - 0.18), px = lerp(sx, lx, pu), pyy = lerp(sy0, ly, pu) - Math.sin(pu * Math.PI) * 120; ctx.beginPath(); ctx.moveTo(px, pyy); ctx.lineTo(x, y); ctx.stroke(); ctx.restore();
+        glow(x, y, 40, '#a5a0ff', 0.5); circle(x, y, 9, '#eef'); }
+      const r = seg(t, land, land + 0.35); if (r > 0 && r < 1) ring(lx, ly, 14 + r * 70, rgba('#c7c3ff', 0.6 * (1 - r)), 3); // a small ripple where it lands
+    });
   }
 }
+// where each dot lands: evenly along the logo's centre-line; each burst disc is big enough that together they cover every pixel of the logo
+const SHOT_TGT = (() => { const n = T.shots.length, pts = [...resample(LP.L, Math.max(2, Math.round(n * 0.5) + 1)).slice(0, -1), ...resample(LP.R, n - Math.round(n * 0.5))]; return pts.map(LPX); })();
+const SHOT_R = (() => { const len = (P) => P.slice(1).reduce((a, p, i) => a + Math.hypot(p[0] - P[i][0], p[1] - P[i][1]), 0), n = T.shots.length, sp = Math.max(len(LP.L) / Math.round(n * 0.5), len(LP.R) / Math.max(1, n - Math.round(n * 0.5) - 1)); return (34 + sp / 2 + 6) * LOGO_S; })();
 function sceneLogo(t) {
   if (t < T.logoDone - 0.01 || t > T.endDone) return;
   const sz = 512 * LOGO_S, png = t >= T.logoDone; // before this, sceneLine's mask shows the same image
   const pulse = 1 + 0.025 * Math.exp(-(t - T.logoDone) * 5) * Math.sin((t - T.logoDone) * 30) * (t > T.logoDone ? 1 : 0);
   if (png) { glow(LOGO_C[0], LOGO_C[1], 420, ACC2, 0.22 * ease.out(seg(t, T.logoDone, T.logoDone + 0.6))); ctx.save(); ctx.shadowColor = rgba(ACC2, 0.6); ctx.shadowBlur = 24; xf(LOGO_C[0], LOGO_C[1], pulse, 0, () => { if (LOGO) ctx.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz); }); ctx.restore(); }
-  // the wordmark rises out of the underline (which was the heartbeat line); the underline becomes the button
-  const total = wmWidth(), ux = CX - total / 2, b = K(t, T.keep - 0.1, T.keep + 0.5, ease.inOut);
+  // the wordmark rises out of the baseline (which was the heartbeat line); then the baseline opens downward into the website link
+  const total = wmWidth(), ux = CX - total / 2;
   let x = ux; const yb = 1060;
   for (let i = 0; i < 9; i++) { const ch = 'MsgHealth'[i], cw = tw(ch, WM_SIZE, 800, -0.04), k = ease.out(seg(t, T.word + i * 0.04, T.word + 0.32 + i * 0.04)); if (k > 0) clipRect([0, yb - 110, W, UY - 4 - (yb - 110)], () => text(ch, x + cw / 2, yb + (1 - k) * 140, WM_SIZE, 800, INK, 'center', -0.04)); x += cw; }
   if (t >= T.ul1) {
-    const r = lr([ux, UY, total, 7], [230, 1150, 620, 116], b);
-    ctx.save(); if (b > 0.3) { ctx.shadowColor = ACC2; ctx.shadowBlur = 50 * b; } else { ctx.shadowColor = '#6d66ff'; ctx.shadowBlur = 18; } fillRR(...r, lerp(3.5, 58, b), mix('#6d66ff', '#4f46e5', b)); ctx.restore();
-    const tk = K(t, T.keep + 0.25, T.keep + 0.65, ease.out); if (tk > 0) clipRect([CX - 310 * tk, 1150, 620 * tk, 116], () => text('Comment “KEEP”', CX, 1150 + 59, 46, 800, '#fff', 'center'));
+    const op = K(t, T.link, T.link + 0.55, ease.inOut), r = [ux, UY, total, lerp(7, 104, op)];
+    ctx.save(); ctx.shadowColor = op > 0.2 ? ACC2 : '#6d66ff'; ctx.shadowBlur = lerp(18, 44, op); fillRR(...r, lerp(3.5, 26, op), mix('#6d66ff', '#4f46e5', op)); ctx.restore();
+    if (op > 0) { ctx.save(); ctx.globalAlpha *= 0.9; fillRR(ux, UY, total, 7, 3.5, '#8f88ff'); ctx.restore(); } // the baseline stays on top as the link opens beneath it
+    if (op > 0.35) clipRect([ux, UY + 8, total, r[3] - 8], () => { const ty = seg(t, T.link + 0.25, T.link + 0.85), s2 = 'msghealth.net'; text(s2.slice(0, Math.ceil(s2.length * ty)), CX, UY + 8 + 52, 50, 800, '#fff', 'center', -0.02); });
   }
-  // the offer tag grows out of the bottom of the button, then shrinks into the caret that types the URL
-  const s = 'FREE RETENTION AUDIT', w = monoW(s, 22, 700) + 50, tagR = [CX - w / 2, 1290, w, 46], g = K(t, T.audit, T.audit + 0.4, ease.out), toC = K(t, T.url - 0.35, T.url - 0.02, ease.inOut);
-  const url = 'msghealth.net', uw = monoW(url, 42, 700, 0.02), ux0 = CX - uw / 2, ty = seg(t, T.url, T.url + 0.7), typed = url.slice(0, Math.ceil(url.length * ty)), cx = ux0 + monoW(typed, 42, 700, 0.02) + 6;
-  if (g > 0 && toC < 1) { const r = lr(lr([CX - 3, 1266, 6, 6], tagR, g), [ux0 - 4, 1294, 6, 44], toC); fillRR(...r, Math.min(r[2], r[3]) / 2, mix('#16302a', ACC, toC)); strokeRR(...r, Math.min(r[2], r[3]) / 2, rgba(GRN, 0.6 * (1 - toC)), 1.5); if (g > 0.4 && toC < 0.3) clipRect(r, () => mono(s, CX, 1314, 22, '#bdf5d3', 'center', 700)); }
-  if (toC >= 1) { mono(typed, ux0, 1316, 42, ACC, 'left', 700, 0.02); const soft = ty < 1 ? 1 : 0.55 + 0.45 * (0.5 + 0.5 * Math.cos((t - T.url - 0.7) * 6)); ctx.save(); ctx.globalAlpha *= soft; fillRR(cx, 1294, 6, 44, 3, ACC); ctx.restore(); }
 }
 
 // ── 8 · HUD + captions ───────────────────────────────────────────────────────
@@ -491,19 +512,15 @@ function scene(t) {
 }
 
 // ── sound ────────────────────────────────────────────────────────────────────
-cue(0.15, 'swoosh', 0.4); [0, 1, 2, 3, 4, 5].forEach((k) => cue(T.title + k * 0.17, 'key', 0.3)); [0, 1, 2].forEach((k) => cue(T.title2 + k * 0.16, 'key', 0.3)); cue(T.collapse + 0.1, 'whoosh', 0.9); cue(T.dotEnd - 0.05, 'snap', 0.6);
-for (let b = 0; b < 12; b++) { const at = E1.start + (b + 0.345) / BEAT; if (at < T.cust) cue(at, 'beep', 0.55); }
-cue(T.cust, 'swoosh', 0.6); for (let c = 4; c >= 0; c--) { cue(DEP(c), 'tap', 0.45); for (let r = 1; r < 4; r++) cue(DEP(c) + 0.22 + (r - 1) * 0.26 + 0.34, 'tap', 0.2); } cue(T.quiet + 0.1, 'swish', 0.4);
-cue(T.radar, 'transition', 0.7); QUIET.forEach((q) => cue(radarHitAt(CUST[q]), 'ding', 0.45)); cue(T.focus, 'whoosh', 0.7);
-for (let i = 0; i < 6; i++) cue(T.score + 0.12 + i * 0.16, 'key', 0.45); cue(T.card, 'swoosh', 0.7); for (let i = 1; i < 5; i++) cue(T.card + 0.55 + i * 0.08, 'tap', 0.35);
-cue(T.slips + 0.1, 'punch', 0.6); cue(T.reach, 'swoosh', 0.6); [0.5, 0.75, 1.0].forEach((f) => cue(T.reach + 0.6 + 1.3 * f - 0.05, 'tap', 0.55));
-cue(T.text, 'notification', 0.7); cue(T.reply, 'notification', 0.7); cue(T.booking + 0.1, 'swoosh', 0.6); cue(T.booking + 0.78, 'ding', 0.7);
-cue(T.tiles, 'whoosh', 0.6); for (let i = 0; i < 5; i++) cue(T.tiles + 0.25 + i * 0.1, 'tap', 0.35); cue(T.tiles + 1.6, 'ding', 0.6);
-cue(T.same, 'swoosh', 0.5); cue(T.flat, 'whoosh', 0.7);
-for (let b = 0; b < 14; b++) { const at = E2.start + (b + 0.345) / BEAT; if (at < T.ul0) cue(at, 'beep', 0.55); }
-T.pumps.forEach(([a, b]) => cue(a + 0.1, 'swoosh', 0.45)); cue(T.logoDone - 0.1, 'transitionHit', 0.8); for (let i = 0; i < 9; i++) cue(T.word + i * 0.04, 'key', 0.25);
-cue(T.keep, 'swoosh', 0.6); cue(T.audit, 'tap', 0.6); for (let i = 0; i < 13; i++) cue(T.url + i * 0.054, 'key', 0.3); cue(T.end, 'whoosh', 0.8); cue(T.endDone - 0.1, 'snap', 0.6);
-
+cue(0.15, 'swoosh', 0.35); cue(T.collapse + 0.1, 'whoosh', 0.7); cue(T.dotEnd - 0.05, 'snap', 0.45);
+for (let b = 0; b < 12; b++) { const at = E1.start + (b + 0.345) / BEAT; if (at < T.cust) cue(at, 'beep', 0.35); }
+cue(T.cust, 'swoosh', 0.45); cue(T.quiet + 0.1, 'swish', 0.3);
+cue(T.radar, 'transition', 0.55); cue(T.focus, 'whoosh', 0.5);
+cue(T.card, 'swoosh', 0.5); cue(T.slips + 0.1, 'punch', 0.45); cue(T.reach, 'swoosh', 0.45);
+cue(T.text, 'notification', 0.55); cue(T.reply, 'notification', 0.55); cue(T.booking + 0.78, 'ding', 0.5);
+cue(T.tiles, 'whoosh', 0.45); cue(T.same, 'swoosh', 0.35); cue(T.flat, 'whoosh', 0.5);
+BEATS2.forEach((b) => { if (b < T.b0) cue(b, 'beep', 0.35); else if (b < T.b2) cue(b, 'thump', 0.75); }); // boom, boom, boom… faster and faster while the logo builds
+cue(T.logoDone - 0.05, 'transitionHit', 0.6); cue(T.link, 'swoosh', 0.45); cue(T.end, 'whoosh', 0.6); cue(T.endDone - 0.1, 'snap', 0.45);
 // ── boot: renderFrame (with sub-frame motion blur when rendering), ready, player ─
 (() => {
   window.DURATION = DURATION;

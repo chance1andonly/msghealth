@@ -96,15 +96,7 @@
     "No lost customers.",
     "No *cuts.*"
    ],
-   "gap": 1.0
-  },
-  {
-   "say": "Comment keep, for a free retention audit.",
-   "caps": [
-    "Comment *KEEP*",
-    "for a *free retention audit.*"
-   ],
-   "gap": 0.5
+   "gap": 1.6
   },
   {
    "say": "Message Health dot net.",
