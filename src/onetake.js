@@ -357,16 +357,21 @@ function sceneTiles(t) {
 
 // ── 7 · the pulse comes back → the logo ──────────────────────────────────────
 const LOGO_S = 1.08, LOGO_C = [CX, 730];
-const LP = { L: [[101, 82], [236, 251], [100, 389], [101, 82]], R: [[252, 301], [397, 105], [399, 410], [326, 328]] }; // stroke trace of assets/logo.png (512-unit box)
+// The logo's centre-line (512-unit box of assets/logo.png): a closed loop for the left shape, one path for the right.
+// Every pixel of the logo lies within 34 units of it, so a stroke of this path 76 units wide, used as a mask over the real
+// logo image, reveals the whole logo exactly — the line "inflates" into the true shape, no approximation is left on screen.
+const LP = { L: [[100, 75], [233, 236], [99, 403], [100, 75]], R: [[245, 311], [398, 100], [401, 363], [394, 423], [309, 299]] };
 function resample(pts, n) { const seglen = []; let tot = 0; for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seglen.push(d); tot += d; } const out = []; for (let k = 0; k < n; k++) { let d = (k / (n - 1)) * tot, i = 0; while (i < seglen.length - 1 && d > seglen[i]) { d -= seglen[i]; i++; } const f = seglen[i] ? d / seglen[i] : 0; out.push([lerp(pts[i][0], pts[i + 1][0], f), lerp(pts[i][1], pts[i + 1][1], f)]); } return out; }
-const NL = 120, NR = 120;
+const NL = 160, NR = 160, MASK_W = 76;
 const LPX = ([x, y]) => [LOGO_C[0] + (x - 256) * LOGO_S, LOGO_C[1] + (y - 256) * LOGO_S];
 const TGT = [...resample(LP.L, NL), ...resample(LP.R, NR)].map(LPX);
 const penX2 = 970;
-function srcTrace(t) { const pts = []; for (let k = 0; k < NL + NR; k++) { const x = lerp(110, 970, k / (NL + NR - 1)); const ts = t - (penX2 - x) / E2.speed; pts.push([x, SY + ecgY(E2, ts)]); } return pts; }
+let SRC = null; // the heartbeat at the moment it starts to form the logo, resampled evenly along its length
+function srcTrace() { if (SRC) return SRC; const pts = []; for (let x = 110; x <= 970; x += 2) { const ts = T.logo - (penX2 - x) / E2.speed; pts.push([x, SY + ecgY(E2, ts)]); } return (SRC = resample(pts, NL + NR)); }
+let MASK = null;
 function sceneLine(t) {
-  if (t < T.back - 0.2 || t > T.logoDone + 0.4) return;
-  const m = K(t, T.logo, T.logoDone - 0.1, ease.inOut), colA = mix(GRN, ACC2, m);
+  if (t < T.back - 0.2 || t > T.logoDone + 0.05) return;
+  const m = K(t, T.logo, T.logo + 1.0, (u) => u);
   if (m <= 0) {
     // the flattened card is now the baseline; the pen grows out of its right end and the pulse comes back
     const gr = ctx.createLinearGradient(110, 0, 970, 0); gr.addColorStop(0, rgba(GRN, 0.15)); gr.addColorStop(0.5, rgba(GRN, 0.9)); gr.addColorStop(1, GRN);
@@ -376,20 +381,33 @@ function sceneLine(t) {
     if (rise > 0) clipRect([0, 0, W, SY - 16], () => { const dy = (1 - rise) * 460; ctx.save(); ctx.shadowColor = scoreCol(v); ctx.shadowBlur = 40; text(String(v), CX, 560 + dy, 170, 800, scoreCol(v), 'center', -0.04); ctx.restore(); mono('JORDAN · HEALTH SCORE', CX, 670 + dy, 22, DIMI, 'center'); });
     return;
   }
-  const src = srcTrace(T.logo), lw = lerp(5, 62.3 * LOGO_S, ease.in(m)), fadeOut = seg(t, T.logoDone - 0.25, T.logoDone + 0.1);
-  const P = src.map((p, k) => { const st = (k / src.length) * 0.25, f = ease.inOut(clamp((m - st) / 0.75)); return [lerp(p[0], TGT[k][0], f), lerp(p[1], TGT[k][1], f)]; });
-  ctx.save(); ctx.globalAlpha *= 1 - fadeOut; ctx.strokeStyle = colA; ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.shadowColor = colA; ctx.shadowBlur = 30;
-  const path = (a, b) => { ctx.beginPath(); P.slice(a, b).forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke(); };
-  path(0, NL); path(NL, NL + NR);
-  if (m < 0.6) { ctx.globalAlpha *= 1 - m / 0.6; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(...P[NL - 1]); ctx.lineTo(...P[NL]); ctx.stroke(); }
+  // 1) the line glides into the logo's centre-line, sweeping left to right (smootherstep per point, staggered along the line)
+  const src = srcTrace(), sm = (u) => u * u * u * (u * (u * 6 - 15) + 10), N = NL + NR;
+  const P = src.map((p, k) => { const st = (k / N) * 0.5, f = sm(clamp((m - st) / 0.5)); return [lerp(p[0], TGT[k][0], f), lerp(p[1], TGT[k][1], f)]; }); // the line peels off left to right and winds into the logo
+  const inf = K(t, T.logo + 0.85, T.logoDone, ease.inOut), col = hexMix(GRN, '#8f88ff', clamp(m * 1.4));
+  // 2) then it inflates: a widening stroke of the centre-line masks the real logo image
+  if (inf > 0 && LOGO) {
+    if (!MASK) { MASK = document.createElement('canvas'); MASK.width = W; MASK.height = H; }
+    const mc = MASK.getContext('2d'); mc.setTransform(1, 0, 0, 1, 0, 0); mc.globalCompositeOperation = 'source-over'; mc.clearRect(0, 0, W, H);
+    mc.strokeStyle = '#fff'; mc.lineWidth = lerp(6, MASK_W, inf) * LOGO_S; mc.lineJoin = 'round'; mc.lineCap = 'round';
+    [TGT.slice(0, NL), TGT.slice(NL)].forEach((seg2) => { mc.beginPath(); seg2.forEach(([x, y], i) => (i ? mc.lineTo(x, y) : mc.moveTo(x, y))); mc.stroke(); });
+    mc.globalCompositeOperation = 'source-in'; const sz = 512 * LOGO_S; mc.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz);
+    ctx.save(); ctx.shadowColor = rgba(ACC2, 0.6); ctx.shadowBlur = 24 * inf; ctx.drawImage(MASK, 0, 0); ctx.restore(); // drawn under the same camera transform as everything else
+  }
+  const la = 1 - seg(inf, 0.15, 0.6); if (la <= 0) return;
+  ctx.save(); ctx.globalAlpha *= la; ctx.strokeStyle = col; ctx.lineWidth = lerp(5, 8, clamp(m * 1.5)); ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.shadowColor = col; ctx.shadowBlur = 24;
+  const path = (a2, b2) => { ctx.beginPath(); P.slice(a2, b2).forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke(); };
+  path(0, NL); path(NL, N);
+  { const pr = 12 * (1 - seg(m, 0.55, 1)); if (pr > 0.3) { glow(...P[N - 1], 70, col, 0.3); circle(...P[N - 1], pr, '#eef'); } } // the pen rides the end of the line in
+  const bridge = 1 - seg(m, 0.25, 0.75); if (bridge > 0) { ctx.globalAlpha *= bridge; ctx.beginPath(); ctx.moveTo(...P[NL - 1]); ctx.lineTo(...P[NL]); ctx.stroke(); } // the bit of line between the two shapes lets go
   ctx.restore();
 }
 const DROP = LPX([392, 412]); // the bottom of the logo's right stroke
 function sceneLogo(t) {
-  if (t < T.logoDone - 0.3 || t > T.endDone) return;
-  const a = seg(t, T.logoDone - 0.3, T.logoDone + 0.1), sz = 512 * LOGO_S;
+  if (t < T.word || t > T.endDone) return;
+  const sz = 512 * LOGO_S, png = t >= T.logoDone; // before this, sceneLine's mask shows the same image
   const pulse = 1 + 0.025 * Math.exp(-(t - T.logoDone) * 5) * Math.sin((t - T.logoDone) * 30) * (t > T.logoDone ? 1 : 0);
-  ctx.save(); ctx.globalAlpha *= a; glow(LOGO_C[0], LOGO_C[1], 420, ACC2, 0.35); xf(LOGO_C[0], LOGO_C[1], pulse, 0, () => { if (LOGO) ctx.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz); }); ctx.restore();
+  if (png) { glow(LOGO_C[0], LOGO_C[1], 420, ACC2, 0.22 * ease.out(seg(t, T.logoDone, T.logoDone + 0.6))); ctx.save(); ctx.shadowColor = rgba(ACC2, 0.6); ctx.shadowBlur = 24; xf(LOGO_C[0], LOGO_C[1], pulse, 0, () => { if (LOGO) ctx.drawImage(LOGO, LOGO_C[0] - sz / 2, LOGO_C[1] - sz / 2, sz, sz); }); ctx.restore(); }
   // a drop falls from the logo, lands, and spreads into the underline; the wordmark rises out of the underline
   const wm = 'MsgHealth', size = 120; font(size, 800, -0.04); const total = ctx.measureText(wm).width, ux = CX - total / 2, UY = 1128;
   const fall = seg(t, T.word, T.word + 0.32), spread = K(t, T.word + 0.3, T.word + 0.7, ease.out), b = K(t, T.keep - 0.1, T.keep + 0.5, ease.inOut);
