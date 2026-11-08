@@ -55,7 +55,9 @@
     "render:smalltext": "ENTRY=smalltext.html node scripts/render.mjs",
     "render:brah": "ENTRY=brah.html node scripts/render.mjs",
     "render:polar": "ENTRY=polar.html node scripts/render.mjs",
-    "render:slowmo": "ENTRY=slowmo.html node scripts/render.mjs"
+    "render:slowmo": "ENTRY=slowmo.html node scripts/render.mjs",
+    "render:wald": "ENTRY=wald.html node scripts/render.mjs",
+    "audit:wald": "ENTRY=wald.html node scripts/audit-text.mjs 0.1"
   },
   "repository": {
     "type": "git",

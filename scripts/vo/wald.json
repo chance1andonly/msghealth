@@ -1,0 +1,20 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  { "say": "In World War Two, they studied bullet holes in returning bombers.", "caps": ["In *World War Two,*", "they studied *bullet holes*", "in returning *bombers.*"], "gap": 0.45 },
+  { "say": "The holes were on the wings and the body. Almost none on the engines.", "caps": ["Holes on the *wings* and *body.*", "Almost none on the *engines.*"], "gap": 0.45 },
+  { "say": "So the generals said, add armor where the holes are.", "caps": ["So the generals said,", "add *armor* where the *holes* are."], "gap": 0.45 },
+  { "say": "But a mathematician named Abraham Wald said, no.", "caps": ["But mathematician *Abraham Wald*", "said *no.*"], "gap": 0.5 },
+  { "say": "Armor the engines. Those planes never came back.", "caps": ["*Armor the engines.*", "Those planes *never came back.*"], "gap": 0.7 },
+  { "say": "The damage you can see isn't the real problem.", "caps": ["The damage you *can see*", "isn't the *real problem.*"], "gap": 0.5 },
+  { "say": "Customers who quietly leave never say a word.", "caps": ["Customers who *quietly leave*", "never *say a word.*"], "gap": 0.6 },
+  { "say": "Message Health shows who's going quiet, before they leave.", "caps": ["*MsgHealth* shows who's", "going *quiet* before *they leave.*"], "gap": 0.4 },
+  { "say": "Every client gets a health score. Slipping ones get flagged.", "caps": ["Every client gets a *health score.*", "Slipping ones get *flagged.*"], "gap": 0.4 },
+  { "say": "Then a text or email goes out to win them back.", "caps": ["Then a *text* or *email* goes out", "to *win them back.*"], "gap": 0.6 },
+  { "say": "Want to see who's slipping away?", "caps": ["Want to see who's *slipping away?*"], "gap": 0.35 },
+  { "say": "Comment keep, for a free retention audit.", "caps": ["Comment *KEEP* for a", "*free retention audit.*"], "gap": 0.4 },
+  { "say": "Message Health dot net.", "caps": ["*msghealth.net*"], "gap": 0.3 }
+ ]
+}
