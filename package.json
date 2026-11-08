@@ -65,7 +65,8 @@
     "render:belville": "ENTRY=belville.html node scripts/render.mjs",
     "audit:belville": "ENTRY=belville.html node scripts/audit-text.mjs 0.1",
     "render:plates": "ENTRY=plates.html node scripts/render.mjs",
-    "audit:plates": "ENTRY=plates.html node scripts/audit-text.mjs 0.1"
+    "audit:plates": "ENTRY=plates.html node scripts/audit-text.mjs 0.1",
+    "render:onetake": "ENTRY=onetake.html node scripts/render.mjs"
   },
   "repository": {
     "type": "git",

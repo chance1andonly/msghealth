@@ -1,0 +1,117 @@
+{
+ "voice": "af_heart",
+ "speed": 1.0,
+ "start": 0.4,
+ "lines": [
+  {
+   "say": "Try to spot a single cut in this video.",
+   "caps": [
+    "Try to spot a single *cut*",
+    "in this video."
+   ],
+   "gap": 0.7
+  },
+  {
+   "say": "You won't find one.",
+   "caps": [
+    "You won't find one."
+   ],
+   "gap": 1.1
+  },
+  {
+   "say": "Watch the dot. It has a pulse.",
+   "caps": [
+    "Watch the dot.",
+    "It has a *pulse.*"
+   ],
+   "gap": 1.3
+  },
+  {
+   "say": "Every business has one. Your customers.",
+   "caps": [
+    "Every business has one.",
+    "Your *customers.*"
+   ],
+   "gap": 1.0
+  },
+  {
+   "say": "Some go quiet, long before they leave.",
+   "caps": [
+    "Some go *quiet,*",
+    "long before they *leave.*"
+   ],
+   "gap": 0.9
+  },
+  {
+   "say": "Message Health catches it.",
+   "caps": [
+    "*MsgHealth* catches it."
+   ],
+   "gap": 0.8
+  },
+  {
+   "say": "Every client gets a live health score.",
+   "caps": [
+    "Every client gets",
+    "a live *health score.*"
+   ],
+   "gap": 1.0
+  },
+  {
+   "say": "When someone slips, it reaches out for you.",
+   "caps": [
+    "When someone *slips,*",
+    "it *reaches out* for you."
+   ],
+   "gap": 0.9
+  },
+  {
+   "say": "A text. A reply. A booking.",
+   "caps": [
+    "A *text.*",
+    "A *reply.*",
+    "A *booking.*"
+   ],
+   "gap": 1.0
+  },
+  {
+   "say": "Reviews, loyalty and payments, in the same place.",
+   "caps": [
+    "*Reviews,* *loyalty* and *payments,*",
+    "in the same place."
+   ],
+   "gap": 1.0
+  },
+  {
+   "say": "And the pulse comes back.",
+   "caps": [
+    "And the *pulse* comes back."
+   ],
+   "gap": 1.2
+  },
+  {
+   "say": "No gaps. No lost customers. No cuts.",
+   "caps": [
+    "No gaps.",
+    "No lost customers.",
+    "No *cuts.*"
+   ],
+   "gap": 1.0
+  },
+  {
+   "say": "Comment keep, for a free retention audit.",
+   "caps": [
+    "Comment *KEEP*",
+    "for a *free retention audit.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.4
+  }
+ ]
+}
