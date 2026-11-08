@@ -16,7 +16,7 @@
    "caps": [
     "You won't find one."
    ],
-   "gap": 1.1
+   "gap": 0.6
   },
   {
    "say": "Watch the dot. It has a pulse.",
@@ -40,7 +40,7 @@
     "Some go *quiet,*",
     "long before they *leave.*"
    ],
-   "gap": 0.9
+   "gap": 0.6
   },
   {
    "say": "Message Health catches it.",
@@ -87,7 +87,7 @@
    "caps": [
     "And the *pulse* comes back."
    ],
-   "gap": 2.6
+   "gap": 2.0
   },
   {
    "say": "No gaps. No lost customers. No cuts.",

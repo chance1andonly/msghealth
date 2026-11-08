@@ -15,5 +15,5 @@ window.VO_CLIPS = [
   { dur: 2.655, chunks: [["No gaps.", 0.0], ["No lost customers.", 0.56], ["No *cuts.*", 1.97]] }, // 11
   { dur: 1.39, chunks: [["*msghealth.net*", 0.0]] }, // 12
 ];
-window.VO_AT = [0.4, 3.16, 5.38, 8.42, 11.68, 14.8, 16.96, 19.87, 22.97, 25.84, 29.7, 33.5, 37.75];
+window.VO_AT = [0.4, 3.16, 4.88, 7.92, 11.18, 14.0, 16.16, 19.07, 22.17, 25.04, 28.9, 32.1, 36.35];
 window.VO_TEXT = ["Try to spot a single cut in this video.", "You won't find one.", "Watch the dot. It has a pulse.", "Every business has one. Your customers.", "Some go quiet, long before they leave.", "Message Health catches it.", "Every client gets a live health score.", "When someone slips, it reaches out for you.", "A text. A reply. A booking.", "Reviews, loyaltee and payments, in the same place.", "And the pulse comes back.", "No gaps. No lost customers. No cuts.", "Message Health dot net."];
