@@ -44,6 +44,7 @@ const ACC = '#8f88ff', ACC2 = '#6d66ff', GRN = '#3ddc84', RD = '#ff5a4f', AMB = 
 const MONO = 'JetBrains Mono';
 const SY = 900; // vertical centre of the stage
 const K = (t, a, b, e = ease.inOut) => e(seg(t, a, b));
+let FRAME_T = null; const FT = (t) => FRAME_T ?? t; // the frame's own time: numbers that tick use it, so motion-blur sub-samples never mix two values
 function mono(s, x, y, size, col, align = 'left', weight = 500, track = 0.08) { ctx.font = `${weight} ${size}px '${MONO}'`; ctx.letterSpacing = `${(size * track).toFixed(2)}px`; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillStyle = col; ctx.fillText(s, x, y); }
 function monoW(s, size, weight = 500, track = 0.08) { ctx.font = `${weight} ${size}px '${MONO}'`; ctx.letterSpacing = `${(size * track).toFixed(2)}px`; return ctx.measureText(s).width; }
 const hexMix = (a, b, k) => '#' + [16, 8, 0].map((sh) => Math.round(lerp((parseInt(a.slice(1), 16) >> sh) & 255, (parseInt(b.slice(1), 16) >> sh) & 255, k)).toString(16).padStart(2, '0')).join('');
@@ -239,7 +240,7 @@ function ringGeom(t) {
 }
 function scoreRing(t, s, hk = 1) { // Jordan's red radar ring thickens into the score ring; the initials roll out, the score rolls in
   const g = ringGeom(t); if (g.m > 0) return;
-  const fill = K(t, T.score + 0.1, T.score + 1.2, ease.out), roll = K(t, T.score - 0.1, T.score + 0.35, ease.inOut), inner = g.r - g.lw / 2 - 2;
+  const fill = K(FT(t), T.score + 0.1, T.score + 1.2, ease.out), roll = K(t, T.score - 0.1, T.score + 0.35, ease.inOut), inner = g.r - g.lw / 2 - 2;
   circle(g.x, g.y, inner, mix('#34323f', '#17141f', s.fo));
   clipCircle(g.x, g.y, inner, () => {
     text('JO', g.x, g.y + 1 - roll * inner * 1.3, Math.max(20, g.r * 0.62), 700, rgba('#ffffff', 0.5), 'center', 0);
@@ -284,7 +285,7 @@ function row(t, i, shift) {
   const sw = i === 0 ? K(t, T.slips + 0.15, T.slips + 0.5) : 0; // the sub-line rolls over to the warning
   clipRect([240, y + 2, 520, 42], () => { text(sub, 252, y + 22 - sw * 40, 23, 500, DIMI, 'left'); if (sw > 0) text('No reply · visit overdue', 252, y + 62 - sw * 40, 23, 500, '#ffb1aa', 'left'); });
   if (i === 0) { const rk = K(t, T.slips + 0.1, T.slips + 0.5, ease.out), w = RISK_W(), right = 880 - 34 - 16; growPill(rk, right, y, [right - w, y - 17, w, 34], RD, null, () => text('AT RISK', right - w / 2, y + 1, 19, 800, '#fff', 'center', 0.1)); }
-  if (i > 0 && open > 0.25) { const f = K(t, T.card + 0.75 + i * 0.08, T.card + 1.5 + i * 0.08, ease.out); arcRing(880, y, 34, 7, sc / 100 * f, scoreCol(sc)); text(String(Math.round(sc * f)), 880, y + 1, 24, 800, INK, 'center', 0); }
+  if (i > 0 && open > 0.25) { const f = K(FT(t), T.card + 0.75 + i * 0.08, T.card + 1.5 + i * 0.08, ease.out); arcRing(880, y, 34, 7, sc / 100 * f, scoreCol(sc)); text(String(Math.round(sc * f)), 880, y + 1, 24, 800, INK, 'center', 0); }
   ctx.restore();
 }
 
@@ -296,7 +297,7 @@ function flowPath() { // from the bottom of the AT RISK tag, down, curving to th
   if (FLOWP) return FLOWP; const w = RISK_W(), tx = 880 - 34 - 16 - w / 2, pts = [];
   for (let y = 478; y <= 540; y += 4) pts.push([tx, y]);
   for (let k = 1; k <= 40; k++) { const u = k / 40, a = 1 - u; pts.push([a * a * a * tx + 3 * a * a * u * tx + 3 * a * u * u * CX + u * u * u * CX, a * a * a * 540 + 3 * a * a * u * 600 + 3 * a * u * u * 580 + u * u * u * 650]); }
-  for (let y = 654; y <= 1130; y += 4) pts.push([CX, y]);
+  for (let y = 654; y <= 1060; y += 4) pts.push([CX, y]);
   const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
   return (FLOWP = { pts, L, total: L[L.length - 1], at: (y) => { const i = pts.findIndex((p, j) => j > 50 && p[1] >= y); return i < 0 ? L[L.length - 1] : L[i]; } });
 }
@@ -312,7 +313,7 @@ function sceneFlow(t) {
   const lw = monoW('WIN-BACK AUTOMATION', 18, 700), lk = clamp((draw * P.total - P.at(790)) / 160) * (1 - ret);
   if (lk > 0) clipRect([CX - 40 - lw * lk, 770, lw * lk + 2, 40], () => mono('WIN-BACK AUTOMATION', CX - 40, 791, 18, rgba(ACC, 0.95), 'right', 700));
   NODES.forEach(([s, y], i) => { // each node grows sideways out of the spine as the pen reaches it (and shrinks back into it)
-    let k = ease.out(clamp((draw * P.total - P.at(y) + 10) / 90)); if (i > 0) k *= 1 - ret; if (k <= 0 || (i === 0 && out > 0)) return;
+    const reach = T.reach + 0.6 + 1.3 * Math.min(1, (P.at(y) - 10) / P.total); let k = ease.out(seg(t, reach, reach + 0.3)); if (i > 0) k *= 1 - ret; // grows once the pen reaches it; the line ends inside the last node if (k <= 0 || (i === 0 && out > 0)) return;
     const r = [CX - 210 * k, y - 42, 420 * k, 84]; panel(...r, 42, 1, rgba(ACC, 0.35)); if (k > 0.5) clipRect(r, () => { circle(CX - 166, y, 20, rgba(ACC, 0.22)); mono(String(i + 1).padStart(2, '0'), CX - 166, y + 1, 18, ACC, 'center', 700); text(s, CX - 130, y + 1, 30, 600, INK, 'left'); });
   });
   // node 01 becomes the outgoing text (typed in), which later folds into the booking
@@ -389,7 +390,7 @@ function sceneTiles(t) {
   const [lx, ly, lw] = rs[1], cx = lx + lw / 2, cy = ly + 250; label('LOYALTY', rs[1]);
   const tr = K(t, A, A + 0.35, ease.inOut), lp = K(t, A + 0.3, A + 1.1, ease.out);
   if (tr > 0) { ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, 112, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * tr); ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 16; ctx.stroke(); ctx.restore(); arcRing(cx, cy, 112, 16, lerp(0, lerp(0.86, 1, seg(lp, 0.55, 1)), seg(lp, 0, 0.55)), lp > 0.98 ? GRN : ACC, 'rgba(0,0,0,0)');
-    const ru = K(t, A + 0.2, A + 0.55, ease.out); clipCircle(cx, cy, 96, () => { text(String(Math.round(lerp(0, 500, lp))), cx, cy - 10 + (1 - ru) * 110, 60, 800, INK, 'center', -0.03); mono('/ 500 PTS', cx, cy + 40 + (1 - ru) * 110, 18, DIMI, 'center'); }); }
+    const ru = K(t, A + 0.2, A + 0.55, ease.out); clipCircle(cx, cy, 96, () => { text(String(Math.round(lerp(0, 500, K(FT(t), A + 0.3, A + 1.1, ease.out)))), cx, cy - 10 + (1 - ru) * 110, 60, 800, INK, 'center', -0.03); mono('/ 500 PTS', cx, cy + 40 + (1 - ru) * 110, 18, DIMI, 'center'); }); }
   const rk = K(t, A + 1.0, A + 1.3, ease.out), rwid = tw('REWARD UNLOCKED', 18, 800, 0.1) + 18 * 1.4; growPill(rk, cx, cy + 120, [cx - rwid / 2, ly + 440 - 16, rwid, 32], rgba(GRN, 0.14), rgba(GRN, 0.45), () => text('REWARD UNLOCKED', cx, ly + 441, 18, 800, GRN, 'center', 0.1));
   // payments: the seed is the caret that types the amount; "Paid" grows out of the amount
   const [px, py] = rs[2]; label('PAYMENTS', rs[2]);
@@ -430,15 +431,15 @@ function sceneLine(t) {
   // the pen at the right end; it grows out of the line's end, and is absorbed as the line becomes the underline
   const py = Y(970), pk = ease.back(seg(t, T.back - 0.15, T.back + 0.2)) * (1 - ul); if (pk > 0.01) { glow(x1, py, 80, col, 0.35 * pk); circle(x1, py, 12 * pk, '#eafff2'); }
     // Jordan's score ring buds off the pen, floats up, climbs from 38 to 86, then returns into the pen before the logo
-    const out = K(t, T.back + 0.1, T.back + 0.75, ease.inOut) * (1 - K(t, T.logo - 0.65, T.logo - 0.08, ease.inOut));
+    const out = K(t, T.back + 0.1, T.back + 0.8, ease.inOut) * (1 - K(t, T.logo - 1.05, T.logo - 0.1, ease.inOut));
     if (out > 0) {
-      const up = K(t, T.back + 0.7, T.back + 1.9, ease.out), v = Math.round(lerp(38, 86, up)), col = scoreCol(v);
+      const up = K(FT(t), T.back + 0.7, T.back + 2.5, ease.out), v = Math.round(lerp(38, 86, up)), col = scoreCol(v);
       const x = lerp(x1, CX, out), y = lerp(py, 560, out) - Math.sin(out * Math.PI) * 70, r = lerp(12 * pk, 130, out), lw = lerp(3, 16, out);
       if (out < 0.25) { ctx.save(); ctx.strokeStyle = '#eafff2'; ctx.lineWidth = lerp(12, 0, out * 4); ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x1, py); ctx.lineTo(x, y); ctx.stroke(); ctx.restore(); } // the bud's neck
       circle(x, y, r, '#17141f'); ring(x, y, r, rgba('#ffffff', 0.08 * out), lw); arcRing(x, y, r, lw, (v / 100) * seg(out, 0.4, 1), col, 'rgba(0,0,0,0)'); glow(x, y, r * 1.8, col, 0.18 * out);
-      const nr = K(t, T.back + 0.5, T.back + 0.85, ease.out) * (1 - K(t, T.logo - 0.95, T.logo - 0.7, ease.in));
+      const nr = K(t, T.back + 0.5, T.back + 0.85, ease.out) * (1 - K(t, T.logo - 1.3, T.logo - 0.85, ease.inOut));
       if (nr > 0) clipCircle(x, y, r - lw / 2 - 2, () => { ctx.save(); ctx.shadowColor = col; ctx.shadowBlur = 30; text(String(v), x, y + 4 + (1 - nr) * r * 1.5, 96, 800, col, 'center', -0.04); ctx.restore(); });
-      const lk = K(t, T.back + 0.8, T.back + 1.15, ease.out) * (1 - K(t, T.logo - 1.2, T.logo - 0.95, ease.in)), lb = 'JORDAN · HEALTH SCORE', lwid = monoW(lb, 20) + 40;
+      const lk = K(t, T.back + 0.8, T.back + 1.15, ease.out) * (1 - K(t, T.logo - 1.55, T.logo - 1.2, ease.inOut)), lb = 'JORDAN · HEALTH SCORE', lwid = monoW(lb, 20) + 40;
       growPill(lk, x, y + r, [x - lwid / 2, y + r + 26, lwid, 40], 'rgba(12,11,17,0.9)', rgba(col, 0.5), () => mono(lb, x, y + r + 47, 20, DIMI, 'center')); // the label grows out of the bottom of the ring
     }
   // every beat (while building) shoots a dot from the spike's tip up into the logo; where it lands it bursts open a disc of the real logo
@@ -529,6 +530,7 @@ cue(T.logoDone - 0.05, 'transitionHit', 0.6); cue(T.link, 'swoosh', 0.45); cue(T
   const SAMPLES = 3, SHUTTER = 0.5 / 60;
   const reset = (c) => { c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.filter = 'none'; c.globalCompositeOperation = 'source-over'; c.shadowBlur = 0; c.shadowColor = 'transparent'; c.lineCap = 'butt'; c.lineJoin = 'miter'; c.setLineDash([]); };
   window.renderFrame = (t) => {
+    FRAME_T = t;
     if (!RENDER || !OFF) { ctx = MAIN; reset(ctx); scene(t); }
     else {
       for (let k = 0; k < SAMPLES; k++) { ctx = OCTX; reset(ctx); scene(t + (k / (SAMPLES - 1) - 0.5) * SHUTTER); reset(MAIN); MAIN.globalAlpha = 1 / (k + 1); MAIN.drawImage(OFF, 0, 0); }
