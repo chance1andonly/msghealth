@@ -56,6 +56,8 @@ function hero(x, y, h, look, o = {}) {
   // back hair (bun / long) behind everything above the shoulders
   if (L2.style === 'bun') { circle(0, -1020, 52, L2.hair); fillRR(-108, -960, 216, 150, 60, L2.hair); }
   if (L2.style === 'long') { fillRR(-132, -1000, 264, 380, 100, L2.hair); }
+  if (L2.style === 'mid') { fillRR(-130, -1000, 260, 262, 96, L2.hair); }
+  if (L2.style === 'bob') { fillRR(-124, -1000, 248, 178, 76, L2.hair); }
   // torso (tee) + sleeves
   fillRR(-150, -782, 300, 362, 64, L2.shirt);
   if (L2.apron) { fillRR(-120, -690, 240, 300, 26, '#3a3a46'); fillRR(-60, -560, 120, 70, 12, '#4a4a58'); line(-30, -575, -30, -520, '#d9dce1', 6); line(-14, -575, -14, -520, '#d9dce1', 4); line(-120, -690, -70, -775, '#3a3a46', 14); line(120, -690, 70, -775, '#3a3a46', 14); }
@@ -74,7 +76,7 @@ function hero(x, y, h, look, o = {}) {
   if (L2.chain) { ctx.lineCap = 'round'; ctx.strokeStyle = '#d6dae0'; ctx.lineWidth = 10; ctx.beginPath(); ctx.ellipse(0, -790, 56, 52, 0, 0.12 * Math.PI, 0.88 * Math.PI); ctx.stroke(); ctx.strokeStyle = '#8c929b'; ctx.lineWidth = 4; ctx.setLineDash([7, 7]); ctx.stroke(); ctx.setLineDash([]); }
   if (arm === 'think') circle(60, -790, 36, skin); // the hand sits in front of the neck, under the chin
   // ears (+ hoops / stud), head
-  if (L2.style !== 'long') { ellipse(-97, -895, 17, 29, L2.skinShade); ellipse(97, -895, 17, 29, L2.skinShade); }
+  if (!['long', 'mid', 'bob'].includes(L2.style)) { ellipse(-97, -895, 17, 29, L2.skinShade); ellipse(97, -895, 17, 29, L2.skinShade); }
   if (L2.hoops) { ring(-97, -858, 13, '#e2b23c', 5); ring(97, -858, 13, '#e2b23c', 5); }
   ctx.beginPath(); ctx.moveTo(-95, -915); ctx.arc(0, -915, 95, Math.PI, 0); ctx.bezierCurveTo(95, -862, 82, -832, 46, -812); ctx.quadraticCurveTo(0, -792, -46, -812); ctx.bezierCurveTo(-82, -832, -95, -862, -95, -915); ctx.closePath(); ctx.fillStyle = skin; ctx.fill();
   if (L2.stud) circle(-93, -893, 5, '#eef0f3');
@@ -96,8 +98,8 @@ function hero(x, y, h, look, o = {}) {
   // brows, eyes
   const browY = L2.style === 'crop' ? -936 : -932, bw = L2.style === 'crop' ? 13 : 8;
   if (L2.brow) { ctx.strokeStyle = L2.brow; ctx.lineWidth = 7; ctx.lineCap = 'round'; [-1, 1].forEach((d) => { ctx.beginPath(); ctx.moveTo(d * 20, -934); ctx.quadraticCurveTo(d * 52, -952, d * 76, -930); ctx.stroke(); }); }
-  else { poly([[-76, browY + 4], [-22, browY - 3], [-20, browY + bw - 3], [-75, browY + bw + 2]], L2.style === 'crop' ? '#2a1d17' : '#1b1b1f');
-    poly([[76, browY + 4], [22, browY - 3], [20, browY + bw - 3], [75, browY + bw + 2]], L2.style === 'crop' ? '#2a1d17' : '#1b1b1f'); }
+  else { const bc = L2.browCol ?? (L2.style === 'crop' ? '#2a1d17' : '#1b1b1f'); poly([[-76, browY + 4], [-22, browY - 3], [-20, browY + bw - 3], [-75, browY + bw + 2]], bc);
+    poly([[76, browY + 4], [22, browY - 3], [20, browY + bw - 3], [75, browY + bw + 2]], bc); }
   [-46, 46].forEach((ex) => {
     ellipse(ex, -909, 21, 10, '#f6efe8'); circle(ex + lk * 7, -909, 9.5, L2.iris ?? '#3b2618'); circle(ex + lk * 7, -909, 4.5, '#0e0806'); circle(ex + lk * 7 + 3, -912, 2.2, '#fff');
     ctx.strokeStyle = '#2a1d17'; ctx.lineWidth = 4; ctx.beginPath(); ctx.ellipse(ex, -906, 23, 12, 0, Math.PI * 1.05, Math.PI * 1.95); ctx.stroke();
@@ -124,7 +126,18 @@ function hero(x, y, h, look, o = {}) {
 function founder(x, y, h, o = {}) { hero(x, y, h, FOUNDER, o); }
 function mom(x, y, h, o = {}) { hero(x, y, h, MOMLOOK, o); }
 function thinkBubble(x, y, a, s = '?') { if (a <= 0) return; xf(x, y, clamp(a), 0, () => { circle(x - 70, y + 92, 12, '#fff'); circle(x - 44, y + 62, 18, '#fff'); fillRR(x - 60, y - 60, 120, 110, 50, '#fff'); text(s, x, y - 2, 72, 800, '#7c6cf0', 'center', 0); }); }
-function kid(x, y, h, i) { person(x, y, h, 300 + i * 7, { skin: ['#f2d0b8', '#e2b08c', '#ecc3a6'][i % 3], shirt: SHIRT[(i * 3) % SHIRT.length], pants: PANTS[i % PANTS.length], hair: ['#5b3b27', '#3a2a20', '#7a5236', '#4a3022'][i % 4], mouth: 'open', bounce: 0 }); }
+// The seven kids, oldest to youngest (left to right), as the founder described them.
+const KID = { skinShade: '#e3b59a', pants: '#3d424f', shoes: '#22222a', lip: '#d08a80' }, BROWN_EYES = '#4a2e1c', BRUNETTE = '#5b3b27';
+const KIDS = [
+  { h: 420, look: { ...KID, skin: '#f4d6c2', hair: '#e2c074', hairHi: '#f3dca0', brow: '#b8925a', iris: MOMLOOK.iris, shirt: '#e08a6d', pants: '#4b5060', style: 'long' } }, // oldest: blond, Mom's eyes
+  { h: 405, look: { ...KID, skin: '#f4d6c2', hair: '#b5541f', hairHi: '#d8763a', browCol: '#9a4a1e', iris: '#5d8f4a', shirt: '#3d7a5a', style: 'crop' } },               // ginger, green eyes
+  { h: 385, look: { ...KID, skin: '#f2d0b8', hair: BRUNETTE, hairHi: '#7d5638', brow: BRUNETTE, iris: BROWN_EYES, shirt: '#d9468a', style: 'mid' } },                // brunette, mid-length hair
+  { h: 370, look: { ...KID, skin: '#f2d0b8', hair: BRUNETTE, hairHi: '#7d5638', brow: BRUNETTE, iris: BROWN_EYES, shirt: '#6c8ebf', style: 'bob' } },                // brunette, short hair
+  { h: 350, look: { ...FOUNDER, beard: false, stud: false } },                                                                                                      // the founder
+  { h: 350, look: { ...FOUNDER, beard: false, stud: false, chain: false, hair: '#33251c', shirt: '#2a4a8a', iris: BROWN_EYES } },                                   // twin brother, brown eyes
+  { h: 290, look: { ...KID, skin: '#f2d0b8', hair: BRUNETTE, hairHi: '#7d5638', brow: BRUNETTE, iris: '#5b86b8', shirt: '#f2b441', style: 'long' } },               // little sister, blue eyes
+];
+function kid(x, y, h, i) { hero(x, y, h, KIDS[i].look, { mouth: 'smile', look: (hash(i + 2) - 0.5) * 0.8 }); }
 
 // ── 1 · mom, a chair, seven kids ─────────────────────────────────────────────
 function sceneSalon(t) {
@@ -132,10 +145,12 @@ function sceneSalon(t) {
   chair(310, 1240, 1.25);
   const m = pop(t, 0.2, 0.45); xf(760, 1240, clamp(m), 0, () => mom(760, 1240, 660, { arm: t < 3 ? 'wave' : 'down', wave: t, mouth: 'smile', look: -0.3 }));
   const sevenAt = L(0) + 2.0;
+  const grow = 1 + 0.12 * ease.out(seg(t, word(3, 2), word(3, 2) + 0.5));
   for (let i = 0; i < 7; i++) {
-    const h0 = 330 - i * 12, x = 118 + i * 140, grow = 1 + 0.17 * ease.out(seg(t, word(3, 2), word(3, 2) + 0.5)), k = pop(t, sevenAt + i * 0.12, 0.35);
-    xf(x, 1420, clamp(k), 0, () => kid(x, 1420, h0 * grow, i));
+    const x = 102 + i * 146, k = pop(t, sevenAt + i * 0.12, 0.35);
+    xf(x, 1405, clamp(k), 0, () => kid(x, 1405, KIDS[i].h * grow, i));
   }
+  const me = pop(t, sevenAt + 1.1, 0.35); if (me > 0) { const mx = 102 + 4 * 146, my = 1405 - KIDS[4].h * grow * 1.03 - 46; xf(mx, my, clamp(me), 0, () => { fillRR(mx - 46, my - 26, 92, 46, 23, '#fff'); poly([[mx - 10, my + 18], [mx + 10, my + 18], [mx, my + 32]], '#fff'); text('ME', mx, my - 2, 26, 800, '#7c6cf0', 'center', 0.1); }); }
   // banners (top): 7 kids · 1 chair · zero slow weeks
   const b1 = pop(t, word(1, 0), 0.3), b2 = pop(t, word(1, 1), 0.3), b3 = pop(t, word(1, 2), 0.3);
   if (t < L(2) - 0.05) {
