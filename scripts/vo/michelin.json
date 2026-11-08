@@ -1,0 +1,118 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen hundred, France had barely three thousand cars.",
+   "caps": [
+    "In *nineteen hundred,*",
+    "France had barely",
+    "*three thousand cars.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So a tire company gave drivers a free guidebook.",
+   "caps": [
+    "So a *tire company* gave",
+    "drivers a *free guidebook.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Nobody cared. One day, the founder saw a dealer propping up a workbench with them.",
+   "caps": [
+    "Nobody *cared.*",
+    "Then the founder saw a dealer",
+    "propping up a *workbench* with them."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "So in nineteen twenty, they started charging for it.",
+   "caps": [
+    "So in *nineteen twenty,*",
+    "they started *charging.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Six years later, they added stars.",
+   "caps": [
+    "Six years later,",
+    "they added *stars.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Now a single star can change a restaurant forever.",
+   "caps": [
+    "Now a *single star*",
+    "can change a *restaurant.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Your customers decide the same way. With stars on a screen.",
+   "caps": [
+    "Your customers decide",
+    "the same way. *Stars.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "But happy customers rarely leave one, unless you ask.",
+   "caps": [
+    "Happy customers *rarely*",
+    "leave one *unless you ask.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Message Health asks for you.",
+   "caps": [
+    "*MsgHealth* asks for you."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "A review request goes out after every visit.",
+   "caps": [
+    "A *review request* goes out",
+    "after *every visit.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Five stars, from one inbox.",
+   "caps": [
+    "*Five stars,*",
+    "from *one inbox.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Want to see who's slipping away?",
+   "caps": [
+    "Want to see who's *slipping away?*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Comment keep, for a free retention audit.",
+   "caps": [
+    "Comment *KEEP* for a",
+    "*free retention audit.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

@@ -1,0 +1,103 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen ninety-nine, an engineer noticed a pudding promotion.",
+   "caps": [
+    "In *nineteen ninety-nine,*",
+    "an engineer noticed",
+    "a *pudding promotion.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Buy pudding cups, collect barcodes, trade them for airline miles.",
+   "caps": [
+    "Buy *pudding,* collect *barcodes,*",
+    "trade them for *airline miles.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The math worked. So he bought twelve thousand puddings.",
+   "caps": [
+    "The math *worked.*",
+    "So he bought",
+    "*twelve thousand* puddings."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "That was over a million miles, for about three thousand dollars.",
+   "caps": [
+    "Over *a million miles,*",
+    "for about *three thousand* dollars."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "He gave the puddings to charity, and flew for years.",
+   "caps": [
+    "He gave the puddings",
+    "to *charity,* and *flew for years.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "People will do wild things for a reward.",
+   "caps": [
+    "People will do",
+    "*wild things* for a *reward.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Your regulars would too, if you gave them a reason.",
+   "caps": [
+    "Your *regulars* would too,",
+    "if you gave them a *reason.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Message Health tracks loyalty for you.",
+   "caps": [
+    "*MsgHealth* tracks",
+    "*loyalty* for you."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Every visit earns points. Every reward brings them back.",
+   "caps": [
+    "Every visit earns *points.*",
+    "Every reward brings them *back.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Want to see who's slipping away?",
+   "caps": [
+    "Want to see who's *slipping away?*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Comment keep, for a free retention audit.",
+   "caps": [
+    "Comment *KEEP* for a",
+    "*free retention audit.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

@@ -1,0 +1,103 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In sixteen forty-four, Sweden paid in copper plates.",
+   "caps": [
+    "In *sixteen forty-four,*",
+    "Sweden paid in *copper plates.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The biggest one weighed forty-three pounds.",
+   "caps": [
+    "The biggest one weighed",
+    "*forty-three pounds.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "People carried their payments on their backs. Or hired a cart.",
+   "caps": [
+    "People carried payments",
+    "*on their backs.*",
+    "Or hired a *cart.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "So in sixteen sixty-one, a bank in Stockholm invented the banknote.",
+   "caps": [
+    "So in *sixteen sixty-one,*",
+    "a bank in *Stockholm*",
+    "invented the *banknote.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "A piece of paper, instead of a horse and cart.",
+   "caps": [
+    "A piece of *paper,*",
+    "instead of a *horse and cart.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Getting paid shouldn't mean carrying anything.",
+   "caps": [
+    "Getting paid shouldn't",
+    "mean *carrying* anything."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "But chasing invoices can feel just as heavy.",
+   "caps": [
+    "But *chasing invoices*",
+    "can feel just as *heavy.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Message Health sends the invoice, and takes the payment.",
+   "caps": [
+    "*MsgHealth* sends the *invoice,*",
+    "and takes the *payment.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "From the same chat they're already in.",
+   "caps": [
+    "From the *same chat*",
+    "they're already in."
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Want to see who's slipping away?",
+   "caps": [
+    "Want to see who's *slipping away?*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Comment keep, for a free retention audit.",
+   "caps": [
+    "Comment *KEEP* for a",
+    "*free retention audit.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

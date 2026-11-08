@@ -1,0 +1,103 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In eighteen thirty-six, Greenwich Observatory had the exact time. London didn't.",
+   "caps": [
+    "In *eighteen thirty-six,*",
+    "Greenwich knew the *exact time.*",
+    "London *didn't.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So one family sold it.",
+   "caps": [
+    "So one *family*",
+    "*sold it.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Every week, Ruth Belville carried a watch from the observatory to her clients.",
+   "caps": [
+    "Every week, *Ruth Belville*",
+    "carried a *watch* from Greenwich",
+    "to her *clients.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Her family did it for over a hundred years.",
+   "caps": [
+    "Her family did it for",
+    "*over a hundred years.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Every client, every week, right on schedule.",
+   "caps": [
+    "Every *client,* every *week,*",
+    "right on *schedule.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Your clients book you the same way. A time, and someone showing up.",
+   "caps": [
+    "Your clients book you",
+    "the same way. A *time.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "But people forget. And a forgotten booking is an empty chair.",
+   "caps": [
+    "But people *forget.*",
+    "A forgotten booking is an *empty chair.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Message Health handles bookings and reminders.",
+   "caps": [
+    "*MsgHealth* handles",
+    "*bookings* and *reminders.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "So clients show up when they said they would.",
+   "caps": [
+    "So clients *show up*",
+    "when they said they *would.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Want to see who's slipping away?",
+   "caps": [
+    "Want to see who's *slipping away?*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Comment keep, for a free retention audit.",
+   "caps": [
+    "Comment *KEEP* for a",
+    "*free retention audit.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health dot net.",
+   "caps": [
+    "*msghealth.net*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

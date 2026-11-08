@@ -45,6 +45,7 @@ for (let b = 0; b * beat * 4 < DUR; b++) {
 function hash(n) { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); }
 for (let n = 0; n < N; n++) { const t = n / SR, g = t < M.brandAt ? 1 : Math.max(0.35, 1 - (t - M.brandAt) / 0.25); MUS[0][n] *= g; MUS[1][n] *= g; }
 
+if (M.bed === false) { MUS[0].fill(0); MUS[1].fill(0); } // ads whose music is added later
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'kitads-'));
 { const buf = Buffer.alloc(44 + N * 4); buf.write('RIFF', 0); buf.writeUInt32LE(36 + N * 4, 4); buf.write('WAVE', 8); buf.write('fmt ', 12); buf.writeUInt32LE(16, 16); buf.writeUInt16LE(1, 20); buf.writeUInt16LE(2, 22); buf.writeUInt32LE(SR, 24); buf.writeUInt32LE(SR * 4, 28); buf.writeUInt16LE(4, 32); buf.writeUInt16LE(16, 34); buf.write('data', 36); buf.writeUInt32LE(N * 4, 40);
   for (let n = 0; n < N; n++) { buf.writeInt16LE(Math.round(Math.tanh(MUS[0][n]) * 32000), 44 + n * 4); buf.writeInt16LE(Math.round(Math.tanh(MUS[1][n]) * 32000), 46 + n * 4); }
@@ -61,7 +62,7 @@ const kinds = Object.keys(SOUNDS).filter((k) => sfx.some((c) => c.kind === k));
 const inputs = ['-i', path.join(TMP, 'music.wav')];
 vo.forEach((v) => inputs.push('-i', path.join(ROOT, v.file)));
 kinds.forEach((k) => inputs.push('-i', path.join(ROOT, 'assets/audio', SOUNDS[k].file)));
-const FX_GAIN = 2.0, VO_GAIN = 1.5, graph = [], voIn = [], fxIn = [];
+const FX_GAIN = 2.0 * (M.fx ?? 1), VO_GAIN = 1.5, graph = [], voIn = [], fxIn = [];
 vo.forEach((v, i) => { const ms = Math.round(v.at * 1000); graph.push(`[${i + 1}:a]aresample=${SR},pan=stereo|c0=c0|c1=c0,volume=${VO_GAIN},adelay=${ms}|${ms}[vo${i}]`); voIn.push(`[vo${i}]`); });
 kinds.forEach((k, ki) => {
   const cues = sfx.filter((c) => c.kind === k), idx = ki + 1 + vo.length;

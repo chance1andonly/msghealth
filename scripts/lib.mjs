@@ -26,7 +26,7 @@ export async function openFilm(entry = process.env.ENTRY || 'index.html') {
     executablePath: process.env.CHROMIUM_PATH || undefined,
     args: ['--disable-gpu-vsync', '--force-color-profile=srgb'],
   });
-  const vertical = /ad\.html$|vertical|canary|pizza|uranus|^(qr|jet|shed|lost|all|text|btc|emu|orbiter|dance|bucket|rats|crassus|yap|pigwar|norton|railway|petrock|ducks|pigeon|bottle|eliza|wowsig|ducks2|pigeon2|bottle2|eliza2|wowsig2|bicep|itstime|smalltext|brah|polar|slowmo|wald)\.html$/.test(entry);
+  const vertical = /ad\.html$|vertical|canary|pizza|uranus|^(qr|jet|shed|lost|all|text|btc|emu|orbiter|dance|bucket|rats|crassus|yap|pigwar|norton|railway|petrock|ducks|pigeon|bottle|eliza|wowsig|ducks2|pigeon2|bottle2|eliza2|wowsig2|bicep|itstime|smalltext|brah|polar|slowmo|wald|michelin|pudding|belville|plates)\.html$/.test(entry);
   const page = await browser.newPage({ viewport: vertical ? { width: 1080, height: 1920 } : { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   page.on('pageerror', (e) => console.error('page error:', e.message));
   await page.goto(`http://127.0.0.1:${srv.address().port}/${entry}?render`);

@@ -57,7 +57,15 @@
     "render:polar": "ENTRY=polar.html node scripts/render.mjs",
     "render:slowmo": "ENTRY=slowmo.html node scripts/render.mjs",
     "render:wald": "ENTRY=wald.html node scripts/render.mjs",
-    "audit:wald": "ENTRY=wald.html node scripts/audit-text.mjs 0.1"
+    "audit:wald": "ENTRY=wald.html node scripts/audit-text.mjs 0.1",
+    "render:michelin": "ENTRY=michelin.html node scripts/render.mjs",
+    "audit:michelin": "ENTRY=michelin.html node scripts/audit-text.mjs 0.1",
+    "render:pudding": "ENTRY=pudding.html node scripts/render.mjs",
+    "audit:pudding": "ENTRY=pudding.html node scripts/audit-text.mjs 0.1",
+    "render:belville": "ENTRY=belville.html node scripts/render.mjs",
+    "audit:belville": "ENTRY=belville.html node scripts/audit-text.mjs 0.1",
+    "render:plates": "ENTRY=plates.html node scripts/render.mjs",
+    "audit:plates": "ENTRY=plates.html node scripts/audit-text.mjs 0.1"
   },
   "repository": {
     "type": "git",
