@@ -426,7 +426,7 @@ statistic. The customers, names and numbers are illustrative. The "50% off your 
 ## "Our story" (founder video)
 
 A 2-minute vertical video telling how MsgHealth started (`story.html`, captioned cut `story-captions.html`), drawn in a paper
-cut-out style (`src/paper-kit.js`: stop-motion boil, layered card shadows, cut edges, paper fibre and grain). It has no
+cut-out style (`src/paper-kit.js`: scissor-cut facets, folds, stop-motion boil, lifted card shadows, cut edges, crinkled paper and grain). It has no
 voiceover: the founder records it to the timeline in `STORY-SCRIPT.md` (regenerate with `python3 scripts/story-script.py`).
 
 - `npm run render:story:captions` → `dist/msghealth-story-captions-9x16.mp4`
