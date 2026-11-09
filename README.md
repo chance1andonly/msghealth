@@ -422,3 +422,12 @@ times Uranus' diameter (51,118 km), which is why the "same scale" shot leaves Ur
 same distance, so six hours is the round trip. The six-hours-versus-weeks line is a comparison, not a measured
 statistic. The customers, names and numbers are illustrative. The "50% off your first month" offer is the one from the
 "While you cut" end card, so confirm it's still running before you buy media.
+
+## "Our story" (founder video)
+
+A 2-minute vertical video telling how MsgHealth started (`story.html`, captioned cut `story-captions.html`), drawn in a paper
+cut-out style (`src/paper-kit.js`: stop-motion boil, layered card shadows, cut edges, paper fibre and grain). It has no
+voiceover: the founder records it to the timeline in `STORY-SCRIPT.md` (regenerate with `python3 scripts/story-script.py`).
+
+- `npm run render:story:captions` → `dist/msghealth-story-captions-9x16.mp4`
+- `npm run render:story` → `dist/msghealth-story-9x16.mp4` (no captions)

@@ -222,7 +222,7 @@ function endCard(t, at, tapAt, urlAt) {
 
 // ── boot: renderFrame, ready, text audit hook and the browser player ─────────
 // cfg: { duration, scenes: [[from, to, fn(t)]], brandAt, hideCaption(t, cap), after(t) (drawn over everything, under captions),
-//        noVoice (no voiceover clips: the timeline in *-vo.js still drives the captions) }
+//        noVoice (no voiceover clips: the timeline in *-vo.js still drives the captions), finish(t) (over everything, captions included) }
 function boot(cfg, voDir) {
   const caps = buildCaps(cfg.brandAt);
   window.DURATION = cfg.duration;
@@ -235,6 +235,7 @@ function boot(cfg, voDir) {
     if (cfg.after) cfg.after(t);
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
     drawCaption(caps, t, cfg.hideCaption);
+    if (cfg.finish) { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; cfg.finish(t); }
   };
   {
     const fill = CanvasRenderingContext2D.prototype.fillText; // text audit hook (scripts/audit-text.mjs)
