@@ -431,3 +431,4 @@ voiceover: the founder records it to the timeline in `STORY-SCRIPT.md` (regenera
 
 - `npm run render:story:captions` → `dist/msghealth-story-captions-9x16.mp4`
 - `npm run render:story` → `dist/msghealth-story-9x16.mp4` (no captions)
+- `node scripts/story-cover.mjs` → `dist/msghealth-story-cover.jpg` (cover image for the post)

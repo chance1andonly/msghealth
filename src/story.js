@@ -14,7 +14,8 @@ const END = L(26);
 const DURATION = +(END + VO_CLIPS[26].dur + 1.9).toFixed(2);
 const T = { brand: L(16), end: END, cta: END + 1.0 };
 window.CUES = T; window.SFX = []; const cue = (t, kind, gain) => window.SFX.push({ t, kind, gain });
-window.MUSIC = { bpm: 96, root: 48, brandAt: T.brand, mood: 'quirky', noVoice: true };
+window.MUSIC = { bpm: 92, root: 48, brandAt: T.brand, mood: 'warm', noVoice: true };
+let NOW = 0; // stop-motion time of the frame being drawn (blinks and other idle life hang on it)
 const SHOW_CAPS = !!window.STORY_CAPTIONS;
 
 const MOM = SKIN[3], MOMHAIR = '#1b1b1f';
@@ -26,6 +27,14 @@ function stage(t, glowA = 0.22) {
   [[260, 330, 9], [880, 240, 6], [140, 1180, 7], [960, 1240, 10], [520, 150, 5]].forEach(([x, y, r], i) => circle(x, y + Math.sin(t * 1.2 + i) * 4, r, '#3a3770'));
   glow(CX, 860, 720, C.primary, glowA);
   [[1640, '#211e42', 160, 22], [1750, '#14132a', 230, 30]].forEach(([y0, col, f, a]) => { ctx.beginPath(); ctx.moveTo(-10, H + 10); for (let x = -10; x <= W + 10; x += 30) ctx.lineTo(x, y0 + Math.sin(x / f + y0) * a); ctx.lineTo(W + 10, H + 10); ctx.closePath(); ctx.fillStyle = col; ctx.fill(); });
+}
+
+function card(x, y, w, h, o = {}) { fillRR(x, y, w, h, o.r ?? 24, o.fill ?? '#25234a'); strokeRR(x, y, w, h, o.r ?? 24, o.stroke ?? 'rgba(255,255,255,0.12)', o.lw ?? 2); }
+function bubble(x, y, maxW, lines, out, a = 1) {
+  if (a <= 0) return 0;
+  const size = 34, lh = 46, w = Math.max(...lines.map((l) => tw(l, size, 600))) + 56, h = lines.length * lh + 34, x0 = out ? x + maxW - w : x;
+  ctx.save(); ctx.globalAlpha *= a; fillRR(x0, y, w, h, 28, out ? C.primary : '#3a3870'); poly(out ? [[x0 + w - 40, y + h - 4], [x0 + w - 8, y + h + 20], [x0 + w - 14, y + h - 26]] : [[x0 + 40, y + h - 4], [x0 + 8, y + h + 20], [x0 + 14, y + h - 26]], out ? C.primary : '#3a3870');
+  lines.forEach((l, i) => text(l, x0 + 28, y + 17 + lh / 2 + i * lh, size, 600, '#fff')); ctx.restore(); return h;
 }
 
 // ── salon set ────────────────────────────────────────────────────────────────
@@ -125,7 +134,9 @@ function hero(x, y, h, look, o = {}) {
   if (L2.brow) { ctx.strokeStyle = L2.brow; ctx.lineWidth = 7; ctx.lineCap = 'round'; [-1, 1].forEach((d) => { ctx.beginPath(); ctx.moveTo(d * 20, -934); ctx.quadraticCurveTo(d * 52, -952, d * 76, -930); ctx.stroke(); }); }
   else { const bc = L2.browCol ?? (L2.style === 'crop' ? '#2a1d17' : '#1b1b1f'); poly([[-76, browY + 4], [-22, browY - 3], [-20, browY + bw - 3], [-75, browY + bw + 2]], bc);
     poly([[76, browY + 4], [22, browY - 3], [20, browY + bw - 3], [75, browY + bw + 2]], bc); }
+  const blink = ((NOW + hash(x * 0.0137 + h * 0.011) * 3.9) % 3.9) < 0.17;
   [-46, 46].forEach((ex) => {
+    if (blink) { ctx.strokeStyle = '#2a1d17'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(ex - 21, -908); ctx.lineTo(ex, -903); ctx.lineTo(ex + 21, -908); ctx.stroke(); return; }
     ellipse(ex, -909, 21, 10, '#f6efe8'); circle(ex + lk * 7, -909, 9.5, L2.iris ?? '#3b2618'); circle(ex + lk * 7, -909, 4.5, '#0e0806'); circle(ex + lk * 7 + 3, -912, 2.2, '#fff');
     ctx.strokeStyle = '#2a1d17'; ctx.lineWidth = 4; ctx.beginPath(); ctx.ellipse(ex, -906, 23, 12, 0, Math.PI * 1.05, Math.PI * 1.95); ctx.stroke();
   });
@@ -169,6 +180,7 @@ function sceneSalon(t) {
   salonBG();
   chair(310, 1240, 1.25);
   const m = pop(t, 0.2, 0.45); xf(760, 1240, clamp(m), 0, () => mom(760, 1240, 660, { arm: t < 3 ? 'wave' : 'down', wave: t, mouth: 'smile', look: -0.3 }));
+  if (t < L(1) - 0.08) { const tt = pop(t, 0.12, 0.4), t2 = pop(t, 0.45, 0.35); if (tt > 0) xf(CX, 170, clamp(tt), 0, () => banner('OUR STORY', CX, 170, 96, C.primary, '#fff', -0.03)); if (t2 > 0) xf(CX, 292, clamp(t2), 0, () => banner('how MsgHealth started', CX, 292, 40, '#1b1f27', '#fff', 0.02, 700)); }
   const sevenAt = L(0) + 2.0;
   const grow = 1 + 0.12 * ease.out(seg(t, word(3, 2), word(3, 2) + 0.5));
   for (let i = 0; i < 7; i++) {
@@ -411,6 +423,9 @@ function sceneName(t) {
   if (a > 0) xf(CX, 1060, clamp(a), 0, () => banner('MESSAGE', 270, 1060, 64, C.primary, '#fff', 0));
   if (p > 0) xf(CX, 1060, clamp(p), 0, () => text('+', CX, 1060, 80, 800, '#fff', 'center', 0));
   if (b > 0) xf(CX, 1060, clamp(b), 0, () => banner('HEALTH', 810, 1060, 64, GREEN, '#0b0b10', 0));
+  const i1 = pop(t, word(16, 1) + 0.45, 0.35), i2 = pop(t, word(16, 1) + 0.6, 0.35);
+  if (i1 > 0) xf(270, 1250, clamp(i1), 0, () => { fillRR(180, 1180, 180, 124, 36, '#fff'); poly([[214, 1296], [200, 1340], [260, 1300]], '#fff'); [232, 270, 308].forEach((x, k) => circle(x, 1242 + Math.sin(t * 6 + k) * 5, 13, C.primary)); });
+  if (i2 > 0) xf(810, 1250, clamp(i2), 0, () => { const bt = 1 + 0.08 * Math.max(0, Math.sin(t * 6.2)) ** 6; xf(810, 1250, bt, 0, () => heartS(810, 1256, 150, GREEN)); ctx.strokeStyle = '#fff'; ctx.lineWidth = 7; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath(); [[742, 1250], [778, 1250], [792, 1222], [812, 1282], [828, 1240], [842, 1250], [878, 1250]].forEach(([x, y], k) => (k ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke(); });
 }
 
 // ── 9–11 · the pulse: healthy → fading → a message brings it back ────────────
@@ -470,6 +485,14 @@ function sceneIndustries(t) {
   const lk = pop(t, word(21, 2) + 0.2, 0.35); if (lk > 0) xf(CX, 200, clamp(lk), 0, () => banner('same leak. different pipe.', CX, 200, 50, '#3aa6d9', '#fff', -0.02));
 }
 
+const CUST = { pants: '#3d424f', shoes: '#22222a' };
+const CUSTOMERS = [
+  { ...CUST, skin: '#8a5537', skinShade: '#74452b', hair: '#1b1b1f', hairHi: '#3a3a42', browCol: '#1b1b1f', shirt: '#6c8ebf', style: 'crop' },
+  { ...CUST, skin: '#f2d0b8', skinShade: '#e2b398', hair: '#7a5236', hairHi: '#9a6c48', brow: '#7a5236', shirt: '#9fb39a', pants: '#575b4c', style: 'bob' },
+  { ...CUST, skin: '#c68a62', skinShade: '#b07650', hair: '#2a1d17', hairHi: '#4a3528', brow: '#2a1d17', shirt: '#e08a6d', pants: '#4b5060', style: 'long' },
+  { ...CUST, skin: '#e2a87f', skinShade: '#cf9068', hair: '#b9b9c0', hairHi: '#dcdce2', browCol: '#8a8a92', shirt: '#3d7a5a', style: 'crop' },
+  { ...CUST, skin: '#6b3f28', skinShade: '#56301d', hair: '#1b1b1f', hairHi: '#3a3a42', brow: '#1b1b1f', shirt: '#f2b441', style: 'bun', lip: '#8a3d38' },
+];
 // ── 13 · they don't say goodbye ──────────────────────────────────────────────
 function sceneGoodbye(t) {
   ctx.fillStyle = vgrad(0, 1150, '#cfe3f3', '#f4ead9'); ctx.fillRect(0, 0, W, 1150); ctx.fillStyle = '#9aa3ad'; ctx.fillRect(0, 1150, W, H - 1150); ctx.fillStyle = '#c9ced4'; ctx.fillRect(0, 1150, W, 30);
@@ -481,7 +504,7 @@ function sceneGoodbye(t) {
   // salon front on the left
   fillRR(-40, 560, 380, 600, 6, '#e8d8c3'); fillRR(30, 760, 200, 400, 6, '#7c6cf0'); fillRR(46, 776, 168, 380, 4, '#cfe7f3'); fillRR(250, 700, 80, 150, 4, '#cfe7f3'); chair(140, 1080, 0.32, '#c0392b'); fillRR(-40, 500, 400, 90, 4, '#c0392b'); text('SALON', 140, 548, 50, 800, '#fff', 'center', 0.1);
   const peds = [0, 1, 2, 3, 4];
-  peds.forEach((i) => { const t0 = L(22) + 0.2 + i * 0.7, x = lerp(150, 1300, seg(t, t0, t0 + 4.2)), h = 340 + (i % 2) * 30, y = 1330 + (i % 2) * 50; if (x < -100 || x > 1180 || t < t0) return; shadow(x, y, h * 0.3); person(x, y, h, 520 + i * 4, { dir: 1, bounce: t * 9 + i, noShadow: true, arm: 'down' }); });
+  peds.forEach((i) => { const t0 = L(22) + 0.2 + i * 0.7, x = lerp(150, 1300, seg(t, t0, t0 + 4.2)), h = 350 + (i % 2) * 30, y = 1340 + (i % 2) * 50; if (x < -120 || x > 1220 || t < t0) return; const ph = t * 9 + i * 1.7; ctx.save(); ctx.translate(x, y); ctx.rotate(Math.sin(ph) * 0.045); ctx.translate(-x, -y); hero(x, y - Math.abs(Math.sin(ph)) * 10, h, CUSTOMERS[i], { look: 1, mouth: 'flat' }); ctx.restore(); });
   const e = pop(t, word(22, 1), 0.4); if (e > 0 && t < word(22, 3)) xf(CX, 300, clamp(e), 0, () => banner('NO GOODBYE', CX, 330, 100, '#1b1f27', '#fff', -0.03));
   const r = pop(t, word(22, 3), 0.3); if (r > 0) xf(680, 470, clamp(r), 0, () => { ctx.save(); ctx.translate(680, 470); ctx.rotate(-0.12); fillRR(-250, -90, 500, 180, 24, 'rgba(255,250,240,0.9)'); strokeRR(-250, -90, 500, 180, 24, '#b3261e', 12); text('RUDE.', 0, 4, 130, 800, '#b3261e', 'center', 0.02); ctx.restore(); });
 }
@@ -521,8 +544,21 @@ function sceneEnd(t) {
   const k = ease.quint(seg(t, END, END + 0.5)); stage(t, 0.2 + 0.22 * k); if (t < END + 0.3) glow(CX, 860, 800, C.primary, 0.45 * (1 - seg(t, END, END + 0.3)));
   xf(CX, 700, 1 + 0.2 * (1 - k), 0, () => { ctx.save(); ctx.globalAlpha = k; logoLockup(CX, 700, 110); text(BRAND.tagline, CX, 820, 34, 500, SOFT, 'center'); ctx.restore(); });
   const u = pop(t, END + 0.5, 0.4); if (u > 0) xf(CX, 1010, clamp(u), 0, () => { const lb = 'Try MsgHealth', bw = tw(lb, 44, 800) + 120; fillRR(CX - bw / 2, 940, bw, 116, 58, C.primary); strokeRR(CX - bw / 2, 940, bw, 116, 58, 'rgba(255,255,255,0.25)', 2); text(lb, CX, 999, 44, 800, '#fff', 'center'); });
-  withFade(seg(t, END + 0.9, END + 1.2), () => text(BRAND.url.toUpperCase(), CX, 1170, 30, 800, IN.mid, 'center', 0.18));
+  withFade(seg(t, END + 0.9, END + 1.2), () => text(BRAND.url.toUpperCase(), CX, 1170, 34, 800, IN.mid, 'center', 0.18));
+  const ch = pop(t, END + 0.35, 0.5); if (ch > 0) xf(CX, 1905, clamp(ch), 0, () => { mom(380, 1905, 610, { arm: 'wave', wave: t, mouth: 'smile', look: 0.3 }); founder(700, 1905, 630, { arm: 'wave', wave: t + 0.4, mouth: 'smile', look: -0.3 }); });
 }
+
+// ── cover image for the post (window.renderCover; scripts/story-cover.mjs) ───
+function sceneCover() {
+  ctx.fillStyle = '#f4c04e'; ctx.fillRect(0, 0, W, H);
+  [[150, 250, 1.0], [780, 420, 0.8], [60, 760, 0.6]].forEach(([x, y, k]) => cloud(x, y, k, '#fff7e2'));
+  ctx.beginPath(); ctx.moveTo(-10, H + 10); for (let x = -10; x <= W + 10; x += 30) ctx.lineTo(x, 1480 + Math.sin(x / 190) * 26); ctx.lineTo(W + 10, H + 10); ctx.closePath(); ctx.fillStyle = '#e59a3c'; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-10, H + 10); for (let x = -10; x <= W + 10; x += 30) ctx.lineTo(x, 1600 + Math.sin(x / 150 + 2) * 30); ctx.lineTo(W + 10, H + 10); ctx.closePath(); ctx.fillStyle = '#c97a2a'; ctx.fill();
+  chair(190, 1560, 1.25); mom(520, 1640, 900, { mouth: 'smile', look: 0.3 }); founder(850, 1640, 920, { mouth: 'smile', look: -0.4, arm: 'heart' });
+  banner('OUR STORY', CX, 250, 150, C.primary, '#fff', -0.03); banner('one chair. seven kids. one idea.', CX, 420, 50, '#1b1f27', '#fff', 0.02, 700);
+  fillRR(CX - 300, 1700, 600, 130, 40, '#17162c'); logoLockup(CX, 1765, 72);
+}
+window.renderCover = () => { ctx = MAIN; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; NOW = 1; paperFrame(0); sceneCover(); ctx.setTransform(1, 0, 0, 1, 0, 0); finishPaper(0); };
 
 const SCENES = [[0, L(4), sceneSalon], [L(4), L(6), sceneBoard], [L(6), L(8), sceneEmpty], [L(8), L(9), sceneJar], [L(9), L(10), sceneSubs], [L(10), L(11), sceneKidneys], [L(11), L(12), sceneBudget], [L(12), L(15), sceneBedroom],
   [L(15), L(16), sceneWorked], [L(16), L(17), sceneName], [L(17), L(18), scenePulse], [L(18), L(19), sceneFade], [L(19), L(20), sceneRevive], [L(20), L(22), sceneIndustries], [L(22), L(23), sceneGoodbye],
@@ -541,7 +577,30 @@ cue(word(19, 0) + 0.2, 'swish', 0.9); cue(word(19, 0) + 1.4, 'ding', 1); cue(wor
 cue(L(20) + 0.1, 'tap', 0.8); for (const x of [word(21, 0), word(21, 0) + 0.45, word(21, 0) + 0.9, word(21, 1), word(21, 1) + 1.0]) cue(x, 'tap', 0.8); cue(word(21, 2) + 0.2, 'punch', 0.8);
 cue(word(22, 1), 'punch', 0.8); cue(word(22, 3), 'punch', 1); cue(word(23, 0), 'punch', 1); cue(word(23, 1), 'ding', 0.9); cue(word(24, 1), 'swish', 0.8); cue(word(24, 2), 'swish', 0.6); cue(word(24, 3), 'tap', 0.6); cue(word(24, 5) - 0.2, 'tap', 0.6);
 cue(L(25), 'transition', 0.8); cue(word(25, 2), 'punch', 0.9); cue(END, 'swish', 0.8); cue(T.cta - 0.2, 'tap', 1.0);
-// Paper cut-out look (src/paper-kit.js): scenes run in stop-motion time (12 poses a second), the finish goes over everything.
-const PAPER_SCENES = SCENES.map(([a, b, fn]) => [a, b, (t) => { paperFrame(t); fn(poseTime(t)); }]);
+// Paper cut-out look (src/paper-kit.js): scenes run in stop-motion time (12 poses a second) with a slow camera push,
+// and each new scene comes in as a fresh sheet with a torn edge. The finish goes over everything.
+const NOWIPE = new Set([9, 18]); // the logo flash and the end card cut in hard
+const TR = 0.36;
+function drawScene(i, t) {
+  const [a, b0, fn] = SCENES[i], b = Math.min(b0, DURATION), k = clamp((t - a) / Math.max(0.01, b - a)), z = i % 2 ? lerp(1.05, 1.0, k) : lerp(1.0, 1.05, k);
+  ctx.save(); ctx.translate(CX, H * 0.45); ctx.scale(z, z); ctx.translate(-CX, -H * 0.45); fn(t); ctx.restore();
+}
+function paperScenes(tr) {
+  paperFrame(tr); const t = poseTime(tr); NOW = t;
+  let i = SCENES.findIndex(([a, b]) => tr >= a && tr < b); if (i < 0) i = SCENES.length - 1;
+  const [a, b] = SCENES[i]; let from = i, to = -1, k = 0;
+  if (i > 0 && tr < a + TR * 0.6 && !NOWIPE.has(i)) { from = i - 1; to = i; k = seg(t, a - TR * 0.4, a + TR * 0.6); }
+  else if (i < SCENES.length - 1 && tr >= b - TR * 0.4 && !NOWIPE.has(i + 1)) { to = i + 1; k = seg(t, b - TR * 0.4, b + TR * 0.6); }
+  if (to < 0 || k <= 0) return drawScene(to >= 0 && k >= 1 ? to : from, t);
+  if (k >= 1) return drawScene(to, t);
+  drawScene(from, t);
+  const e = ease.inOut(k), right = to % 2 === 0, x0 = right ? W * (1 - e) - 30 : W * e + 30;
+  const edge = [], sheet = () => { PAPER.on = false; ctx.beginPath(); ctx.moveTo(right ? W + 40 : -40, -40); for (let y = -40; y <= H + 40; y += 28) { const x = x0 + (hash(y * 0.37 + to * 11) - 0.5) * 22; ctx.lineTo(x, y); edge.push([x, y]); } ctx.lineTo(right ? W + 40 : -40, H + 40); ctx.closePath(); PAPER.on = true; };
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+  sheet(); PAPER.on = false; ctx.shadowColor = 'rgba(20,12,6,0.5)'; ctx.shadowBlur = 34; ctx.shadowOffsetX = right ? -14 : 14; ctx.fillStyle = '#efe6d6'; ctx.fill(); ctx.shadowColor = 'transparent'; PAPER.on = true;
+  edge.length = 0; sheet(); ctx.clip(); drawScene(to, t); ctx.restore();
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); PAPER.on = false; ctx.beginPath(); edge.forEach(([x, y], n) => (n ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.strokeStyle = 'rgba(255,250,240,0.9)'; ctx.lineWidth = 5; ctx.stroke(); PAPER.on = true; ctx.restore();
+}
+const PAPER_SCENES = [[0, 999, paperScenes]];
 boot({ duration: DURATION, scenes: PAPER_SCENES, brandAt: T.brand, noVoice: true, finish: finishPaper, hideCaption: (t) => !SHOW_CAPS || t >= END - 0.1,
   after: (t) => { const f = 1 - seg(t, T.brand, T.brand + 0.12); if (t >= T.brand && f > 0) { ctx.fillStyle = rgba('#ffffff', 0.5 * f); ctx.fillRect(0, 0, W, H); } } }, 'story');

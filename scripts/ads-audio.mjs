@@ -31,14 +31,15 @@ const beat = 60 / M.bpm, root = M.root;
 const MOODS = { // scale degrees (semitones) for the chord roots and the pluck pattern
   sneaky: { chords: [0, -2, -4, -2], scale: [0, 3, 5, 7, 10], swing: 0 }, bouncy: { chords: [0, 5, 7, 5], scale: [0, 4, 7, 9, 12], swing: 0.08 }, quirky: { chords: [0, 7, 5, 3], scale: [0, 2, 5, 7, 9], swing: 0.05 },
 };
+MOODS.warm = { chords: [0, -3, 5, 7], tri: [[0, 4, 7], [0, 3, 7], [0, 4, 7], [0, 4, 7]], scale: [0, 4, 7, 12], swing: 0 }; // I–vi–IV–V, triads + arpeggio
 const mood = MOODS[M.mood] ?? MOODS.sneaky;
 for (let b = 0; b * beat * 4 < DUR; b++) {
   const t0 = b * beat * 4, r = root + mood.chords[b % 4];
-  add(t0, beat * 4 + 0.3, (t) => { const e = Math.min(1, t / 0.4) * Math.min(1, (beat * 4 + 0.3 - t) / 0.4); return e * [0, 7, 12].reduce((s, d) => s + tri(mtof(r + 12 + d) * t) + tri(mtof(r + 12 + d) * 1.004 * t), 0) / 6; }, 0.05);
+  add(t0, beat * 4 + 0.3, (t) => { const e = Math.min(1, t / 0.4) * Math.min(1, (beat * 4 + 0.3 - t) / 0.4); return e * (mood.tri ? [...mood.tri[b % 4], 12] : [0, 7, 12]).reduce((s, d) => s + tri(mtof(r + 12 + d) * t) + tri(mtof(r + 12 + d) * 1.004 * t), 0) / 6; }, 0.05);
   for (let k = 0; k < 8; k++) {
     const t = t0 + k * beat / 2 + (k % 2 ? mood.swing * beat : 0);
     if (k % 2 === 0) add(t, 0.4, sub(mtof(r - 12), 6), 0.3);
-    const n = mood.scale[Math.floor(hash(b * 8 + k) * mood.scale.length)];
+    const n = mood.tri ? [0, 0, mood.tri[b % 4][2], 12, 0, mood.tri[b % 4][1] + 12, 12, mood.tri[b % 4][2]][k] : mood.scale[Math.floor(hash(b * 8 + k) * mood.scale.length)];
     if (k % 3 !== 1) add(t, 0.5, pluck(mtof(r + 12 + n), 8), 0.06, k % 2 ? 0.4 : -0.4);
   }
 }
@@ -79,7 +80,7 @@ if (voIn.length) {
   graph.push(`[0:a]volume=${M.noVoice ? 0.5 : 1}[duck]`);
   graph.push(`anullsrc=r=${SR}:cl=stereo,atrim=0:${DUR.toFixed(3)}[voice]`);
 }
-graph.push(`[duck][voice]${fxIn.join('')}amix=inputs=${2 + fxIn.length}:normalize=0:duration=first,alimiter=limit=0.89:level=disabled,afade=t=out:st=${(DUR - 0.6).toFixed(3)}:d=0.6,atrim=0:${DUR.toFixed(3)}[out]`);
+graph.push(`[duck][voice]${fxIn.join('')}amix=inputs=${2 + fxIn.length}:normalize=0:duration=first,alimiter=limit=${M.noVoice ? 0.7 : 0.89}:level=disabled,afade=t=out:st=${(DUR - 0.6).toFixed(3)}:d=0.6,atrim=0:${DUR.toFixed(3)}[out]`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', ...inputs, '-filter_complex', graph.join(';'), '-map', '[out]', '-ac', '2', '-c:a', 'pcm_s16le', out], { stdio: 'inherit' });
 fs.rmSync(TMP, { recursive: true, force: true });
 console.log(`audio → ${out}  (${vo.length} voice clips, ${sfx.length} effects)`);
