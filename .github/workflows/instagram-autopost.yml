@@ -1,11 +1,10 @@
-# Posts the next reel from posting/queue to Instagram 3 times a day, at the hours in posting/schedule.json.
-# Runs every hour; the script posts only when one of the 3 slots is due. Every Monday it re-picks the best
+# Posts the next reel from posting/queue to Instagram 3 times a day. GitHub's own hourly cron never fired, so a
+# scheduled Claude task starts this workflow (action=post) at 8am, 12pm and 8pm Eastern. Every Monday it re-picks the best
 # hours from your own reels' views, runs the niche research report and refreshes the Instagram token.
 name: Instagram autopost
 
 on:
   schedule:
-    - cron: '7 * * * *'      # every hour at :07 (the script decides if a slot is due)
     - cron: '37 5 * * *'     # every night ~12:37am Eastern: niche research, ready before the 2:17am reel batch
     - cron: '23 9 * * 1'     # Mondays: re-pick the best hours, niche research, refresh the token
   workflow_dispatch:
@@ -39,10 +38,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Post if a slot is due
-        if: github.event_name == 'schedule' && github.event.schedule == '7 * * * *'
-        run: node posting/ig.mjs post
 
       - name: Nightly niche research
         if: github.event_name == 'schedule' && github.event.schedule == '37 5 * * *'
