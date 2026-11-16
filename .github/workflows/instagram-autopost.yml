@@ -1,0 +1,74 @@
+# Posts the next reel from posting/queue to Instagram 3 times a day, at the hours in posting/schedule.json.
+# Runs every hour; the script posts only when one of the 3 slots is due. Every Monday it re-picks the best
+# hours from your own reels' views and refreshes the Instagram token.
+name: Instagram autopost
+
+on:
+  schedule:
+    - cron: '7 * * * *'      # every hour at :07 (the script decides if a slot is due)
+    - cron: '23 9 * * 1'     # Mondays: re-pick the best hours + refresh the token
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'check = test connection · post = post the next reel now · optimize = re-pick best hours · refresh = refresh token'
+        type: choice
+        options: [check, post, optimize, refresh]
+        default: check
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram-autopost
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      IG_TOKEN: ${{ secrets.IG_TOKEN }}
+      PUBLIC_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Post if a slot is due
+        if: github.event_name == 'schedule' && github.event.schedule == '7 * * * *'
+        run: node posting/ig.mjs post
+
+      - name: Weekly tune-up
+        if: github.event_name == 'schedule' && github.event.schedule == '23 9 * * 1'
+        run: |
+          node posting/ig.mjs optimize
+          NEW_TOKEN_FILE=/tmp/ig_token node posting/ig.mjs refresh || echo "::warning::Token refresh failed"
+
+      - name: Manual run
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          case "${{ inputs.action }}" in
+            post) node posting/ig.mjs post --force ;;
+            refresh) NEW_TOKEN_FILE=/tmp/ig_token node posting/ig.mjs refresh ;;
+            *) node posting/ig.mjs ${{ inputs.action }} ;;
+          esac
+
+      - name: Save the refreshed token
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          if [ -s /tmp/ig_token ]; then
+            if [ -n "$GH_TOKEN" ]; then gh secret set IG_TOKEN --repo "${{ github.repository }}" < /tmp/ig_token && echo "Saved the refreshed token."
+            else echo "::warning::No GH_PAT secret, so the refreshed token was not saved. Generate a new IG_TOKEN before day 60."; fi
+            rm -f /tmp/ig_token
+          fi
+
+      - name: Save queue, log and schedule
+        if: always()
+        run: |
+          git config user.name "instagram-autopost"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A posting
+          git diff --cached --quiet || (git commit -m "autopost: $(date -u +%F' '%H:%M) update" && git push)
