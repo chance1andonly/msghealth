@@ -47,7 +47,7 @@ jobs:
       - name: Nightly niche research
         if: github.event_name == 'schedule' && github.event.schedule == '37 5 * * *'
         run: |
-          if [ -n "$FB_TOKEN" ]; then node posting/research.mjs || echo "::warning::Research failed"; fi
+          if [ -n "$YOUTUBE_API_KEY" ]; then node posting/research.mjs || echo "::warning::Research failed"; else echo "No YOUTUBE_API_KEY, skipping (Instagram research needs Meta app review)."; fi
 
       - name: Weekly tune-up
         if: github.event_name == 'schedule' && github.event.schedule == '23 9 * * 1'
