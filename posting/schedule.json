@@ -1,7 +1,12 @@
 {
   "ig_user_id": "17841449627448338",
   "timezone": "America/New_York",
-  "slots": [8, 12, 20],
+  "slots": [
+    8,
+    12,
+    20
+  ],
   "trial": null,
-  "basis": "starting defaults; replaced every Monday by the best hours from your own reels' views"
+  "basis": "defaults (not enough data yet)",
+  "slots_updated": "2026-11-16T19:43:27.739Z"
 }
