@@ -6,6 +6,7 @@ name: Instagram autopost
 on:
   schedule:
     - cron: '7 * * * *'      # every hour at :07 (the script decides if a slot is due)
+    - cron: '37 5 * * *'     # every night ~12:37am Eastern: niche research, ready before the 2:17am reel batch
     - cron: '23 9 * * 1'     # Mondays: re-pick the best hours, niche research, refresh the token
   workflow_dispatch:
     inputs:
@@ -42,6 +43,11 @@ jobs:
       - name: Post if a slot is due
         if: github.event_name == 'schedule' && github.event.schedule == '7 * * * *'
         run: node posting/ig.mjs post
+
+      - name: Nightly niche research
+        if: github.event_name == 'schedule' && github.event.schedule == '37 5 * * *'
+        run: |
+          if [ -n "$FB_TOKEN" ]; then node posting/research.mjs || echo "::warning::Research failed"; fi
 
       - name: Weekly tune-up
         if: github.event_name == 'schedule' && github.event.schedule == '23 9 * * 1'
