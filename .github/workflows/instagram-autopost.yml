@@ -28,7 +28,9 @@ jobs:
     timeout-minutes: 20
     env:
       IG_TOKEN: ${{ secrets.IG_TOKEN }}
-      FB_TOKEN: ${{ secrets.FB_TOKEN }}
+      FB_TOKEN: ${{ secrets.FB_TOKEN || secrets.IG_TOKEN }}
+      FB_APP_ID: ${{ secrets.FB_APP_ID }}
+      FB_APP_SECRET: ${{ secrets.FB_APP_SECRET }}
       YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
       PUBLIC_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}
     steps:
