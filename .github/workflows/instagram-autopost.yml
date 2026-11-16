@@ -1,18 +1,18 @@
 # Posts the next reel from posting/queue to Instagram 3 times a day, at the hours in posting/schedule.json.
 # Runs every hour; the script posts only when one of the 3 slots is due. Every Monday it re-picks the best
-# hours from your own reels' views and refreshes the Instagram token.
+# hours from your own reels' views, runs the niche research report and refreshes the Instagram token.
 name: Instagram autopost
 
 on:
   schedule:
     - cron: '7 * * * *'      # every hour at :07 (the script decides if a slot is due)
-    - cron: '23 9 * * 1'     # Mondays: re-pick the best hours + refresh the token
+    - cron: '23 9 * * 1'     # Mondays: re-pick the best hours, niche research, refresh the token
   workflow_dispatch:
     inputs:
       action:
-        description: 'check = test connection · post = post the next reel now · optimize = re-pick best hours · refresh = refresh token'
+        description: 'check = test connection · post = post the next reel now · optimize = re-pick best hours · research = niche outlier report · refresh = refresh token'
         type: choice
-        options: [check, post, optimize, refresh]
+        options: [check, post, optimize, research, refresh]
         default: check
 
 permissions:
@@ -28,6 +28,8 @@ jobs:
     timeout-minutes: 20
     env:
       IG_TOKEN: ${{ secrets.IG_TOKEN }}
+      FB_TOKEN: ${{ secrets.FB_TOKEN }}
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
       PUBLIC_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
@@ -43,6 +45,7 @@ jobs:
         if: github.event_name == 'schedule' && github.event.schedule == '23 9 * * 1'
         run: |
           node posting/ig.mjs optimize
+          if [ -n "$FB_TOKEN" ]; then node posting/research.mjs || echo "::warning::Research failed"; fi
           NEW_TOKEN_FILE=/tmp/ig_token node posting/ig.mjs refresh || echo "::warning::Token refresh failed"
 
       - name: Manual run
@@ -50,6 +53,7 @@ jobs:
         run: |
           case "${{ inputs.action }}" in
             post) node posting/ig.mjs post --force ;;
+            research) node posting/research.mjs ;;
             refresh) NEW_TOKEN_FILE=/tmp/ig_token node posting/ig.mjs refresh ;;
             *) node posting/ig.mjs ${{ inputs.action }} ;;
           esac

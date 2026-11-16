@@ -29,3 +29,34 @@ If the queue runs out, the run at the next posting time fails, and GitHub emails
 
 - Different times: edit `slots` in `schedule.json` (24-hour clock). Monday's run will replace them unless you remove the `optimize` line from the workflow.
 - Normal reels instead of trials: set `"trial": null`. `"MANUAL"` makes trials that only move to your main page when you choose in the app.
+
+## Free niche research (vidIQ-style, $0)
+
+`research.mjs` runs every Monday after the schedule update (or on demand: Run workflow → `research`) and writes `research.json`, which the reels-studio skill reads first:
+
+- **Outliers:** reels from accounts in `watchlist.json` that got at least 3× that account's usual views. These show which topics and hooks broke out, not just who has a big audience. This is what vidIQ calls outliers.
+- **Account benchmarks:** followers, median views per reel, engagement and posts per week.
+- **Hashtag top posts** for the niche tags in `watchlist.json`.
+- **Suggested accounts:** professional accounts @-mentioned in the outliers, to add to the watchlist.
+- **YouTube Shorts trends** (optional): the most-viewed Shorts of the last 30 days for your search terms.
+- **You vs the niche:** your median views next to the watchlist's.
+
+It uses only Meta's official API (Business Discovery and hashtag search) and Google's YouTube Data API, both free.
+
+### Setup (about 10 minutes, once)
+
+1. **Link a Facebook Page to your Instagram.** Business Discovery needs one. In the Facebook app: your Page → Settings → Linked accounts → Instagram. Any Page you own works, even a bare one.
+2. **Get a Page token.**
+   - In your Meta app, add the product **Facebook Login for Business**.
+   - Open the [Graph API Explorer](https://developers.facebook.com/tools/explorer/) and pick your app.
+   - Add the permissions `instagram_basic`, `pages_show_list`, `pages_read_engagement` and `business_management`, then tap **Generate Access Token**.
+   - Tap the ⓘ next to the token → **Open in Access Token Tool** → **Extend Access Token**, and copy the long-lived token.
+   - Back in the Explorer, paste it and run `me/accounts`. Copy the `access_token` of your Page. A Page token made this way doesn't expire.
+3. **Save it in GitHub** as a repository secret named `FB_TOKEN`.
+4. **(Optional) YouTube Shorts trends.**
+   - In [Google Cloud console](https://console.cloud.google.com/), create a project and enable **YouTube Data API v3**.
+   - Go to Credentials → Create credentials → API key.
+   - Save the key as a secret named `YOUTUBE_API_KEY`. The free quota (10,000 units a day) is far more than a weekly run uses.
+5. **Test it:** Actions → Instagram autopost → Run workflow → `research`.
+
+Edit `watchlist.json` to change who you benchmark against. Only public professional accounts can be read. Personal or private ones are skipped and listed under `errors`.
