@@ -20,11 +20,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const FB = process.env.FB_API_BASE || 'https://graph.facebook.com/v23.0';
-const IGB = process.env.IG_API_BASE || 'https://graph.instagram.com/v23.0';
+const IGB = process.env.IG_API_BASE || 'https://graph.facebook.com/v23.0';
 const YT = process.env.YT_API_BASE || 'https://www.googleapis.com/youtube/v3';
 const DIR = path.dirname(new URL(import.meta.url).pathname);
 const OUT = path.join(DIR, 'research.json'), WATCH = path.join(DIR, 'watchlist.json');
-const { FB_TOKEN, YOUTUBE_API_KEY, IG_TOKEN } = process.env;
+const { YOUTUBE_API_KEY, IG_TOKEN } = process.env, FB_TOKEN = process.env.FB_TOKEN || IG_TOKEN;
 const say = (...a) => console.log(...a);
 const med = (a) => { const s = a.filter((x) => x != null).sort((x, y) => x - y); return s.length ? s[Math.floor((s.length - 1) / 2)] : 0; };
 const days = (iso) => (Date.now() - Date.parse(iso)) / 864e5;
@@ -38,9 +38,9 @@ async function get(base, p, params, token) {
 
 // The Instagram business account behind the Page token.
 async function myIgId() {
-  const j = await get(FB, '/me', { fields: 'instagram_business_account{id,username}' }, FB_TOKEN);
-  if (!j.instagram_business_account) throw new Error('This Facebook Page has no linked Instagram professional account.');
-  return j.instagram_business_account;
+  const id = JSON.parse(fs.readFileSync(path.join(DIR, 'schedule.json'), 'utf8')).ig_user_id; if (!id) throw new Error('Set "ig_user_id" in posting/schedule.json');
+  const j = await get(FB, `/${id}`, { fields: 'id,username' }, FB_TOKEN);
+  return { id: j.id, username: j.username };
 }
 
 async function account(igId, username) {
@@ -78,7 +78,7 @@ async function shorts(term) {
 }
 
 async function mine() {
-  const m = await get(IGB, '/me', { fields: 'user_id,username' }, IG_TOKEN);
+  const id = JSON.parse(fs.readFileSync(path.join(DIR, 'schedule.json'), 'utf8')).ig_user_id, m = { user_id: id, username: (await get(IGB, `/${id}`, { fields: 'username' }, IG_TOKEN)).username };
   const media = (await get(IGB, `/${m.user_id}/media`, { fields: 'id,timestamp,media_product_type', limit: '30' }, IG_TOKEN)).data.filter((x) => x.media_product_type === 'REELS' && days(x.timestamp) >= 1);
   const views = [];
   for (const x of media) { const ins = await get(IGB, `/${x.id}/insights`, { metric: 'views' }, IG_TOKEN).catch(() => null); if (ins) views.push(ins.data[0]?.values?.[0]?.value ?? ins.data[0]?.total_value?.value ?? 0); }

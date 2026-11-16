@@ -11,7 +11,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const API = process.env.IG_API_BASE || 'https://graph.instagram.com/v23.0'; // IG_API_BASE: only for local tests
+// New Meta apps get 'Unified login' tokens, which work on graph.facebook.com (not graph.instagram.com).
+const API = process.env.IG_API_BASE || 'https://graph.facebook.com/v23.0'; // IG_API_BASE: only for local tests
 const DIR = path.dirname(new URL(import.meta.url).pathname);
 const QUEUE = path.join(DIR, 'queue'), POSTED = path.join(DIR, 'posted');
 const SCHEDULE = path.join(DIR, 'schedule.json'), LOG = path.join(DIR, 'log.json'), STATS = path.join(DIR, 'stats.json');
@@ -37,7 +38,9 @@ function localNow(tz) {
 }
 const hourIn = (iso, tz) => +new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: '2-digit', hourCycle: 'h23' }).format(new Date(iso));
 
-async function me() { return api('GET', '/me', { fields: 'user_id,username,account_type' }); }
+// The Instagram account is named by its ID in schedule.json (ig_user_id); the ID is not secret.
+const igId = () => { const id = readJson(SCHEDULE, {}).ig_user_id; if (!id) throw new Error('Set "ig_user_id" in posting/schedule.json'); return String(id); };
+async function me() { const id = igId(), r = await api('GET', `/${id}`, { fields: 'id,username' }); return { user_id: r.id, username: r.username, account_type: 'professional' }; }
 
 async function check() {
   const m = await me(); say(`connected as @${m.username} (${m.account_type}), id ${m.user_id}`);
@@ -120,9 +123,11 @@ async function optimize() {
 }
 
 async function refresh() {
-  const r = await fetch(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${encodeURIComponent(TOKEN)}`).then((x) => x.json());
-  if (!r.access_token) throw new Error('token refresh failed: ' + JSON.stringify(r.error || r));
-  say(`token refreshed, valid for ${Math.round(r.expires_in / 86400)} more days`);
+  const { FB_APP_ID: id, FB_APP_SECRET: secret } = process.env;
+  if (!id || !secret) { say('token refresh skipped: add FB_APP_ID and FB_APP_SECRET secrets to enable it (see posting/README.md)'); return; }
+  const r = await api('GET', '/oauth/access_token', { grant_type: 'fb_exchange_token', client_id: id, client_secret: secret, fb_exchange_token: TOKEN });
+  if (!r.access_token) throw new Error('token refresh failed');
+  say(`token extended, valid for about ${Math.round((r.expires_in || 5184000) / 86400)} days`);
   if (process.env.NEW_TOKEN_FILE) fs.writeFileSync(process.env.NEW_TOKEN_FILE, r.access_token);
 }
 
