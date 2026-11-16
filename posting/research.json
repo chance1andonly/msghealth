@@ -1,0 +1,31 @@
+{
+  "updated": "2026-11-16T09:48:41.714Z",
+  "errors": [
+    "@vicblends: (#10) Application does not have permission for this action",
+    "@sami2fresh: (#10) Application does not have permission for this action",
+    "@arod23pr: (#10) Application does not have permission for this action",
+    "@360jeezy: (#10) Application does not have permission for this action",
+    "@taylorcutz1: (#10) Application does not have permission for this action",
+    "@andyauthentic: (#10) Application does not have permission for this action",
+    "@kcfee: (#10) Application does not have permission for this action",
+    "@rickthebarb3r: (#10) Application does not have permission for this action",
+    "@harisbarbershop: (#10) Application does not have permission for this action",
+    "@londonschoolofbarbering: (#10) Application does not have permission for this action",
+    "#barber: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review.",
+    "#barberlife: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review.",
+    "#barbershop: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review.",
+    "#hairstylist: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review.",
+    "#atlantabarber: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review."
+  ],
+  "outliers": [],
+  "most_viewed": [],
+  "accounts": [],
+  "suggested_accounts": [],
+  "hashtags": [],
+  "you": {
+    "username": "msghealthco",
+    "reels": 0,
+    "median_views": 0,
+    "niche_median_views": 0
+  }
+}
