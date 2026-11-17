@@ -1,0 +1,56 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "He didn't leave you. His job changed his Thursdays.",
+   "caps": [
+    "He didn't *leave you.*",
+    "His job changed his *Thursdays.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Shift changes, moves, new schedules. Life takes more regulars than the shop down the street.",
+   "caps": [
+    "Shift changes. Moves.",
+    "Life takes *more regulars*",
+    "than the *shop down the street.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "And he won't ask. He figures you're full.",
+   "caps": [
+    "He won't ask.",
+    "He figures you're *full.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "So you ask first. Did your schedule change? I've got Saturday mornings open.",
+   "caps": [
+    "So you *ask first:*",
+    "*\"Did your schedule change?\"*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "New time. Same barber. Same regular.",
+   "caps": [
+    "New time. *Same barber.*",
+    "Same *regular.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment the word keep and we'll show you who's drifted. Message Health dot net.",
+   "caps": [
+    "Comment *KEEP* and we'll",
+    "show you who's *drifted.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Seven in ten new clients never book a second cut.",
+   "caps": [
+    "*7 in 10* new clients",
+    "never book *cut two.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "They won't complain. They just never come back.",
+   "caps": [
+    "They won't complain.",
+    "They just *never come back.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The fix is one text. Send it the day after the first cut.",
+   "caps": [
+    "The fix is *one text.*",
+    "Send it the *day after.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Say, hey Marcus, how's the fade holding up? Want your next one on the books?",
+   "caps": [
+    "*How's the fade* holding up?",
+    "Want your *next one* booked?"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "That one text turns a stranger into a regular.",
+   "caps": [
+    "That text turns",
+    "a stranger into a *regular.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment the word keep and we'll show you who needs a text. Message Health dot net.",
+   "caps": [
+    "Comment *KEEP* and we'll",
+    "show you who *needs a text.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

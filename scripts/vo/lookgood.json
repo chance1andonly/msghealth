@@ -1,0 +1,55 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Looks great, man. Then he never books again.",
+   "caps": [
+    "*\"Looks great, man.\"*",
+    "Then he *never* books again."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Clients almost never complain. Silence is how they say it.",
+   "caps": [
+    "Clients almost never *complain.*",
+    "*Silence* is how they say it."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "You can't fix what you never hear. So ask, the next day.",
+   "caps": [
+    "You can't fix what",
+    "you *never hear.* Ask *next day.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Text this. Anything off with the cut? I'll fix it free.",
+   "caps": [
+    "Text this:",
+    "*\"Anything off with the cut?\"*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The ones who answer stay. The ones you never ask, leave.",
+   "caps": [
+    "The ones who answer *stay.*",
+    "The ones you never ask *leave.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment the word keep and we'll show you who's gone quiet. Message Health dot net.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
