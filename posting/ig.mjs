@@ -111,9 +111,11 @@ async function optimize() {
   const med = (a) => { const s = a.slice().sort((x, y) => x - y); return s.length ? s[Math.floor((s.length - 1) / 2)] : 0; };
   const byHour = {}; rows.forEach((r) => (byHour[r.hour] ||= []).push(r.views));
   const ranked = Object.entries(byHour).filter(([h, v]) => v.length >= 2 && h >= 6).map(([h, v]) => ({ hour: +h, reels: v.length, median_views: med(v) })).sort((a, b) => b.median_views - a.median_views);
-  // Take the best hours at least 3 hours apart; fill any gap with the default slots.
-  const pick = []; for (const r of ranked) if (pick.length < 3 && pick.every((h) => Math.abs(h - r.hour) >= 3)) pick.push(r.hour);
-  for (const h of [8, 12, 20]) if (pick.length < 3 && pick.every((p) => Math.abs(p - h) >= 3)) pick.push(h);
+  // Take the best hours (7am-9pm only), spaced apart, up to per_day; fill any gap with evenly spread default hours.
+  const n = sch.per_day || (sch.slots || []).length || 3, gap = n > 4 ? 1 : 3;
+  const defaults = n === 10 ? [7, 9, 11, 12, 13, 15, 17, 19, 20, 21] : Array.from({ length: n }, (_, i) => Math.round(7 + (i * 14) / Math.max(1, n - 1)));
+  const pick = []; for (const r of ranked) if (pick.length < n && r.hour >= 7 && r.hour <= 21 && pick.every((h) => Math.abs(h - r.hour) >= gap)) pick.push(r.hour);
+  for (const h of defaults) if (pick.length < n && !pick.includes(h) && pick.every((p) => Math.abs(p - h) >= Math.min(gap, 1))) pick.push(h);
   const slots = pick.sort((a, b) => a - b);
   writeJson(STATS, { updated: new Date().toISOString(), timezone: tz, reels_analyzed: rows.length, by_hour: ranked, top_reels: rows.sort((a, b) => b.views - a.views).slice(0, 15) });
   say(`analyzed ${rows.length} reels; best hours: ${ranked.slice(0, 5).map((r) => `${r.hour}:00 (${r.median_views} views, ${r.reels} reels)`).join(', ') || 'not enough data yet'}`);

@@ -10,9 +10,9 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: 'check = test connection · post = post the next reel now · optimize = re-pick best hours · research = niche outlier report · refresh = refresh token'
+        description: 'check = test connection · post = post the next reel now · due = post only if a slot is due · optimize = re-pick best hours · research = niche outlier report · refresh = refresh token'
         type: choice
-        options: [check, post, optimize, research, refresh]
+        options: [check, post, due, optimize, research, refresh]
         default: check
 
 permissions:
@@ -56,6 +56,7 @@ jobs:
         run: |
           case "${{ inputs.action }}" in
             post) node posting/ig.mjs post --force ;;
+            due) node posting/ig.mjs post ;;
             research) node posting/research.mjs ;;
             refresh) NEW_TOKEN_FILE=/tmp/ig_token node posting/ig.mjs refresh ;;
             *) node posting/ig.mjs ${{ inputs.action }} ;;
