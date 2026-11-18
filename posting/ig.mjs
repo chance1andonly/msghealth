@@ -98,30 +98,48 @@ async function post(force) {
 }
 
 async function optimize() {
-  const sch = readJson(SCHEDULE, {}), tz = sch.timezone || 'America/New_York', { user_id: uid } = await me();
-  let media = [], next = `/${uid}/media`, params = { fields: 'id,timestamp,media_type,media_product_type,permalink,caption', limit: '50' };
+  const sch = readJson(SCHEDULE, {}), tz = sch.timezone || 'America/New_York', { user_id: uid } = await me(), log = readJson(LOG, []);
+  let media = [], next = `/${uid}/media`, params = { fields: 'id,timestamp,media_type,media_product_type,permalink,caption,like_count,comments_count', limit: '50' };
   while (next && media.length < 200) { const r = await api('GET', next, params); media.push(...(r.data || [])); next = r.paging?.next; params = {}; }
   const reels = media.filter((m) => m.media_product_type === 'REELS' && Date.now() - Date.parse(m.timestamp) > 2 * 864e5); // ignore reels under 2 days old
-  const rows = []; let insErr = '';
+  const rows = []; let insErr = '', insOk = 0;
   for (const m of reels) {
-    const ins = await api('GET', `/${m.id}/insights`, { metric: 'views,reach,saved,shares' }).catch((e) => { insErr ||= e.message; return null; }); if (!ins) continue;
-    const v = Object.fromEntries(ins.data.map((d) => [d.name, d.values?.[0]?.value ?? d.total_value?.value ?? 0]));
-    rows.push({ id: m.id, permalink: m.permalink, hour: hourIn(m.timestamp, tz), posted: m.timestamp, views: v.views || 0, reach: v.reach || 0, saved: v.saved || 0, shares: v.shares || 0, caption: (m.caption || '').slice(0, 80) });
+    const ins = await api('GET', `/${m.id}/insights`, { metric: 'views,reach,saved,shares' }).catch((e) => { insErr ||= e.message; return null; });
+    const v = ins ? Object.fromEntries(ins.data.map((d) => [d.name, d.values?.[0]?.value ?? d.total_value?.value ?? 0])) : {};
+    if (ins) insOk++;
+    rows.push({ id: m.id, permalink: m.permalink, hour: hourIn(m.timestamp, tz), posted: m.timestamp, views: v.views ?? null, reach: v.reach ?? null, saved: v.saved ?? null, shares: v.shares ?? null, likes: m.like_count || 0, comments: m.comments_count || 0, caption: (m.caption || '').slice(0, 80) });
   }
-  say(`found ${media.length} posts, ${reels.length} reels old enough, ${rows.length} with insights${insErr ? '; insights error: ' + insErr : ''}`);
+  // Score = views when Instagram shares insights with this token, otherwise likes + 2 x comments (always available).
+  const metric = insOk ? 'views' : 'engagement';
+  rows.forEach((r) => { r.score = metric === 'views' ? r.views || 0 : r.likes + 2 * r.comments; });
+  say(`found ${media.length} posts, ${reels.length} reels old enough, ${insOk} with insights${insErr ? '; insights unavailable (' + insErr.replace(/^GET [^:]+: /, '') + '), scoring by likes + 2 x comments' : ''}`);
   const med = (a) => { const s = a.slice().sort((x, y) => x - y); return s.length ? s[Math.floor((s.length - 1) / 2)] : 0; };
-  const byHour = {}; rows.forEach((r) => (byHour[r.hour] ||= []).push(r.views));
-  const ranked = Object.entries(byHour).filter(([h, v]) => v.length >= 2 && h >= 6).map(([h, v]) => ({ hour: +h, reels: v.length, median_views: med(v) })).sort((a, b) => b.median_views - a.median_views);
-  // Take the best hours (7am-9pm only), spaced apart, up to per_day; fill any gap with evenly spread default hours.
-  const n = sch.per_day || (sch.slots || []).length || 3, gap = n > 4 ? 1 : 3;
-  const defaults = n === 10 ? [7, 9, 11, 12, 13, 15, 17, 19, 20, 21] : Array.from({ length: n }, (_, i) => Math.round(7 + (i * 14) / Math.max(1, n - 1)));
+  const byHour = {}; rows.forEach((r) => (byHour[r.hour] ||= []).push(r.score));
+  const ranked = Object.entries(byHour).filter(([h, v]) => v.length >= 2 && h >= 6).map(([h, v]) => ({ hour: +h, reels: v.length, median_score: med(v) })).sort((a, b) => b.median_score - a.median_score);
+
+  // How many posts a day? Hill-climb between 3 and 10 on total score per day (posts per day x median score per reel), using only
+  // reels this autoposter posted, grouped by the per_day setting in force when they went out. Old log entries count as 3 a day.
+  const posted = new Map(log.map((l) => [l.media_id, l.per_day || 3]));
+  const groups = {}; rows.forEach((r) => { const d = posted.get(r.id); if (d) (groups[d] ||= []).push(r.score); });
+  const cur = Math.min(10, Math.max(3, sch.per_day || 3)), MIN = 4, tested = Object.keys(groups).map(Number).filter((d) => groups[d].length >= MIN).sort((a, b) => a - b);
+  const total = (d) => d * med(groups[d]), lower = tested.filter((d) => d < cur).pop();
+  let perDay = cur, why = 'holding: not enough reels at this rate yet (need ' + MIN + ', have ' + (groups[cur]?.length || 0) + ')';
+  if (tested.includes(cur)) {
+    if (lower != null && (total(cur) < 0.9 * total(lower) || med(groups[cur]) < 0.5 * med(groups[lower]))) { perDay = lower; why = `back to ${lower} a day: ${cur} a day scored ${total(cur)} vs ${total(lower)} a day at ${lower}`; }
+    else if (cur < 10) { perDay = Math.min(10, cur + (lower == null ? 2 : 1)); why = `trying ${perDay} a day: ${cur} a day is holding up (median ${med(groups[cur])} per reel)`; }
+    else why = 'holding at 10 a day (the maximum)';
+  }
+  say('posts per day:', why);
+
+  const n = perDay, gap = n > 4 ? 1 : 3;
+  const defaults = n === 3 ? [8, 12, 20] : n === 10 ? [7, 9, 11, 12, 13, 15, 17, 19, 20, 21] : Array.from({ length: n }, (_, i) => Math.round(8 + (i * 12) / (n - 1)));
   const pick = []; for (const r of ranked) if (pick.length < n && r.hour >= 7 && r.hour <= 21 && pick.every((h) => Math.abs(h - r.hour) >= gap)) pick.push(r.hour);
-  for (const h of defaults) if (pick.length < n && !pick.includes(h) && pick.every((p) => Math.abs(p - h) >= Math.min(gap, 1))) pick.push(h);
+  for (const h of defaults) if (pick.length < n && !pick.includes(h) && pick.every((p) => Math.abs(p - h) >= 1)) pick.push(h);
   const slots = pick.sort((a, b) => a - b);
-  writeJson(STATS, { updated: new Date().toISOString(), timezone: tz, reels_analyzed: rows.length, by_hour: ranked, top_reels: rows.sort((a, b) => b.views - a.views).slice(0, 15) });
-  say(`analyzed ${rows.length} reels; best hours: ${ranked.slice(0, 5).map((r) => `${r.hour}:00 (${r.median_views} views, ${r.reels} reels)`).join(', ') || 'not enough data yet'}`);
-  if (DRY) return say('DRY_RUN: would set slots', slots);
-  writeJson(SCHEDULE, { ...sch, timezone: tz, slots, slots_updated: new Date().toISOString(), basis: ranked.length ? 'median views of your own reels by posting hour' : 'defaults (not enough data yet)' });
+  writeJson(STATS, { updated: new Date().toISOString(), timezone: tz, metric, reels_analyzed: rows.length, by_hour: ranked, per_day_scores: Object.fromEntries(Object.entries(groups).map(([d, v]) => [d, { reels: v.length, median_score: med(v) }])), per_day_decision: why, top_reels: rows.slice().sort((a, b) => b.score - a.score).slice(0, 15) });
+  say(`best hours by ${metric}: ${ranked.slice(0, 5).map((r) => `${r.hour}:00 (${r.median_score}, ${r.reels} reels)`).join(', ') || 'not enough data yet'}`);
+  if (DRY) return say('DRY_RUN: would set per_day', perDay, 'slots', slots);
+  writeJson(SCHEDULE, { ...sch, timezone: tz, per_day: perDay, slots, slots_updated: new Date().toISOString(), basis: ranked.length ? `median ${metric} of your own reels by posting hour` : 'defaults spread over the day (not enough data yet)' });
   say('posting slots now', slots.map((h) => `${h}:00`).join(', '), tz);
 }
 

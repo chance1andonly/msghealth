@@ -2,19 +2,13 @@
   "ig_user_id": "17841449627448338",
   "timezone": "America/New_York",
   "slots": [
-    7,
-    9,
+    8,
     11,
-    12,
-    13,
-    15,
+    14,
     17,
-    19,
-    20,
-    21
+    20
   ],
+  "per_day": 5,
   "trial": null,
-  "basis": "defaults (not enough data yet)",
-  "slots_updated": "2026-11-18T15:54:48.330Z",
-  "per_day": 10
+  "basis": "defaults spread over the day (not enough data yet)"
 }
