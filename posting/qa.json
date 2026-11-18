@@ -14,8 +14,8 @@
   "08b-razor.mp4": {
     "approved": true,
     "sha1": "234d9e41545d9df94c10dcb9ff70a952a9691f20",
-    "checked_at": "2026-11-18T20:40:05.579Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-18T22:10:10.453Z",
+    "note": "reviewed 2026-11-18: timing 24s hook 3.8s, wording no AI tells, no dashes, facts (Gillette 51/90,884) ok, caption KEEP+hashtags ok"
   },
   "09-thursdays.mp4": {
     "approved": true,
