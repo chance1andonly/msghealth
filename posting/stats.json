@@ -1,7 +1,252 @@
 {
-  "updated": "2026-11-18T15:54:48.330Z",
+  "updated": "2026-11-18T15:56:39.701Z",
   "timezone": "America/New_York",
-  "reels_analyzed": 0,
-  "by_hour": [],
-  "top_reels": []
+  "metric": "engagement",
+  "reels_analyzed": 44,
+  "by_hour": [
+    {
+      "hour": 8,
+      "reels": 7,
+      "median_score": 3
+    },
+    {
+      "hour": 13,
+      "reels": 15,
+      "median_score": 3
+    },
+    {
+      "hour": 22,
+      "reels": 3,
+      "median_score": 3
+    },
+    {
+      "hour": 16,
+      "reels": 4,
+      "median_score": 1
+    },
+    {
+      "hour": 23,
+      "reels": 3,
+      "median_score": 1
+    }
+  ],
+  "per_day_scores": {
+    "3": {
+      "reels": 1,
+      "median_score": 2
+    }
+  },
+  "per_day_decision": "holding: not enough reels at this rate yet (need 4, have 0)",
+  "top_reels": [
+    {
+      "id": "17912640258490606",
+      "permalink": "https://www.instagram.com/reel/De3UzsMRrlY/",
+      "hour": 0,
+      "posted": "2026-10-24T04:58:01+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 24,
+      "comments": 0,
+      "caption": "In 1990, the night before Iraq invaded Kuwait, pizza deliveries to the Pentagon ",
+      "score": 24
+    },
+    {
+      "id": "17868924792676158",
+      "permalink": "https://www.instagram.com/reel/DfyeOZgRy2Z/",
+      "hour": 23,
+      "posted": "2026-11-16T04:17:13+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 15,
+      "comments": 2,
+      "caption": "Don’t let your ship sink if you can do something about it🚢\n\nUse MsgHealth to pr",
+      "score": 19
+    },
+    {
+      "id": "18081932513384598",
+      "permalink": "https://www.instagram.com/reel/Dfe2YIyRjL_/",
+      "hour": 8,
+      "posted": "2026-11-08T13:21:16+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 9,
+      "comments": 0,
+      "caption": "The woman who sold London the time of day ⏰\n\nHer clients came back every week be",
+      "score": 9
+    },
+    {
+      "id": "18169787110479729",
+      "permalink": "https://www.instagram.com/reel/DfXr2vFhPy2/",
+      "hour": 13,
+      "posted": "2026-11-05T18:34:05+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 8,
+      "comments": 0,
+      "caption": "In 1932 the Australian army fought 20,000 emus. Guess who won…\n\nMost businesses ",
+      "score": 8
+    },
+    {
+      "id": "18006719603990137",
+      "permalink": "https://www.instagram.com/reel/DesH1BTOXyq/",
+      "hour": 16,
+      "posted": "2026-10-19T20:31:55+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 6,
+      "comments": 1,
+      "caption": "They don’t tell you when they stop booking. MsgHealth does.\n\nmsghealth.net • 50%",
+      "score": 8
+    },
+    {
+      "id": "18114674987617668",
+      "permalink": "https://www.instagram.com/reel/DfXruqppG-t/",
+      "hour": 13,
+      "posted": "2026-11-05T18:33:07+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 7,
+      "comments": 0,
+      "caption": "In 1325 two Italian cities went to war over a bucket. 700 years later, one is st",
+      "score": 7
+    },
+    {
+      "id": "18209732626370602",
+      "permalink": "https://www.instagram.com/reel/DfXrbeJx3jQ/",
+      "hour": 13,
+      "posted": "2026-11-05T18:30:24+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 7,
+      "comments": 0,
+      "caption": "Pepsi offered a fighter jet for 7 million points. A student mailed a $700,000 ch",
+      "score": 7
+    },
+    {
+      "id": "18143809600590092",
+      "permalink": "https://www.instagram.com/reel/De3qc4zRYEm/",
+      "hour": 4,
+      "posted": "2026-10-24T08:06:27+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 7,
+      "comments": 0,
+      "caption": "FEMA checks Waffle House to see how bad a hurricane hit. 🧇\n\nGreen = full menu. ",
+      "score": 7
+    },
+    {
+      "id": "18174908521459593",
+      "permalink": "https://www.instagram.com/reel/DfXrhROhemF/",
+      "hour": 13,
+      "posted": "2026-11-05T18:31:05+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 6,
+      "comments": 0,
+      "caption": "The first Bitcoin pizza receipt was a napkin, and a dog ate it. 🐕 (Okay, we mad",
+      "score": 6
+    },
+    {
+      "id": "18580323853072131",
+      "permalink": "https://www.instagram.com/reel/DfXrStPMwIU/",
+      "hour": 13,
+      "posted": "2026-11-05T18:29:17+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 6,
+      "comments": 0,
+      "caption": "In 1975 an ad man sold a million rocks in a box with air holes and a training ma",
+      "score": 6
+    },
+    {
+      "id": "17960628999015469",
+      "permalink": "https://www.instagram.com/reel/DfXq5YdB3JE/",
+      "hour": 13,
+      "posted": "2026-11-05T18:25:49+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 6,
+      "comments": 0,
+      "caption": "How many regulars did you lose this month? If you don’t know, nobody told you th",
+      "score": 6
+    },
+    {
+      "id": "18097198448408019",
+      "permalink": "https://www.instagram.com/reel/Dez7W2dhh82/",
+      "hour": 17,
+      "posted": "2026-10-22T21:21:25+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 4,
+      "comments": 1,
+      "caption": "6 regulars rebooked. You sent 0 texts.\n\nMsgHealth handles the follow-ups while y",
+      "score": 6
+    },
+    {
+      "id": "18128504984489411",
+      "permalink": "https://www.instagram.com/reel/De33s68RJ-O/",
+      "hour": 6,
+      "posted": "2026-10-24T10:01:47+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 3,
+      "comments": 1,
+      "caption": "Some people call me the debt collector. \nSome people call me at 11 PM on a Sunda",
+      "score": 5
+    },
+    {
+      "id": "18097736933553760",
+      "permalink": "https://www.instagram.com/reel/De32TgKRaRO/",
+      "hour": 5,
+      "posted": "2026-10-24T09:49:33+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 5,
+      "comments": 0,
+      "caption": "Every barber has messed up a fade for the same reason… 📱💀\n \nPhone rings, clipp",
+      "score": 5
+    },
+    {
+      "id": "18156692182516395",
+      "permalink": "https://www.instagram.com/reel/De3orLhsvF_/",
+      "hour": 3,
+      "posted": "2026-10-24T07:51:45+0000",
+      "views": null,
+      "reach": null,
+      "saved": null,
+      "shares": null,
+      "likes": 5,
+      "comments": 0,
+      "caption": "Comment MARCO and we’ll send you 50% off your first month.\n\nShe left you for Mar",
+      "score": 5
+    }
+  ]
 }
