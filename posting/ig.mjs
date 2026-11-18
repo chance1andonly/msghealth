@@ -93,7 +93,7 @@ async function post(force) {
     say('Instagram refused the trial setting, posting as a normal reel:', e.message); trial = null; id = await publish(uid, file, caption, null);
   }
   fs.mkdirSync(POSTED, { recursive: true }); fs.renameSync(file, path.join(POSTED, next)); if (fs.existsSync(capFile)) fs.renameSync(capFile, path.join(POSTED, path.basename(capFile)));
-  log.push({ date: now.date, slot: due ?? null, hour: now.hour, file: next, media_id: id, trial, posted_at: new Date().toISOString() }); writeJson(LOG, log);
+  log.push({ date: now.date, slot: due ?? null, hour: now.hour, file: next, media_id: id, trial, per_day: sch.per_day || slots.length, posted_at: new Date().toISOString() }); writeJson(LOG, log);
   say('published, media id', id);
 }
 
@@ -102,12 +102,13 @@ async function optimize() {
   let media = [], next = `/${uid}/media`, params = { fields: 'id,timestamp,media_type,media_product_type,permalink,caption', limit: '50' };
   while (next && media.length < 200) { const r = await api('GET', next, params); media.push(...(r.data || [])); next = r.paging?.next; params = {}; }
   const reels = media.filter((m) => m.media_product_type === 'REELS' && Date.now() - Date.parse(m.timestamp) > 2 * 864e5); // ignore reels under 2 days old
-  const rows = [];
+  const rows = []; let insErr = '';
   for (const m of reels) {
-    const ins = await api('GET', `/${m.id}/insights`, { metric: 'views,reach,saved,shares' }).catch(() => null); if (!ins) continue;
+    const ins = await api('GET', `/${m.id}/insights`, { metric: 'views,reach,saved,shares' }).catch((e) => { insErr ||= e.message; return null; }); if (!ins) continue;
     const v = Object.fromEntries(ins.data.map((d) => [d.name, d.values?.[0]?.value ?? d.total_value?.value ?? 0]));
     rows.push({ id: m.id, permalink: m.permalink, hour: hourIn(m.timestamp, tz), posted: m.timestamp, views: v.views || 0, reach: v.reach || 0, saved: v.saved || 0, shares: v.shares || 0, caption: (m.caption || '').slice(0, 80) });
   }
+  say(`found ${media.length} posts, ${reels.length} reels old enough, ${rows.length} with insights${insErr ? '; insights error: ' + insErr : ''}`);
   const med = (a) => { const s = a.slice().sort((x, y) => x - y); return s.length ? s[Math.floor((s.length - 1) / 2)] : 0; };
   const byHour = {}; rows.forEach((r) => (byHour[r.hour] ||= []).push(r.views));
   const ranked = Object.entries(byHour).filter(([h, v]) => v.length >= 2 && h >= 6).map(([h, v]) => ({ hour: +h, reels: v.length, median_views: med(v) })).sort((a, b) => b.median_views - a.median_views);
