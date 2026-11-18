@@ -1,8 +1,8 @@
 {
-  "updated": "2026-11-18T15:56:39.701Z",
+  "updated": "2026-11-18T20:55:49.430Z",
   "timezone": "America/New_York",
   "metric": "engagement",
-  "reels_analyzed": 44,
+  "reels_analyzed": 45,
   "by_hour": [
     {
       "hour": 8,
@@ -32,7 +32,7 @@
   ],
   "per_day_scores": {
     "3": {
-      "reels": 1,
+      "reels": 2,
       "median_score": 2
     }
   },

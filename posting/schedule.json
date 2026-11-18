@@ -10,6 +10,6 @@
   ],
   "per_day": 5,
   "trial": null,
-  "basis": "defaults spread over the day (hour data too thin to trust yet)",
-  "slots_updated": "2026-11-18T15:56:39.701Z"
+  "basis": "median engagement of your own reels by posting hour",
+  "slots_updated": "2026-11-18T20:55:49.430Z"
 }
