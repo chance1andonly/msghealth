@@ -1,0 +1,55 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Starbucks once closed about seven thousand stores at the same time.",
+   "caps": [
+    "Starbucks closed *7,000 stores*",
+    "at the *same time.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "A hundred and thirty five thousand baristas went back to class.",
+   "caps": [
+    "*135,000 baristas*",
+    "went *back to class.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "They didn't buy ads. They fixed the experience for people already coming.",
+   "caps": [
+    "They didn't buy ads.",
+    "They fixed it for *people already coming.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Regulars notice when it slips. They don't complain. They just stop coming.",
+   "caps": [
+    "Regulars *notice* when it slips.",
+    "They don't complain. *They just stop.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Ask them. One text beats guessing why they left.",
+   "caps": [
+    "*Ask them.*",
+    "One text beats *guessing.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

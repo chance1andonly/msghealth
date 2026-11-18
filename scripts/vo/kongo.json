@@ -1,0 +1,55 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "One Japanese family ran the same business for over fourteen hundred years.",
+   "caps": [
+    "One family. *1,400 years.*",
+    "Same business."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Forty generations. The same temple was rebuilt seven times, and they rebuilt it every time.",
+   "caps": [
+    "*40 generations.*",
+    "Same temple, *rebuilt 7 times.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The client who keeps coming back is the business.",
+   "caps": [
+    "The client who *keeps coming back*",
+    "is *the business.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "They kept one client for fourteen hundred years. You can keep yours with one text.",
+   "caps": [
+    "They kept *one client* for 1,400 years.",
+    "You keep yours with *one text.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Been too long. Thursday at four thirty?",
+   "caps": [
+    "Been too long.",
+    "Thursday at *4:30?*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

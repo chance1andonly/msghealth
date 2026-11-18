@@ -1,0 +1,56 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A Costco hot dog and soda costs a dollar fifty. It has for decades.",
+   "caps": [
+    "*$1.50.*",
+    "Same price for *decades.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "When the new CEO asked to raise it, the founder said: don't. Figure it out.",
+   "caps": [
+    "The founder told the new CEO:",
+    "*don't touch it.* Figure it out."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "It makes little to nothing. It tells members one thing: you can count on us.",
+   "caps": [
+    "It makes *little to nothing.*",
+    "It says: *you can count on us.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Regulars don't come for a deal. They come for something they can count on.",
+   "caps": [
+    "Regulars don't come",
+    "for a deal. They come for",
+    "*something they can count on.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Same chair. Same cut. Thursday at four thirty?",
+   "caps": [
+    "Same chair. Same cut.",
+    "*Thursday at 4:30?*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
