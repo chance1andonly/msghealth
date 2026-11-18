@@ -12,7 +12,7 @@
    "gap": 0.4
   },
   {
-   "say": "Shift changes, moves, new schedules. Life takes more regulars than the shop down the street.",
+   "say": "Night shifts, a move, a new schedule. Life takes more regulars than the shop down the street.",
    "caps": [
     "Shift changes. Moves.",
     "Life takes *more regulars*",
@@ -21,7 +21,7 @@
    "gap": 0.4
   },
   {
-   "say": "And he won't ask. He figures you're full.",
+   "say": "And he probably won't ask, because he figures you're full.",
    "caps": [
     "He won't ask.",
     "He figures you're *full.*"
@@ -29,7 +29,7 @@
    "gap": 0.4
   },
   {
-   "say": "So you ask first. Did your schedule change? I've got Saturday mornings open.",
+   "say": "So ask first. Did your schedule change? I've got Saturday mornings open.",
    "caps": [
     "So you *ask first:*",
     "*\"Did your schedule change?\"*"
@@ -37,7 +37,7 @@
    "gap": 0.45
   },
   {
-   "say": "New time. Same barber. Same regular.",
+   "say": "New time, same barber, same regular.",
    "caps": [
     "New time. *Same barber.*",
     "Same *regular.*"

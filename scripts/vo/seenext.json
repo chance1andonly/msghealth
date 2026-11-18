@@ -4,7 +4,7 @@
  "start": 0.3,
  "lines": [
   {
-   "say": "Stop saying, see you next time. Next time is not a date.",
+   "say": "Stop saying, see you next time. Next time isn't a date.",
    "caps": [
     "Stop saying *\"see you next time.\"*",
     "Next time *isn't a date.*"
@@ -12,7 +12,7 @@
    "gap": 0.4
   },
   {
-   "say": "Almost half of clients book one cut and never come back. Nobody ever asked them for the next one.",
+   "say": "Almost half of clients get one cut and never return. Nobody asked for the next one.",
    "caps": [
     "*48%* book one cut",
     "and *never return.*",
@@ -21,7 +21,7 @@
    "gap": 0.4
   },
   {
-   "say": "So ask, right in the chair. Saturday or Sunday? Not, do you want to book again?",
+   "say": "So ask right there in the chair. Saturday or Sunday? Don't say, do you want to rebook?",
    "caps": [
     "Ask in the chair:",
     "*\"Saturday or Sunday?\"*",
@@ -38,10 +38,10 @@
    "gap": 0.45
   },
   {
-   "say": "A date on the calendar beats a maybe, every time.",
+   "say": "A date on the calendar gets kept. A maybe usually doesn't.",
    "caps": [
-    "A *date* beats a *maybe,*",
-    "every time."
+    "A *date* gets kept.",
+    "A *maybe* usually doesn't."
    ],
    "gap": 0.45
   },

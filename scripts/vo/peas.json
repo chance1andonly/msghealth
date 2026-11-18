@@ -12,7 +12,7 @@
    "gap": 0.4
   },
   {
-   "say": "That became the eighty twenty rule.",
+   "say": "That turned into the eighty twenty rule.",
    "caps": [
     "That became the",
     "*80/20 rule.*"
@@ -20,28 +20,31 @@
    "gap": 0.4
   },
   {
-   "say": "In a shop, usually about twenty percent of clients pay most of the bills.",
+   "say": "Your shop's probably the same. Maybe twenty percent of your clients pay most of the bills.",
    "caps": [
-    "Usually, about *20%* of clients",
+    "Your shop is *probably the same.*",
+    "About *20%* of clients",
     "pay *most of the bills.*"
    ],
    "gap": 0.4
   },
   {
-   "say": "Do you know who they are?",
+   "say": "Could you name them right now?",
    "caps": [
-    "Do you know",
-    "*who they are?*"
+    "Could you *name them*",
+    "right now?"
    ],
-   "gap": 0.4
+   "gap": 0.55,
+   "speed": 1.05
   },
   {
-   "say": "Check when each one last came in. Text the quiet ones first.",
+   "say": "Look up when each one last came in, and text the quiet ones first.",
    "caps": [
     "Check when each one *last came in.*",
     "Text the *quiet ones* first."
    ],
-   "gap": 0.4
+   "gap": 0.4,
+   "speed": 1.08
   },
   {
    "say": "Comment KEEP and we'll show you who's gone quiet.",

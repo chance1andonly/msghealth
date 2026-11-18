@@ -3,6 +3,7 @@
 //
 //   node posting/ig.mjs check            test the token and show the account and its publishing limit
 //   node posting/ig.mjs post [--force]   post the next reel in posting/queue if a time slot is due (--force: post now)
+//   node posting/ig.mjs approve NAME    mark a queued reel as reviewed (required before it can post)
 //   node posting/ig.mjs optimize         pick the 3 best posting hours from your own reels' views; writes schedule.json + stats.json
 //   node posting/ig.mjs refresh          refresh the 60-day token; writes the new one to $NEW_TOKEN_FILE
 //
@@ -10,15 +11,19 @@
 // Queue: posting/queue/NAME.mp4 + NAME.txt (the caption). Files post in name order, then move to posting/posted/.
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 
 // New Meta apps get 'Unified login' tokens, which work on graph.facebook.com (not graph.instagram.com).
 const API = process.env.IG_API_BASE || 'https://graph.facebook.com/v23.0'; // IG_API_BASE: only for local tests
 const DIR = path.dirname(new URL(import.meta.url).pathname);
 const QUEUE = path.join(DIR, 'queue'), POSTED = path.join(DIR, 'posted');
-const SCHEDULE = path.join(DIR, 'schedule.json'), LOG = path.join(DIR, 'log.json'), STATS = path.join(DIR, 'stats.json');
+const SCHEDULE = path.join(DIR, 'schedule.json'), LOG = path.join(DIR, 'log.json'), STATS = path.join(DIR, 'stats.json'), QA = path.join(DIR, 'qa.json');
 const TOKEN = process.env.IG_TOKEN, DRY = process.env.DRY_RUN === '1';
 const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return d; } };
 const writeJson = (f, o) => fs.writeFileSync(f, JSON.stringify(o, null, 2) + '\n');
+// Review gate: a reel posts only if posting/qa.json holds an approval whose sha1 matches the file, so an edited or unreviewed reel never goes out.
+const sha1 = (f) => crypto.createHash('sha1').update(fs.readFileSync(f)).digest('hex');
+const approved = (name) => { const a = readJson(QA, {})[name]; return !!a && a.approved === true && a.sha1 === sha1(path.join(QUEUE, name)); };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const say = (...a) => console.log(new Date().toISOString().slice(11, 19), ...a);
 
@@ -46,7 +51,7 @@ async function check() {
   const m = await me(); say(`connected as @${m.username} (${m.account_type}), id ${m.user_id}`);
   const lim = await api('GET', `/${m.user_id}/content_publishing_limit`, { fields: 'quota_usage,config' }).catch((e) => ({ error: e.message }));
   say('publishing limit:', JSON.stringify(lim.data?.[0] || lim));
-  say('queue:', fs.readdirSync(QUEUE).filter((f) => f.endsWith('.mp4')).length, 'reels waiting');
+  { const q = fs.readdirSync(QUEUE).filter((f) => f.endsWith('.mp4')); say('queue:', q.length, 'reels waiting,', q.filter(approved).length, 'approved'); }
 }
 
 // Upload one reel: resumable upload of the file's bytes; if that host refuses, fall back to a public URL of the file.
@@ -74,14 +79,22 @@ async function publish(uid, file, caption, trial) {
   return (await api('POST', `/${uid}/media_publish`, { creation_id: c.id })).id;
 }
 
+// node posting/ig.mjs approve NAME [note ...]: record that a reel passed review (stores the file's sha1)
+async function approve(name, note) {
+  const f = path.join(QUEUE, name.endsWith('.mp4') ? name : name + '.mp4'); if (!fs.existsSync(f)) throw new Error('no such reel in the queue: ' + name);
+  const qa = readJson(QA, {}); qa[path.basename(f)] = { approved: true, sha1: sha1(f), checked_at: new Date().toISOString(), note: note || '' }; writeJson(QA, qa); say('approved', path.basename(f));
+}
 async function post(force) {
   const sch = readJson(SCHEDULE, {}), tz = sch.timezone || 'America/New_York', slots = (sch.slots || [8, 12, 20]).slice().sort((a, b) => a - b);
   const log = readJson(LOG, []), now = localNow(tz);
   // The slot that is due: the latest slot hour at or before now, not posted yet today, at most 2 hours late (cron can run late).
   const due = slots.filter((h) => h <= now.hour && now.hour - h < 2 && !log.some((l) => l.date === now.date && l.slot === h)).pop();
   if (due == null && !force) return say(`nothing due (${now.date} ${now.hour}:00 ${tz}; slots ${slots.join(', ')})`);
-  const next = fs.readdirSync(QUEUE).filter((f) => f.endsWith('.mp4')).sort()[0];
-  if (!next) { say('QUEUE EMPTY: add reels to posting/queue'); process.exitCode = 3; return; }
+  const all = fs.readdirSync(QUEUE).filter((f) => f.endsWith('.mp4')).sort();
+  if (!all.length) { say('QUEUE EMPTY: add reels to posting/queue'); process.exitCode = 3; return; }
+  const held = all.filter((f) => !approved(f)); if (held.length) say(`held back, not reviewed yet: ${held.join(', ')}`);
+  const next = all.find(approved);
+  if (!next) { say('NOTHING APPROVED: every queued reel still needs its review (node posting/ig.mjs approve NAME)'); process.exitCode = 3; return; }
   const file = path.join(QUEUE, next), capFile = file.replace(/\.mp4$/, '.txt');
   const caption = fs.existsSync(capFile) ? fs.readFileSync(capFile, 'utf8').trim() : '';
   say(`posting ${next} for the ${due ?? 'manual'} slot as ${sch.trial ? 'a trial reel (' + sch.trial + ')' : 'a reel'}`);
@@ -154,7 +167,7 @@ async function refresh() {
   if (process.env.NEW_TOKEN_FILE) fs.writeFileSync(process.env.NEW_TOKEN_FILE, r.access_token);
 }
 
-const [cmd, flag] = process.argv.slice(2);
-if (!TOKEN && !(cmd === 'post' && DRY)) { console.error('IG_TOKEN is not set. Add it under Settings → Secrets and variables → Actions.'); process.exit(2); }
-({ check, post: () => post(flag === '--force'), optimize, refresh }[cmd] || (() => { console.error('usage: node posting/ig.mjs check|post [--force]|optimize|refresh'); process.exit(2); }))()
+const [cmd, flag, ...rest] = process.argv.slice(2);
+if (!TOKEN && !(cmd === 'post' && DRY) && cmd !== 'approve') { console.error('IG_TOKEN is not set. Add it under Settings → Secrets and variables → Actions.'); process.exit(2); }
+({ check, post: () => post(flag === '--force'), approve: () => approve(flag, rest.join(' ')), optimize, refresh }[cmd] || (() => { console.error('usage: node posting/ig.mjs check|post [--force]|optimize|refresh'); process.exit(2); }))()
   .catch((e) => { console.error('ERROR', e.message, e.data ? JSON.stringify(e.data) : ''); process.exit(1); });

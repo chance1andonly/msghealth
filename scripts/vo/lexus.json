@@ -4,7 +4,7 @@
  "start": 0.3,
  "lines": [
   {
-   "say": "Lexus recalled every car it had sold. All eight thousand of them.",
+   "say": "Lexus once recalled every car it had sold. All eight thousand of them.",
    "caps": [
     "Lexus recalled *every car*",
     "it had sold. *8,000.*"
@@ -12,15 +12,15 @@
    "gap": 0.4
   },
   {
-   "say": "Over a couple of small complaints. A cruise control. A brake light.",
+   "say": "The problem? A cruise control thing and a brake light. Tiny stuff.",
    "caps": [
-    "Over a *couple of small complaints.*",
+    "A *couple of small complaints.*",
     "A cruise control. *A brake light.*"
    ],
    "gap": 0.4
   },
   {
-   "say": "Dealers fixed it free, left a loaner car, and washed it before returning it.",
+   "say": "Dealers fixed it for free, left a loaner car, and washed the car before they brought it back.",
    "caps": [
     "Fixed *free.*",
     "A *loaner car.*",
@@ -29,20 +29,21 @@
    "gap": 0.4
   },
   {
-   "say": "That recall helped make Lexus a luxury brand.",
+   "say": "People still point to that recall as part of why Lexus became a luxury brand.",
    "caps": [
     "That recall helped make",
     "Lexus a *luxury brand.*"
    ],
-   "gap": 0.4
+   "gap": 0.5
   },
   {
-   "say": "Don't wait for the complaint. Text first, and fix it.",
+   "say": "So don't wait for the complaint. Text first. Was the last cut okay?",
    "caps": [
     "Don't wait for the complaint.",
-    "*Text first.* Fix it."
+    "*Text first.*"
    ],
-   "gap": 0.4
+   "gap": 0.4,
+   "speed": 1.08
   },
   {
    "say": "Comment KEEP and we'll show you who's gone quiet.",

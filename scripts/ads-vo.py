@@ -1,6 +1,6 @@
 # Builds the voiceover for one ad from scripts/vo/<name>.json with Kokoro TTS, then aligns the caption chunks.
 #   python3 scripts/ads-vo.py NAME MODEL.onnx VOICES.bin
-# Spec: { "voice": "am_michael", "speed": 1.08, "start": 0.3, "lines": [ { "say": "spoken text", "caps": ["chunk", ...], "gap": 0.25 } ] }
+# Spec: { "voice": "am_michael", "speed": 1.08, "start": 0.3, "lines": [ { "say": "spoken text", "caps": ["chunk", ...], "gap": 0.25, "speed": 1.0 } ] }  (per-line "speed" and "gap" shape emphasis; see posting/VOICE.md)
 # "say" is what is read ("Message Health" for MsgHealth); "caps" are the on-screen caption chunks (*word* = accent).
 # Writes assets/audio/NAME/vo-NN.wav (silence trimmed) and src/NAME-vo.js (VO_CLIPS, VO_AT, VO_TEXT).
 import sys, json, re, os, numpy as np, soundfile as sf
@@ -20,7 +20,7 @@ def syl(s):
     return n
 clips, at, t = [], [], spec.get('start', 0.3)
 for i, ln in enumerate(spec['lines']):
-    x, sr = k.create(ln['say'], voice=spec['voice'], speed=spec['speed'], lang='en-us')
+    x, sr = k.create(ln['say'], voice=spec['voice'], speed=ln.get('speed', spec['speed']), lang='en-us')
     hop = int(sr * 0.005); e = np.array([np.sqrt((x[j:j + hop] ** 2).mean()) for j in range(0, len(x) - hop, hop)])
     v = np.where(e > e.max() * 0.04)[0]; a = max(0, (v[0] - 4) * hop); b = min(len(x), (v[-1] + 14) * hop)
     x = x[a:b]; sf.write(f'assets/audio/{name}/vo-{i:02d}.wav', x, sr)

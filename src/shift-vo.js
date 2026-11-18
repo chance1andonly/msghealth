@@ -2,11 +2,11 @@
 // caption chunk start times and when each clip starts. Don't edit by hand.
 window.VO_CLIPS = [
   { dur: 2.71, chunks: [["He didn't *leave you.*", 0.0], ["His job changed his *Thursdays.*", 0.94]] }, // 00
-  { dur: 4.76, chunks: [["Shift changes. Moves.", 0.0], ["Life takes *more regulars*", 1.46], ["than the *shop down the street.*", 3.31]] }, // 01
-  { dur: 1.74, chunks: [["He won't ask.", 0.0], ["He figures you're *full.*", 0.75]] }, // 02
-  { dur: 4.12, chunks: [["So you *ask first:*", 0.0], ["*\"Did your schedule change?\"*", 1.65]] }, // 03
-  { dur: 2.055, chunks: [["New time. *Same barber.*", 0.0], ["Same *regular.*", 1.24]] }, // 04
+  { dur: 4.625, chunks: [["Shift changes. Moves.", 0.0], ["Life takes *more regulars*", 1.44], ["than the *shop down the street.*", 3.18]] }, // 01
+  { dur: 2.555, chunks: [["He won't ask.", 0.0], ["He figures you're *full.*", 0.87]] }, // 02
+  { dur: 4.01, chunks: [["So you *ask first:*", 0.0], ["*\"Did your schedule change?\"*", 1.6]] }, // 03
+  { dur: 1.925, chunks: [["New time. *Same barber.*", 0.0], ["Same *regular.*", 1.05]] }, // 04
   { dur: 3.905, chunks: [["Comment *KEEP* and we'll", 0.0], ["show you who's *drifted.*", 2.12]] }, // 05
 ];
-window.VO_AT = [0.3, 3.41, 8.57, 10.71, 15.28, 17.79];
-window.VO_TEXT = ["He didn't leave you. His job changed his Thursdays.", "Shift changes, moves, new schedules. Life takes more regulars than the shop down the street.", "And he won't ask. He figures you're full.", "So you ask first. Did your schedule change? I've got Saturday mornings open.", "New time. Same barber. Same regular.", "Comment the word keep and we'll show you who's drifted. Message Health dot net."];
+window.VO_AT = [0.3, 3.41, 8.44, 11.39, 15.85, 18.23];
+window.VO_TEXT = ["He didn't leave you. His job changed his Thursdays.", "Night shifts, a move, a new schedule. Life takes more regulars than the shop down the street.", "And he probably won't ask, because he figures you're full.", "So ask first. Did your schedule change? I've got Saturday mornings open.", "New time, same barber, same regular.", "Comment the word keep and we'll show you who's drifted. Message Health dot net."];

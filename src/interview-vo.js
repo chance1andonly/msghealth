@@ -3,10 +3,10 @@
 window.VO_CLIPS = [
   { dur: 2.88, chunks: [["He told you about *his interview.*", 0.0], ["You never asked *how it went.*", 1.54]] }, // 00
   { dur: 3.325, chunks: [["Nobody comes back *for the fade.*", 0.0], ["They come back", 1.68], ["because *you remembered.*", 2.0]] }, // 01
-  { dur: 3.245, chunks: [["After every cut,", 0.0], ["save *one detail.*", 1.37], ["The *job.* The *kid.* The *trip.*", 1.89]] }, // 02
+  { dur: 4.65, chunks: [["After every cut,", 0.0], ["save *one detail.*", 1.79], ["The *job.* The *kid.* The *trip.*", 2.7]] }, // 02
   { dur: 2.89, chunks: [["Three days later, text it:", 0.0], ["*\"How'd the interview go?\"*", 1.33]] }, // 03
-  { dur: 2.54, chunks: [["That's not a *discount.*", 0.0], ["That's *why he stays.*", 1.23]] }, // 04
+  { dur: 3.345, chunks: [["No *coupon* needed.", 0.0], ["He stays because", 1.25], ["*you cared.*", 2.42]] }, // 04
   { dur: 3.98, chunks: [["Comment *KEEP* and we'll show", 0.0], ["you who's *gone quiet.*", 2.53]] }, // 05
 ];
-window.VO_AT = [0.3, 3.58, 7.3, 10.95, 14.29, 17.28];
-window.VO_TEXT = ["He told you about his interview. You never asked how it went.", "Nobody comes back for the fade. They come back because you remembered.", "After every cut, save one detail. The job. The kid. The trip.", "Three days later, send this. How did the interview go, Dray?", "That's not a discount. That's the reason he stays.", "Comment the word keep and we'll show you who's gone quiet. Message Health dot net."];
+window.VO_AT = [0.3, 3.58, 7.3, 12.36, 15.7, 19.49];
+window.VO_TEXT = ["He told you about his interview. You never asked how it went.", "Nobody comes back for the fade. They come back because you remembered.", "After every cut, save one detail about his life. His job, his kid, a trip coming up.", "Three days later, send this. How did the interview go, Dray?", "No coupon needed. He stays because somebody cared how it went.", "Comment the word keep and we'll show you who's gone quiet. Message Health dot net."];

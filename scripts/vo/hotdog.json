@@ -4,7 +4,7 @@
  "start": 0.3,
  "lines": [
   {
-   "say": "A Costco hot dog and soda costs a dollar fifty. It has for decades.",
+   "say": "A Costco hot dog and soda costs a dollar fifty. It always has.",
    "caps": [
     "*$1.50.*",
     "Same price for *decades.*"
@@ -12,7 +12,7 @@
    "gap": 0.4
   },
   {
-   "say": "When the new CEO asked to raise it, the founder said: don't. Figure it out.",
+   "say": "When the new CEO wanted to raise it, the founder told him, don't touch it. Figure it out.",
    "caps": [
     "The founder told the new CEO:",
     "*don't touch it.* Figure it out."
@@ -20,29 +20,29 @@
    "gap": 0.4
   },
   {
-   "say": "It makes little to nothing. It tells members one thing: you can count on us.",
+   "say": "It makes them almost nothing. But members know exactly what they're getting.",
    "caps": [
-    "It makes *little to nothing.*",
-    "It says: *you can count on us.*"
+    "It makes *almost nothing.*",
+    "Members know *what they're getting.*"
    ],
    "gap": 0.4
   },
   {
-   "say": "Regulars don't come for a deal. They come for something they can count on.",
+   "say": "And honestly, regulars aren't there for a deal. They're there for something they can count on.",
    "caps": [
-    "Regulars don't come",
-    "for a deal. They come for",
-    "*something they can count on.*"
+    "Regulars aren't there for a deal.",
+    "They want *something they can count on.*"
    ],
-   "gap": 0.4
+   "gap": 0.5
   },
   {
-   "say": "Same chair. Same cut. Thursday at four thirty?",
+   "say": "Same chair, same cut, Thursday at four thirty?",
    "caps": [
     "Same chair. Same cut.",
     "*Thursday at 4:30?*"
    ],
-   "gap": 0.4
+   "gap": 0.4,
+   "speed": 1.05
   },
   {
    "say": "Comment KEEP and we'll show you who's gone quiet.",

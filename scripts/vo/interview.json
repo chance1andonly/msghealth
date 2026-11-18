@@ -21,7 +21,7 @@
    "gap": 0.4
   },
   {
-   "say": "After every cut, save one detail. The job. The kid. The trip.",
+   "say": "After every cut, save one detail about his life. His job, his kid, a trip coming up.",
    "caps": [
     "After every cut,",
     "save *one detail.*",
@@ -38,10 +38,11 @@
    "gap": 0.45
   },
   {
-   "say": "That's not a discount. That's the reason he stays.",
+   "say": "No coupon needed. He stays because somebody cared how it went.",
    "caps": [
-    "That's not a *discount.*",
-    "That's *why he stays.*"
+    "No *coupon* needed.",
+    "He stays because",
+    "*you cared.*"
    ],
    "gap": 0.45
   },

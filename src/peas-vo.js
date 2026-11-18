@@ -2,11 +2,11 @@
 // caption chunk start times and when each clip starts. Don't edit by hand.
 window.VO_CLIPS = [
   { dur: 3.4, chunks: [["*20%* of the pods in his garden", 0.0], ["held *80%* of the peas.", 2.14]] }, // 00
-  { dur: 1.615, chunks: [["That became the", 0.0], ["*80/20 rule.*", 0.99]] }, // 01
-  { dur: 3.565, chunks: [["Usually, about *20%* of clients", 0.0], ["pay *most of the bills.*", 1.99]] }, // 02
-  { dur: 1.085, chunks: [["Do you know", 0.0], ["*who they are?*", 0.43]] }, // 03
-  { dur: 3.035, chunks: [["Check when each one *last came in.*", 0.0], ["Text the *quiet ones* first.", 1.66]] }, // 04
+  { dur: 1.74, chunks: [["That became the", 0.0], ["*80/20 rule.*", 1.12]] }, // 01
+  { dur: 4.555, chunks: [["Your shop is *probably the same.*", 0.0], ["About *20%* of clients", 2.15], ["pay *most of the bills.*", 3.01]] }, // 02
+  { dur: 1.425, chunks: [["Could you *name them*", 0.0], ["right now?", 1.05]] }, // 03
+  { dur: 3.415, chunks: [["Check when each one *last came in.*", 0.0], ["Text the *quiet ones* first.", 1.8]] }, // 04
   { dur: 2.215, chunks: [["Comment *KEEP* and we'll show", 0.0], ["you who's *gone quiet.*", 1.48]] }, // 05
 ];
-window.VO_AT = [0.3, 4.1, 6.12, 10.08, 11.56, 15.0];
-window.VO_TEXT = ["Twenty percent of the pods in his garden held eighty percent of the peas.", "That became the eighty twenty rule.", "In a shop, usually about twenty percent of clients pay most of the bills.", "Do you know who they are?", "Check when each one last came in. Text the quiet ones first.", "Comment KEEP and we'll show you who's gone quiet."];
+window.VO_AT = [0.3, 4.1, 6.24, 11.2, 13.17, 16.98];
+window.VO_TEXT = ["Twenty percent of the pods in his garden held eighty percent of the peas.", "That turned into the eighty twenty rule.", "Your shop's probably the same. Maybe twenty percent of your clients pay most of the bills.", "Could you name them right now?", "Look up when each one last came in, and text the quiet ones first.", "Comment KEEP and we'll show you who's gone quiet."];

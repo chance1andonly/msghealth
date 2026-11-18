@@ -1,0 +1,74 @@
+{
+  "16-espresso.mp4": {
+    "approved": true,
+    "sha1": "65e3df1abd52138b94774d2bb83ccf716199e528",
+    "checked_at": "2026-11-18T20:40:05.518Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "11-five-times.mp4": {
+    "approved": true,
+    "sha1": "8bef9044b05b32120d93125c096d59a338e726cc",
+    "checked_at": "2026-11-18T20:40:05.549Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "08b-razor.mp4": {
+    "approved": true,
+    "sha1": "234d9e41545d9df94c10dcb9ff70a952a9691f20",
+    "checked_at": "2026-11-18T20:40:05.579Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "09-thursdays.mp4": {
+    "approved": true,
+    "sha1": "6cfc22d9b4990bec33f696ad05d3a8cfb85a6e4f",
+    "checked_at": "2026-11-18T20:40:05.611Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "14-lexus.mp4": {
+    "approved": true,
+    "sha1": "e415e3d6a2311c23eb10bbb50470026a11aed9d4",
+    "checked_at": "2026-11-18T20:40:05.649Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "12-interview.mp4": {
+    "approved": true,
+    "sha1": "61cc69e9440918af59e63bbf7b3eae43879ec359",
+    "checked_at": "2026-11-18T20:40:05.678Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "15-hotdog.mp4": {
+    "approved": true,
+    "sha1": "dd38b2514748c12f5c674141e26fc04ea64a59fc",
+    "checked_at": "2026-11-18T20:40:05.709Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "10b-peas.mp4": {
+    "approved": true,
+    "sha1": "8a084b1cb3f20e92d3a278ad8e40c97b6e0a76ad",
+    "checked_at": "2026-11-18T20:40:05.737Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "13-kongo.mp4": {
+    "approved": true,
+    "sha1": "50de8bb1c44b5b02e21b0bb0644430599f1220d4",
+    "checked_at": "2026-11-18T20:40:05.766Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "11b-coupon.mp4": {
+    "approved": true,
+    "sha1": "0dcf08088adbde5757e3236f5d9094986a66dbca",
+    "checked_at": "2026-11-18T20:40:05.800Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "10-see-you-next.mp4": {
+    "approved": true,
+    "sha1": "808a2820809c073965d4981d9a7b887810c233a8",
+    "checked_at": "2026-11-18T20:40:05.831Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "09b-giraffe.mp4": {
+    "approved": true,
+    "sha1": "c9fd0c0c416d5071b8ffbecf82cce93e28c34622",
+    "checked_at": "2026-11-18T20:40:05.864Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  }
+}

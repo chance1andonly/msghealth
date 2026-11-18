@@ -12,15 +12,15 @@
    "gap": 0.4
   },
   {
-   "say": "Clients almost never complain. Silence is how they say it.",
+   "say": "Clients almost never complain. They just go quiet.",
    "caps": [
     "Clients almost never *complain.*",
-    "*Silence* is how they say it."
+    "They just go *quiet.*"
    ],
    "gap": 0.4
   },
   {
-   "say": "You can't fix what you never hear. So ask, the next day.",
+   "say": "You can't fix what you never hear, so ask the next day.",
    "caps": [
     "You can't fix what",
     "you *never hear.* Ask *next day.*"
@@ -36,10 +36,10 @@
    "gap": 0.45
   },
   {
-   "say": "The ones who answer stay. The ones you never ask, leave.",
+   "say": "The ones who answer usually stay. The ones nobody asks just disappear.",
    "caps": [
     "The ones who answer *stay.*",
-    "The ones you never ask *leave.*"
+    "The ones you never ask *disappear.*"
    ],
    "gap": 0.45
   },

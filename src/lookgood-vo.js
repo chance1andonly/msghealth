@@ -2,11 +2,11 @@
 // caption chunk start times and when each clip starts. Don't edit by hand.
 window.VO_CLIPS = [
   { dur: 2.27, chunks: [["*\"Looks great, man.\"*", 0.0], ["Then he *never* books again.", 0.52]] }, // 00
-  { dur: 3.15, chunks: [["Clients almost never *complain.*", 0.0], ["*Silence* is how they say it.", 1.74]] }, // 01
-  { dur: 2.74, chunks: [["You can't fix what", 0.0], ["you *never hear.* Ask *next day.*", 1.06]] }, // 02
+  { dur: 2.705, chunks: [["Clients almost never *complain.*", 0.0], ["They just go *quiet.*", 1.69]] }, // 01
+  { dur: 2.62, chunks: [["You can't fix what", 0.0], ["you *never hear.* Ask *next day.*", 1.05]] }, // 02
   { dur: 2.57, chunks: [["Text this:", 0.0], ["*\"Anything off with the cut?\"*", 0.55]] }, // 03
-  { dur: 2.58, chunks: [["The ones who answer *stay.*", 0.0], ["The ones you never ask *leave.*", 1.27]] }, // 04
+  { dur: 3.695, chunks: [["The ones who answer *stay.*", 0.0], ["The ones you never ask *disappear.*", 1.53]] }, // 04
   { dur: 3.98, chunks: [["Comment *KEEP* and we'll show", 0.0], ["you who's *gone quiet.*", 2.53]] }, // 05
 ];
-window.VO_AT = [0.3, 2.97, 6.52, 9.66, 12.68, 15.71];
-window.VO_TEXT = ["Looks great, man. Then he never books again.", "Clients almost never complain. Silence is how they say it.", "You can't fix what you never hear. So ask, the next day.", "Text this. Anything off with the cut? I'll fix it free.", "The ones who answer stay. The ones you never ask, leave.", "Comment the word keep and we'll show you who's gone quiet. Message Health dot net."];
+window.VO_AT = [0.3, 2.97, 6.07, 9.09, 12.11, 16.26];
+window.VO_TEXT = ["Looks great, man. Then he never books again.", "Clients almost never complain. They just go quiet.", "You can't fix what you never hear, so ask the next day.", "Text this. Anything off with the cut? I'll fix it free.", "The ones who answer usually stay. The ones nobody asks just disappear.", "Comment the word keep and we'll show you who's gone quiet. Message Health dot net."];

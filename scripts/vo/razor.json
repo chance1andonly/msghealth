@@ -4,7 +4,7 @@
  "start": 0.3,
  "lines": [
   {
-   "say": "In nineteen oh three, Jill-ett sold fifty-one razors.",
+   "say": "Jill-ett's first year, nineteen oh three. They sold fifty-one razors.",
    "caps": [
     "In *1903,* Gillette sold",
     "*51 razors.*"
@@ -12,15 +12,16 @@
    "gap": 0.4
   },
   {
-   "say": "The next year? Ninety thousand.",
+   "say": "The next year, over ninety thousand.",
    "caps": [
     "The next year?",
     "*90,884.*"
    ],
-   "gap": 0.4
+   "gap": 0.55,
+   "speed": 1.05
   },
   {
-   "say": "A razor, you buy once. Blades, you buy again.",
+   "say": "You buy a razor once. Then you buy blades for the rest of your life.",
    "caps": [
     "A razor, you buy *once.*",
     "Blades, you buy *again.*"
@@ -28,20 +29,21 @@
    "gap": 0.4
   },
   {
-   "say": "Your haircut is the razor. The next visit is the blade.",
+   "say": "Your chair works the same way. The cut is the razor, and the next visit is the blade.",
    "caps": [
-    "The haircut is the *razor.*",
+    "The cut is the *razor.*",
     "The next visit is the *blade.*"
    ],
    "gap": 0.4
   },
   {
-   "say": "Most cuts start fading around week three. Text them then.",
+   "say": "Most cuts start looking rough around week three. That's when you text them.",
    "caps": [
     "Cuts fade around *week three.*",
     "Text them *then.*"
    ],
-   "gap": 0.4
+   "gap": 0.4,
+   "speed": 1.08
   },
   {
    "say": "Comment KEEP and we'll show you who's gone quiet.",

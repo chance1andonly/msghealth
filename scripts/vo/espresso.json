@@ -4,7 +4,7 @@
  "start": 0.3,
  "lines": [
   {
-   "say": "Starbucks once closed about seven thousand stores at the same time.",
+   "say": "In two thousand eight, Starbucks closed about seven thousand stores for an afternoon.",
    "caps": [
     "Starbucks closed *7,000 stores*",
     "at the *same time.*"
@@ -12,7 +12,7 @@
    "gap": 0.4
   },
   {
-   "say": "A hundred and thirty five thousand baristas went back to class.",
+   "say": "A hundred and thirty-five thousand employees got retrained on how to pull a good shot.",
    "caps": [
     "*135,000 baristas*",
     "went *back to class.*"
@@ -20,28 +20,29 @@
    "gap": 0.4
   },
   {
-   "say": "They didn't buy ads. They fixed the experience for people already coming.",
+   "say": "No ads. They fixed things for the people who were already walking in.",
    "caps": [
-    "They didn't buy ads.",
+    "No *ads.*",
     "They fixed it for *people already coming.*"
    ],
    "gap": 0.4
   },
   {
-   "say": "Regulars notice when it slips. They don't complain. They just stop coming.",
+   "say": "Regulars notice when something slips, and most of them never say a word. They just stop showing up.",
    "caps": [
     "Regulars *notice* when it slips.",
-    "They don't complain. *They just stop.*"
+    "They *just stop.*"
    ],
    "gap": 0.4
   },
   {
-   "say": "Ask them. One text beats guessing why they left.",
+   "say": "So ask them. One text tells you what guessing never will.",
    "caps": [
-    "*Ask them.*",
+    "So *ask them.*",
     "One text beats *guessing.*"
    ],
-   "gap": 0.4
+   "gap": 0.4,
+   "speed": 1.08
   },
   {
    "say": "Comment KEEP and we'll show you who's gone quiet.",
