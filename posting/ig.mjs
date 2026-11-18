@@ -133,7 +133,9 @@ async function optimize() {
 
   const n = perDay, gap = n > 4 ? 1 : 3;
   const defaults = n === 3 ? [8, 12, 20] : n === 10 ? [7, 9, 11, 12, 13, 15, 17, 19, 20, 21] : Array.from({ length: n }, (_, i) => Math.round(8 + (i * 12) / (n - 1)));
-  const pick = []; for (const r of ranked) if (pick.length < n && r.hour >= 7 && r.hour <= 21 && pick.every((h) => Math.abs(h - r.hour) >= gap)) pick.push(r.hour);
+  // Only trust an hour that has at least 4 reels and beats the overall median; otherwise it is noise and the spread-out defaults fill in.
+  const overall = med(rows.map((r) => r.score));
+  const pick = []; for (const r of ranked) if (pick.length < n && r.reels >= 4 && r.median_score > overall && r.hour >= 7 && r.hour <= 21 && pick.every((h) => Math.abs(h - r.hour) >= gap)) pick.push(r.hour);
   for (const h of defaults) if (pick.length < n && !pick.includes(h) && pick.every((p) => Math.abs(p - h) >= 1)) pick.push(h);
   const slots = pick.sort((a, b) => a - b);
   writeJson(STATS, { updated: new Date().toISOString(), timezone: tz, metric, reels_analyzed: rows.length, by_hour: ranked, per_day_scores: Object.fromEntries(Object.entries(groups).map(([d, v]) => [d, { reels: v.length, median_score: med(v) }])), per_day_decision: why, top_reels: rows.slice().sort((a, b) => b.score - a.score).slice(0, 15) });

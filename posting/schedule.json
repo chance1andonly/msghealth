@@ -4,12 +4,12 @@
   "slots": [
     8,
     11,
-    13,
     14,
-    16
+    17,
+    20
   ],
   "per_day": 5,
   "trial": null,
-  "basis": "median engagement of your own reels by posting hour",
+  "basis": "defaults spread over the day (hour data too thin to trust yet)",
   "slots_updated": "2026-11-18T15:56:39.701Z"
 }
