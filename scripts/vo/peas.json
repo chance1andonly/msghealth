@@ -1,0 +1,55 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Twenty percent of the pods in his garden held eighty percent of the peas.",
+   "caps": [
+    "*20%* of the pods in his garden",
+    "held *80%* of the peas."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "That became the eighty twenty rule.",
+   "caps": [
+    "That became the",
+    "*80/20 rule.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "In a shop, usually about twenty percent of clients pay most of the bills.",
+   "caps": [
+    "Usually, about *20%* of clients",
+    "pay *most of the bills.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Do you know who they are?",
+   "caps": [
+    "Do you know",
+    "*who they are?*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Check when each one last came in. Text the quiet ones first.",
+   "caps": [
+    "Check when each one *last came in.*",
+    "Text the *quiet ones* first."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

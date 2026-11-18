@@ -1,0 +1,57 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A boy left his stuffed giraffe at a Ritz-Carlton.",
+   "caps": [
+    "A boy left his *giraffe*",
+    "at a *Ritz-Carlton.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The hotel didn't just mail it back.",
+   "caps": [
+    "The hotel didn't",
+    "*just mail it back.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "They sent photos of him at the pool, at the spa, with the resort's parrot.",
+   "caps": [
+    "Photos of him *at the pool,*",
+    "*at the spa,*",
+    "with the *resort's parrot.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "People are still telling that story.",
+   "caps": [
+    "People are *still telling*",
+    "that story."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Your version: text the fresh cut, plus one line about his week.",
+   "caps": [
+    "Your version:",
+    "text the *fresh cut,*",
+    "plus *one line* about his week."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

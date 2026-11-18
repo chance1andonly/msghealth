@@ -1,0 +1,58 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Atlanta, eighteen eighty-eight. A soda company starts handing out free drink tickets.",
+   "caps": [
+    "Atlanta, *1888.*",
+    "A soda company hands out",
+    "*free drink tickets.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "By nineteen thirteen, eight and a half million free drinks. One in nine Americans.",
+   "caps": [
+    "By 1913:",
+    "*8.5 million* free drinks.",
+    "*One in nine* Americans."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The free drink wasn't the point. The second one was.",
+   "caps": [
+    "The free drink",
+    "wasn't the point.",
+    "The *second one* was."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Most shops chase new clients. A returning one costs you one text.",
+   "caps": [
+    "Most shops chase *new clients.*",
+    "A returning one costs *one text.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Text someone who's gone quiet: trim's on me Thursday.",
+   "caps": [
+    "Text someone *gone quiet:*",
+    "*\"Trim's on me Thursday.\"*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

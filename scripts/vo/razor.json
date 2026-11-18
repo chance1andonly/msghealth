@@ -1,0 +1,55 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In nineteen oh three, Jill-ett sold fifty-one razors.",
+   "caps": [
+    "In *1903,* Gillette sold",
+    "*51 razors.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The next year? Ninety thousand.",
+   "caps": [
+    "The next year?",
+    "*90,884.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "A razor, you buy once. Blades, you buy again.",
+   "caps": [
+    "A razor, you buy *once.*",
+    "Blades, you buy *again.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Your haircut is the razor. The next visit is the blade.",
+   "caps": [
+    "The haircut is the *razor.*",
+    "The next visit is the *blade.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Most cuts start fading around week three. Text them then.",
+   "caps": [
+    "Cuts fade around *week three.*",
+    "Text them *then.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

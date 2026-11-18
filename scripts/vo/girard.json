@@ -1,0 +1,55 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "He sold over thirteen thousand cars. More than anyone in history.",
+   "caps": [
+    "He sold *13,001 cars.*",
+    "More than *anyone in history.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Every month, he mailed thirteen thousand cards to people who already bought.",
+   "caps": [
+    "Every month, he mailed *13,000 cards*",
+    "to people who *already bought.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "No sales pitch. Just: I like you.",
+   "caps": [
+    "No sales pitch.",
+    "Just: *\"I like you.\"*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "He needed two assistants and a stamp. You need one text.",
+   "caps": [
+    "He needed *two assistants.*",
+    "You need *one text.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Been a minute. Chair's open Thursday.",
+   "caps": [
+    "Been a minute.",
+    "Chair's open *Thursday.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
