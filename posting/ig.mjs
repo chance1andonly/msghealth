@@ -51,6 +51,11 @@ async function check() {
   const m = await me(); say(`connected as @${m.username} (${m.account_type}), id ${m.user_id}`);
   const lim = await api('GET', `/${m.user_id}/content_publishing_limit`, { fields: 'quota_usage,config' }).catch((e) => ({ error: e.message }));
   say('publishing limit:', JSON.stringify(lim.data?.[0] || lim));
+  // Which permissions this token really carries, and whether one insights call works (shows why views are unavailable).
+  const perms = await api('GET', '/me/permissions').then((r) => (r.data || []).map((x) => `${x.permission}:${x.status}`).join(', ')).catch((e) => 'unreadable (' + e.message.replace(/^GET [^:]+: /, '') + ')');
+  say('token permissions:', perms);
+  const last = await api('GET', `/${m.user_id}/media`, { fields: 'id,media_product_type', limit: 5 }).then((r) => (r.data || []).find((x) => x.media_product_type === 'REELS') || r.data?.[0]).catch(() => null);
+  if (last) for (const metric of ['reach', 'views', 'saved']) { const r = await api('GET', `/${last.id}/insights`, { metric }).then((x) => 'ok ' + JSON.stringify(x.data?.[0]?.values?.[0]?.value)).catch((e) => 'FAILED ' + e.message.replace(/^GET [^:]+: /, '')); say(`insights test (${metric}):`, r); }
   { const q = fs.readdirSync(QUEUE).filter((f) => f.endsWith('.mp4')); say('queue:', q.length, 'reels waiting,', q.filter(approved).length, 'approved'); }
 }
 
