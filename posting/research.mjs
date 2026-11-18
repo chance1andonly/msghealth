@@ -69,13 +69,27 @@ async function hashtagTop(igId, tag) {
   return (r.data || []).filter((m) => m.media_type === 'VIDEO').map((m) => ({ tag, permalink: m.permalink, likes: m.like_count ?? null, comments: m.comments_count ?? null, posted: m.timestamp?.slice(0, 10), caption: (m.caption || '').replace(/\s+/g, ' ').slice(0, 300) }));
 }
 
+// Discovery by the video, not the channel: search any channel's recent Shorts for the term, then keep the ones that beat their own
+// channel's size (views / subscribers) and that viewers actually liked and commented on. A big account that coasts on its following
+// scores low; a 3k-subscriber channel with a 400k-view Short scores high.
 async function shorts(term) {
-  const after = new Date(Date.now() - 30 * 864e5).toISOString();
-  const s = await get(YT, '/search', { part: 'snippet', q: term, type: 'video', videoDuration: 'short', order: 'viewCount', publishedAfter: after, maxResults: '15', relevanceLanguage: 'en', regionCode: 'US', key: YOUTUBE_API_KEY });
-  const ids = (s.items || []).map((i) => i.id.videoId).join(','); if (!ids) return [];
-  const v = await get(YT, '/videos', { part: 'statistics,snippet,contentDetails', id: ids, key: YOUTUBE_API_KEY });
-  return v.items.map((i) => ({ term, title: i.snippet.title, channel: i.snippet.channelTitle, url: `https://youtube.com/shorts/${i.id}`, posted: i.snippet.publishedAt.slice(0, 10), views: +i.statistics.viewCount || 0, likes: +i.statistics.likeCount || 0, comments: +i.statistics.commentCount || 0 }));
+  const after = new Date(Date.now() - 45 * 864e5).toISOString(), out = [];
+  for (const order of ['viewCount', 'relevance']) {
+    const s = await get(YT, '/search', { part: 'snippet', q: term, type: 'video', videoDuration: 'short', order, publishedAfter: after, maxResults: '25', relevanceLanguage: 'en', regionCode: 'US', key: YOUTUBE_API_KEY });
+    const ids = [...new Set((s.items || []).map((i) => i.id.videoId))]; if (!ids.length) continue;
+    const v = await get(YT, '/videos', { part: 'statistics,snippet', id: ids.join(','), key: YOUTUBE_API_KEY });
+    const ch = await get(YT, '/channels', { part: 'statistics', id: [...new Set(v.items.map((i) => i.snippet.channelId))].join(','), key: YOUTUBE_API_KEY });
+    const subs = Object.fromEntries((ch.items || []).map((c) => [c.id, c.statistics.hiddenSubscriberCount ? null : +c.statistics.subscriberCount]));
+    for (const i of v.items) {
+      const views = +i.statistics.viewCount || 0, likes = +i.statistics.likeCount || 0, comments = +i.statistics.commentCount || 0, sub = subs[i.snippet.channelId], age = Math.max(1, days(i.snippet.publishedAt));
+      out.push({ term, title: i.snippet.title, channel: i.snippet.channelTitle, subscribers: sub, url: `https://youtube.com/shorts/${i.id}`, posted: i.snippet.publishedAt.slice(0, 10), age_days: +age.toFixed(1), views, likes, comments,
+        views_per_subscriber: sub ? +(views / Math.max(sub, 500)).toFixed(1) : null, like_rate: views ? +(likes / views * 100).toFixed(2) : 0, comment_rate: views ? +(comments / views * 100).toFixed(3) : 0, views_per_day: Math.round(views / age) });
+    }
+  }
+  return out;
 }
+// Quality score: beat your own audience size, and keep people engaged. Needs real traction (20k+ views), not a tiny-sample fluke.
+const popScore = (r) => (r.views >= 20000 ? Math.log10(r.views) * (r.views_per_subscriber ?? 1) * (1 + r.like_rate / 4 + r.comment_rate * 5) : 0);
 
 async function mine() {
   const id = JSON.parse(fs.readFileSync(path.join(DIR, 'schedule.json'), 'utf8')).ig_user_id, m = { user_id: id, username: (await get(IGB, `/${id}`, { fields: 'username' }, IG_TOKEN)).username };
@@ -108,12 +122,13 @@ async function main() {
   for (const t of w.hashtags || []) { try { report.hashtags.push(...(await hashtagTop(me.id, t))); } catch (e) { report.errors.push(`#${t}: ${e.message}`); } }
   report.hashtags.sort((a, b) => (b.likes || 0) + 3 * (b.comments || 0) - ((a.likes || 0) + 3 * (a.comments || 0)));
 
-  if (YOUTUBE_API_KEY) { report.youtube_shorts = []; for (const t of w.youtube_terms || []) { try { report.youtube_shorts.push(...(await shorts(t))); } catch (e) { report.errors.push(`YouTube "${t}": ${e.message}`); } } report.youtube_shorts.sort((a, b) => b.views - a.views); }
+  if (YOUTUBE_API_KEY) { report.youtube_shorts = []; for (const t of w.youtube_terms || []) { try { report.youtube_shorts.push(...(await shorts(t))); } catch (e) { report.errors.push(`YouTube "${t}": ${e.message}`); } } const seenU = new Set(); report.youtube_shorts = report.youtube_shorts.filter((r) => !seenU.has(r.url) && seenU.add(r.url)); report.youtube_shorts.forEach((r) => { r.pop_score = +popScore(r).toFixed(1); }); report.youtube_shorts.sort((a, b) => b.pop_score - a.pop_score || b.views - a.views); report.youtube_shorts = report.youtube_shorts.slice(0, 60); }
 
   if (IG_TOKEN) { try { const m = await mine(); report.you = { ...m, niche_median_views: med(accounts.map((a) => a.median_views)) }; } catch (e) { report.errors.push(`your account: ${e.message}`); } }
 
   fs.writeFileSync(OUT, JSON.stringify(report, null, 2) + '\n');
   say(`\n${report.outliers.length} outliers, ${report.hashtags.length} hashtag posts, ${report.suggested_accounts.length} suggested accounts${report.youtube_shorts ? `, ${report.youtube_shorts.length} Shorts` : ''}.`);
+  if (report.youtube_shorts?.length) { say('\nBest Shorts by quality (beat their channel size, well liked):'); report.youtube_shorts.slice(0, 5).forEach((r) => say(`  score ${r.pop_score}  ${r.views} views  ${r.views_per_subscriber ?? '?'}x subs  ${r.channel}: ${r.title.slice(0, 60)}`)); }
   report.outliers.slice(0, 5).forEach((r) => say(`  ${r.outlier}x  @${r.username}  ${r.views} views  ${r.caption.slice(0, 70)}`));
   if (report.errors.length) say('\nskipped:\n  ' + report.errors.join('\n  '));
 }
