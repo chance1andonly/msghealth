@@ -1,0 +1,57 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "He told you about his interview. You never asked how it went.",
+   "caps": [
+    "He told you about *his interview.*",
+    "You never asked *how it went.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Nobody comes back for the fade. They come back because you remembered.",
+   "caps": [
+    "Nobody comes back *for the fade.*",
+    "They come back",
+    "because *you remembered.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "After every cut, save one detail. The job. The kid. The trip.",
+   "caps": [
+    "After every cut,",
+    "save *one detail.*",
+    "The *job.* The *kid.* The *trip.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Three days later, send this. How did the interview go, Dray?",
+   "caps": [
+    "Three days later, text it:",
+    "*\"How'd the interview go?\"*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "That's not a discount. That's the reason he stays.",
+   "caps": [
+    "That's not a *discount.*",
+    "That's *why he stays.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment the word keep and we'll show you who's gone quiet. Message Health dot net.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

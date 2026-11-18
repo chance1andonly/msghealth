@@ -1,0 +1,57 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Stop saying, see you next time. Next time is not a date.",
+   "caps": [
+    "Stop saying *\"see you next time.\"*",
+    "Next time *isn't a date.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Almost half of clients book one cut and never come back. Nobody ever asked them for the next one.",
+   "caps": [
+    "*48%* book one cut",
+    "and *never return.*",
+    "Nobody asked for *the next one.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "So ask, right in the chair. Saturday or Sunday? Not, do you want to book again?",
+   "caps": [
+    "Ask in the chair:",
+    "*\"Saturday or Sunday?\"*",
+    "Not \"want to rebook?\""
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Then send the text before he leaves. You're locked in, Saturday at ten.",
+   "caps": [
+    "Then *text it*",
+    "before he leaves."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "A date on the calendar beats a maybe, every time.",
+   "caps": [
+    "A *date* beats a *maybe,*",
+    "every time."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment the word keep and we'll show you who's gone quiet. Message Health dot net.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

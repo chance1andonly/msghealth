@@ -1,0 +1,56 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A new client costs you five times what an old one does.",
+   "caps": [
+    "A *new* client costs",
+    "*5x* more than an old one."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "You post, you promote, you hand out cards. Meanwhile, forty regulars sit in your phone.",
+   "caps": [
+    "You post. You promote.",
+    "Meanwhile *40 regulars*",
+    "sit in your *phone.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Scroll to the ones who haven't booked in ninety days. They're your cheapest clients.",
+   "caps": [
+    "Scroll to who's *90 days* out.",
+    "They're your *cheapest* clients."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Text one. Been a minute, Dray. Got Thursday at six if you want it.",
+   "caps": [
+    "Text one.",
+    "*\"Been a minute.\"*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "One text. Zero ad spend. One chair filled.",
+   "caps": [
+    "One text. *Zero* ad spend.",
+    "*One chair* filled."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment the word keep and we'll show you who's gone quiet. Message Health dot net.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

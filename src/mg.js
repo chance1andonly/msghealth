@@ -22,7 +22,7 @@ function msg(x, y, maxW, lines, out, a = 1, p = 1) {
 function phoneChat(t, at, until, fn, y = 330) {
   const k = ease.quint(seg(t, at, at + 0.5)) * (1 - seg(t, until - 0.25, until));
   if (k <= 0.01) return;
-  ctx.save(); ctx.globalAlpha = k; xf(CX, y + 480, 0.92 + 0.08 * k, 0, () => phone(220, y, 640, 960, '#0d0d14', () => { fillRR(0, 0, 640, 110, 0, '#14141e'); circle(60, 74, 24, '#3b3b55'); text('Marcus', 100, 74, 30, 700, '#fff'); fn(); })); ctx.restore();
+  ctx.save(); ctx.globalAlpha = k; xf(CX, y + 480, 0.92 + 0.08 * k, 0, () => phone(220, y, 640, 960, '#0d0d14', () => { fillRR(0, 0, 640, 110, 0, '#14141e'); circle(60, 74, 24, '#3b3b55'); text(window.CHAT_WHO || 'Marcus', 100, 74, 30, 700, '#fff'); fn(); })); ctx.restore();
 }
 function chip(s, x, y, col, a = 1, size = 24) { const w = tw(s, size, 800, 0.08) + 44, h = size * 2; ctx.save(); ctx.globalAlpha *= clamp(a); fillRR(x - w / 2, y - h / 2, w, h, h / 2, rgba(col, 0.16)); strokeRR(x - w / 2, y - h / 2, w, h, h / 2, rgba(col, 0.6), 2); text(s, x, y + 1, size, 800, col, 'center', 0.08); ctx.restore(); }
 function headline(s, y, a, size = 120, col = INK) { withFade(a, () => text(s, CX, y, size, 800, col, 'center', -0.04)); }
