@@ -30,3 +30,10 @@ Updated 2026-11-18 from 62 YouTube Shorts ranked by views vs channel size, 15 In
 ## Open questions for the next run
 - Do the history-hook reels with a concrete first-line scene beat the ones that open with a stat? Compare the queued reels once they have 24+ hours of views.
 - Try 2 reels per week in the "He waited 13 years" style: one human story, a withheld ending, then the retention lesson.
+
+## Captions (from the same data)
+- Line 1 is the scene or number from the video, with one emoji. Not a slogan.
+- Then the lesson in two sentences, then a question the viewer can answer in the comments, or a "✅ or ❌" verdict. The best Shorts in the data are built on a verdict or vote.
+- One CTA: "Comment KEEP and we'll show you who's gone quiet."
+- 3 hashtags (#barber #atlantabarber #hairstylist). The winners used 0 to 3.
+- No em dashes, no cliches, written like a person (posting/VOICE.md).
