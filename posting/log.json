@@ -61,5 +61,15 @@
     "media_id": "17968041834079142",
     "trial": null,
     "posted_at": "2026-11-18T13:10:25.583Z"
+  },
+  {
+    "date": "2026-11-18",
+    "slot": 11,
+    "hour": 11,
+    "file": "07b-girard.mp4",
+    "media_id": "18232935478326574",
+    "trial": null,
+    "per_day": 5,
+    "posted_at": "2026-11-18T16:10:14.957Z"
   }
 ]
