@@ -62,8 +62,8 @@
   "10-see-you-next.mp4": {
     "approved": true,
     "sha1": "808a2820809c073965d4981d9a7b887810c233a8",
-    "checked_at": "2026-11-18T20:40:05.831Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-19T16:11:19.258Z",
+    "note": "reviewed 2026-11-19: hook 2.8s, total ~25s, no dashes/AI tells, contractions, lines read aloud (no ASR model), caption KEEP+hashtags ok; 48% stat is an industry claim, unverified"
   },
   "09b-giraffe.mp4": {
     "approved": true,
