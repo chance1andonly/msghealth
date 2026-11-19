@@ -44,8 +44,8 @@
   "10b-peas.mp4": {
     "approved": true,
     "sha1": "8a084b1cb3f20e92d3a278ad8e40c97b6e0a76ad",
-    "checked_at": "2026-11-18T20:40:05.737Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-19T19:10:33.311Z",
+    "note": "reviewed 2026-11-19: hook 3.4s, total ~22s, no dead air; script read aloud, plain contractions, one question, no em dashes or AI tells; Pareto pea fact true; caption ends with KEEP CTA + hashtags; ASR unavailable, no hard words"
   },
   "13-kongo.mp4": {
     "approved": true,
