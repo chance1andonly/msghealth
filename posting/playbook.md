@@ -1,6 +1,6 @@
 # Niche playbook (the batch task rewrites this from posting/research.json and posting/stats.json)
 
-Updated 2026-11-19 (data from 2026-11-18, under 3 days old so not re-run) from 62 YouTube Shorts ranked by views vs channel size, 15 Instagram outliers (views vs that account's median) and our own 26 reels' views. Titles, captions and numbers only; the videos themselves were not watched, so structure claims are inferred from titles and metrics.
+Updated 2026-11-19 (research.json refreshed 2026-11-19, stats.json from 2026-11-18) from 62 YouTube Shorts ranked by views vs channel size, 15 Instagram outliers (views vs that account's median) and our own 26 reels' views. Titles, captions and numbers only; the videos themselves were not watched, so structure claims are inferred from titles and metrics.
 
 ## What the winners share
 1. The hook is one odd, specific scene with the outcome withheld. "He waited 13 years for a haircut" (1.06M views, 1,190x the channel's subscribers). "I cut a dead client's hair..". "His barber said 'Interesting'". "Grandpa's barbershop had three customers left. Then a teen walked in" (24k views in 2 days from a 2k channel). A topic ("barber tips") never beats a scene.
@@ -17,7 +17,7 @@ Updated 2026-11-19 (data from 2026-11-18, under 3 days old so not re-run) from 6
 ## Our own reels (views)
 - 1,708 Pentagon pizza, 1,289 coffin ship, 794 London time lady: all open with a surprising true story and pivot to a client lesson. Everything else sits at about 150 to 200 views. Our median is 135.
 - Direct "you're losing clients" and promo-style posts are the floor. So the true-story format is the one working, which matches the niche data.
-- Reels posted on 11-17 and 11-18 (girard, looks-great, razor, thursdays) are too new to have views. 12 reels are queued, including netflix and late-fees (both: a big company number or loss in the hook, an admission or quote as the turn, then a text the barber can send).
+- Reels posted on 11-17 and 11-18 (girard, looks-great, razor, thursdays) are too new to have views. 12 reels are queued, including netflix, late-fees, domino, stew-rock and empty-chair (both: a big company number or loss in the hook, an admission or quote as the turn, then a text the barber can send).
 - Still 45 reels analyzed; the median is about 135 and only 3 are above 700, all true stories.
 
 ## Rules for new scripts
@@ -29,9 +29,11 @@ Updated 2026-11-19 (data from 2026-11-18, under 3 days old so not re-run) from 6
 6. Voice follows posting/VOICE.md.
 
 ## Story picks that fit (verified 2026-11-19)
-- Reversals and admissions work as a middle beat because the CEO's own words ("I messed up") are quotable and checkable: Netflix 2011 (800,000 US subscribers lost in Q3, price up to 60%).
-- Money taken from returning customers (Blockbuster 2000, $800M late fees, about 16% of revenue) maps to the win-back text: no lecture, just an open chair.
-- Avoid reusing: Pentagon pizza, coffin ship, London time lady, emu war, Waffle House, Girard, Gillette, giraffe, peas, Coca-Cola coupon, Kongo Gumi, Lexus, Costco, Starbucks, Netflix, Blockbuster.
+- Reversals and admissions work as a middle beat because the company's own words are quotable and checkable: Netflix 2011 ("I messed up"), Domino's 2009 (customers saying "tastes like cardboard" in its own ads; new pizza launched last week of 2009; same-store sales up 14.3% in Q1 2010, QSR).
+- Objects and scenes beat abstractions: a three-ton rock with two rules carved in it (Stew Leonard's, about five times average grocery sales per square foot, Guinness 1992); an empty chair at Amazon's early meetings (hedged: one named source, ex-Amazon exec Bill Price via Shep Hyken, so the script says "a former Amazon exec says").
+- When sources disagree or only one source tells a detail (Stew Leonard's eggnog origin story), leave the detail out or attribute it.
+- Money taken from returning customers (Blockbuster 2000, $800M late fees) maps to the win-back text.
+- Avoid reusing: Pentagon pizza, coffin ship, London time lady, emu war, Waffle House, Girard, Gillette, giraffe, peas, Coca-Cola coupon, Kongo Gumi, Lexus, Costco, Starbucks, Netflix, Blockbuster, Domino's, Stew Leonard's, Amazon empty chair.
 
 ## Open questions for the next run
 - Do the history-hook reels with a concrete first-line scene beat the ones that open with a stat? Compare the queued reels once they have 24+ hours of views.

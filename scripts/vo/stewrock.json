@@ -1,0 +1,62 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A grocery store in Connecticut put a three ton rock at its front door.",
+   "caps": [
+    "A grocery store put a",
+    "*three ton rock* at the front door."
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "Two rules were carved into it. Number one, the customer is always right.",
+   "caps": [
+    "Two rules, carved in.",
+    "Rule one: the *customer",
+    "is always right.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The second one said, if the customer's ever wrong, go back and read number one.",
+   "caps": [
+    "Rule two: if the customer",
+    "is ever wrong,",
+    "*re-read rule one.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "That store sold five times as much per square foot as a normal grocery store. Guinness noticed.",
+   "caps": [
+    "*Five times* the sales per square foot",
+    "of a normal grocery store."
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Nobody owes you a return visit. So text him. Been a while, anything I could've done better?",
+   "caps": [
+    "So text him:",
+    "*\"Been a while.*",
+    "Anything I could've",
+    "*done better?\"*"
+   ],
+   "gap": 0.6,
+   "speed": 1.08
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

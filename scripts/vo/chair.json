@@ -1,0 +1,61 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "At Amazon's early meetings, one chair was left empty on purpose.",
+   "caps": [
+    "At Amazon's early meetings,",
+    "one chair was *left empty.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "A former Amazon executive says it was for the customer, who could never come to the meeting.",
+   "caps": [
+    "A former Amazon exec says",
+    "it was *for the customer,*",
+    "who could never attend."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The idea was that the person paying you is never in the room when you make the call.",
+   "caps": [
+    "The person paying you is never",
+    "*in the room* when you decide."
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Your shop's got one too. It's the Thursday four thirty a regular used to take.",
+   "caps": [
+    "Your shop has one too:",
+    "the *Thursday 4:30*",
+    "a regular used to take."
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "So text him. Saved your usual spot, Thursday four thirty.",
+   "caps": [
+    "So text him:",
+    "*\"Saved your usual spot.*",
+    "*Thursday 4:30.\"*"
+   ],
+   "gap": 0.6,
+   "speed": 1.08
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

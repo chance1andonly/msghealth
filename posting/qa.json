@@ -82,5 +82,23 @@
     "sha1": "421c8593addeac93324413a343d1c58886623907",
     "checked_at": "2026-11-19T07:27:28.013Z",
     "note": "reviewed 2026-11-19: facts checked (NBC via Mental Floss: $800M, ~16% of 2000 revenue), timing, frames per line, wording; no ASR model, lines read aloud. Caption asks viewer to pick the line they would send."
+  },
+  "19-domino.mp4": {
+    "approved": true,
+    "sha1": "53fcc8ca65dcce22c8a5e4c4781032209c017d56",
+    "checked_at": "2026-11-19T19:31:26.109Z",
+    "note": "reviewed 2026-11-19: qa flags clean, caption chunks fit, frames checked, facts (cardboard quote, ~14% same-store Q1 2010, 18-month rebuild) from Inc/NBC/QSR; no ASR model so lines read and checked by hand"
+  },
+  "20-stew-rock.mp4": {
+    "approved": true,
+    "sha1": "c0fdb345ecd90ccb594fed029bb520af09815e2c",
+    "checked_at": "2026-11-19T19:31:26.137Z",
+    "note": "reviewed 2026-11-19: qa clean, frames checked, facts (3-ton rock, rules, 5x sales/sq ft Guinness) from Gale company histories + BND; eggnog origin left out (single source); no ASR model"
+  },
+  "21-empty-chair.mp4": {
+    "approved": true,
+    "sha1": "e5afe97f09d0fc47d123d9687c8a055d98ee052c",
+    "checked_at": "2026-11-19T19:31:26.167Z",
+    "note": "reviewed 2026-11-19: qa clean, frames checked; empty-chair claim attributed to a former Amazon exec (Bill Price via Hyken), no numbers; no ASR model"
   }
 }

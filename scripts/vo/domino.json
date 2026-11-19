@@ -1,0 +1,58 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Domino's ran ads where real customers said the crust tasted like cardboard.",
+   "caps": [
+    "Real customers said the crust",
+    "tasted like *cardboard.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "They'd spent about a year and a half rebuilding the pizza, and then they showed everyone the complaints.",
+   "caps": [
+    "A year and a half rebuilding the pizza,",
+    "then they showed *the complaints.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "It launched the last week of the year. Sales at existing stores jumped about fourteen percent that quarter.",
+   "caps": [
+    "Sales at existing stores jumped",
+    "*about 14 percent* that quarter."
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "You've got clients who left over something small, and they'd probably tell you if you asked.",
+   "caps": [
+    "Clients who left over something small,",
+    "would *probably tell you* if you asked."
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "So text one of them. Was the last cut off? Be honest, I'll fix it Thursday.",
+   "caps": [
+    "Text one: *\"Was the last cut off?",
+    "Be honest. I'll fix it Thursday.\"*"
+   ],
+   "gap": 0.6,
+   "speed": 1.08
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
