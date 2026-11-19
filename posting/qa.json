@@ -20,8 +20,8 @@
   "09-thursdays.mp4": {
     "approved": true,
     "sha1": "6cfc22d9b4990bec33f696ad05d3a8cfb85a6e4f",
-    "checked_at": "2026-11-18T20:40:05.611Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-19T01:09:46.863Z",
+    "note": "reviewed 2026-11-19: timing ~25s hook 2.7s, no AI tells or dashes, contractions, facts ok, caption KEEP+hashtags ok"
   },
   "14-lexus.mp4": {
     "approved": true,
