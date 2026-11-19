@@ -70,5 +70,17 @@
     "sha1": "c9fd0c0c416d5071b8ffbecf82cce93e28c34622",
     "checked_at": "2026-11-18T20:40:05.864Z",
     "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "17-netflix.mp4": {
+    "approved": true,
+    "sha1": "fd20764c8a51213e32e710f9347e039decf0493c",
+    "checked_at": "2026-11-19T07:27:27.977Z",
+    "note": "reviewed 2026-11-19: facts checked (AP/Quartz: 800k US subs Q3 2011, up to 60% hike, 'I messed up'), timing, frames per line, wording; no ASR model, lines read aloud. Caption ends on a self-check verdict (✅ or ❌)."
+  },
+  "18-late-fees.mp4": {
+    "approved": true,
+    "sha1": "421c8593addeac93324413a343d1c58886623907",
+    "checked_at": "2026-11-19T07:27:28.013Z",
+    "note": "reviewed 2026-11-19: facts checked (NBC via Mental Floss: $800M, ~16% of 2000 revenue), timing, frames per line, wording; no ASR model, lines read aloud. Caption asks viewer to pick the line they would send."
   }
 }

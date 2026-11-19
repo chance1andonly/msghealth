@@ -1,0 +1,13 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {"say": "In twenty eleven, Netflix lost eight hundred thousand customers in one quarter.", "caps": ["Netflix lost *800,000 customers*", "in *one quarter.*"], "gap": 0.5, "speed": 1.08},
+  {"say": "The ten dollar plan had turned into about sixteen dollars, for the same two things.", "caps": ["The $10 plan became *$15.98*", "for the *same two things.*"], "gap": 0.5},
+  {"say": "Then the CEO wrote a note that started, I messed up. I owe everyone an explanation.", "caps": ["Then the CEO wrote:", "*\"I messed up.\"*"], "gap": 0.6, "speed": 1.05},
+  {"say": "Regulars react the same way to a price change. They won't say a word, they just wait longer between cuts, then stop.", "caps": ["Your regulars *won't say a word.*", "They just *stop coming.*"], "gap": 0.6},
+  {"say": "Tell them first. Heads up, cuts go up five dollars in January. Book this week for the old price.", "caps": ["Tell them *first.*", "Book this week, *old price.*"], "gap": 0.6, "speed": 1.08},
+  {"say": "Comment KEEP and we'll show you who's gone quiet.", "caps": ["Comment *KEEP* and we'll show", "you who's *gone quiet.*"], "gap": 0.3}
+ ]
+}

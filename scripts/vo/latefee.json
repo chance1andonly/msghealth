@@ -1,0 +1,13 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {"say": "In two thousand, Blockbuster made eight hundred million dollars from late fees.", "caps": ["Blockbuster made *$800 million*", "from *late fees.*"], "gap": 0.5, "speed": 1.08},
+  {"say": "That was sixteen percent of its revenue, and it all came from people already coming in.", "caps": ["About *16%* of all its revenue,", "from people *already coming in.*"], "gap": 0.5},
+  {"say": "Picture the guy at the counter. He's late, he already feels bad, and now there's a bill.", "caps": ["He's *late.*", "And now there's *a bill.*"], "gap": 0.6, "speed": 1.05},
+  {"say": "A client who comes back after four months feels the same way. Greet him with a lecture and he'll think twice.", "caps": ["Greet him with *a lecture,*", "and he'll *think twice.*"], "gap": 0.6},
+  {"say": "So send this instead. Hey Marcus, chair's open Thursday if you want it. No pressure.", "caps": ["Chair's open *Thursday.*", "*No pressure.*"], "gap": 0.6, "speed": 1.08},
+  {"say": "Comment KEEP and we'll show you who's gone quiet.", "caps": ["Comment *KEEP* and we'll show", "you who's *gone quiet.*"], "gap": 0.3}
+ ]
+}
