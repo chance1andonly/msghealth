@@ -68,8 +68,8 @@
   "09b-giraffe.mp4": {
     "approved": true,
     "sha1": "c9fd0c0c416d5071b8ffbecf82cce93e28c34622",
-    "checked_at": "2026-11-18T20:40:05.864Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-19T13:10:34.788Z",
+    "note": "reviewed 2026-11-19: hook 2.6s, total ~22s, wording no AI tells/dashes, facts ok (Ritz-Carlton Joshie story), qa no flags, caption KEEP+hashtags ok"
   },
   "17-netflix.mp4": {
     "approved": true,
