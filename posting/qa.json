@@ -8,8 +8,8 @@
   "11-five-times.mp4": {
     "approved": true,
     "sha1": "8bef9044b05b32120d93125c096d59a338e726cc",
-    "checked_at": "2026-11-18T20:40:05.549Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-19T22:08:58.129Z",
+    "note": "reviewed 2026-11-19: qa no flags, hook 2.9s, ~27s total, contractions, no em dashes, caption ends with KEEP CTA + hashtags; 5x acquisition-cost claim is the common rule of thumb, caption says about; no ASR model so lines read by hand"
   },
   "08b-razor.mp4": {
     "approved": true,
