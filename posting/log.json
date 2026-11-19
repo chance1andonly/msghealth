@@ -91,5 +91,15 @@
     "trial": null,
     "per_day": 5,
     "posted_at": "2026-11-18T22:11:20.048Z"
+  },
+  {
+    "date": "2026-11-18",
+    "slot": 20,
+    "hour": 20,
+    "file": "09-thursdays.mp4",
+    "media_id": "18101744264557536",
+    "trial": null,
+    "per_day": 5,
+    "posted_at": "2026-11-19T01:10:52.134Z"
   }
 ]
