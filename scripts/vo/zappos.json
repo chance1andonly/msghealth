@@ -1,0 +1,13 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {"say": "A customer called Zappos for one pair of boots, and talked for ten hours.", "caps": ["A customer called Zappos", "for *one pair of boots,*", "and talked for *ten hours.*"], "gap": 0.5, "speed": 1.08},
+  {"say": "They talked about life in Las Vegas, movies, and favorite foods.", "caps": ["They talked about *life in Las Vegas,*", "*movies,* and *favorite foods.*"], "gap": 0.5},
+  {"say": "Zappos has said its reps can stay on the phone as long as a customer needs.", "caps": ["Zappos has said its reps can", "stay on the phone as long as", "*a customer needs.*"], "gap": 0.6, "speed": 1.05},
+  {"say": "Your regulars tell you things in the chair. Use one. Text, how'd the interview go, instead of a coupon.", "caps": ["Your regulars *tell you things*", "in the chair. *Use one.*", "Text *\"How'd the interview go?\"*", "instead of a coupon."], "gap": 0.7, "speed": 1.08},
+  {"say": "And she did buy the boots, ten hours later.", "caps": ["And she *did buy the boots,*", "ten hours later."], "gap": 0.6, "speed": 1.0},
+  {"say": "Comment KEEP and we'll show you who's gone quiet.", "caps": ["Comment *KEEP* and we'll show", "you who's *gone quiet.*"], "gap": 0.3}
+ ]
+}

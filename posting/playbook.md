@@ -1,6 +1,6 @@
 # Niche playbook (the batch task rewrites this from posting/research.json and posting/stats.json)
 
-Updated 2026-11-19 (research.json refreshed 2026-11-19, stats.json from 2026-11-18) from 62 YouTube Shorts ranked by views vs channel size, 15 Instagram outliers (views vs that account's median) and our own 26 reels' views. Titles, captions and numbers only; the videos themselves were not watched, so structure claims are inferred from titles and metrics.
+Updated 2026-11-20 (research.json refreshed 2026-11-20, stats.json from 2026-11-18) from 62 YouTube Shorts ranked by views vs channel size, 15 Instagram outliers (views vs that account's median) and our own 26 reels' views. Titles, captions and numbers only; the videos themselves were not watched, so structure claims are inferred from titles and metrics.
 
 ## What the winners share
 1. The hook is one odd, specific scene with the outcome withheld. "He waited 13 years for a haircut" (1.06M views, 1,190x the channel's subscribers). "I cut a dead client's hair..". "His barber said 'Interesting'". "Grandpa's barbershop had three customers left. Then a teen walked in" (24k views in 2 days from a 2k channel). A topic ("barber tips") never beats a scene.
@@ -34,6 +34,12 @@ Updated 2026-11-19 (research.json refreshed 2026-11-19, stats.json from 2026-11-
 - When sources disagree or only one source tells a detail (Stew Leonard's eggnog origin story), leave the detail out or attribute it.
 - Money taken from returning customers (Blockbuster 2000, $800M late fees) maps to the win-back text.
 - Avoid reusing: Pentagon pizza, coffin ship, London time lady, emu war, Waffle House, Girard, Gillette, giraffe, peas, Coca-Cola coupon, Kongo Gumi, Lexus, Costco, Starbucks, Netflix, Blockbuster, Domino's, Stew Leonard's, Amazon empty chair.
+
+## Added 2026-11-20
+- Queue was 10 of a 12 target (per_day 5). Added Tesco Clubcard (the chairman admits data scared him, then the outcome: Tesco passed the market leader; closest fit yet for "who's gone quiet") and Zappos' 10 hour 29 minute call (one odd scene, payoff held to the line before the CTA: she bought the boots). Both graphics reels (draws 0.73, 0.30); no people reel this batch.
+- Verified: Tesco launch 13 Feb 1995, 1994 trial in nine stores over three months, MacLaurin quote (Wikipedia/Computer Weekly word it slightly differently), Tesco passing Sainsbury's within a year (Computer Weekly). Zappos 10 h 29 min and the Uggs sale (NPR, The World). Leave out the 10 h 43 min 2016 figure; unverified.
+- Caption chunks over about 30 characters clip on screen; keep chunks to 3 short lines.
+- Still avoid reusing: Tesco, Zappos.
 
 ## Open questions for the next run
 - Do the history-hook reels with a concrete first-line scene beat the ones that open with a stat? Compare the queued reels once they have 24+ hours of views.

@@ -1,0 +1,13 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {"say": "In 1994, a supermarket chairman said one report scared him.", "caps": ["In 1994, a supermarket chairman", "said one *report scared him.*"], "gap": 0.5, "speed": 1.08},
+  {"say": "Tesco had tested a loyalty card in nine stores for three months, and the tills showed who kept coming back.", "caps": ["Tesco tested a *loyalty card*", "in nine stores for *three months,*", "and the tills showed who *kept coming back.*"], "gap": 0.5},
+  {"say": "He said, what scares me is that you know more about my customers after three months than I know after thirty years.", "caps": ["\"What scares me is that you know", "*more about my customers*", "after *three months* than I know", "after *thirty years.*\""], "gap": 0.6, "speed": 1.05},
+  {"say": "A year after the card launched, Tesco had passed the biggest grocer in Britain.", "caps": ["A year after the card launched,", "Tesco had *passed the market leader.*"], "gap": 0.6, "speed": 1.05},
+  {"say": "Your booking history is that same list. Find who's gone quiet, and text, been a minute, chair's open Saturday.", "caps": ["Your booking history is *that same list.*", "Find who's *gone quiet,* and text:", "*Been a minute.* Chair's open Saturday."], "gap": 0.4},
+  {"say": "Comment KEEP and we'll show you who's gone quiet.", "caps": ["Comment *KEEP* and we'll show", "you who's *gone quiet.*"], "gap": 0.3}
+ ]
+}
