@@ -60,8 +60,18 @@ async function check() {
 }
 
 // Upload one reel: resumable upload of the file's bytes; if that host refuses, fall back to a public URL of the file.
+// Cover image: posting/covers/NAME.jpg (made by scripts/make-covers.sh from the frame where the hook is readable), served from the repo.
+// Without one, Instagram uses frame 0, which is nearly blank on every reel, so fall back to a frame 2.6s in.
+let skipCover = false;
 async function publish(uid, file, caption, trial) {
+  try { return await publish0(uid, file, caption, trial); }
+  catch (e) { if (!skipCover && /cover|thumb/i.test(e.message)) { skipCover = true; say('cover image was refused, retrying with a frame offset instead:', e.message); return publish0(uid, file, caption, trial); } throw e; }
+}
+async function publish0(uid, file, caption, trial) {
   const base = { media_type: 'REELS', caption, share_to_feed: 'true' };
+  const cov = path.join(DIR, 'covers', path.basename(file, '.mp4') + '.jpg');
+  if (!skipCover && process.env.PUBLIC_BASE_URL && fs.existsSync(cov)) base.cover_url = `${process.env.PUBLIC_BASE_URL}/posting/covers/${path.basename(cov)}`;
+  else base.thumb_offset = '2600';
   if (trial) base.trial_params = JSON.stringify({ graduation_strategy: trial });
   let c;
   try {
