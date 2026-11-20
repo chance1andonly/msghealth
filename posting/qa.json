@@ -75,7 +75,7 @@
     "approved": true,
     "sha1": "fd20764c8a51213e32e710f9347e039decf0493c",
     "checked_at": "2026-11-19T07:27:27.977Z",
-    "note": "reviewed 2026-11-19: facts checked (AP/Quartz: 800k US subs Q3 2011, up to 60% hike, 'I messed up'), timing, frames per line, wording; no ASR model, lines read aloud. Caption ends on a self-check verdict (✅ or ❌)."
+    "note": "reviewed 2026-11-19: facts checked (AP/Quartz: 800k US subs Q3 2011, up to 60% hike, 'I messed up'), timing, frames per line, wording; no ASR model, lines read aloud. Caption ends on a self-check verdict (\u2705 or \u274c)."
   },
   "18-late-fees.mp4": {
     "approved": true,

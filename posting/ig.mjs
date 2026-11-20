@@ -12,6 +12,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 
 // New Meta apps get 'Unified login' tokens, which work on graph.facebook.com (not graph.instagram.com).
 const API = process.env.IG_API_BASE || 'https://graph.facebook.com/v23.0'; // IG_API_BASE: only for local tests
@@ -97,6 +98,8 @@ async function publish0(uid, file, caption, trial) {
 // node posting/ig.mjs approve NAME [note ...]: record that a reel passed review (stores the file's sha1)
 async function approve(name, note) {
   const f = path.join(QUEUE, name.endsWith('.mp4') ? name : name + '.mp4'); if (!fs.existsSync(f)) throw new Error('no such reel in the queue: ' + name);
+  const cov = path.join(DIR, 'covers', path.basename(f, '.mp4') + '.jpg');
+  if (!fs.existsSync(cov)) { try { execFileSync('bash', [path.join(DIR, '..', 'scripts', 'make-covers.sh'), path.basename(f, '.mp4')], { stdio: 'inherit' }); } catch (e) { say('could not make a cover (posts will use a frame offset):', e.message); } }
   const qa = readJson(QA, {}); qa[path.basename(f)] = { approved: true, sha1: sha1(f), checked_at: new Date().toISOString(), note: note || '' }; writeJson(QA, qa); say('approved', path.basename(f));
 }
 async function post(force) {
