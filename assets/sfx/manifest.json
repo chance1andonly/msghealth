@@ -1,0 +1,1793 @@
+{
+ "whoosh-fast-medium": {
+  "cat": "whooshes",
+  "dur": 0.252,
+  "sync": 0.096,
+  "meets": "move-peak",
+  "tier": "medium",
+  "lufs": -20.5,
+  "use": "A quick, clean swish of air with a defined middle."
+ },
+ "whoosh-fast-soft": {
+  "cat": "whooshes",
+  "dur": 0.25,
+  "sync": 0.099,
+  "meets": "move-peak",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A quick, gentle puff of air with a soft edge and no weight."
+ },
+ "whoosh-medium-medium": {
+  "cat": "whooshes",
+  "dur": 0.517,
+  "sync": 0.209,
+  "meets": "move-peak",
+  "tier": "medium",
+  "lufs": -20.5,
+  "use": "A balanced swish of air: a clear rise, a defined peak and a smooth fade."
+ },
+ "whoosh-medium-soft": {
+  "cat": "whooshes",
+  "dur": 0.543,
+  "sync": 0.229,
+  "meets": "move-peak",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A smooth, gentle sweep of air that rises and fades without an edge."
+ },
+ "whoosh-slow-medium": {
+  "cat": "whooshes",
+  "dur": 1.002,
+  "sync": 0.438,
+  "meets": "move-peak",
+  "tier": "medium",
+  "lufs": -20.5,
+  "use": "A slow, full sweep of air with a gentle swell and a long, settled tail."
+ },
+ "whoosh-slow-soft": {
+  "cat": "whooshes",
+  "dur": 1.049,
+  "sync": 0.452,
+  "meets": "move-peak",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A long, soft breath of air drifting past."
+ },
+ "swish-medium": {
+  "cat": "swishes-and-zips",
+  "dur": 0.201,
+  "sync": 0.076,
+  "meets": "move-peak",
+  "tier": "medium",
+  "lufs": -21,
+  "use": "A quick, clean swish through the air, with a little whistle."
+ },
+ "swish-soft": {
+  "cat": "swishes-and-zips",
+  "dur": 0.223,
+  "sync": 0.085,
+  "meets": "move-peak",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A soft, thin swish: something light flicked past."
+ },
+ "zip-in-medium": {
+  "cat": "swishes-and-zips",
+  "dur": 0.349,
+  "sync": 0.233,
+  "meets": "arrival",
+  "tier": "medium",
+  "lufs": -21,
+  "use": "A quick zip in: rising to a stop."
+ },
+ "zip-in-soft": {
+  "cat": "swishes-and-zips",
+  "dur": 0.414,
+  "sync": 0.294,
+  "meets": "arrival",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "Something small zipping gently into place."
+ },
+ "zip-out-medium": {
+  "cat": "swishes-and-zips",
+  "dur": 0.256,
+  "sync": 0.023,
+  "meets": "release",
+  "tier": "medium",
+  "lufs": -21,
+  "use": "A quick zip out: off it goes, falling away."
+ },
+ "zip-out-soft": {
+  "cat": "swishes-and-zips",
+  "dur": 0.307,
+  "sync": 0.032,
+  "meets": "release",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "Something zipping softly away."
+ },
+ "swipe-fast-firm": {
+  "cat": "swipes",
+  "dur": 0.199,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "firm",
+  "lufs": -24.5,
+  "use": "A quick, definite swipe: a fingertip pressed and flicked across glass."
+ },
+ "swipe-fast-soft": {
+  "cat": "swipes",
+  "dur": 0.206,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "soft",
+  "lufs": -27,
+  "use": "A light, quick flick of a fingertip across a screen."
+ },
+ "swipe-medium-firm": {
+  "cat": "swipes",
+  "dur": 0.279,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "firm",
+  "lufs": -24.5,
+  "use": "A clear swipe across glass, with a crisp touch."
+ },
+ "swipe-medium-soft": {
+  "cat": "swipes",
+  "dur": 0.293,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "soft",
+  "lufs": -27,
+  "use": "A soft fingertip swipe across a screen."
+ },
+ "swipe-slow-firm": {
+  "cat": "swipes",
+  "dur": 0.414,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "firm",
+  "lufs": -24.5,
+  "use": "A slow, pressed drag across glass."
+ },
+ "swipe-slow-soft": {
+  "cat": "swipes",
+  "dur": 0.431,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "soft",
+  "lufs": -27,
+  "use": "A slow, light drag of a fingertip across a screen."
+ },
+ "impact-light-firm": {
+  "cat": "impacts",
+  "dur": 0.099,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "light",
+  "lufs": -25,
+  "use": "A light wooden tap: a small object set down on a table."
+ },
+ "impact-light-soft": {
+  "cat": "impacts",
+  "dur": 0.166,
+  "sync": 0.012,
+  "meets": "instant",
+  "tier": "light",
+  "lufs": -25,
+  "use": "A light, muffled landing: something small dropping onto a cushion."
+ },
+ "impact-medium-firm": {
+  "cat": "impacts",
+  "dur": 0.175,
+  "sync": 0.012,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -22,
+  "use": "A solid knock: a medium-sized object landing on wood."
+ },
+ "impact-medium-soft": {
+  "cat": "impacts",
+  "dur": 0.21,
+  "sync": 0.013,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -22,
+  "use": "A soft, padded thud: something landing on fabric."
+ },
+ "pop-large-bubble": {
+  "cat": "pops",
+  "dur": 0.208,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "large",
+  "lufs": -20,
+  "use": "A deep, round bubble bloop."
+ },
+ "pop-large-in": {
+  "cat": "pops",
+  "dur": 0.112,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "large",
+  "lufs": -20,
+  "use": "A full, round pop with a little puff of air."
+ },
+ "pop-large-out": {
+  "cat": "pops",
+  "dur": 0.11,
+  "sync": 0.012,
+  "meets": "instant",
+  "tier": "large",
+  "lufs": -20,
+  "use": "A low, soft pop that sinks away."
+ },
+ "pop-medium-bubble": {
+  "cat": "pops",
+  "dur": 0.126,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -22.5,
+  "use": "A clean bubble plip with a small one after it."
+ },
+ "pop-medium-in": {
+  "cat": "pops",
+  "dur": 0.06,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -22.5,
+  "use": "A round, friendly pop that lifts into place."
+ },
+ "pop-medium-out": {
+  "cat": "pops",
+  "dur": 0.069,
+  "sync": 0.012,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -22.5,
+  "use": "A soft pop that falls away as something disappears."
+ },
+ "pop-small-bubble": {
+  "cat": "pops",
+  "dur": 0.081,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "small",
+  "lufs": -25,
+  "use": "A tiny water-bubble blip, light and quick."
+ },
+ "pop-small-in": {
+  "cat": "pops",
+  "dur": 0.04,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "small",
+  "lufs": -25,
+  "use": "A tiny, bright pop that lifts as it appears."
+ },
+ "pop-small-out": {
+  "cat": "pops",
+  "dur": 0.051,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "small",
+  "lufs": -25,
+  "use": "A tiny, soft pop that drops away."
+ },
+ "appear-burst": {
+  "cat": "appear-and-vanish",
+  "dur": 1.005,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "burst",
+  "lufs": -21,
+  "use": "Something bursting apart: a pop, a thump and pieces scattering."
+ },
+ "appear-dissolve": {
+  "cat": "appear-and-vanish",
+  "dur": 1.15,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "dissolve",
+  "lufs": -25,
+  "use": "Something dissolving into fine particles that drift away."
+ },
+ "appear-flip-quick": {
+  "cat": "appear-and-vanish",
+  "dur": 0.178,
+  "sync": 0.155,
+  "meets": "arrival",
+  "tier": "flip-quick",
+  "lufs": -24,
+  "use": "A card flipping over quickly, landing with a light tap."
+ },
+ "appear-flip-slow": {
+  "cat": "appear-and-vanish",
+  "dur": 0.437,
+  "sync": 0.407,
+  "meets": "arrival",
+  "tier": "flip-slow",
+  "lufs": -24,
+  "use": "A panel turning over slowly, landing softly."
+ },
+ "appear-materialise": {
+  "cat": "appear-and-vanish",
+  "dur": 1.209,
+  "sync": 0.026,
+  "meets": "action-start",
+  "tier": "materialise",
+  "lufs": -25,
+  "use": "Something materialising: particles gathering in and settling."
+ },
+ "appear-poof": {
+  "cat": "appear-and-vanish",
+  "dur": 0.62,
+  "sync": 0.026,
+  "meets": "instant",
+  "tier": "poof",
+  "lufs": -23,
+  "use": "A poof: something vanishing in a puff of smoke, a few glints as it clears."
+ },
+ "click-button-firm": {
+  "cat": "interface",
+  "dur": 0.02,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm, bright button click with a little snap."
+ },
+ "click-button-medium": {
+  "cat": "interface",
+  "dur": 0.017,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27,
+  "use": "A clean, crisp button click."
+ },
+ "click-button-soft": {
+  "cat": "interface",
+  "dur": 0.016,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -29,
+  "use": "A gentle, soft press of a small button."
+ },
+ "click-clap-firm": {
+  "cat": "interface",
+  "dur": 0.149,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "clap firm",
+  "lufs": -23.5,
+  "use": "A sharp, bright hand clap."
+ },
+ "click-clap-medium": {
+  "cat": "interface",
+  "dur": 0.166,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "clap medium",
+  "lufs": -24.5,
+  "use": "A single hand clap."
+ },
+ "click-clap-soft": {
+  "cat": "interface",
+  "dur": 0.177,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "clap soft",
+  "lufs": -26,
+  "use": "A soft, cupped hand clap."
+ },
+ "click-clip-firm": {
+  "cat": "interface",
+  "dur": 0.056,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm metal clip snapping shut with a ring."
+ },
+ "click-clip-medium": {
+  "cat": "interface",
+  "dur": 0.049,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27,
+  "use": "A spring clip snapping shut on paper."
+ },
+ "click-clip-soft": {
+  "cat": "interface",
+  "dur": 0.046,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -29,
+  "use": "A small clip closing gently on paper."
+ },
+ "click-hover-firm": {
+  "cat": "interface",
+  "dur": 0.015,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "hover firm",
+  "lufs": -28,
+  "use": "A small, crisp tick: a hover that wants to be noticed."
+ },
+ "click-hover-medium": {
+  "cat": "interface",
+  "dur": 0.014,
+  "sync": 0.008,
+  "meets": "instant",
+  "tier": "hover medium",
+  "lufs": -30,
+  "use": "A tiny, light tick for a hover or a highlight moving."
+ },
+ "click-hover-soft": {
+  "cat": "interface",
+  "dur": 0.014,
+  "sync": 0.007,
+  "meets": "instant",
+  "tier": "hover soft",
+  "lufs": -32,
+  "use": "The faintest tick: a cursor gliding over something."
+ },
+ "click-latch-firm": {
+  "cat": "interface",
+  "dur": 0.038,
+  "sync": 0.021,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm latch: a sharp, definite click with a metal tick."
+ },
+ "click-latch-medium": {
+  "cat": "interface",
+  "dur": 0.038,
+  "sync": 0.021,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27,
+  "use": "A push button catching: the spring, then a crisp click home."
+ },
+ "click-latch-soft": {
+  "cat": "interface",
+  "dur": 0.038,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -29,
+  "use": "A soft push button latching, like a pen clicking."
+ },
+ "click-mouse-firm": {
+  "cat": "interface",
+  "dur": 0.094,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm, crisp mouse click with a clear release."
+ },
+ "click-mouse-medium": {
+  "cat": "interface",
+  "dur": 0.092,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27,
+  "use": "A natural mouse click: the press and its release."
+ },
+ "click-mouse-soft": {
+  "cat": "interface",
+  "dur": 0.099,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -29,
+  "use": "A quiet mouse click, down and up."
+ },
+ "click-rocker-firm": {
+  "cat": "interface",
+  "dur": 0.046,
+  "sync": 0.021,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm rocker switch: a solid, chunky clunk, like a power switch."
+ },
+ "click-rocker-medium": {
+  "cat": "interface",
+  "dur": 0.045,
+  "sync": 0.021,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27,
+  "use": "A rocker switch: it tips over and lands with a chunky clunk."
+ },
+ "click-rocker-soft": {
+  "cat": "interface",
+  "dur": 0.04,
+  "sync": 0.021,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -29,
+  "use": "A soft rocker switch: a tip and a gentle clunk."
+ },
+ "click-snap-firm": {
+  "cat": "interface",
+  "dur": 0.125,
+  "sync": 0.015,
+  "meets": "instant",
+  "tier": "snap firm",
+  "lufs": -23,
+  "use": "A sharp, bright finger snap."
+ },
+ "click-snap-medium": {
+  "cat": "interface",
+  "dur": 0.128,
+  "sync": 0.015,
+  "meets": "instant",
+  "tier": "snap medium",
+  "lufs": -25,
+  "use": "A clean finger snap."
+ },
+ "click-snap-soft": {
+  "cat": "interface",
+  "dur": 0.148,
+  "sync": 0.015,
+  "meets": "instant",
+  "tier": "snap soft",
+  "lufs": -27,
+  "use": "A soft finger snap."
+ },
+ "click-tap-firm": {
+  "cat": "interface",
+  "dur": 0.024,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm, definite tap with a crisp tick."
+ },
+ "click-tap-medium": {
+  "cat": "interface",
+  "dur": 0.022,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27,
+  "use": "A clear tap on a screen, with a faint glassy tick."
+ },
+ "click-tap-soft": {
+  "cat": "interface",
+  "dur": 0.016,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -29,
+  "use": "A soft fingertip tap on glass."
+ },
+ "click-toggle-firm": {
+  "cat": "interface",
+  "dur": 0.044,
+  "sync": 0.031,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm, definite switch: a crisp tick and snap."
+ },
+ "click-toggle-medium": {
+  "cat": "interface",
+  "dur": 0.042,
+  "sync": 0.031,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27,
+  "use": "A neat toggle: tick, then a clear snap into place."
+ },
+ "click-toggle-off-firm": {
+  "cat": "interface",
+  "dur": 0.054,
+  "sync": 0.035,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm switch off: a crisp tick and a low, solid snap."
+ },
+ "click-toggle-off-medium": {
+  "cat": "interface",
+  "dur": 0.051,
+  "sync": 0.035,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27,
+  "use": "A switch flipping off: tick, then a lower, duller snap."
+ },
+ "click-toggle-off-soft": {
+  "cat": "interface",
+  "dur": 0.052,
+  "sync": 0.04,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -29,
+  "use": "A soft switch flipping off: a tick falling into a dull snap."
+ },
+ "click-toggle-on-firm": {
+  "cat": "interface",
+  "dur": 0.038,
+  "sync": 0.025,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm switch on: a crisp tick and a bright, definite snap."
+ },
+ "click-toggle-on-medium": {
+  "cat": "interface",
+  "dur": 0.034,
+  "sync": 0.025,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27,
+  "use": "A switch flipping on: tick, then a bright snap above it."
+ },
+ "click-toggle-on-soft": {
+  "cat": "interface",
+  "dur": 0.038,
+  "sync": 0.03,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -29,
+  "use": "A soft switch flipping on: a light tick rising into a snap."
+ },
+ "click-toggle-soft": {
+  "cat": "interface",
+  "dur": 0.046,
+  "sync": 0.037,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -29,
+  "use": "A soft switch flip: a light tick, then a gentle snap."
+ },
+ "keyboard-letter-firm": {
+  "cat": "keyboard",
+  "dur": 0.081,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm, crisp keypress."
+ },
+ "keyboard-letter-medium": {
+  "cat": "keyboard",
+  "dur": 0.083,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27.5,
+  "use": "A natural keypress: the key going down and coming back up."
+ },
+ "keyboard-letter-soft": {
+  "cat": "keyboard",
+  "dur": 0.089,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -30,
+  "use": "A soft keypress and its quiet release."
+ },
+ "keyboard-return-firm": {
+  "cat": "keyboard",
+  "dur": 0.09,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm, decisive Return: send, submit, done."
+ },
+ "keyboard-return-medium": {
+  "cat": "keyboard",
+  "dur": 0.1,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27.5,
+  "use": "A Return key press: a fuller knock with a hint of rattle."
+ },
+ "keyboard-return-soft": {
+  "cat": "keyboard",
+  "dur": 0.106,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -30,
+  "use": "A soft press of the Return key, a little fuller than a letter."
+ },
+ "keyboard-space-firm": {
+  "cat": "keyboard",
+  "dur": 0.116,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "firm",
+  "lufs": -25,
+  "use": "A firm space bar: a deeper knock and a clear release."
+ },
+ "keyboard-space-medium": {
+  "cat": "keyboard",
+  "dur": 0.103,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "medium",
+  "lufs": -27.5,
+  "use": "A space bar press with a hint of stabiliser rattle."
+ },
+ "keyboard-space-soft": {
+  "cat": "keyboard",
+  "dur": 0.116,
+  "sync": 0.009,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -30,
+  "use": "A soft space bar press, a little lower and wider than a key."
+ },
+ "keyboard-typing-quick-short": {
+  "cat": "keyboard",
+  "dur": 0.73,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "typing",
+  "lufs": -27,
+  "use": "A quick burst of typing: a word or two."
+ },
+ "keyboard-typing-steady-short": {
+  "cat": "keyboard",
+  "dur": 0.788,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "typing",
+  "lufs": -27,
+  "use": "A short burst of steady typing: a word or two."
+ },
+ "writing-chalk-draw": {
+  "cat": "writing-and-drawing",
+  "dur": 1.008,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "chalk",
+  "lufs": -25,
+  "use": "Chalk on a blackboard, drawing a few long strokes."
+ },
+ "writing-chalk-tick": {
+  "cat": "writing-and-drawing",
+  "dur": 0.238,
+  "sync": 0.165,
+  "meets": "instant",
+  "tier": "chalk",
+  "lufs": -25,
+  "use": "Chalk on a blackboard, ticking a box."
+ },
+ "writing-eraser": {
+  "cat": "writing-and-drawing",
+  "dur": 0.764,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "eraser",
+  "lufs": -27,
+  "use": "A rubber eraser rubbing out pencil on paper."
+ },
+ "writing-highlighter": {
+  "cat": "writing-and-drawing",
+  "dur": 0.381,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "highlighter",
+  "lufs": -27,
+  "use": "A highlighter swept across a line of text."
+ },
+ "writing-marker-draw": {
+  "cat": "writing-and-drawing",
+  "dur": 1.063,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "marker",
+  "lufs": -25,
+  "use": "A marker on a whiteboard, drawing a few long strokes."
+ },
+ "writing-marker-tick": {
+  "cat": "writing-and-drawing",
+  "dur": 0.243,
+  "sync": 0.15,
+  "meets": "instant",
+  "tier": "marker",
+  "lufs": -25,
+  "use": "A marker on a whiteboard, ticking a box."
+ },
+ "writing-pen-draw": {
+  "cat": "writing-and-drawing",
+  "dur": 1.269,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "pen",
+  "lufs": -27,
+  "use": "A pen on paper, drawing a few long strokes."
+ },
+ "writing-pen-tick": {
+  "cat": "writing-and-drawing",
+  "dur": 0.242,
+  "sync": 0.155,
+  "meets": "instant",
+  "tier": "pen",
+  "lufs": -27,
+  "use": "A pen on paper, ticking a box."
+ },
+ "writing-pencil-tick": {
+  "cat": "writing-and-drawing",
+  "dur": 0.242,
+  "sync": 0.157,
+  "meets": "instant",
+  "tier": "pencil",
+  "lufs": -26,
+  "use": "A pencil on paper, ticking a box."
+ },
+ "writing-pencil-write": {
+  "cat": "writing-and-drawing",
+  "dur": 1.191,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "pencil",
+  "lufs": -26,
+  "use": "A pencil on paper, writing a word or two."
+ },
+ "writing-scribble": {
+  "cat": "writing-and-drawing",
+  "dur": 0.997,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "scribble",
+  "lufs": -25,
+  "use": "A quick, busy pencil scribble."
+ },
+ "writing-wipe": {
+  "cat": "writing-and-drawing",
+  "dur": 0.736,
+  "sync": 0.001,
+  "meets": "action-start",
+  "tier": "wipe",
+  "lufs": -27,
+  "use": "A whiteboard eraser wiping the board clean."
+ },
+ "phone-keypad": {
+  "cat": "phone",
+  "dur": 1.116,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "keypad",
+  "lufs": -25,
+  "use": "Six keys dialled, each with its keypad tone."
+ },
+ "phone-vibrate-hand": {
+  "cat": "phone",
+  "dur": 0.344,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "vibrate-hand",
+  "lufs": -27,
+  "use": "A phone buzzing once in the hand."
+ },
+ "phone-vibrate-table": {
+  "cat": "phone",
+  "dur": 1.116,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "vibrate-table",
+  "lufs": -24,
+  "use": "A phone vibrating on a table, twice: a buzzing rattle."
+ },
+ "mechanical-latch-light": {
+  "cat": "mechanical",
+  "dur": 0.112,
+  "sync": 0.052,
+  "meets": "instant",
+  "tier": "light",
+  "lufs": -25,
+  "use": "A small latch clicking shut, like a cabinet door."
+ },
+ "mechanical-lock-light": {
+  "cat": "mechanical",
+  "dur": 0.293,
+  "sync": 0.21,
+  "meets": "instant",
+  "tier": "light",
+  "lufs": -25,
+  "use": "A small lock turning: pin clicks and a light bolt."
+ },
+ "mechanical-ratchet-light": {
+  "cat": "mechanical",
+  "dur": 0.398,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "light",
+  "lufs": -25,
+  "use": "A small dial or ratchet turning, quick clicks."
+ },
+ "mechanical-shutter-light": {
+  "cat": "mechanical",
+  "dur": 0.11,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "light",
+  "lufs": -25,
+  "use": "A compact camera shutter: a quick ka-chik."
+ },
+ "mechanical-slider-light": {
+  "cat": "mechanical",
+  "dur": 0.439,
+  "sync": 0.424,
+  "meets": "arrival",
+  "tier": "light",
+  "lufs": -25,
+  "use": "A small slider gliding to its stop."
+ },
+ "mechanical-switch-light": {
+  "cat": "mechanical",
+  "dur": 0.032,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "light",
+  "lufs": -25,
+  "use": "A light switch flicked: a crisp snap."
+ },
+ "foley-card-slide": {
+  "cat": "foley",
+  "dur": 0.362,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "slide",
+  "lufs": -25,
+  "use": "A card slid across a table: a smooth little zip."
+ },
+ "foley-card-touch": {
+  "cat": "foley",
+  "dur": 0.05,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "touch",
+  "lufs": -24,
+  "use": "A stiff card set down: a short, crisp tack."
+ },
+ "foley-fabric-slide": {
+  "cat": "foley",
+  "dur": 0.44,
+  "sync": 0.006,
+  "meets": "action-start",
+  "tier": "slide",
+  "lufs": -25,
+  "use": "A cloth swish, soft and airy."
+ },
+ "foley-fabric-touch": {
+  "cat": "foley",
+  "dur": 0.265,
+  "sync": 0.022,
+  "meets": "instant",
+  "tier": "touch",
+  "lufs": -24,
+  "use": "A soft pat and rustle of fabric."
+ },
+ "foley-glass-slide": {
+  "cat": "foley",
+  "dur": 0.645,
+  "sync": 0.002,
+  "meets": "action-start",
+  "tier": "slide",
+  "lufs": -25,
+  "use": "Glass gliding on a surface, faintly singing."
+ },
+ "foley-glass-touch": {
+  "cat": "foley",
+  "dur": 0.47,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "touch",
+  "lufs": -24,
+  "use": "A glass clink that rings out."
+ },
+ "foley-paper-slide": {
+  "cat": "foley",
+  "dur": 0.492,
+  "sync": 0.006,
+  "meets": "action-start",
+  "tier": "slide",
+  "lufs": -25,
+  "use": "Paper sliding across a desk: a soft, dry hiss."
+ },
+ "foley-paper-touch": {
+  "cat": "foley",
+  "dur": 0.31,
+  "sync": 0.022,
+  "meets": "instant",
+  "tier": "touch",
+  "lufs": -24,
+  "use": "A sheet of paper handled: a quick crinkle and rustle."
+ },
+ "foley-plastic-slide": {
+  "cat": "foley",
+  "dur": 0.407,
+  "sync": 0.006,
+  "meets": "action-start",
+  "tier": "slide",
+  "lufs": -25,
+  "use": "Plastic sliding: a bright, light scrape."
+ },
+ "foley-plastic-touch": {
+  "cat": "foley",
+  "dur": 0.079,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "touch",
+  "lufs": -24,
+  "use": "A hollow tap on plastic."
+ },
+ "foley-wood-slide": {
+  "cat": "foley",
+  "dur": 0.585,
+  "sync": 0.01,
+  "meets": "action-start",
+  "tier": "slide",
+  "lufs": -25,
+  "use": "Wood sliding on wood: a grainy rub."
+ },
+ "foley-wood-touch": {
+  "cat": "foley",
+  "dur": 0.128,
+  "sync": 0.012,
+  "meets": "instant",
+  "tier": "touch",
+  "lufs": -24,
+  "use": "A knuckle knock on wood."
+ },
+ "props-book-close": {
+  "cat": "everyday-props",
+  "dur": 0.204,
+  "sync": 0.052,
+  "meets": "instant",
+  "tier": "book-close",
+  "lufs": -24,
+  "use": "A book closing: a puff of air and a thud of its cover."
+ },
+ "props-box-open": {
+  "cat": "everyday-props",
+  "dur": 0.688,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "box-open",
+  "lufs": -25,
+  "use": "A cardboard box opening: two flaps scraping and thumping open."
+ },
+ "props-page-turn": {
+  "cat": "everyday-props",
+  "dur": 0.54,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "page-turn",
+  "lufs": -26,
+  "use": "A page turning: lifted at the corner, swung over and falling flat."
+ },
+ "props-scissors": {
+  "cat": "everyday-props",
+  "dur": 0.19,
+  "sync": 0.158,
+  "meets": "instant",
+  "tier": "scissors",
+  "lufs": -25,
+  "use": "Scissors sliding and snipping through paper."
+ },
+ "props-splash": {
+  "cat": "everyday-props",
+  "dur": 0.673,
+  "sync": 0.013,
+  "meets": "instant",
+  "tier": "splash",
+  "lufs": -23,
+  "use": "Something dropping into water: a plop, a splash and drops falling back."
+ },
+ "props-tape": {
+  "cat": "everyday-props",
+  "dur": 0.608,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "tape",
+  "lufs": -24,
+  "use": "Sticky tape peeled off its roll in a quick, rising rip."
+ },
+ "props-zip": {
+  "cat": "everyday-props",
+  "dur": 0.611,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "zip",
+  "lufs": -25,
+  "use": "A zip pulled: its teeth clicking by, faster and faster."
+ },
+ "notification-alert-clear": {
+  "cat": "notifications",
+  "dur": 0.657,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "clear",
+  "lufs": -21,
+  "use": "A bright double ding: an alert."
+ },
+ "notification-alert-soft": {
+  "cat": "notifications",
+  "dur": 0.458,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A warm double note: something needs a look."
+ },
+ "notification-attention-clear": {
+  "cat": "notifications",
+  "dur": 0.548,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "clear",
+  "lufs": -21,
+  "use": "A single ringing chime."
+ },
+ "notification-attention-soft": {
+  "cat": "notifications",
+  "dur": 0.328,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A knock-knock on wood."
+ },
+ "notification-error-clear": {
+  "cat": "notifications",
+  "dur": 0.905,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "clear",
+  "lufs": -21,
+  "use": "A clear, falling two-note chime: an error, without alarm."
+ },
+ "notification-error-soft": {
+  "cat": "notifications",
+  "dur": 0.567,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A soft, falling two-note marimba: something's not right, gently."
+ },
+ "notification-failure-deflate": {
+  "cat": "notifications",
+  "dur": 0.541,
+  "sync": 0.002,
+  "meets": "instant",
+  "tier": "failure",
+  "lufs": -23.5,
+  "use": "Air whistling down, like a balloon letting go: a playful fail."
+ },
+ "notification-failure-knock": {
+  "cat": "notifications",
+  "dur": 0.318,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "failure",
+  "lufs": -23.5,
+  "use": "Two wooden knocks, the second lower: nope."
+ },
+ "notification-failure-low": {
+  "cat": "notifications",
+  "dur": 0.703,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "failure",
+  "lufs": -23.5,
+  "use": "A single low, soft note: a quiet no."
+ },
+ "notification-failure-minor": {
+  "cat": "notifications",
+  "dur": 0.748,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "failure",
+  "lufs": -23.5,
+  "use": "A soft marimba chord falling in a minor key: a gentle letdown."
+ },
+ "notification-failure-pluck": {
+  "cat": "notifications",
+  "dur": 0.319,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "failure",
+  "lufs": -23.5,
+  "use": "A muted pluck falling a fourth: a dud."
+ },
+ "notification-failure-thud": {
+  "cat": "notifications",
+  "dur": 0.982,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "failure",
+  "lufs": -23.5,
+  "use": "A dull, low bonk: that didn't work."
+ },
+ "notification-failure-wobble": {
+  "cat": "notifications",
+  "dur": 0.535,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "failure",
+  "lufs": -23.5,
+  "use": "A kalimba note bending down as it rings: womp."
+ },
+ "notification-message-in-clear": {
+  "cat": "notifications",
+  "dur": 0.607,
+  "sync": 0.041,
+  "meets": "instant",
+  "tier": "clear",
+  "lufs": -21,
+  "use": "A bubble and a bright ping: a message arrives."
+ },
+ "notification-message-in-soft": {
+  "cat": "notifications",
+  "dur": 0.423,
+  "sync": 0.046,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A little bubble and a warm note: a new message."
+ },
+ "notification-message-out-clear": {
+  "cat": "notifications",
+  "dur": 0.568,
+  "sync": 0.052,
+  "meets": "instant",
+  "tier": "clear",
+  "lufs": -21,
+  "use": "A quick airy send with a bright little ping."
+ },
+ "notification-message-out-soft": {
+  "cat": "notifications",
+  "dur": 0.283,
+  "sync": 0.061,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A soft puff of air with a small note: sent."
+ },
+ "notification-success-bubble": {
+  "cat": "notifications",
+  "dur": 0.636,
+  "sync": 0.045,
+  "meets": "instant",
+  "tier": "success",
+  "lufs": -22.5,
+  "use": "A bubble and two bright notes: a playful success."
+ },
+ "notification-success-chime": {
+  "cat": "notifications",
+  "dur": 0.963,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "success",
+  "lufs": -22.5,
+  "use": "Two bells rising a fifth: a clear, bright success."
+ },
+ "notification-success-clear": {
+  "cat": "notifications",
+  "dur": 0.606,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "clear",
+  "lufs": -21,
+  "use": "A bright, rising three-note chime: success."
+ },
+ "notification-success-ding-ding": {
+  "cat": "notifications",
+  "dur": 0.987,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "success",
+  "lufs": -22.5,
+  "use": "Two quick bell dings: correct!"
+ },
+ "notification-success-fanfare": {
+  "cat": "notifications",
+  "dur": 0.524,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "success",
+  "lufs": -22.5,
+  "use": "A little marimba ta-da: two quick chords, resolving."
+ },
+ "notification-success-flourish": {
+  "cat": "notifications",
+  "dur": 0.535,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "success",
+  "lufs": -22.5,
+  "use": "A fast marimba run up to a high, ringing note: achieved."
+ },
+ "notification-success-pluck": {
+  "cat": "notifications",
+  "dur": 1.161,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "success",
+  "lufs": -22.5,
+  "use": "A plucked string rising a fourth: a warm, simple yes."
+ },
+ "notification-success-soft": {
+  "cat": "notifications",
+  "dur": 0.53,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -24,
+  "use": "A warm, rising three-note marimba arpeggio: done."
+ },
+ "notification-success-sparkle": {
+  "cat": "notifications",
+  "dur": 0.632,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "success",
+  "lufs": -22.5,
+  "use": "A quick kalimba arpeggio up an octave, with a few glints: delight."
+ },
+ "notification-success-warm": {
+  "cat": "notifications",
+  "dur": 0.68,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "success",
+  "lufs": -22.5,
+  "use": "A soft, rolled marimba chord: quietly done."
+ },
+ "tone-ding-high": {
+  "cat": "tones",
+  "dur": 0.812,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "ding",
+  "lufs": -23,
+  "use": "A small bell's clear ding (E, high)."
+ },
+ "tone-ding-low": {
+  "cat": "tones",
+  "dur": 1.14,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "ding",
+  "lufs": -23,
+  "use": "A small bell's clear ding (G, low)."
+ },
+ "tone-ding-mid": {
+  "cat": "tones",
+  "dur": 1.064,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "ding",
+  "lufs": -23,
+  "use": "A small bell's clear ding (C, middle)."
+ },
+ "tone-step-1": {
+  "cat": "tones",
+  "dur": 0.513,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "step",
+  "lufs": -26,
+  "use": "Step 1 of 5: a soft marimba note (C), each one higher."
+ },
+ "tone-step-2": {
+  "cat": "tones",
+  "dur": 0.445,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "step",
+  "lufs": -26,
+  "use": "Step 2 of 5: a soft marimba note (E), each one higher."
+ },
+ "tone-step-3": {
+  "cat": "tones",
+  "dur": 0.403,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "step",
+  "lufs": -26,
+  "use": "Step 3 of 5: a soft marimba note (G), each one higher."
+ },
+ "tone-step-4": {
+  "cat": "tones",
+  "dur": 0.372,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "step",
+  "lufs": -26,
+  "use": "Step 4 of 5: a soft marimba note (A), each one higher."
+ },
+ "tone-step-5": {
+  "cat": "tones",
+  "dur": 0.347,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "step",
+  "lufs": -26,
+  "use": "Step 5 of 5: a soft marimba note (C), each one higher."
+ },
+ "shimmer-medium-bright": {
+  "cat": "shimmers",
+  "dur": 1.109,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "bright",
+  "lufs": -23.5,
+  "use": "A shimmer: a bright cloud of glassy glints."
+ },
+ "shimmer-medium-soft": {
+  "cat": "shimmers",
+  "dur": 1.13,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -25,
+  "use": "A shimmer: a few soft, glassy glints that ring out gently."
+ },
+ "shimmer-medium-sparkle": {
+  "cat": "shimmers",
+  "dur": 1.105,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "sparkle",
+  "lufs": -22.5,
+  "use": "A shimmer: a dense, tinkling sparkle, high and light."
+ },
+ "shimmer-short-bright": {
+  "cat": "shimmers",
+  "dur": 0.511,
+  "sync": 0.013,
+  "meets": "instant",
+  "tier": "bright",
+  "lufs": -23.5,
+  "use": "A short shimmer: a bright cloud of glassy glints."
+ },
+ "shimmer-short-soft": {
+  "cat": "shimmers",
+  "dur": 0.478,
+  "sync": 0.012,
+  "meets": "instant",
+  "tier": "soft",
+  "lufs": -25,
+  "use": "A short shimmer: a few soft, glassy glints that ring out gently."
+ },
+ "shimmer-short-sparkle": {
+  "cat": "shimmers",
+  "dur": 0.53,
+  "sync": 0.012,
+  "meets": "instant",
+  "tier": "sparkle",
+  "lufs": -22.5,
+  "use": "A short shimmer: a dense, tinkling sparkle, high and light."
+ },
+ "time-timer": {
+  "cat": "time",
+  "dur": 1.102,
+  "sync": 0.139,
+  "meets": "instant",
+  "tier": "timer",
+  "lufs": -22,
+  "use": "A timer finishing: a click and a bright ting-ting."
+ },
+ "money-card-tap": {
+  "cat": "money",
+  "dur": 0.274,
+  "sync": 0.113,
+  "meets": "instant",
+  "tier": "card-tap",
+  "lufs": -24,
+  "use": "A contactless card tapped on a reader, and its beep."
+ },
+ "money-coin-drop": {
+  "cat": "money",
+  "dur": 0.681,
+  "sync": 0.01,
+  "meets": "instant",
+  "tier": "coin-drop",
+  "lufs": -24,
+  "use": "A coin dropped on a table: it rings, bounces and rattles flat."
+ },
+ "money-coin-stack": {
+  "cat": "money",
+  "dur": 0.865,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "coin-stack",
+  "lufs": -25,
+  "use": "Coins set down on a stack, one by one: short, dry chinks."
+ },
+ "money-coins-pour": {
+  "cat": "money",
+  "dur": 1.125,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "coins-pour",
+  "lufs": -23,
+  "use": "A handful of coins poured onto a pile: a dense, short clatter."
+ },
+ "money-notes": {
+  "cat": "money",
+  "dur": 0.808,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "notes",
+  "lufs": -25,
+  "use": "Banknotes being counted, flicked through one by one."
+ },
+ "money-register": {
+  "cat": "money",
+  "dur": 0.912,
+  "sync": 0.093,
+  "meets": "instant",
+  "tier": "register",
+  "lufs": -22,
+  "use": "A cash register: a key, the bell's ching and the drawer sliding open."
+ },
+ "digital-blip-clear": {
+  "cat": "digital",
+  "dur": 0.163,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "clear",
+  "lufs": -22,
+  "use": "A clean, bright blip."
+ },
+ "digital-blip-subtle": {
+  "cat": "digital",
+  "dur": 0.137,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "subtle",
+  "lufs": -26,
+  "use": "A soft, low digital blip."
+ },
+ "digital-breach": {
+  "cat": "digital",
+  "dur": 0.924,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "alert",
+  "lufs": -22,
+  "use": "A security breach: an urgent two-tone alarm, three times."
+ },
+ "digital-corrupt": {
+  "cat": "digital",
+  "dur": 0.649,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "glitch",
+  "lufs": -24,
+  "use": "Data corrupting: a slice of data stuttering, crushed and smeared."
+ },
+ "digital-decrypt": {
+  "cat": "digital",
+  "dur": 1.262,
+  "sync": 0.659,
+  "meets": "instant",
+  "tier": "glitch",
+  "lufs": -24,
+  "use": "Decrypted: a scramble slowing and resolving into a clean, rising chime."
+ },
+ "digital-denied": {
+  "cat": "digital",
+  "dur": 0.35,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "alert",
+  "lufs": -22,
+  "use": "Access denied: two short, low buzzes."
+ },
+ "digital-glitch-clear": {
+  "cat": "digital",
+  "dur": 0.24,
+  "sync": 0.018,
+  "meets": "instant",
+  "tier": "clear",
+  "lufs": -22,
+  "use": "A crisp little glitch, stepping in pitch."
+ },
+ "digital-glitch-subtle": {
+  "cat": "digital",
+  "dur": 0.164,
+  "sync": 0.02,
+  "meets": "instant",
+  "tier": "subtle",
+  "lufs": -26,
+  "use": "A gentle, clean stutter."
+ },
+ "digital-interference": {
+  "cat": "digital",
+  "dur": 0.866,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "glitch",
+  "lufs": -24,
+  "use": "Electrical interference: a buzz stuttering on and off with crackle."
+ },
+ "digital-power-down": {
+  "cat": "digital",
+  "dur": 0.882,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "power",
+  "lufs": -23,
+  "use": "A device powering down: a click, then its hum sinking away."
+ },
+ "digital-power-up": {
+  "cat": "digital",
+  "dur": 1.131,
+  "sync": 0,
+  "meets": "instant",
+  "tier": "power",
+  "lufs": -23,
+  "use": "A device powering up: a click, its hum rising, a ping when it's ready."
+ },
+ "digital-process-clear": {
+  "cat": "digital",
+  "dur": 1.098,
+  "sync": 0.071,
+  "meets": "action-start",
+  "tier": "clear",
+  "lufs": -22,
+  "use": "Busy processing: a bright, steady run of pips."
+ },
+ "digital-process-subtle": {
+  "cat": "digital",
+  "dur": 1.119,
+  "sync": 0.093,
+  "meets": "action-start",
+  "tier": "subtle",
+  "lufs": -26,
+  "use": "Quiet processing: a soft run of tiny pips."
+ },
+ "digital-scan-clear": {
+  "cat": "digital",
+  "dur": 0.837,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "clear",
+  "lufs": -22,
+  "use": "A clean scan: a defined tone gliding up, pulsing."
+ },
+ "digital-scan-subtle": {
+  "cat": "digital",
+  "dur": 0.841,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "subtle",
+  "lufs": -26,
+  "use": "A soft scan: a gentle tone gliding up with slow pulses."
+ },
+ "digital-scramble": {
+  "cat": "digital",
+  "dur": 0.955,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "glitch",
+  "lufs": -24,
+  "use": "Scrambling: rapid random pips, like text decoding."
+ },
+ "digital-signal-drop": {
+  "cat": "digital",
+  "dur": 0.793,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "glitch",
+  "lufs": -24,
+  "use": "A signal failing: a tone stuttering, sagging and cutting out."
+ },
+ "digital-static": {
+  "cat": "digital",
+  "dur": 0.646,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "glitch",
+  "lufs": -24,
+  "use": "A burst of TV static: bright snow with a faint buzz in it."
+ },
+ "data-bar-grow": {
+  "cat": "data",
+  "dur": 0.35,
+  "sync": 0.328,
+  "meets": "arrival",
+  "tier": "bar",
+  "lufs": -23,
+  "use": "A quick upward swish that lands on a tick: a bar growing to its value."
+ },
+ "data-chart-reveal": {
+  "cat": "data",
+  "dur": 0.833,
+  "sync": 0.007,
+  "meets": "action-start",
+  "tier": "chart",
+  "lufs": -23,
+  "use": "A soft swell with a few glints: a chart appearing."
+ },
+ "data-countup-medium": {
+  "cat": "data",
+  "dur": 1.222,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "countup",
+  "lufs": -25,
+  "use": "A count-up of about 1.2 seconds: ticks that speed up and settle."
+ },
+ "data-countup-short": {
+  "cat": "data",
+  "dur": 0.621,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "countup",
+  "lufs": -25,
+  "use": "A short count-up: ticks that speed up and settle, about 0.6 seconds."
+ },
+ "data-decrease-medium": {
+  "cat": "data",
+  "dur": 1.221,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "decrease",
+  "lufs": -25,
+  "use": "A count-down of about 1.2 seconds: a value easing down."
+ },
+ "data-decrease-short": {
+  "cat": "data",
+  "dur": 0.62,
+  "sync": 0,
+  "meets": "action-start",
+  "tier": "decrease",
+  "lufs": -25,
+  "use": "A short count-down: ticks that speed up and settle, falling a little, about 0.6 seconds."
+ },
+ "data-number-land": {
+  "cat": "data",
+  "dur": 0.233,
+  "sync": 0.011,
+  "meets": "instant",
+  "tier": "land",
+  "lufs": -22,
+  "use": "A woody knock with a small, bright ping: a number landing."
+ },
+ "data-progress-short": {
+  "cat": "data",
+  "dur": 0.992,
+  "sync": 0.007,
+  "meets": "action-start",
+  "tier": "progress",
+  "lufs": -25,
+  "use": "A one-second progress fill: rising air with soft ticks filling in."
+ },
+ "data-tick": {
+  "cat": "data",
+  "dur": 0.018,
+  "sync": 0.008,
+  "meets": "instant",
+  "tier": "tick",
+  "lufs": -28,
+  "use": "A single soft, woody tick: one step of a number changing."
+ }
+}

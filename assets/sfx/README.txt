@@ -1,0 +1,1 @@
+SFX Kit by Wyzowl (https://github.com/wyzowl/sfx-kit), CC0 1.0. Converted to mono 48 kHz 16-bit. manifest.json holds the sync point (seconds into the file that should land on the visual moment), duration and level tier of each sound.
