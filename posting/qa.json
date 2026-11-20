@@ -32,8 +32,8 @@
   "12-interview.mp4": {
     "approved": true,
     "sha1": "61cc69e9440918af59e63bbf7b3eae43879ec359",
-    "checked_at": "2026-11-18T20:40:05.678Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-20T13:09:44.243Z",
+    "note": "reviewed 2026-11-20: qa timing 26s hook 2.9s, one not-X-its-Y reversal only, contractions, no dashes, no factual claims, no ASR model so lines read by hand, caption has KEEP CTA + hashtags"
   },
   "15-hotdog.mp4": {
     "approved": true,
