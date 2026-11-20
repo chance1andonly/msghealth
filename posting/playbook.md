@@ -45,3 +45,10 @@ Updated 2026-11-19 (research.json refreshed 2026-11-19, stats.json from 2026-11-
 - One CTA: "Comment KEEP and we'll show you who's gone quiet."
 - 3 hashtags (#barber #atlantabarber #hairstylist). The winners used 0 to 3.
 - No em dashes, no cliches, written like a person (posting/VOICE.md).
+
+## People reels (about 1 in 3)
+Some reels use `cast` scenes (animated people in a shop or street set, speech bubbles that match the spoken line) instead of
+only stats and cards. A reel is a people reel when its random draw says so (see the batch task); in that reel at least 3 of
+the 5 story scenes are `cast`, and the rest can be stat, versus or chat. Rules: one to three people on screen, a bubble line is
+never longer than the spoken line it matches, people tell the scene (a stylist waving, a client on his phone, a chair that
+stays empty) and the number or stake still appears as a chip. Keep the same look for the same person across scenes in one reel.

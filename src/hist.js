@@ -1,6 +1,7 @@
-// MsgHealth · "history hook" retention reels (1080 × 1920, 30 fps), built on kit.js + mg.js. Motion graphics only, no characters.
+// MsgHealth · "history hook" retention reels (1080 × 1920, 30 fps), built on kit.js + mg.js. Mostly motion graphics, with 'cast' scenes (animated people) in about 1 of 3 reels.
 // Each reel is a config in window.REEL (see src/<name>-reel.js): one scene per voiceover line 0..N-1, then the CTA line N.
-// Scene types: stat, stack, quote, versus, split, people, frames, weeks, chat.
+// Scene types: stat, stack, quote, versus, split, people, frames, weeks, chat, cast.
+// cast: animated people in a shop or street set. {type:'cast', eyebrow, set:'shop'|'street'|'phone', cast:[{x, h, seed, o:{shirt,skin,hair,hat,arm,mouth,glasses,dir}, say:['line 1','line 2'], at:0.4, from:'left'|'right'|'up', walk:true}], chip:'47 DAYS', label, sub}
 'use strict';
 const R = window.REEL; window.CHAT_WHO = R.who || 'Marcus';
 const N = R.scenes.length, END = VO_AT[N] - 0.1, DURATION = +Math.max(END + 2.4, lineEnd(N) + 1.1).toFixed(2);
@@ -69,6 +70,24 @@ const SCENES = {
       xf(x + 65, 820, clamp(e), 0, () => { card(x, 700, 130, 240, { r: 22, fill: on > 0.5 ? rgba(OK, 0.18) : 'rgba(255,255,255,0.05)', stroke: on > 0.5 ? rgba(OK, 0.9) : 'rgba(255,255,255,0.12)', lw: on > 0.5 ? 4 : 2 }); text('WEEK', x + 65, 770, 22, 700, MUTED, 'center', 0.12); text(String(i + 1), x + 65, 850, 86, 800, on > 0.5 ? OK : `rgba(255,255,255,${0.9 * fade})`, 'center'); }); }
     const f = seg(t, ch(L, 0), ch(L, 0) + 0.6); if (f > 0) withFade(f, () => { line(95, 1010, 95 + 130 + 150 * 2, 1010, 'rgba(111,227,160,0.6)', 8); text('fresh', 95 + 215, 1062, 34, 700, OK, 'center'); line(95 + 450, 1010, 95 + 900 - 20, 1010, 'rgba(255,111,138,0.5)', 8); text('fading', 95 + 690, 1062, 34, 700, RED, 'center'); });
     const p = pop(t, ch(L, 1), 0.35); if (p > 0) xf(95 + 215 + 150 - 150, 640, clamp(p), 0, () => chip('TEXT HERE', 95 + 215, 640, OK, 1, 30));
+  },
+  cast(t, a, c) { // animated people (kit.js person) with speech bubbles
+    stage(t, 0.14); eyebrow(c.eyebrow, 330, IN.mid);
+    const FY = 1390; // floor line, above the caption strip
+    fillRR(0, FY, W, H - FY, 0, 'rgba(255,255,255,0.03)'); line(0, FY, W, FY, 'rgba(255,255,255,0.12)', 2);
+    if (c.set === 'shop') { card(120, 460, 840, 860, { r: 36, fill: 'rgba(165,160,255,0.06)', stroke: rgba(IN.mid, 0.4), lw: 4 }); line(120, 860, 960, 860, 'rgba(255,255,255,0.05)', 2); }
+    if (c.set === 'street') [200, 540, 880].forEach((x, i) => { fillRR(x - 70, 760 - i % 2 * 60, 140, 740 + i % 2 * 60, 8, 'rgba(255,255,255,0.04)'); });
+    (c.cast || []).forEach((p, i) => {
+      const at = a + (p.at ?? 0.2 + i * 0.35), e = ease.out(seg(t, at, at + 0.55)); if (e <= 0) return;
+      const fx = p.from === 'right' ? 380 : p.from === 'left' ? -380 : 0, fy = p.from === 'up' ? -300 : 0, x = p.x + fx * (1 - e), y = FY + fy * (1 - e);
+      ctx.save(); ctx.globalAlpha *= clamp(e * 1.6);
+      person(x, y, p.h || 600, p.seed ?? i + 3, Object.assign({ bounce: p.walk && e < 1 ? t * 14 : t * 2 + i, wave: t - at, mouth: p.say && t > at + 0.5 && t < at + 3.2 ? (Math.sin(t * 11) > -0.2 ? 'open' : '') : '' }, p.o || {}));
+      ctx.restore();
+      if (p.say) { const b = seg(t, at + 0.5, at + 0.8); if (b > 0) xf(p.x, FY - (p.h || 600) - 70, clamp(b), 0, () => bubble(Math.max(40, Math.min(W - 560, p.x - 250)), FY - (p.h || 600) - 70 - p.say.length * 40 - 30, 520, p.say, !!p.out)); }
+    });
+    if (c.chip) { const q = pop(t, a + (c.chipAt ?? 1.2), 0.35); if (q > 0) xf(CX, 400, clamp(q), 0, () => chip(c.chip, CX, 400, c.chipCol || GOLD, 1, 30)); }
+    if (c.label) withFade(seg(t, a + 1.4, a + 1.8), () => text(c.label, CX, 1700, fit(c.label, 56, 900), 800, '#fff', 'center', -0.02));
+    if (c.sub) withFade(seg(t, a + 1.9, a + 2.3), () => text(c.sub, CX, 1775, 34, 600, SOFT, 'center'));
   },
   chat(t, a, c, i) { // phone with a text thread
     stage(t, 0.14); const until = VO_AT[i + 1] + 0.2;
