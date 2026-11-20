@@ -26,8 +26,8 @@
   "14-lexus.mp4": {
     "approved": true,
     "sha1": "e415e3d6a2311c23eb10bbb50470026a11aed9d4",
-    "checked_at": "2026-11-18T20:40:05.649Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-20T16:16:04.960Z",
+    "note": "reviewed 2026-11-20: qa no flags, hook 3.8s, ~26s total, no dashes, contractions, 1989 LS400 recall (~8,000 cars, cruise control + brake light wiring) fact ok, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
   },
   "12-interview.mp4": {
     "approved": true,
