@@ -2,8 +2,8 @@
   "16-espresso.mp4": {
     "approved": true,
     "sha1": "65e3df1abd52138b94774d2bb83ccf716199e528",
-    "checked_at": "2026-11-18T20:40:05.518Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-20T22:09:24.177Z",
+    "note": "reviewed 2026-11-20: qa timing ~27s total, hook line ends ~4.6s (borderline ok), no dashes, contractions, one mild never/just-stop pair only, Starbucks 2008 7,000 stores/135,000 staff facts ok, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
   },
   "11-five-times.mp4": {
     "approved": true,
