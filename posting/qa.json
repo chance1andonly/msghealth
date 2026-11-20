@@ -56,8 +56,8 @@
   "11b-coupon.mp4": {
     "approved": true,
     "sha1": "0dcf08088adbde5757e3236f5d9094986a66dbca",
-    "checked_at": "2026-11-18T20:40:05.800Z",
-    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+    "checked_at": "2026-11-20T01:09:38.586Z",
+    "note": "reviewed 2026-11-20: qa no timing flags, 26.6s total, hook 4.2s, contractions, no em dashes, one X/Y reversal only, 1888/8.5M/1913 coupon claim is the standard Coca-Cola figure, caption ends with KEEP CTA + hashtags; no ASR model so lines read by hand"
   },
   "10-see-you-next.mp4": {
     "approved": true,
