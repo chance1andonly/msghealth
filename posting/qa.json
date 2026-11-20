@@ -112,5 +112,17 @@
     "sha1": "da99e17c6c8b5d3a07e88dc609b0f79dcc5af20b",
     "checked_at": "2026-11-20T07:25:33.879Z",
     "note": "reviewed 2026-11-20: graphics reel (draw 0.30): 10h29m per The World/NPR, Uggs sale per NPR, caption clipping fixed, frames checked, no ASR model available"
+  },
+  "24-airbnb-photos.mp4": {
+    "approved": true,
+    "sha1": "f6bed61d50ffcb1a0eeffe4a6568c675fc4c3ec7",
+    "checked_at": "2026-11-20T19:30:15.650Z",
+    "note": "reviewed 2026-11-20: graphics reel: timing/wording flags clean, frame per line viewed, facts per Paul Graham essay (fees 460/897/1428, 4000/mo goal, camera); caption states the causality loosely (no claim trip caused the rise)"
+  },
+  "25-new-coke.mp4": {
+    "approved": true,
+    "sha1": "f549a6eb662dfd81b775c517a754810c57931f56",
+    "checked_at": "2026-11-20T19:30:15.932Z",
+    "note": "reviewed 2026-11-20: graphics reel: frames per line viewed, nearly 200k taste tests, 1500 calls/day vs 400, 31600 calls in 2 days, 79 days all from Coca-Cola's own history page; minor qa flags (line length) accepted"
   }
 }

@@ -41,6 +41,13 @@ Updated 2026-11-20 (research.json refreshed 2026-11-20, stats.json from 2026-11-
 - Caption chunks over about 30 characters clip on screen; keep chunks to 3 short lines.
 - Still avoid reusing: Tesco, Zappos.
 
+## Added 2026-11-20 (evening batch)
+- Queue was 8 of a 12 target (per_day 5). Made 2 of the 4 needed: Airbnb's New York host visit (Paul Graham essay: $4,000/month goal, rented camera, weekly fees $460 then $897 then $1,428 in Feb 2009; the script claims no cause) and New Coke (Coca-Cola's own history: nearly 200,000 taste-testers, 79 days, 1,500 calls a day vs 400 in June, 31,600 hotline calls in the two days after Classic was announced). Both graphics reels (draws 0.77, 0.84).
+- Short because the web fetch tool refused further sources (Wikipedia/BBC, permission not answered), so Wispa, Taco Bell Mexican Pizza and Chewy were left unverified and unused. Never script from memory.
+- Sources disagree on New Coke calls (Coca-Cola: 1,500/day; History.com: up to 8,000/day plus ~40,000 letters). We used Coca-Cola's numbers and attributed them.
+- Still avoid reusing: Airbnb, New Coke.
+- Candidates once verified: Cadbury Wispa return (2007), Taco Bell Mexican Pizza return (2022), LEGO 2003 ($300M loss per Wharton; fan-input detail unverified).
+
 ## Open questions for the next run
 - Do the history-hook reels with a concrete first-line scene beat the ones that open with a stat? Compare the queued reels once they have 24+ hours of views.
 - Try 2 reels per week in the "He waited 13 years" style: one human story, a withheld ending, then the retention lesson.

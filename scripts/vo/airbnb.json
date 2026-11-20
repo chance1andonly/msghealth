@@ -1,0 +1,61 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Two founders rented a camera and flew to New York to photograph apartments.",
+   "caps": [
+    "Two founders rented a *camera*",
+    "and flew to *New York*",
+    "to photograph *apartments.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "They needed four thousand dollars a month, just to cover rent and food.",
+   "caps": [
+    "They needed *$4,000 a month*",
+    "just to cover *rent and food.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "So the founders showed up in person, to help hosts fix their listings.",
+   "caps": [
+    "So the founders showed up *in person,*",
+    "to help hosts *fix their listings.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "In February, weekly fees went from four hundred sixty dollars, to eight ninety seven, to fourteen twenty eight.",
+   "caps": [
+    "In February, weekly fees went",
+    "from *$460,* to *$897,*",
+    "to *$1,428.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Your version of that visit is one text. It's been a few weeks, Marcus. Want Thursday at four?",
+   "caps": [
+    "Your version of that visit",
+    "is *one text.*",
+    "It's been a few weeks, Marcus.",
+    "Want *Thursday at four?*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

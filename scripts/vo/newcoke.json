@@ -1,0 +1,63 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Nearly two hundred thousand people picked new Coke. Then came the calls.",
+   "caps": [
+    "*Nearly 200,000 people*",
+    "picked new Coke.",
+    "Then came *the calls.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "By June, Coke's hotline took fifteen hundred calls a day, up from four hundred.",
+   "caps": [
+    "By June, the hotline took",
+    "*1,500 calls a day,* up from *400.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The test measured the sip. It missed the bond people had with the old Coke.",
+   "caps": [
+    "The test measured *the sip.*",
+    "It missed the *bond* people had",
+    "with the old Coke."
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Seventy nine days in, the original came back. The hotline took thirty one thousand six hundred calls in two days.",
+   "caps": [
+    "*79 days* in, the original came back.",
+    "The hotline took *31,600 calls*",
+    "in two days."
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Your clients won't call a hotline, they'll just stop booking. So reach out first. We miss you, Marcus. Want your usual Thursday?",
+   "caps": [
+    "Your clients won't call a hotline,",
+    "they'll just *stop booking.*",
+    "So *reach out first.*",
+    "We miss you, Marcus.",
+    "Want your *usual Thursday?*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
