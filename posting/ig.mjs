@@ -71,8 +71,9 @@ async function publish(uid, file, caption, trial) {
 async function publish0(uid, file, caption, trial) {
   const base = { media_type: 'REELS', caption, share_to_feed: 'true' };
   const cov = path.join(DIR, 'covers', path.basename(file, '.mp4') + '.jpg');
-  if (!skipCover && process.env.PUBLIC_BASE_URL && fs.existsSync(cov)) base.cover_url = `${process.env.PUBLIC_BASE_URL}/posting/covers/${path.basename(cov)}`;
-  else base.thumb_offset = '2600';
+  const covUrl = `${process.env.PUBLIC_BASE_URL}/posting/covers/${path.basename(cov)}`;
+  const covOk = !skipCover && process.env.PUBLIC_BASE_URL && fs.existsSync(cov) && await fetch(covUrl, { method: 'HEAD' }).then((r) => r.ok).catch(() => false); // only if the cover is already published in the repo
+  if (covOk) base.cover_url = covUrl; else base.thumb_offset = '2600';
   if (trial) base.trial_params = JSON.stringify({ graduation_strategy: trial });
   let c;
   try {
