@@ -92,8 +92,8 @@
   "20-stew-rock.mp4": {
     "approved": true,
     "sha1": "c0fdb345ecd90ccb594fed029bb520af09815e2c",
-    "checked_at": "2026-11-19T19:31:26.137Z",
-    "note": "reviewed 2026-11-19: qa clean, frames checked, facts (3-ton rock, rules, 5x sales/sq ft Guinness) from Gale company histories + BND; eggnog origin left out (single source); no ASR model"
+    "checked_at": "2026-11-21T16:11:26.079Z",
+    "note": "reviewed 2026-11-21: qa no flags, hook 3.5s, ~30s total, contractions, no dashes, caption KEEP CTA + hashtags ok; Stew Leonard's rock/Guinness sales per sq ft claim is the commonly cited one; no ASR model so lines read by hand. 19-domino held (launch-timing line unverified, no TTS models to fix)"
   },
   "21-empty-chair.mp4": {
     "approved": true,
