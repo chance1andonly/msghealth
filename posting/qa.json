@@ -103,9 +103,9 @@
   },
   "22-tesco-data.mp4": {
     "approved": true,
-    "sha1": "be2f841178451605d39d58887279f0f68c4b2aeb",
-    "checked_at": "2026-11-20T07:25:33.517Z",
-    "note": "reviewed 2026-11-20: graphics reel (draw 0.73): hook, 6 lines read aloud, frames checked, quote per Wikipedia/Computer Weekly (MacLaurin), no ASR model available"
+    "sha1": "bb5977cf4ce5b664655faf937f079c877cef2543",
+    "checked_at": "2026-11-21T22:12:38.380Z",
+    "note": "reviewed 2026-11-21: timing 4.3s hook/32s total, fixed unverifiable 'nine stores' and 'a year after' claims, rebuilt VO, no em dashes, caption ends KEEP CTA + hashtags, lines read aloud"
   },
   "23-zappos-call.mp4": {
     "approved": true,

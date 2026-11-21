@@ -2,11 +2,11 @@
 // caption chunk start times and when each clip starts. Don't edit by hand.
 window.VO_CLIPS = [
   { dur: 4.315, chunks: [["In 1994, a supermarket chairman", 0.0], ["said one *report scared him.*", 2.37]] }, // 00
-  { dur: 5.465, chunks: [["Tesco tested a *loyalty card*", 0.0], ["in nine stores for *three months,*", 1.72], ["and the tills showed who *kept coming back.*", 3.39]] }, // 01
+  { dur: 5.64, chunks: [["Tesco tested a *loyalty card*", 0.0], ["in a handful of stores, and *three months*", 1.4], ["of till data showed who *kept coming back.*", 3.3]] }, // 01
   { dur: 5.855, chunks: [["\"What scares me is that you know", 0.0], ["*more about my customers*", 1.57], ["after *three months* than I know", 3.29], ["after *thirty years.*\"", 4.91]] }, // 02
-  { dur: 4.115, chunks: [["A year after the card launched,", 0.0], ["Tesco had *passed the market leader.*", 1.7]] }, // 03
-  { dur: 5.315, chunks: [["Your booking history is *that same list.*", 0.0], ["Find who's *gone quiet,* and text:", 1.87], ["*Been a minute.* Chair's open Saturday.", 3.07]] }, // 04
+  { dur: 4.3, chunks: [["Within a year of the card launching,", 0.0], ["Tesco had *passed the market leader.*", 2.04]] }, // 03
+  { dur: 5.71, chunks: [["Your booking history is *that same list.*", 0.0], ["Find who's *gone quiet* and text him:", 1.93], ["*Been a minute.* Chair's open Saturday.", 3.54]] }, // 04
   { dur: 2.215, chunks: [["Comment *KEEP* and we'll show", 0.0], ["you who's *gone quiet.*", 1.48]] }, // 05
 ];
-window.VO_AT = [0.3, 5.12, 11.08, 17.54, 22.25, 27.96];
-window.VO_TEXT = ["In 1994, a supermarket chairman said one report scared him.", "Tesco had tested a loyalty card in nine stores for three months, and the tills showed who kept coming back.", "He said, what scares me is that you know more about my customers after three months than I know after thirty years.", "A year after the card launched, Tesco had passed the biggest grocer in Britain.", "Your booking history is that same list. Find who's gone quiet, and text, been a minute, chair's open Saturday.", "Comment KEEP and we'll show you who's gone quiet."];
+window.VO_AT = [0.3, 5.12, 11.25, 17.71, 22.61, 28.72];
+window.VO_TEXT = ["In 1994, a supermarket chairman said one report scared him.", "Tesco tested a loyalty card in a handful of stores, and three months of till data showed who kept coming back.", "He said, what scares me is that you know more about my customers after three months than I know after thirty years.", "Within a year of the card launching, Tesco had passed the biggest grocer in Britain.", "Your booking history is that same list. Find who's gone quiet and text him, been a minute, chair's open Saturday.", "Comment KEEP and we'll show you who's gone quiet."];
