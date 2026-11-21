@@ -98,8 +98,8 @@
   "21-empty-chair.mp4": {
     "approved": true,
     "sha1": "e5afe97f09d0fc47d123d9687c8a055d98ee052c",
-    "checked_at": "2026-11-19T19:31:26.167Z",
-    "note": "reviewed 2026-11-19: qa clean, frames checked; empty-chair claim attributed to a former Amazon exec (Bill Price via Hyken), no numbers; no ASR model"
+    "checked_at": "2026-11-21T19:09:10.022Z",
+    "note": "reviewed 2026-11-21: qa no flags, hook 3.6s, ~28s total, no dashes, contractions, Amazon empty chair story hedged as per a former exec, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
   },
   "22-tesco-data.mp4": {
     "approved": true,
