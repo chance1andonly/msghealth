@@ -80,8 +80,8 @@
   "18-late-fees.mp4": {
     "approved": true,
     "sha1": "421c8593addeac93324413a343d1c58886623907",
-    "checked_at": "2026-11-19T07:27:28.013Z",
-    "note": "reviewed 2026-11-19: facts checked (NBC via Mental Floss: $800M, ~16% of 2000 revenue), timing, frames per line, wording; no ASR model, lines read aloud. Caption asks viewer to pick the line they would send."
+    "checked_at": "2026-11-21T13:09:07.235Z",
+    "note": "reviewed 2026-11-21: qa timing ~28s, hook ends ~4.5s (borderline ok), no dashes, contractions, varied lengths, no repeated reversal, Blockbuster 2000 $800M late fees ~16% revenue ok, line 4 long (21w) but reads fine, caption question + KEEP CTA + hashtags ok; no ASR model so lines read by hand"
   },
   "19-domino.mp4": {
     "approved": true,
