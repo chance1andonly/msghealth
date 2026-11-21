@@ -74,8 +74,8 @@
   "17-netflix.mp4": {
     "approved": true,
     "sha1": "fd20764c8a51213e32e710f9347e039decf0493c",
-    "checked_at": "2026-11-19T07:27:27.977Z",
-    "note": "reviewed 2026-11-19: facts checked (AP/Quartz: 800k US subs Q3 2011, up to 60% hike, 'I messed up'), timing, frames per line, wording; no ASR model, lines read aloud. Caption ends on a self-check verdict (✅ or ❌)."
+    "checked_at": "2026-11-21T01:09:47.405Z",
+    "note": "reviewed 2026-11-20: re-read script and caption; hook 4.1s, total ~32s, facts per AP/Quartz, contractions, no em dashes, one reversal only, KEEP CTA and hashtags present; no ASR model, lines read aloud"
   },
   "18-late-fees.mp4": {
     "approved": true,
