@@ -1,0 +1,61 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A barber app counted thirteen point nine million appointments at seven thousand shops.",
+   "caps": [
+    "A barber app counted",
+    "*13.9 million appointments*",
+    "at *7,000 shops.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "A client who comes back waits about forty eight days between cuts.",
+   "caps": [
+    "A client who comes back",
+    "waits about *48 days*",
+    "between cuts."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And Squire says about half of clients book once and never come back.",
+   "caps": [
+    "And Squire says about *half*",
+    "of clients book *once*",
+    "and never come back."
+   ],
+   "gap": 0.6,
+   "speed": 1.0
+  },
+  {
+   "say": "So text him around day thirty five, before he's drifted, not after.",
+   "caps": [
+    "So text him around *day 35,*",
+    "before he's *drifted.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.0
+  },
+  {
+   "say": "Been a minute. Chair's open Thursday.",
+   "caps": [
+    "Been a minute.",
+    "Chair's open *Thursday.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

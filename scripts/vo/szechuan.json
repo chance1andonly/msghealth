@@ -1,0 +1,61 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Hundreds lined up for a McDonald's sauce. One store had twenty packets.",
+   "caps": [
+    "*Hundreds* lined up for a",
+    "McDonald's sauce.",
+    "One store had *20 packets.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "Police cleared the crowd. It was a nineties sauce that fans had begged for.",
+   "caps": [
+    "Police *cleared the crowd.*",
+    "A nineties sauce fans had *begged for.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The next day, McDonald's said its batch wasn't near enough to meet that demand.",
+   "caps": [
+    "Next day, McDonald's said its batch",
+    "*wasn't near enough*",
+    "to meet that demand."
+   ],
+   "gap": 0.5,
+   "speed": 1.05
+  },
+  {
+   "say": "Your quiet clients liked you too. They're just waiting for somebody to ask.",
+   "caps": [
+    "Your quiet clients *liked you too.*",
+    "They're just waiting",
+    "*for somebody to ask.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.0
+  },
+  {
+   "say": "Been a minute. Chair's open Thursday.",
+   "caps": [
+    "Been a minute.",
+    "Chair's open *Thursday.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

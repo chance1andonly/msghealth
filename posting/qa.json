@@ -136,5 +136,29 @@
     "sha1": "9449dc652728c154faefcc32f03b740a3b1b5824",
     "checked_at": "2026-11-21T07:27:51.596Z",
     "note": "reviewed 2026-11-21: graphics reel (draw 0.74): qa.py no flags, frames checked, facts: removed Nov 5 2020, petition 170k+ (sources say 170k to 200k, used the low), back May 19 2022, 7x demand per Taco Bell Aug 2022; ASR unavailable; caption uses check/cross verdict"
+  },
+  "28-sewell-fee.mp4": {
+    "approved": true,
+    "sha1": "6d510807e190f7d780896077e17beaa5157e2b6b",
+    "checked_at": "2026-11-21T19:30:09.219Z",
+    "note": "reviewed 2026-11-21: graphics reel (draw 0.795): script, frames and wording flags checked, $332,000 and $25 fee attributed to Selling Power, caption adds source"
+  },
+  "29-wendys-key-tag.mp4": {
+    "approved": true,
+    "sha1": "1a5c25d2868646303a033e94d79c83b0b38593a5",
+    "checked_at": "2026-11-21T19:30:09.675Z",
+    "note": "reviewed 2026-11-21: graphics reel (draw 0.482): $3 tag per wendys.com, frames and wording checked"
+  },
+  "30-mcdonalds-sauce.mp4": {
+    "approved": true,
+    "sha1": "629d91422fa54b2abd64e703aeb6470186bae183",
+    "checked_at": "2026-11-21T19:30:10.082Z",
+    "note": "reviewed 2026-11-21: people reel (draw 0.249): 3 cast scenes viewed, bubbles readable, 20 packets/crowd per Hollywood Reporter, quote per McDonald's Oct 8 2017 statement"
+  },
+  "31-squire-48-days.mp4": {
+    "approved": true,
+    "sha1": "4871f2065ac0cd5877e1b8b38d69392c0eb7b33e",
+    "checked_at": "2026-11-21T19:30:10.437Z",
+    "note": "reviewed 2026-11-21: graphics reel (draw 0.783): stat-first test hook, 13.9M/7,000 shops/48.5 days from Squire 2026 report, 48% attributed to Squire blog, no sample size"
   }
 }

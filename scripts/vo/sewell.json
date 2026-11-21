@@ -1,0 +1,59 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "He locked his keys in the car. The dealer waived twenty-five dollars.",
+   "caps": [
+    "He *locked his keys* in the car.",
+    "The dealer waived *$25.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "Why? He figured one loyal customer was worth three hundred thirty two thousand dollars.",
+   "caps": [
+    "Why? He figured one loyal customer",
+    "was worth *$332,000.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.05
+  },
+  {
+   "say": "So he kept a hundred and fifteen loaner cars, free to anyone who'd bought from him.",
+   "caps": [
+    "So he kept *115 loaner cars,*",
+    "free to anyone who'd *bought from him.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Think about the client who stopped coming. Seven cuts a year, ten years: seventy haircuts.",
+   "caps": [
+    "Think about the client *who stopped coming.*",
+    "Seven cuts a year, ten years:",
+    "*seventy haircuts.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Been a minute. Chair's open Thursday.",
+   "caps": [
+    "Been a minute.",
+    "Chair's open *Thursday.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
