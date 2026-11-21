@@ -201,5 +201,15 @@
     "trial": null,
     "per_day": 5,
     "posted_at": "2026-11-21T01:13:13.273Z"
+  },
+  {
+    "date": "2026-11-21",
+    "slot": 8,
+    "hour": 8,
+    "file": "18-late-fees.mp4",
+    "media_id": "18116938421034642",
+    "trial": null,
+    "per_day": 5,
+    "posted_at": "2026-11-21T13:12:35.789Z"
   }
 ]
