@@ -1,0 +1,61 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Cadbury dropped the Wispa bar in 2003. Four years later, fans still begged.",
+   "caps": [
+    "Cadbury dropped *Wispa* in 2003.",
+    "Four years later, fans *still begged.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "By August 2007, the Facebook groups had nearly fourteen thousand members.",
+   "caps": [
+    "By August 2007, the Facebook groups",
+    "had *nearly 14,000 members.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Think about that. There wasn't one bar for sale, and people still cared enough to organize.",
+   "caps": [
+    "Think about that.",
+    "*Not one bar* for sale,",
+    "and they still *organized.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "That October it came back, twenty three million bars. Your quiet regulars probably miss you too.",
+   "caps": [
+    "That October it came back:",
+    "*23 million bars.*",
+    "Your quiet regulars *miss you too.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "So say it first. Been a minute, chair's open Thursday.",
+   "caps": [
+    "So say it first:",
+    "*\"Been a minute.*",
+    "*Chair's open Thursday.\"*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

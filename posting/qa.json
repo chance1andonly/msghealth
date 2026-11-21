@@ -124,5 +124,17 @@
     "sha1": "f549a6eb662dfd81b775c517a754810c57931f56",
     "checked_at": "2026-11-20T19:30:15.932Z",
     "note": "reviewed 2026-11-20: graphics reel: frames per line viewed, nearly 200k taste tests, 1500 calls/day vs 400, 31600 calls in 2 days, 79 days all from Coca-Cola's own history page; minor qa flags (line length) accepted"
+  },
+  "26-wispa-bars.mp4": {
+    "approved": true,
+    "sha1": "4af2fcddb22e25222dd2bcaf33f4eda03a429942",
+    "checked_at": "2026-11-21T07:27:51.185Z",
+    "note": "reviewed 2026-11-21: people reel (draw 0.20; 3 cast scenes): qa.py no flags, frames checked, facts: Wispa dropped 2003, ~14,000 Facebook members Aug 2007 (Confectionery News), 23M limited run Oct 2007 (Wikipedia/Confectionery News); ASR unavailable, lines read aloud; caption uses A/B question"
+  },
+  "27-mexican-pizza.mp4": {
+    "approved": true,
+    "sha1": "9449dc652728c154faefcc32f03b740a3b1b5824",
+    "checked_at": "2026-11-21T07:27:51.596Z",
+    "note": "reviewed 2026-11-21: graphics reel (draw 0.74): qa.py no flags, frames checked, facts: removed Nov 5 2020, petition 170k+ (sources say 170k to 200k, used the low), back May 19 2022, 7x demand per Taco Bell Aug 2022; ASR unavailable; caption uses check/cross verdict"
   }
 }

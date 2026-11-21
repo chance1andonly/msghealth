@@ -1,63 +1,44 @@
 # Niche playbook (the batch task rewrites this from posting/research.json and posting/stats.json)
 
-Updated 2026-11-20 (research.json refreshed 2026-11-20, stats.json from 2026-11-18) from 62 YouTube Shorts ranked by views vs channel size, 15 Instagram outliers (views vs that account's median) and our own 26 reels' views. Titles, captions and numbers only; the videos themselves were not watched, so structure claims are inferred from titles and metrics.
+Updated 2026-11-21 (research.json from 2026-11-21, stats.json from 2026-11-18). Sources: YouTube Shorts ranked by views vs channel size, Instagram outliers vs each account's median, and our own 45 reels' views. Judged from titles, captions and numbers only; I did not watch the videos.
 
 ## What the winners share
-1. The hook is one odd, specific scene with the outcome withheld. "He waited 13 years for a haircut" (1.06M views, 1,190x the channel's subscribers). "I cut a dead client's hair..". "His barber said 'Interesting'". "Grandpa's barbershop had three customers left. Then a teen walked in" (24k views in 2 days from a 2k channel). A topic ("barber tips") never beats a scene.
-2. A number or a stake in the title: "$1000!!!! That is crazy", "He paid me $500 for this haircut". Money and years are the common ones.
-3. Verdict or vote devices keep people engaged: GrantTheBarber's "Does he have his confidence back? ✅❌" series holds a 3 to 5% like rate across five videos. Repeating one format builds a series people recognize.
-4. POV and quoted dialogue: "POV: He asked for the Caesar cut", "His barber said 'Interesting'".
-5. Instagram outliers in the niche close with a payoff the viewer waits for ("wait for his reaction") and a comment-word CTA that gives something.
+1. One human scene with the outcome withheld. "He Waited 13 Years For A Haircut" (4.3M views from a 2.4k channel, 1,782x its subscribers, 2% like rate), vicblends' "free haircut for a 10 year old" and "102 year old veteran" (about 10.8M views each, comment rates of 0.2 to 4%). The stake is a person, an age or a number of years, never a tip.
+2. Question titles about why clients leave work: "Why do people often change barbers?" (1.7M views, 4k channel, 28k likes). Structure transfers; our version is a true story that answers it.
+3. A word-comment CTA that gives something: sami2fresh's "comment the word" reel is the biggest outlier (19M views). Ours is KEEP.
+4. A verdict or vote (GrantTheBarber's checkmark/cross series, 3 to 5% like rate) keeps people in the comments.
+5. Topic that does NOT transfer: free cuts for strangers, kids and veterans (consumer feel-good), ASMR tutorials, ingrown extractions.
 
-## What did NOT win in the data
-- Generic business advice. "How to make customers come back again" (22k views, 2k channel) and "Why this salon added a mirror" (30k views, 187k channel) score near the floor. Retention content only did well when framed as a story: StoryFable's barbershop story, "How a roadside barber built a 1,200 crore empire", "Why I stopped selling treatments" (5.7% like rate).
-- Huge channels coasting: their views are mostly their following, so ignore them as examples.
-- Hashtag-stuffed titles. The winners use 0 to 3 tags.
+## What did not win
+- Generic retention advice and promo posts. Small channels that tell a story beat big channels that coast.
 
-## Our own reels (views)
-- 1,708 Pentagon pizza, 1,289 coffin ship, 794 London time lady: all open with a surprising true story and pivot to a client lesson. Everything else sits at about 150 to 200 views. Our median is 135.
-- Direct "you're losing clients" and promo-style posts are the floor. So the true-story format is the one working, which matches the niche data.
-- Reels posted on 11-17 and 11-18 (girard, looks-great, razor, thursdays) are too new to have views. 12 reels are queued, including netflix, late-fees, domino, stew-rock and empty-chair (both: a big company number or loss in the hook, an admission or quote as the turn, then a text the barber can send).
-- Still 45 reels analyzed; the median is about 135 and only 3 are above 700, all true stories.
+## Our own reels
+- Top: Pentagon pizza 1,708, coffin ship 1,289, London time lady 794. All open on one odd true scene and pivot to a client lesson. Everything else sits near 135 to 200. Promo and "you're losing clients" posts are the floor.
+- People reels vs graphics reels: no people reel has enough views yet to compare. Check once the queued ones post (cast reels so far: wispa; graphics: all others).
+- Still true: story hooks beat direct advice.
 
 ## Rules for new scripts
-1. Hook = one odd, true, specific scene or number, with the outcome withheld, under 14 words. A scene, not a category.
-2. Story first, lesson second. Never open with the advice.
-3. Hold the payoff to the line before the CTA.
-4. Give the viewer a verdict to make in the caption (a question, or "would you have texted him? ✅ or ❌") and keep the one-word CTA.
-5. Reuse a format once it works, as a series (same structure, new story), rather than inventing a new one each time.
+1. Hook = one odd true scene or number, outcome withheld, under 14 words and under 4.5 seconds spoken.
+2. Story first, lesson second; the payoff (the outcome) sits in the line before the text, the text line is the barber's action.
+3. Where sources disagree, take the low number and attribute it ("Taco Bell said").
+4. Verdict in the caption (question or check/cross) plus the one-word CTA.
+5. Lines of 15 words or fewer; at most one "not X, it's Y" per reel.
 6. Voice follows posting/VOICE.md.
 
-## Story picks that fit (verified 2026-11-19)
-- Reversals and admissions work as a middle beat because the company's own words are quotable and checkable: Netflix 2011 ("I messed up"), Domino's 2009 (customers saying "tastes like cardboard" in its own ads; new pizza launched last week of 2009; same-store sales up 14.3% in Q1 2010, QSR).
-- Objects and scenes beat abstractions: a three-ton rock with two rules carved in it (Stew Leonard's, about five times average grocery sales per square foot, Guinness 1992); an empty chair at Amazon's early meetings (hedged: one named source, ex-Amazon exec Bill Price via Shep Hyken, so the script says "a former Amazon exec says").
-- When sources disagree or only one source tells a detail (Stew Leonard's eggnog origin story), leave the detail out or attribute it.
-- Money taken from returning customers (Blockbuster 2000, $800M late fees) maps to the win-back text.
-- Avoid reusing: Pentagon pizza, coffin ship, London time lady, emu war, Waffle House, Girard, Gillette, giraffe, peas, Coca-Cola coupon, Kongo Gumi, Lexus, Costco, Starbucks, Netflix, Blockbuster, Domino's, Stew Leonard's, Amazon empty chair.
+## Story bank
+- Used (never repeat): Pentagon pizza, coffin ship, London time lady, emu war, Waffle House, Girard, Gillette, giraffe, peas, Coca-Cola coupon, Kongo Gumi, Lexus, Costco, Starbucks, Netflix, Blockbuster, Domino's, Stew Leonard's, Amazon chair, Tesco, Zappos, Airbnb, New Coke, Cadbury Wispa, Taco Bell Mexican Pizza.
+- Verified 2026-11-21 and used: Wispa dropped 2003; Facebook groups nearly 14,000 members (Confectionery News, Aug 2007); 23 million bar limited run announced Oct 2007; permanent return Oct 2008 (Wikipedia). Mexican Pizza removed Nov 5 2020; petition 170k+ (Wikipedia; NRN says 200k); returned May 19 2022; Taco Bell said demand was 7x (Wikipedia).
+- Could NOT verify (do not script): Duolingo "reminders don't seem to be working" notification, Chewy pet-death flowers. Sources blocked. Squire (vendor blog, Aug 2026) says about 48% of clients book once and never return, avg gap 48.5 days, 44.6% of visits are repeat: usable only if attributed to Squire.
+- Candidates to verify: LEGO 2003, other "customers begged for it back" cases (fits the win-back text).
 
-## Added 2026-11-20
-- Queue was 10 of a 12 target (per_day 5). Added Tesco Clubcard (the chairman admits data scared him, then the outcome: Tesco passed the market leader; closest fit yet for "who's gone quiet") and Zappos' 10 hour 29 minute call (one odd scene, payoff held to the line before the CTA: she bought the boots). Both graphics reels (draws 0.73, 0.30); no people reel this batch.
-- Verified: Tesco launch 13 Feb 1995, 1994 trial in nine stores over three months, MacLaurin quote (Wikipedia/Computer Weekly word it slightly differently), Tesco passing Sainsbury's within a year (Computer Weekly). Zappos 10 h 29 min and the Uggs sale (NPR, The World). Leave out the 10 h 43 min 2016 figure; unverified.
-- Caption chunks over about 30 characters clip on screen; keep chunks to 3 short lines.
-- Still avoid reusing: Tesco, Zappos.
+## Captions
+- Line 1 is the scene or number from the video, one emoji. Then the lesson in two sentences, then a question or a check/cross verdict, then the CTA "Comment KEEP and we'll show you who's gone quiet.", then #barber #atlantabarber #hairstylist.
+- Caption chunks on screen stay at about 30 characters or fewer, 3 short lines.
+- No em dashes, no cliches (posting/VOICE.md).
 
-## Added 2026-11-20 (evening batch)
-- Queue was 8 of a 12 target (per_day 5). Made 2 of the 4 needed: Airbnb's New York host visit (Paul Graham essay: $4,000/month goal, rented camera, weekly fees $460 then $897 then $1,428 in Feb 2009; the script claims no cause) and New Coke (Coca-Cola's own history: nearly 200,000 taste-testers, 79 days, 1,500 calls a day vs 400 in June, 31,600 hotline calls in the two days after Classic was announced). Both graphics reels (draws 0.77, 0.84).
-- Short because the web fetch tool refused further sources (Wikipedia/BBC, permission not answered), so Wispa, Taco Bell Mexican Pizza and Chewy were left unverified and unused. Never script from memory.
-- Sources disagree on New Coke calls (Coca-Cola: 1,500/day; History.com: up to 8,000/day plus ~40,000 letters). We used Coca-Cola's numbers and attributed them.
-- Still avoid reusing: Airbnb, New Coke.
-- Candidates once verified: Cadbury Wispa return (2007), Taco Bell Mexican Pizza return (2022), LEGO 2003 ($300M loss per Wharton; fan-input detail unverified).
-
-## Open questions for the next run
-- Do the history-hook reels with a concrete first-line scene beat the ones that open with a stat? Compare the queued reels once they have 24+ hours of views.
-- Try 2 reels per week in the "He waited 13 years" style: one human story, a withheld ending, then the retention lesson.
-
-## Captions (from the same data)
-- Line 1 is the scene or number from the video, with one emoji. Not a slogan.
-- Then the lesson in two sentences, then a question the viewer can answer in the comments, or a "✅ or ❌" verdict. The best Shorts in the data are built on a verdict or vote.
-- One CTA: "Comment KEEP and we'll show you who's gone quiet."
-- 3 hashtags (#barber #atlantabarber #hairstylist). The winners used 0 to 3.
-- No em dashes, no cliches, written like a person (posting/VOICE.md).
+## Open questions
+- Do history hooks with a concrete scene beat stat-first hooks? Compare queued reels at 24+ hours.
+- Try the "He waited 13 years" shape: one human story, withheld ending, retention lesson.
 
 ## People reels (about 1 in 3)
 Some reels use `cast` scenes (animated people in a shop or street set, speech bubbles that match the spoken line) instead of

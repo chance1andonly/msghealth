@@ -1,0 +1,62 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Over a hundred seventy thousand people petitioned for a dead pizza.",
+   "caps": [
+    "*170,000+ people* signed",
+    "a petition for",
+    "a *dead pizza.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "Taco Bell pulled the Mexican Pizza on November fifth, twenty twenty, to simplify its menu.",
+   "caps": [
+    "Taco Bell pulled the Mexican Pizza",
+    "on *Nov. 5, 2020,*",
+    "to simplify the menu."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "It came back May nineteenth, twenty twenty two. Taco Bell said demand ran seven times higher than before.",
+   "caps": [
+    "It came back *May 19, 2022.*",
+    "Taco Bell said demand ran",
+    "*7x higher* than before."
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Those people had been waiting the whole time for somebody to ask.",
+   "caps": [
+    "Those people had been *waiting*",
+    "the whole time for",
+    "*somebody to ask.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Your quiet clients might be the same. Miss your usual, Marcus? Thursday four thirty is open.",
+   "caps": [
+    "\"Miss your usual, Marcus?",
+    "*Thursday 4:30* is open.\""
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
