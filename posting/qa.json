@@ -122,8 +122,8 @@
   "25-new-coke.mp4": {
     "approved": true,
     "sha1": "f549a6eb662dfd81b775c517a754810c57931f56",
-    "checked_at": "2026-11-20T19:30:15.932Z",
-    "note": "reviewed 2026-11-20: graphics reel: frames per line viewed, nearly 200k taste tests, 1500 calls/day vs 400, 31600 calls in 2 days, 79 days all from Coca-Cola's own history page; minor qa flags (line length) accepted"
+    "checked_at": "2026-11-22T16:09:27.323Z",
+    "note": "reviewed 2026-11-22: hook 3.6s, total ~32s; wording no em dashes/one reversal; facts (200k tests, 1,500/day vs 400, 79 days, 31,600 calls) match Coca-Cola history; caption ends KEEP CTA + hashtags; lines read by hand"
   },
   "26-wispa-bars.mp4": {
     "approved": true,
