@@ -1,6 +1,6 @@
 # Niche playbook (the batch task rewrites this from posting/research.json and posting/stats.json)
 
-Updated 2026-11-22 (research.json 2026-11-21, stats.json 2026-11-18, 45 reels; no newer stats, so the own-results section is unchanged). Judged from titles, captions and numbers only; I did not watch the videos.
+Updated 2026-11-22 pm (research.json 2026-11-22, stats.json 2026-11-18, 45 reels; no newer stats, so the own-results section is unchanged). Judged from titles, captions and numbers only; I did not watch the videos.
 
 ## What the winners share
 1. One human scene, outcome withheld, a person's age or years as the stake: "He Waited 13 Years For A Haircut" (6.3M views, about 1,700x the channel's subscribers, 1.9% like rate); vicblends' free cut for a 10 year old and a 102 year old veteran (about 10.8M views each, comment rates up to 4%).
@@ -19,6 +19,8 @@ Updated 2026-11-22 (research.json 2026-11-21, stats.json 2026-11-18, 45 reels; n
 - Only state what two sources agree on. This run dropped Sassoon (no source says the cut was designed to need trims) and the "Chewy ran no ad" idea (unsupported); a Book It claim that families came along was also unsupported.
 - Queued 32 to 35 (Krispy Kreme, Harley HOG, Chewy, Book It) are new data: compare views once posted, HOG is the people reel.
 
+- New this run: queued 36 (Twinkies) is the first reel built with a one-guy-in-front-of-one-big-sign framing: put the shop sign centered behind the actor (x 0, w 12) so names stay readable; keep running actors within +-1.8 of the camera x.
+
 ## Rules for new scripts
 1. Hook = one odd true scene or number, outcome withheld, 14 words or fewer, under 4.5 seconds spoken.
 2. Story first, lesson second; the payoff sits in the line before the text, and the text line is the barber's action.
@@ -28,10 +30,11 @@ Updated 2026-11-22 (research.json 2026-11-21, stats.json 2026-11-18, 45 reels; n
 6. Voice follows posting/VOICE.md.
 
 ## Story bank
-- Used (never repeat): Pentagon pizza, coffin ship, London time lady, emu war, Waffle House, Girard, Gillette, giraffe, peas, Coca-Cola coupon, Kongo Gumi, Lexus, Costco, Starbucks, Netflix, Blockbuster, Domino's, Stew Leonard's, Amazon chair, Tesco, Zappos, Airbnb, New Coke, Cadbury Wispa, Taco Bell Mexican Pizza, Sewell Cadillac $332,000 customer, Wendy's Frosty Key Tag, McDonald's Szechuan sauce 2017, Squire 48.5-day gap, Krispy Kreme hole in the wall, Harley Owners Group, Chewy flowers (Anna Brose), Pizza Hut Book It.
+- Used (never repeat): Pentagon pizza, coffin ship, London time lady, emu war, Waffle House, Girard, Gillette, giraffe, peas, Coca-Cola coupon, Kongo Gumi, Lexus, Costco, Starbucks, Netflix, Blockbuster, Domino's, Stew Leonard's, Amazon chair, Tesco, Zappos, Airbnb, New Coke, Cadbury Wispa, Taco Bell Mexican Pizza, Sewell Cadillac $332,000 customer, Wendy's Frosty Key Tag, McDonald's Szechuan sauce 2017, Squire 48.5-day gap, Krispy Kreme hole in the wall, Harley Owners Group, Chewy flowers (Anna Brose), Pizza Hut Book It, Twinkies rush (Hostess closing, Nov 2012).
 - Verified 2026-11-21: Selling Power (2010, early-90s figures) says Sewell figures a loyal customer spends $332,000 and waived a $25 lockout fee, and keeps 115 loaner cars free for buyers. Wendy's page: $3 tag, free Classic Jr. Frosty with purchase through 12/31/27 (Fortune 2016: $2 tag). Szechuan: Oct 7 2017; THR says one LA store had 20 packets, crowd of 500 (body: hundreds), police dispersed, no arrests; McDonald's Oct 8 statement "wasn't near enough". Squire State of Barbershops 2026: 13.9M appointments, 7,000 shops, 48.5 days between visits; the "about 48% book once" figure appears only in Squire's blog, no sample size (always attribute).
 - Booksy blog says "nearly 70% of first-time clients never make it back" and 5x acquisition cost, no source: usable only attributed. Duolingo and Chewy stories: unverifiable, skip.
 - Verified 2026-11-22: Krispy Kreme 1937 Winston-Salem, hole in outside wall for sidewalk customers (KK UK, Atlanta Magazine; Hot Light 1992 is KK UK only). HOG launched 1983, about 25,000 expected (Fessler in Rider), about 1M members in 2013 (Rider), only rule is owning a Harley (Wikipedia). Chewy: Anna Brose, June 2022, refund, donate food, flowers (NBC, KTVU, Fortune); 600,000+ likes. Book It: 1984, free personal pan for a monthly reading goal, up to 6 a year, about 60M kids over 30 years (Pizza Hut 2014, single source). Not verified, skip: Sassoon grow-out, Book It families, Chewy as a win-back.
+- Verified 2026-11-22 (AP, Nov 17 2012, via CBS/Fox): box of 10 about $5; one seller listed three boxes for $300; a buyer hit Walgreens Friday night, then Target and a grocery store Saturday. Skip single-source: $5,000 single Twinkie, +2,000% Amazon sales (The Week only).
 - Candidates: LEGO 2003, Chick-fil-A, other "customers begged for it back" cases.
 
 ## Captions

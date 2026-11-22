@@ -190,5 +190,11 @@
     "sha1": "ad4a99af3e510dd724e7997fb6365f30bca16e2e",
     "checked_at": "2026-11-22T07:53:03.518Z",
     "note": "reviewed 2026-11-22: toy-world 3D reel (new style): 3.6s hook, ASR heard every word, frames checked per line, cover made"
+  },
+  "36-twinkie-rush.mp4": {
+    "approved": true,
+    "sha1": "c7ca16dfd75cf5a29a5ed861f3f1d8ab30568144",
+    "checked_at": "2026-11-22T19:33:52.003Z",
+    "note": "reviewed 2026-11-22: toy-world reel: hook 4.2s, 5 frames checked (people in frame, signs readable, no overlap with caption strip), facts per AP Nov 17 2012 (about $5 box, 3 boxes listed $300, Walgreens then Target), speech ASR unavailable, lines read aloud; one 'didn't X, just Y' pair"
   }
 }

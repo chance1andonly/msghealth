@@ -1,0 +1,58 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A Twinkies box cost five dollars. Saturday, three were listed for three hundred.",
+   "caps": [
+    "Twinkies: about *$5 a box.*",
+    "Saturday: three boxes for *$300.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.2
+  },
+  {
+   "say": "Hostess had just announced it was closing for good, and the shelves went crazy.",
+   "caps": [
+    "Hostess had just announced",
+    "it was *closing for good.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "One guy cleaned out a Walgreens Friday night, then hit Target the next morning.",
+   "caps": [
+    "One guy: *Walgreens* Friday night,",
+    "then *Target* the next morning."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Look, he didn't love Twinkies any more on Saturday. He just noticed they could be gone.",
+   "caps": [
+    "He didn't love them more Saturday.",
+    "He just *noticed they could be gone.*"
+   ],
+   "gap": 0.55,
+   "speed": 1.08
+  },
+  {
+   "say": "Your regulars are the same, so text him at week three, while his chair's still open.",
+   "caps": [
+    "Your regulars are the same.",
+    "Text him at *week three.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.05
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
