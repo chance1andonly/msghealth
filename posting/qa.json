@@ -110,8 +110,8 @@
   "23-zappos-call.mp4": {
     "approved": true,
     "sha1": "da99e17c6c8b5d3a07e88dc609b0f79dcc5af20b",
-    "checked_at": "2026-11-20T07:25:33.879Z",
-    "note": "reviewed 2026-11-20: graphics reel (draw 0.30): 10h29m per The World/NPR, Uggs sale per NPR, caption clipping fixed, frames checked, no ASR model available"
+    "checked_at": "2026-11-22T01:10:36.350Z",
+    "note": "reviewed 2026-11-21: qa timing ~27s total, hook ends ~4.3s, no dashes, contractions, varied rhythm, Zappos 10+ hour call (Las Vegas, movies, food, customer bought boots) fact ok, caption KEEP CTA + hashtags ok; line 4 long (19w) but one breath ok; no ASR model so lines read by hand"
   },
   "24-airbnb-photos.mp4": {
     "approved": true,
