@@ -54,6 +54,7 @@ const SOUNDS = {
   swoosh: { file: 'fx-swoosh.wav', anchor: 0.057 }, swish: { file: 'fx-swish.wav', anchor: 0.159 }, transition: { file: 'fx-transition.wav', anchor: 0.242 },
   transitionHit: { file: 'fx-transition-hit.wav', anchor: 0.62, skip: 0.36 }, key: { file: 'fx-key.wav', anchor: 0.036 }, ding: { file: 'fx-ding.wav', anchor: 0.058 },
   notification: { file: 'fx-notification.wav', anchor: 0.043 }, punch: { file: 'fx-punch.wav', anchor: 0.052 }, tap: { file: 'fx-tap.wav', anchor: 0.046 },
+  pop: { file: '../sfx/pop-small-in.wav', anchor: 0.01 }, whoosh: { file: '../sfx/whoosh-fast-soft.wav', anchor: 0.099 }, click: { file: '../sfx/click-mouse-soft.wav', anchor: 0.009 }, // CC0 quiet set (assets/sfx)
 };
 const unknown = [...new Set(sfx.map((c) => c.kind))].filter((k) => !SOUNDS[k]);
 if (unknown.length) throw new Error(`no sound for cue kind(s): ${unknown.join(', ')}`);

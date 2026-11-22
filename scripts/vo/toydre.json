@@ -1,0 +1,58 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Dray came in every two weeks for four years. Then seven weeks went by.",
+   "caps": [
+    "Dre came in *every two weeks*",
+    "for four years. Then *seven weeks.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So you open a missing persons case, and check his Instagram. Fresh fade. Definitely not yours.",
+   "caps": [
+    "You open a *missing persons case.*",
+    "His Instagram: fresh fade. *Not yours.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.1
+  },
+  {
+   "say": "So you drive across Atlanta, in a rental you've covered in plants so he won't spot you.",
+   "caps": [
+    "So you drive across Atlanta,",
+    "in a *rental covered in plants.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "You find him at Tony's, scrolling his phone. He looks up and goes, oh hey, I meant to book.",
+   "caps": [
+    "You find him at *Tony's,*",
+    "\"Oh hey, I *meant to book.*\""
+   ],
+   "gap": 0.5,
+   "speed": 1.1
+  },
+  {
+   "say": "Sure he did. One text at week three, and he never leaves.",
+   "caps": [
+    "Sure he did. One text at *week three*",
+    "and he *never leaves.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.05
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

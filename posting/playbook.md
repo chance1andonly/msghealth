@@ -48,3 +48,12 @@ only stats and cards. A reel is a people reel when its random draw says so (see 
 the 5 story scenes are `cast`, and the rest can be stat, versus or chat. Rules: one to three people on screen, a bubble line is
 never longer than the spoken line it matches, people tell the scene (a stylist waving, a client on his phone, a chair that
 stays empty) and the number or stake still appears as a chip. Keep the same look for the same person across scenes in one reel.
+
+## Toy-world reels (the default look)
+The channel's look is now low-poly 3D cartoons (src/toy.js, three.js): blocky toy people, barbershops, a lot, a road, night streets,
+name tags over heads, giant yellow callout words, chat scenes, then the kit's end card. Reference: the chase4 video the owner uploaded
+(an absurd chase story told in a toy world). Write the story as a scene: one shot per spoken line, one person doing one clear thing,
+one callout word or tag per shot. Keep the comic, specific, absurd hook, and end on the text-him payoff and the KEEP CTA.
+Shots: set shop|street|lot|road|night; actors p/car/crowd with poses idle walk run sit phone sitphone wave shock point cut sleep.
+Camera notes (portrait, fov 58): stay 8 to 11 units from one or two people, 15 to 19 for wide shots; keep actors inside +-3 of the camera x.
+Reference reel: src/toydre-reel.js. Render takes about 4 minutes per reel.
