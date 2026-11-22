@@ -134,8 +134,8 @@
   "27-mexican-pizza.mp4": {
     "approved": true,
     "sha1": "9449dc652728c154faefcc32f03b740a3b1b5824",
-    "checked_at": "2026-11-21T07:27:51.596Z",
-    "note": "reviewed 2026-11-21: graphics reel (draw 0.74): qa.py no flags, frames checked, facts: removed Nov 5 2020, petition 170k+ (sources say 170k to 200k, used the low), back May 19 2022, 7x demand per Taco Bell Aug 2022; ASR unavailable; caption uses check/cross verdict"
+    "checked_at": "2026-11-22T22:09:25.909Z",
+    "note": "reviewed 2026-11-22: qa no flags, hook 3.4s, ~31s total, contractions, no dashes, facts ok (petition 170k+, pulled Nov 5 2020, back May 19 2022, 7x demand per Taco Bell), caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
   },
   "28-sewell-fee.mp4": {
     "approved": true,
