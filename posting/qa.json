@@ -116,8 +116,8 @@
   "24-airbnb-photos.mp4": {
     "approved": true,
     "sha1": "f6bed61d50ffcb1a0eeffe4a6568c675fc4c3ec7",
-    "checked_at": "2026-11-20T19:30:15.650Z",
-    "note": "reviewed 2026-11-20: graphics reel: timing/wording flags clean, frame per line viewed, facts per Paul Graham essay (fees 460/897/1428, 4000/mo goal, camera); caption states the causality loosely (no claim trip caused the rise)"
+    "checked_at": "2026-11-22T13:09:25.196Z",
+    "note": "reviewed 2026-11-22: qa no flags, hook ~4.0s, ~27s total, no dashes, contractions, varied rhythm, Airbnb 2009 weekly figures 460/897/1428 per Paul Graham, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
   },
   "25-new-coke.mp4": {
     "approved": true,
