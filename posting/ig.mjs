@@ -3,6 +3,8 @@
 //
 //   node posting/ig.mjs check            test the token and show the account and its publishing limit
 //   node posting/ig.mjs post [--force]   post the next reel in posting/queue if a time slot is due (--force: post now)
+//   node posting/ig.mjs next              show queue order and how fresh each approval is
+//   node posting/ig.mjs prioritize A B    put the reels the validator chose first (posting/order.json)
 //   node posting/ig.mjs approve NAME    mark a queued reel as reviewed (required before it can post)
 //   node posting/ig.mjs optimize         pick the 3 best posting hours from your own reels' views; writes schedule.json + stats.json
 //   node posting/ig.mjs refresh          refresh the 60-day token; writes the new one to $NEW_TOKEN_FILE
@@ -97,6 +99,30 @@ async function publish0(uid, file, caption, trial) {
 }
 
 // node posting/ig.mjs approve NAME [note ...]: record that a reel passed review (stores the file's sha1)
+
+// Next-reel choice. posting/order.json ({"order":["NAME.mp4",...]}) lets the validator put the best reel first; otherwise name order.
+// A reel counts as FRESH when its approval (a review against the latest analytics) is at most FRESH_HOURS old; the poster prefers fresh reels
+// and only falls back to a stale approved one (with a warning) so the channel never goes silent. Optional posting/queue/NAME.meta.json
+// {"expires":"YYYY-MM-DD"} moves a time-sensitive reel to posting/held/ once it is past its date.
+const FRESH_HOURS = +(process.env.FRESH_HOURS || 4);
+const ORDER = path.join(DIR, 'order.json');
+function ageHours(f) { const q = readJson(QA, {})[f]; return q && q.checked_at ? (Date.now() - Date.parse(q.checked_at)) / 3600000 : 1e9; }
+function expired(f) { const m = path.join(QUEUE, f.replace(/\.mp4$/, '.meta.json')); const j = fs.existsSync(m) ? readJson(m, {}) : {}; return j.expires && j.expires < new Date().toISOString().slice(0, 10); }
+function ordered(all) { const o = (readJson(ORDER, {}).order || []).filter((f) => all.includes(f)); return o.concat(all.filter((f) => !o.includes(f))); }
+function pick(all) {
+  all.filter(expired).forEach((f) => { const H = path.join(DIR, 'held'); fs.mkdirSync(H, { recursive: true }); for (const e of ['.mp4', '.txt', '.meta.json']) { const a = path.join(QUEUE, f.replace(/\.mp4$/, e)); if (fs.existsSync(a)) fs.renameSync(a, path.join(H, path.basename(a))); } say(`expired, moved to held: ${f}`); });
+  const live = ordered(all.filter((f) => !expired(f))).filter(approved);
+  const fresh = live.find((f) => ageHours(f) <= FRESH_HOURS);
+  if (fresh) return fresh;
+  if (live[0]) say(`WARNING: no reel was validated in the last ${FRESH_HOURS}h; posting ${live[0]} on its older approval (${ageHours(live[0]).toFixed(1)}h old)`);
+  return live[0];
+}
+function nextCmd() { // shows what would post next and how fresh each approval is
+  const all = fs.readdirSync(QUEUE).filter((f) => f.endsWith('.mp4')).sort(); const o = ordered(all);
+  say('queue order (first posts next):'); o.forEach((f, i) => say(`${i + 1}. ${f}  ${approved(f) ? 'approved ' + ageHours(f).toFixed(1) + 'h ago' + (ageHours(f) <= FRESH_HOURS ? ' (fresh)' : ' (stale: re-validate)') : 'NOT approved'}${expired(f) ? '  EXPIRED' : ''}`));
+  const n = pick(all.slice()); say('next to post:', n || 'none');
+}
+function prioritize(first, more) { const names = [first, ...more].map((n) => (n.endsWith('.mp4') ? n : n + '.mp4')); for (const n of names) if (!fs.existsSync(path.join(QUEUE, n))) throw new Error('not in queue: ' + n); writeJson(ORDER, { order: names, set_at: new Date().toISOString() }); say('order set; posts first:', names.join(', ')); }
 async function approve(name, note) {
   const f = path.join(QUEUE, name.endsWith('.mp4') ? name : name + '.mp4'); if (!fs.existsSync(f)) throw new Error('no such reel in the queue: ' + name);
   const cov = path.join(DIR, 'covers', path.basename(f, '.mp4') + '.jpg');
@@ -112,7 +138,7 @@ async function post(force) {
   const all = fs.readdirSync(QUEUE).filter((f) => f.endsWith('.mp4')).sort();
   if (!all.length) { say('QUEUE EMPTY: add reels to posting/queue'); process.exitCode = 3; return; }
   const held = all.filter((f) => !approved(f)); if (held.length) say(`held back, not reviewed yet: ${held.join(', ')}`);
-  const next = all.find(approved);
+  const next = pick(all);
   if (!next) { say('NOTHING APPROVED: every queued reel still needs its review (node posting/ig.mjs approve NAME)'); process.exitCode = 3; return; }
   const file = path.join(QUEUE, next), capFile = file.replace(/\.mp4$/, '.txt');
   const caption = fs.existsSync(capFile) ? fs.readFileSync(capFile, 'utf8').trim() : '';
@@ -187,6 +213,6 @@ async function refresh() {
 }
 
 const [cmd, flag, ...rest] = process.argv.slice(2);
-if (!TOKEN && !(cmd === 'post' && DRY) && cmd !== 'approve') { console.error('IG_TOKEN is not set. Add it under Settings → Secrets and variables → Actions.'); process.exit(2); }
-({ check, post: () => post(flag === '--force'), approve: () => approve(flag, rest.join(' ')), optimize, refresh }[cmd] || (() => { console.error('usage: node posting/ig.mjs check|post [--force]|optimize|refresh'); process.exit(2); }))()
+if (!TOKEN && !(cmd === 'post' && DRY) && !['approve', 'next', 'prioritize'].includes(cmd)) { console.error('IG_TOKEN is not set. Add it under Settings → Secrets and variables → Actions.'); process.exit(2); }
+({ check, post: () => post(flag === '--force'), approve: () => approve(flag, rest.join(' ')), next: async () => nextCmd(), prioritize: async () => prioritize(flag, rest), optimize, refresh }[cmd] || (() => { console.error('usage: node posting/ig.mjs check|post [--force]|optimize|refresh'); process.exit(2); }))()
   .catch((e) => { console.error('ERROR', e.message, e.data ? JSON.stringify(e.data) : ''); process.exit(1); });

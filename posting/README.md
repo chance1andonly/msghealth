@@ -51,3 +51,10 @@ It uses only Meta's official API (Business Discovery and hashtag search) and Goo
 It uses the same `IG_TOKEN` and the `ig_user_id` in `schedule.json`; no extra token or Facebook Page is needed. Optional: a free YouTube Data API v3 key (Google Cloud console → Credentials → API key) saved as the secret `YOUTUBE_API_KEY` adds the Shorts trends. Then run Actions → Instagram autopost → Run workflow → `research`.
 
 Edit `watchlist.json` to change who you benchmark against. Only public professional accounts can be read. Personal or private ones are skipped and listed under `errors`.
+
+## Validate-before-post (just in time)
+Every post is chosen by a review against the latest analytics, done within a few hours of its slot, not the night before.
+- `node posting/ig.mjs next` shows the queue order and how old each approval is (fresh = under 4 hours, FRESH_HOURS).
+- `node posting/ig.mjs prioritize A.mp4 B.mp4` writes posting/order.json so the reel the validator chose posts first.
+- `approve` re-stamps the approval time; the poster prefers fresh approved reels and only falls back to an older approval with a warning.
+- Optional posting/queue/NAME.meta.json {"expires":"YYYY-MM-DD"} moves a time-sensitive reel to posting/held/ after that date.
