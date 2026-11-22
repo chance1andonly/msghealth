@@ -128,8 +128,8 @@
   "26-wispa-bars.mp4": {
     "approved": true,
     "sha1": "4af2fcddb22e25222dd2bcaf33f4eda03a429942",
-    "checked_at": "2026-11-21T07:27:51.185Z",
-    "note": "reviewed 2026-11-21: people reel (draw 0.20; 3 cast scenes): qa.py no flags, frames checked, facts: Wispa dropped 2003, ~14,000 Facebook members Aug 2007 (Confectionery News), 23M limited run Oct 2007 (Wikipedia/Confectionery News); ASR unavailable, lines read aloud; caption uses A/B question"
+    "checked_at": "2026-11-22T20:09:45.292Z",
+    "note": "reviewed 2026-11-22: qa no flags, ~27s total, hook line ends ~4.8s (borderline ok), no dashes, contractions, varied rhythm, Wispa 2003 drop/Aug 2007 14k Facebook members/Oct 2007 return 23M bars ok, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
   },
   "27-mexican-pizza.mp4": {
     "approved": true,
