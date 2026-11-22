@@ -1,0 +1,59 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A baker cut a hole in his wall in 1937. Strangers kept asking.",
+   "caps": [
+    "A baker cut *a hole* in his wall",
+    "in 1937. *Strangers kept asking.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.18
+  },
+  {
+   "say": "Vernon Rudolph only sold his doughnuts to grocery stores. But people on the sidewalk wanted them hot.",
+   "caps": [
+    "He only sold to *grocery stores.*",
+    "People on the sidewalk *wanted them hot.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "So he cut a hole in an outside wall and sold them right there.",
+   "caps": [
+    "So he cut a hole *in the wall*",
+    "and sold them *right there.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.1
+  },
+  {
+   "say": "Nobody had to be sold. Those customers were already outside, they just needed a door.",
+   "caps": [
+    "Nobody had to be sold.",
+    "They were *already outside,*",
+    "they just needed *a door.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Been a minute. Chair's open Thursday.",
+   "caps": [
+    "Been a minute.",
+    "Chair's open *Thursday.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

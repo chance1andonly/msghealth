@@ -1,0 +1,59 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 1983, Harley started an owners club, hoping for twenty-five thousand.",
+   "caps": [
+    "In 1983, Harley started",
+    "*an owners club,*",
+    "hoping for *25,000.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.22
+  },
+  {
+   "say": "You only had to own one bike to join. That was the whole rule.",
+   "caps": [
+    "You only had to *own one bike.*",
+    "That was *the whole rule.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The point was staying in touch with riders, long after they'd paid.",
+   "caps": [
+    "The point was *staying in touch,*",
+    "long after they'd *paid.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.1
+  },
+  {
+   "say": "By 2013, Rider magazine counted about a million members. Buying the bike was just the ticket in.",
+   "caps": [
+    "By 2013, about *a million members.*",
+    "Buying the bike was *the ticket in.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Been a minute. Chair's open Thursday.",
+   "caps": [
+    "Been a minute.",
+    "Chair's open *Thursday.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

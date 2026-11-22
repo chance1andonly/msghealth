@@ -1,0 +1,59 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 1984, Pizza Hut started paying kids in pizza to read.",
+   "caps": [
+    "In 1984, Pizza Hut started",
+    "paying kids *in pizza* to read."
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "Hit your teacher's reading goal, and you got a free personal pan pizza.",
+   "caps": [
+    "Hit the teacher's *reading goal,*",
+    "get a *free personal pizza.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "And the goals reset every month, up to six a year.",
+   "caps": [
+    "The goals *reset every month,*",
+    "up to *six a year.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.1
+  },
+  {
+   "say": "Pizza Hut says about sixty million kids joined over thirty years. A reason to come back, every month.",
+   "caps": [
+    "Pizza Hut says *60 million kids*",
+    "joined over 30 years. *Every month,*",
+    "a reason to come back."
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Been a minute. Chair's open Thursday.",
+   "caps": [
+    "Been a minute.",
+    "Chair's open *Thursday.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

@@ -160,5 +160,29 @@
     "sha1": "4871f2065ac0cd5877e1b8b38d69392c0eb7b33e",
     "checked_at": "2026-11-21T19:30:10.437Z",
     "note": "reviewed 2026-11-21: graphics reel (draw 0.783): stat-first test hook, 13.9M/7,000 shops/48.5 days from Squire 2026 report, 48% attributed to Squire blog, no sample size"
+  },
+  "32-krispy-hole.mp4": {
+    "approved": true,
+    "sha1": "51ce0c8c945399a4ef7368c8f6b21755e48e1957",
+    "checked_at": "2026-11-22T07:33:08.138Z",
+    "note": "reviewed 2026-11-22: graphics reel: qa no flags, hook 4.2s, ~25s, contractions, no dashes, Krispy Kreme 1937 hole in the wall per KK UK + Atlanta Magazine (no price/back-door claims); no ASR model so lines read by hand; frames checked"
+  },
+  "33-harley-hog.mp4": {
+    "approved": true,
+    "sha1": "9f848e3a69c44e8de2aae1907c9023b8f59424a1",
+    "checked_at": "2026-11-22T07:33:08.577Z",
+    "note": "reviewed 2026-11-22: PEOPLE reel (3 of 5 scenes cast, draw 0.25): qa no flags, ~24s; HOG 1983, 25,000 expected per Fessler/Rider, ~1M members per Rider 2013, only-one-bike rule per Wikipedia; cast frames checked, people fully visible; lines read by hand"
+  },
+  "34-chewy-flowers.mp4": {
+    "approved": true,
+    "sha1": "c1d54933e1bff870f9993df568917185c3dd6388",
+    "checked_at": "2026-11-22T07:33:59.549Z",
+    "note": "reviewed 2026-11-22: graphics reel: qa no flags, hook 3.8s; Anna Brose/Gus June 2022 refund+flowers per NBC, KTVU, Fortune; 600,000+ likes attributed; removed unsupported 'no ad' claim; lines read by hand"
+  },
+  "35-bookit-pizza.mp4": {
+    "approved": true,
+    "sha1": "ffcd5e9a4bd1a2dcd2c3d04fdd5e3eab8abca0f9",
+    "checked_at": "2026-11-22T07:33:09.376Z",
+    "note": "reviewed 2026-11-22: graphics reel: qa no flags; Book It 1984, free personal pan, up to 6 monthly goals, ~60M kids per Pizza Hut 2014 (single source, attributed); lines read by hand"
   }
 }

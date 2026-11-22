@@ -1,0 +1,58 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A woman tried to return a bag of dog food and got flowers instead.",
+   "caps": [
+    "She tried to return *dog food*",
+    "and got *flowers instead.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "Anna Brose's dog Gus had died a week earlier. She only wanted a refund.",
+   "caps": [
+    "Her dog Gus *had died*",
+    "a week earlier. She wanted *a refund.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Chewy refunded her, said to donate the food, and sent flowers to her porch.",
+   "caps": [
+    "Chewy *refunded her,*",
+    "and sent *flowers to her porch.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.1
+  },
+  {
+   "say": "More than six hundred thousand people liked her tweet. All Chewy did was notice.",
+   "caps": [
+    "*600,000+ likes* on her tweet.",
+    "All Chewy did was *notice.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.05
+  },
+  {
+   "say": "Been a minute. Chair's open Thursday.",
+   "caps": [
+    "Been a minute.",
+    "Chair's open *Thursday.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
