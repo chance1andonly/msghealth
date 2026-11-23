@@ -230,8 +230,8 @@
   "44-toy-why-clients-leave.mp4": {
     "approved": true,
     "sha1": "f27474f72c41d45f023b64e8fe88e707ae707171",
-    "checked_at": "2026-11-23T08:50:57.216Z",
-    "note": ""
+    "checked_at": "2026-11-23T15:14:47.664Z",
+    "note": "validated 2026-11-23 10:20 ET: pronunciation OK (plain words, no names; no ASR here, script read by hand), frames OK (contact sheet: subject in frame, callouts clear of caption zone, no broken shot), analytics: why-clients-leave question hook matches the 1.7M-view research topic, explainer follows the viral goat-truck so style alternates, no topic repeat, caption has KEEP CTA + 3 hashtags"
   },
   "42-toy-swat-wrong-door.mp4": {
     "approved": true,
