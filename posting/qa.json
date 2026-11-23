@@ -1,284 +1,284 @@
 {
- "16-espresso.mp4": {
-  "approved": true,
-  "sha1": "65e3df1abd52138b94774d2bb83ccf716199e528",
-  "checked_at": "2026-11-20T22:09:24.177Z",
-  "note": "reviewed 2026-11-20: qa timing ~27s total, hook line ends ~4.6s (borderline ok), no dashes, contractions, one mild never/just-stop pair only, Starbucks 2008 7,000 stores/135,000 staff facts ok, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
- },
- "11-five-times.mp4": {
-  "approved": true,
-  "sha1": "8bef9044b05b32120d93125c096d59a338e726cc",
-  "checked_at": "2026-11-19T22:08:58.129Z",
-  "note": "reviewed 2026-11-19: qa no flags, hook 2.9s, ~27s total, contractions, no em dashes, caption ends with KEEP CTA + hashtags; 5x acquisition-cost claim is the common rule of thumb, caption says about; no ASR model so lines read by hand"
- },
- "08b-razor.mp4": {
-  "approved": true,
-  "sha1": "234d9e41545d9df94c10dcb9ff70a952a9691f20",
-  "checked_at": "2026-11-18T22:10:10.453Z",
-  "note": "reviewed 2026-11-18: timing 24s hook 3.8s, wording no AI tells, no dashes, facts (Gillette 51/90,884) ok, caption KEEP+hashtags ok"
- },
- "09-thursdays.mp4": {
-  "approved": true,
-  "sha1": "6cfc22d9b4990bec33f696ad05d3a8cfb85a6e4f",
-  "checked_at": "2026-11-19T01:09:46.863Z",
-  "note": "reviewed 2026-11-19: timing ~25s hook 2.7s, no AI tells or dashes, contractions, facts ok, caption KEEP+hashtags ok"
- },
- "14-lexus.mp4": {
-  "approved": true,
-  "sha1": "e415e3d6a2311c23eb10bbb50470026a11aed9d4",
-  "checked_at": "2026-11-20T16:16:04.960Z",
-  "note": "reviewed 2026-11-20: qa no flags, hook 3.8s, ~26s total, no dashes, contractions, 1989 LS400 recall (~8,000 cars, cruise control + brake light wiring) fact ok, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
- },
- "12-interview.mp4": {
-  "approved": true,
-  "sha1": "61cc69e9440918af59e63bbf7b3eae43879ec359",
-  "checked_at": "2026-11-20T13:09:44.243Z",
-  "note": "reviewed 2026-11-20: qa timing 26s hook 2.9s, one not-X-its-Y reversal only, contractions, no dashes, no factual claims, no ASR model so lines read by hand, caption has KEEP CTA + hashtags"
- },
- "15-hotdog.mp4": {
-  "approved": true,
-  "sha1": "dd38b2514748c12f5c674141e26fc04ea64a59fc",
-  "checked_at": "2026-11-18T20:40:05.709Z",
-  "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
- },
- "10b-peas.mp4": {
-  "approved": true,
-  "sha1": "8a084b1cb3f20e92d3a278ad8e40c97b6e0a76ad",
-  "checked_at": "2026-11-19T19:10:33.311Z",
-  "note": "reviewed 2026-11-19: hook 3.4s, total ~22s, no dead air; script read aloud, plain contractions, one question, no em dashes or AI tells; Pareto pea fact true; caption ends with KEEP CTA + hashtags; ASR unavailable, no hard words"
- },
- "13-kongo.mp4": {
-  "approved": true,
-  "sha1": "50de8bb1c44b5b02e21b0bb0644430599f1220d4",
-  "checked_at": "2026-11-18T20:40:05.766Z",
-  "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
- },
- "11b-coupon.mp4": {
-  "approved": true,
-  "sha1": "0dcf08088adbde5757e3236f5d9094986a66dbca",
-  "checked_at": "2026-11-20T01:09:38.586Z",
-  "note": "reviewed 2026-11-20: qa no timing flags, 26.6s total, hook 4.2s, contractions, no em dashes, one X/Y reversal only, 1888/8.5M/1913 coupon claim is the standard Coca-Cola figure, caption ends with KEEP CTA + hashtags; no ASR model so lines read by hand"
- },
- "10-see-you-next.mp4": {
-  "approved": true,
-  "sha1": "808a2820809c073965d4981d9a7b887810c233a8",
-  "checked_at": "2026-11-19T16:11:19.258Z",
-  "note": "reviewed 2026-11-19: hook 2.8s, total ~25s, no dashes/AI tells, contractions, lines read aloud (no ASR model), caption KEEP+hashtags ok; 48% stat is an industry claim, unverified"
- },
- "09b-giraffe.mp4": {
-  "approved": true,
-  "sha1": "c9fd0c0c416d5071b8ffbecf82cce93e28c34622",
-  "checked_at": "2026-11-19T13:10:34.788Z",
-  "note": "reviewed 2026-11-19: hook 2.6s, total ~22s, wording no AI tells/dashes, facts ok (Ritz-Carlton Joshie story), qa no flags, caption KEEP+hashtags ok"
- },
- "17-netflix.mp4": {
-  "approved": true,
-  "sha1": "fd20764c8a51213e32e710f9347e039decf0493c",
-  "checked_at": "2026-11-21T01:09:47.405Z",
-  "note": "reviewed 2026-11-20: re-read script and caption; hook 4.1s, total ~32s, facts per AP/Quartz, contractions, no em dashes, one reversal only, KEEP CTA and hashtags present; no ASR model, lines read aloud"
- },
- "18-late-fees.mp4": {
-  "approved": true,
-  "sha1": "421c8593addeac93324413a343d1c58886623907",
-  "checked_at": "2026-11-21T13:09:07.235Z",
-  "note": "reviewed 2026-11-21: qa timing ~28s, hook ends ~4.5s (borderline ok), no dashes, contractions, varied lengths, no repeated reversal, Blockbuster 2000 $800M late fees ~16% revenue ok, line 4 long (21w) but reads fine, caption question + KEEP CTA + hashtags ok; no ASR model so lines read by hand"
- },
- "19-domino.mp4": {
-  "approved": true,
-  "sha1": "53fcc8ca65dcce22c8a5e4c4781032209c017d56",
-  "checked_at": "2026-11-19T19:31:26.109Z",
-  "note": "reviewed 2026-11-19: qa flags clean, caption chunks fit, frames checked, facts (cardboard quote, ~14% same-store Q1 2010, 18-month rebuild) from Inc/NBC/QSR; no ASR model so lines read and checked by hand"
- },
- "20-stew-rock.mp4": {
-  "approved": true,
-  "sha1": "c0fdb345ecd90ccb594fed029bb520af09815e2c",
-  "checked_at": "2026-11-21T16:11:26.079Z",
-  "note": "reviewed 2026-11-21: qa no flags, hook 3.5s, ~30s total, contractions, no dashes, caption KEEP CTA + hashtags ok; Stew Leonard's rock/Guinness sales per sq ft claim is the commonly cited one; no ASR model so lines read by hand. 19-domino held (launch-timing line unverified, no TTS models to fix)"
- },
- "21-empty-chair.mp4": {
-  "approved": true,
-  "sha1": "e5afe97f09d0fc47d123d9687c8a055d98ee052c",
-  "checked_at": "2026-11-21T19:09:10.022Z",
-  "note": "reviewed 2026-11-21: qa no flags, hook 3.6s, ~28s total, no dashes, contractions, Amazon empty chair story hedged as per a former exec, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
- },
- "22-tesco-data.mp4": {
-  "approved": true,
-  "sha1": "bb5977cf4ce5b664655faf937f079c877cef2543",
-  "checked_at": "2026-11-21T22:12:38.380Z",
-  "note": "reviewed 2026-11-21: timing 4.3s hook/32s total, fixed unverifiable 'nine stores' and 'a year after' claims, rebuilt VO, no em dashes, caption ends KEEP CTA + hashtags, lines read aloud"
- },
- "23-zappos-call.mp4": {
-  "approved": true,
-  "sha1": "da99e17c6c8b5d3a07e88dc609b0f79dcc5af20b",
-  "checked_at": "2026-11-22T01:10:36.350Z",
-  "note": "reviewed 2026-11-21: qa timing ~27s total, hook ends ~4.3s, no dashes, contractions, varied rhythm, Zappos 10+ hour call (Las Vegas, movies, food, customer bought boots) fact ok, caption KEEP CTA + hashtags ok; line 4 long (19w) but one breath ok; no ASR model so lines read by hand"
- },
- "24-airbnb-photos.mp4": {
-  "approved": true,
-  "sha1": "f6bed61d50ffcb1a0eeffe4a6568c675fc4c3ec7",
-  "checked_at": "2026-11-22T13:09:25.196Z",
-  "note": "reviewed 2026-11-22: qa no flags, hook ~4.0s, ~27s total, no dashes, contractions, varied rhythm, Airbnb 2009 weekly figures 460/897/1428 per Paul Graham, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
- },
- "25-new-coke.mp4": {
-  "approved": true,
-  "sha1": "f549a6eb662dfd81b775c517a754810c57931f56",
-  "checked_at": "2026-11-22T16:09:27.323Z",
-  "note": "reviewed 2026-11-22: hook 3.6s, total ~32s; wording no em dashes/one reversal; facts (200k tests, 1,500/day vs 400, 79 days, 31,600 calls) match Coca-Cola history; caption ends KEEP CTA + hashtags; lines read by hand"
- },
- "26-wispa-bars.mp4": {
-  "approved": true,
-  "sha1": "4af2fcddb22e25222dd2bcaf33f4eda03a429942",
-  "checked_at": "2026-11-22T20:09:45.292Z",
-  "note": "reviewed 2026-11-22: qa no flags, ~27s total, hook line ends ~4.8s (borderline ok), no dashes, contractions, varied rhythm, Wispa 2003 drop/Aug 2007 14k Facebook members/Oct 2007 return 23M bars ok, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
- },
- "27-mexican-pizza.mp4": {
-  "approved": true,
-  "sha1": "9449dc652728c154faefcc32f03b740a3b1b5824",
-  "checked_at": "2026-11-22T22:09:25.909Z",
-  "note": "reviewed 2026-11-22: qa no flags, hook 3.4s, ~31s total, contractions, no dashes, facts ok (petition 170k+, pulled Nov 5 2020, back May 19 2022, 7x demand per Taco Bell), caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
- },
- "28-sewell-fee.mp4": {
-  "approved": true,
-  "sha1": "6d510807e190f7d780896077e17beaa5157e2b6b",
-  "checked_at": "2026-11-23T00:13:18.581Z",
-  "note": "validated 2026-11-22 19:20 ET: stats.json (64 reels) shows no new winners; last 2 posts were candy and pizza food reels, so picked non-food car-dealer story (odd true scene, outcome withheld, then barber action) that matches top-reel structure; qa no flags, 24s, hook 3.6s, $332K and 115 loaners attributed to Selling Power, frames match each line, caption has KEEP CTA, verdict, 3 hashtags"
- },
- "29-wendys-key-tag.mp4": {
-  "approved": true,
-  "sha1": "1a5c25d2868646303a033e94d79c83b0b38593a5",
-  "checked_at": "2026-11-21T19:30:09.675Z",
-  "note": "reviewed 2026-11-21: graphics reel (draw 0.482): $3 tag per wendys.com, frames and wording checked"
- },
- "30-mcdonalds-sauce.mp4": {
-  "approved": true,
-  "sha1": "629d91422fa54b2abd64e703aeb6470186bae183",
-  "checked_at": "2026-11-21T19:30:10.082Z",
-  "note": "reviewed 2026-11-21: people reel (draw 0.249): 3 cast scenes viewed, bubbles readable, 20 packets/crowd per Hollywood Reporter, quote per McDonald's Oct 8 2017 statement"
- },
- "31-squire-48-days.mp4": {
-  "approved": true,
-  "sha1": "4871f2065ac0cd5877e1b8b38d69392c0eb7b33e",
-  "checked_at": "2026-11-21T19:30:10.437Z",
-  "note": "reviewed 2026-11-21: graphics reel (draw 0.783): stat-first test hook, 13.9M/7,000 shops/48.5 days from Squire 2026 report, 48% attributed to Squire blog, no sample size"
- },
- "32-krispy-hole.mp4": {
-  "approved": true,
-  "sha1": "51ce0c8c945399a4ef7368c8f6b21755e48e1957",
-  "checked_at": "2026-11-22T07:33:08.138Z",
-  "note": "reviewed 2026-11-22: graphics reel: qa no flags, hook 4.2s, ~25s, contractions, no dashes, Krispy Kreme 1937 hole in the wall per KK UK + Atlanta Magazine (no price/back-door claims); no ASR model so lines read by hand; frames checked"
- },
- "33-harley-hog.mp4": {
-  "approved": true,
-  "sha1": "9f848e3a69c44e8de2aae1907c9023b8f59424a1",
-  "checked_at": "2026-11-23T01:15:24.931Z",
-  "note": "validated 2026-11-22 20:20 ET: stats refreshed (65 reels, no views yet for last 6 posts; 20-23h and 8h best hours). Picked HOG people reel: not food, differs from last 3 (wispa, mexican pizza, sewell); script/frames/caption checked, facts not date-bound, qa no flags"
- },
- "34-chewy-flowers.mp4": {
-  "approved": true,
-  "sha1": "c1d54933e1bff870f9993df568917185c3dd6388",
-  "checked_at": "2026-11-22T07:33:59.549Z",
-  "note": "reviewed 2026-11-22: graphics reel: qa no flags, hook 3.8s; Anna Brose/Gus June 2022 refund+flowers per NBC, KTVU, Fortune; 600,000+ likes attributed; removed unsupported 'no ad' claim; lines read by hand"
- },
- "35-bookit-pizza.mp4": {
-  "approved": true,
-  "sha1": "ffcd5e9a4bd1a2dcd2c3d04fdd5e3eab8abca0f9",
-  "checked_at": "2026-11-22T07:33:09.376Z",
-  "note": "reviewed 2026-11-22: graphics reel: qa no flags; Book It 1984, free personal pan, up to 6 monthly goals, ~60M kids per Pizza Hut 2014 (single source, attributed); lines read by hand"
- },
- "32-toy-dre-missing.mp4": {
-  "approved": true,
-  "sha1": "ad4a99af3e510dd724e7997fb6365f30bca16e2e",
-  "checked_at": "2026-11-22T07:53:03.518Z",
-  "note": "reviewed 2026-11-22: toy-world 3D reel (new style): 3.6s hook, ASR heard every word, frames checked per line, cover made"
- },
- "36-twinkie-rush.mp4": {
-  "approved": true,
-  "sha1": "c7ca16dfd75cf5a29a5ed861f3f1d8ab30568144",
-  "checked_at": "2026-11-22T19:33:52.003Z",
-  "note": "reviewed 2026-11-22: toy-world reel: hook 4.2s, 5 frames checked (people in frame, signs readable, no overlap with caption strip), facts per AP Nov 17 2012 (about $5 box, 3 boxes listed $300, Walgreens then Target), speech ASR unavailable, lines read aloud; one 'didn't X, just Y' pair"
- },
- "37-bluebell-return.mp4": {
-  "approved": true,
-  "sha1": "6cb9145e6dda6624a3f58306caf218f08f327bd1",
-  "checked_at": "2026-11-23T07:49:11.398Z",
-  "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
- },
- "38-saturn-homecoming.mp4": {
-  "approved": true,
-  "sha1": "5bd4fda08dd264ca5a96db9fdb006baf4124dca4",
-  "checked_at": "2026-11-23T07:49:13.273Z",
-  "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
- },
- "39-chickfila-snow.mp4": {
-  "approved": true,
-  "sha1": "bb6e39cf4679c7d8bdfa98aa42e74c24cfcd1147",
-  "checked_at": "2026-11-23T07:49:15.047Z",
-  "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
- },
- "40-toy-goat-truck.mp4": {
-  "approved": true,
-  "sha1": "a606ecee44f8f984dc5810eb75a35b55c950d51d",
-  "checked_at": "2026-11-23T13:14:34.668Z",
-  "note": "validated 2026-11-23 08:20 ET: pronunciation OK (no names/odd words; ASR model unavailable, lines read by hand), frames OK (7 shots checked, hook/callouts/caption zone clear, rival shop sign slightly cropped but readable), analytics: story-hook comedic toy-world reel with a concrete pain hook under 4s, ~26s, KEEP CTA; topic differs from last post (Sewell fee), best fit vs recent weak explainers"
- },
- "41-toy-what-is-msghealth.mp4": {
-  "approved": true,
-  "sha1": "9c3212305427af3470d2b3ab85eb4247d3ffe49a",
-  "checked_at": "2026-11-23T08:50:57.603Z",
-  "note": ""
- },
- "44-toy-why-clients-leave.mp4": {
-  "approved": true,
-  "sha1": "f27474f72c41d45f023b64e8fe88e707ae707171",
-  "checked_at": "2026-11-23T15:14:47.664Z",
-  "note": "validated 2026-11-23 10:20 ET: pronunciation OK (plain words, no names; no ASR here, script read by hand), frames OK (contact sheet: subject in frame, callouts clear of caption zone, no broken shot), analytics: why-clients-leave question hook matches the 1.7M-view research topic, explainer follows the viral goat-truck so style alternates, no topic repeat, caption has KEEP CTA + 3 hashtags"
- },
- "42-toy-swat-wrong-door.mp4": {
-  "approved": true,
-  "sha1": "7e60b3d3f03cf65cb4c8f8f84fbf09bbe82214e3",
-  "checked_at": "2026-11-23T17:14:54.498Z",
-  "note": "validated 2026-11-23 12:30 ET: pronunciation OK (plain words, no names spoken; no ASR model here, script read by hand), frames OK (contact sheet + extra frames: Dre centered, callouts clear of caption zone, bakery sign edge-cropped only mid-crush), analytics: viral escalation hook <4s follows explainer 44 so style alternates; same shape as goat reel but different topic and 5h apart; no better-performing alternative in data (toy reels unmeasured); caption fixed to one emoji + question + KEEP + 3 hashtags"
- },
- "43-toy-parade-goat.mp4": {
-  "approved": true,
-  "sha1": "a040f1497983972e46f7dfa83e2170e33d6a8902",
-  "checked_at": "2026-11-23T08:50:57.646Z",
-  "note": ""
- },
- "45-toy-door-kick.mp4": {
-  "approved": true,
-  "sha1": "c09f4043ac84e9315f2ad1b9fc593afaa648bb23",
-  "checked_at": "2026-11-23T19:10:48.274Z",
-  "note": "validated toydoor: pronunciation OK (ASR 'message health', Dray), frames OK (flicker none, contact sheets reviewed), analytics: viral story w/ KEEP chip all video; real performance unverified"
- },
- "46-toy-missing-client.mp4": {
-  "approved": true,
-  "sha1": "cb19e73d25f8156e1f66ed9b159611d7096032f4",
-  "checked_at": "2026-11-23T19:16:31.883Z",
-  "note": "validated toymissing: pronunciation OK, frames OK (flicker none, sheets reviewed), viral escalation; real performance unverified"
- },
- "47-toy-what-is-msghealth.mp4": {
-  "approved": true,
-  "sha1": "af84a27609c71eedfc4b345b0e429b30336f6513",
-  "checked_at": "2026-11-23T19:28:05.247Z",
-  "note": "validated toyexplain2: pronunciation OK (ASR 'Message Health'), frames OK (chat card/stat overlap fixed, flicker none); explainer; real performance unverified"
- },
- "48-toy-funeral-client.mp4": {
-  "approved": true,
-  "sha1": "f1bc80320a24175de02faf94e64184601203ce93",
-  "checked_at": "2026-11-23T20:07:52.229Z",
-  "note": "reviewed 2026-11-23 VIRAL funeral. Gate1 words: ASR matches script (Terrell, lineup, haircut; 'fade' swapped to 'haircut' after ASR heard 'fate'). Gate2 frames: contact sheet one frame per shot, re-rendered after fixing off-edge client and flowers panel overlap; nothing in caption zone. Gate3: absurd escalating hook (assumed he died, funeral), 54s, withheld ending, text-at-week-three payoff, KEEP caption + question; no toy-world view data yet (3 posted today too new), so predicted from hook shape of top reels (odd scene, outcome withheld), not proven"
- },
- "49-toy-barber-duel.mp4": {
-  "approved": true,
-  "sha1": "3ea7ef56dec86a0193cfed2d1b43a2736e01d4c1",
-  "checked_at": "2026-11-23T20:07:52.301Z",
-  "note": "reviewed 2026-11-23 VIRAL duel. Gate1: ASR matches script (Jaylen heard as Jalen, valid reading). Gate2: contact sheet checked, re-rendered once to pull actors in from frame edges; nothing in caption zone. Gate3: concrete absurd hook (duel with the other barber, cape), escalation 300 spectators + helicopter, reveal 'you never texted me', week-three payoff, KEEP caption + question; no toy view data yet, predicted from top-reel hook shape, unproven"
- },
- "50-toy-three-steps.mp4": {
-  "approved": true,
-  "sha1": "f980e40be71b1359bf7a74ef6d56253d20f23fcd",
-  "checked_at": "2026-11-23T20:07:52.368Z",
-  "note": "reviewed 2026-11-23 EXPLAINER. Gate1: ASR matches script, Message Health pronounced right. Gate2: contact sheet checked, re-rendered to move STEP 3 counter off the chat header; panels readable, caption zone clear. Gate3: 38s, hook 'someone in your book went quiet' then score, text, book, reviews/payments/inbox per PRODUCT.md only; caption ends with KEEP CTA; no toy view data yet, unproven"
- }
+  "16-espresso.mp4": {
+    "approved": true,
+    "sha1": "65e3df1abd52138b94774d2bb83ccf716199e528",
+    "checked_at": "2026-11-20T22:09:24.177Z",
+    "note": "reviewed 2026-11-20: qa timing ~27s total, hook line ends ~4.6s (borderline ok), no dashes, contractions, one mild never/just-stop pair only, Starbucks 2008 7,000 stores/135,000 staff facts ok, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
+  },
+  "11-five-times.mp4": {
+    "approved": true,
+    "sha1": "8bef9044b05b32120d93125c096d59a338e726cc",
+    "checked_at": "2026-11-19T22:08:58.129Z",
+    "note": "reviewed 2026-11-19: qa no flags, hook 2.9s, ~27s total, contractions, no em dashes, caption ends with KEEP CTA + hashtags; 5x acquisition-cost claim is the common rule of thumb, caption says about; no ASR model so lines read by hand"
+  },
+  "08b-razor.mp4": {
+    "approved": true,
+    "sha1": "234d9e41545d9df94c10dcb9ff70a952a9691f20",
+    "checked_at": "2026-11-18T22:10:10.453Z",
+    "note": "reviewed 2026-11-18: timing 24s hook 3.8s, wording no AI tells, no dashes, facts (Gillette 51/90,884) ok, caption KEEP+hashtags ok"
+  },
+  "09-thursdays.mp4": {
+    "approved": true,
+    "sha1": "6cfc22d9b4990bec33f696ad05d3a8cfb85a6e4f",
+    "checked_at": "2026-11-19T01:09:46.863Z",
+    "note": "reviewed 2026-11-19: timing ~25s hook 2.7s, no AI tells or dashes, contractions, facts ok, caption KEEP+hashtags ok"
+  },
+  "14-lexus.mp4": {
+    "approved": true,
+    "sha1": "e415e3d6a2311c23eb10bbb50470026a11aed9d4",
+    "checked_at": "2026-11-20T16:16:04.960Z",
+    "note": "reviewed 2026-11-20: qa no flags, hook 3.8s, ~26s total, no dashes, contractions, 1989 LS400 recall (~8,000 cars, cruise control + brake light wiring) fact ok, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
+  },
+  "12-interview.mp4": {
+    "approved": true,
+    "sha1": "61cc69e9440918af59e63bbf7b3eae43879ec359",
+    "checked_at": "2026-11-20T13:09:44.243Z",
+    "note": "reviewed 2026-11-20: qa timing 26s hook 2.9s, one not-X-its-Y reversal only, contractions, no dashes, no factual claims, no ASR model so lines read by hand, caption has KEEP CTA + hashtags"
+  },
+  "15-hotdog.mp4": {
+    "approved": true,
+    "sha1": "dd38b2514748c12f5c674141e26fc04ea64a59fc",
+    "checked_at": "2026-11-18T20:40:05.709Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "10b-peas.mp4": {
+    "approved": true,
+    "sha1": "8a084b1cb3f20e92d3a278ad8e40c97b6e0a76ad",
+    "checked_at": "2026-11-19T19:10:33.311Z",
+    "note": "reviewed 2026-11-19: hook 3.4s, total ~22s, no dead air; script read aloud, plain contractions, one question, no em dashes or AI tells; Pareto pea fact true; caption ends with KEEP CTA + hashtags; ASR unavailable, no hard words"
+  },
+  "13-kongo.mp4": {
+    "approved": true,
+    "sha1": "50de8bb1c44b5b02e21b0bb0644430599f1220d4",
+    "checked_at": "2026-11-18T20:40:05.766Z",
+    "note": "reviewed 2026-11-18: script humanized, ASR + timing + frames checked"
+  },
+  "11b-coupon.mp4": {
+    "approved": true,
+    "sha1": "0dcf08088adbde5757e3236f5d9094986a66dbca",
+    "checked_at": "2026-11-20T01:09:38.586Z",
+    "note": "reviewed 2026-11-20: qa no timing flags, 26.6s total, hook 4.2s, contractions, no em dashes, one X/Y reversal only, 1888/8.5M/1913 coupon claim is the standard Coca-Cola figure, caption ends with KEEP CTA + hashtags; no ASR model so lines read by hand"
+  },
+  "10-see-you-next.mp4": {
+    "approved": true,
+    "sha1": "808a2820809c073965d4981d9a7b887810c233a8",
+    "checked_at": "2026-11-19T16:11:19.258Z",
+    "note": "reviewed 2026-11-19: hook 2.8s, total ~25s, no dashes/AI tells, contractions, lines read aloud (no ASR model), caption KEEP+hashtags ok; 48% stat is an industry claim, unverified"
+  },
+  "09b-giraffe.mp4": {
+    "approved": true,
+    "sha1": "c9fd0c0c416d5071b8ffbecf82cce93e28c34622",
+    "checked_at": "2026-11-19T13:10:34.788Z",
+    "note": "reviewed 2026-11-19: hook 2.6s, total ~22s, wording no AI tells/dashes, facts ok (Ritz-Carlton Joshie story), qa no flags, caption KEEP+hashtags ok"
+  },
+  "17-netflix.mp4": {
+    "approved": true,
+    "sha1": "fd20764c8a51213e32e710f9347e039decf0493c",
+    "checked_at": "2026-11-21T01:09:47.405Z",
+    "note": "reviewed 2026-11-20: re-read script and caption; hook 4.1s, total ~32s, facts per AP/Quartz, contractions, no em dashes, one reversal only, KEEP CTA and hashtags present; no ASR model, lines read aloud"
+  },
+  "18-late-fees.mp4": {
+    "approved": true,
+    "sha1": "421c8593addeac93324413a343d1c58886623907",
+    "checked_at": "2026-11-21T13:09:07.235Z",
+    "note": "reviewed 2026-11-21: qa timing ~28s, hook ends ~4.5s (borderline ok), no dashes, contractions, varied lengths, no repeated reversal, Blockbuster 2000 $800M late fees ~16% revenue ok, line 4 long (21w) but reads fine, caption question + KEEP CTA + hashtags ok; no ASR model so lines read by hand"
+  },
+  "19-domino.mp4": {
+    "approved": true,
+    "sha1": "53fcc8ca65dcce22c8a5e4c4781032209c017d56",
+    "checked_at": "2026-11-19T19:31:26.109Z",
+    "note": "reviewed 2026-11-19: qa flags clean, caption chunks fit, frames checked, facts (cardboard quote, ~14% same-store Q1 2010, 18-month rebuild) from Inc/NBC/QSR; no ASR model so lines read and checked by hand"
+  },
+  "20-stew-rock.mp4": {
+    "approved": true,
+    "sha1": "c0fdb345ecd90ccb594fed029bb520af09815e2c",
+    "checked_at": "2026-11-21T16:11:26.079Z",
+    "note": "reviewed 2026-11-21: qa no flags, hook 3.5s, ~30s total, contractions, no dashes, caption KEEP CTA + hashtags ok; Stew Leonard's rock/Guinness sales per sq ft claim is the commonly cited one; no ASR model so lines read by hand. 19-domino held (launch-timing line unverified, no TTS models to fix)"
+  },
+  "21-empty-chair.mp4": {
+    "approved": true,
+    "sha1": "e5afe97f09d0fc47d123d9687c8a055d98ee052c",
+    "checked_at": "2026-11-21T19:09:10.022Z",
+    "note": "reviewed 2026-11-21: qa no flags, hook 3.6s, ~28s total, no dashes, contractions, Amazon empty chair story hedged as per a former exec, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
+  },
+  "22-tesco-data.mp4": {
+    "approved": true,
+    "sha1": "bb5977cf4ce5b664655faf937f079c877cef2543",
+    "checked_at": "2026-11-21T22:12:38.380Z",
+    "note": "reviewed 2026-11-21: timing 4.3s hook/32s total, fixed unverifiable 'nine stores' and 'a year after' claims, rebuilt VO, no em dashes, caption ends KEEP CTA + hashtags, lines read aloud"
+  },
+  "23-zappos-call.mp4": {
+    "approved": true,
+    "sha1": "da99e17c6c8b5d3a07e88dc609b0f79dcc5af20b",
+    "checked_at": "2026-11-22T01:10:36.350Z",
+    "note": "reviewed 2026-11-21: qa timing ~27s total, hook ends ~4.3s, no dashes, contractions, varied rhythm, Zappos 10+ hour call (Las Vegas, movies, food, customer bought boots) fact ok, caption KEEP CTA + hashtags ok; line 4 long (19w) but one breath ok; no ASR model so lines read by hand"
+  },
+  "24-airbnb-photos.mp4": {
+    "approved": true,
+    "sha1": "f6bed61d50ffcb1a0eeffe4a6568c675fc4c3ec7",
+    "checked_at": "2026-11-22T13:09:25.196Z",
+    "note": "reviewed 2026-11-22: qa no flags, hook ~4.0s, ~27s total, no dashes, contractions, varied rhythm, Airbnb 2009 weekly figures 460/897/1428 per Paul Graham, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
+  },
+  "25-new-coke.mp4": {
+    "approved": true,
+    "sha1": "f549a6eb662dfd81b775c517a754810c57931f56",
+    "checked_at": "2026-11-22T16:09:27.323Z",
+    "note": "reviewed 2026-11-22: hook 3.6s, total ~32s; wording no em dashes/one reversal; facts (200k tests, 1,500/day vs 400, 79 days, 31,600 calls) match Coca-Cola history; caption ends KEEP CTA + hashtags; lines read by hand"
+  },
+  "26-wispa-bars.mp4": {
+    "approved": true,
+    "sha1": "4af2fcddb22e25222dd2bcaf33f4eda03a429942",
+    "checked_at": "2026-11-22T20:09:45.292Z",
+    "note": "reviewed 2026-11-22: qa no flags, ~27s total, hook line ends ~4.8s (borderline ok), no dashes, contractions, varied rhythm, Wispa 2003 drop/Aug 2007 14k Facebook members/Oct 2007 return 23M bars ok, caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
+  },
+  "27-mexican-pizza.mp4": {
+    "approved": true,
+    "sha1": "9449dc652728c154faefcc32f03b740a3b1b5824",
+    "checked_at": "2026-11-22T22:09:25.909Z",
+    "note": "reviewed 2026-11-22: qa no flags, hook 3.4s, ~31s total, contractions, no dashes, facts ok (petition 170k+, pulled Nov 5 2020, back May 19 2022, 7x demand per Taco Bell), caption KEEP CTA + hashtags ok; no ASR model so lines read by hand"
+  },
+  "28-sewell-fee.mp4": {
+    "approved": true,
+    "sha1": "6d510807e190f7d780896077e17beaa5157e2b6b",
+    "checked_at": "2026-11-23T00:13:18.581Z",
+    "note": "validated 2026-11-22 19:20 ET: stats.json (64 reels) shows no new winners; last 2 posts were candy and pizza food reels, so picked non-food car-dealer story (odd true scene, outcome withheld, then barber action) that matches top-reel structure; qa no flags, 24s, hook 3.6s, $332K and 115 loaners attributed to Selling Power, frames match each line, caption has KEEP CTA, verdict, 3 hashtags"
+  },
+  "29-wendys-key-tag.mp4": {
+    "approved": true,
+    "sha1": "1a5c25d2868646303a033e94d79c83b0b38593a5",
+    "checked_at": "2026-11-21T19:30:09.675Z",
+    "note": "reviewed 2026-11-21: graphics reel (draw 0.482): $3 tag per wendys.com, frames and wording checked"
+  },
+  "30-mcdonalds-sauce.mp4": {
+    "approved": true,
+    "sha1": "629d91422fa54b2abd64e703aeb6470186bae183",
+    "checked_at": "2026-11-21T19:30:10.082Z",
+    "note": "reviewed 2026-11-21: people reel (draw 0.249): 3 cast scenes viewed, bubbles readable, 20 packets/crowd per Hollywood Reporter, quote per McDonald's Oct 8 2017 statement"
+  },
+  "31-squire-48-days.mp4": {
+    "approved": true,
+    "sha1": "4871f2065ac0cd5877e1b8b38d69392c0eb7b33e",
+    "checked_at": "2026-11-21T19:30:10.437Z",
+    "note": "reviewed 2026-11-21: graphics reel (draw 0.783): stat-first test hook, 13.9M/7,000 shops/48.5 days from Squire 2026 report, 48% attributed to Squire blog, no sample size"
+  },
+  "32-krispy-hole.mp4": {
+    "approved": true,
+    "sha1": "51ce0c8c945399a4ef7368c8f6b21755e48e1957",
+    "checked_at": "2026-11-22T07:33:08.138Z",
+    "note": "reviewed 2026-11-22: graphics reel: qa no flags, hook 4.2s, ~25s, contractions, no dashes, Krispy Kreme 1937 hole in the wall per KK UK + Atlanta Magazine (no price/back-door claims); no ASR model so lines read by hand; frames checked"
+  },
+  "33-harley-hog.mp4": {
+    "approved": true,
+    "sha1": "9f848e3a69c44e8de2aae1907c9023b8f59424a1",
+    "checked_at": "2026-11-23T01:15:24.931Z",
+    "note": "validated 2026-11-22 20:20 ET: stats refreshed (65 reels, no views yet for last 6 posts; 20-23h and 8h best hours). Picked HOG people reel: not food, differs from last 3 (wispa, mexican pizza, sewell); script/frames/caption checked, facts not date-bound, qa no flags"
+  },
+  "34-chewy-flowers.mp4": {
+    "approved": true,
+    "sha1": "c1d54933e1bff870f9993df568917185c3dd6388",
+    "checked_at": "2026-11-22T07:33:59.549Z",
+    "note": "reviewed 2026-11-22: graphics reel: qa no flags, hook 3.8s; Anna Brose/Gus June 2022 refund+flowers per NBC, KTVU, Fortune; 600,000+ likes attributed; removed unsupported 'no ad' claim; lines read by hand"
+  },
+  "35-bookit-pizza.mp4": {
+    "approved": true,
+    "sha1": "ffcd5e9a4bd1a2dcd2c3d04fdd5e3eab8abca0f9",
+    "checked_at": "2026-11-22T07:33:09.376Z",
+    "note": "reviewed 2026-11-22: graphics reel: qa no flags; Book It 1984, free personal pan, up to 6 monthly goals, ~60M kids per Pizza Hut 2014 (single source, attributed); lines read by hand"
+  },
+  "32-toy-dre-missing.mp4": {
+    "approved": true,
+    "sha1": "ad4a99af3e510dd724e7997fb6365f30bca16e2e",
+    "checked_at": "2026-11-22T07:53:03.518Z",
+    "note": "reviewed 2026-11-22: toy-world 3D reel (new style): 3.6s hook, ASR heard every word, frames checked per line, cover made"
+  },
+  "36-twinkie-rush.mp4": {
+    "approved": true,
+    "sha1": "c7ca16dfd75cf5a29a5ed861f3f1d8ab30568144",
+    "checked_at": "2026-11-22T19:33:52.003Z",
+    "note": "reviewed 2026-11-22: toy-world reel: hook 4.2s, 5 frames checked (people in frame, signs readable, no overlap with caption strip), facts per AP Nov 17 2012 (about $5 box, 3 boxes listed $300, Walgreens then Target), speech ASR unavailable, lines read aloud; one 'didn't X, just Y' pair"
+  },
+  "37-bluebell-return.mp4": {
+    "approved": true,
+    "sha1": "6cb9145e6dda6624a3f58306caf218f08f327bd1",
+    "checked_at": "2026-11-23T07:49:11.398Z",
+    "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
+  },
+  "38-saturn-homecoming.mp4": {
+    "approved": true,
+    "sha1": "5bd4fda08dd264ca5a96db9fdb006baf4124dca4",
+    "checked_at": "2026-11-23T07:49:13.273Z",
+    "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
+  },
+  "39-chickfila-snow.mp4": {
+    "approved": true,
+    "sha1": "bb6e39cf4679c7d8bdfa98aa42e74c24cfcd1147",
+    "checked_at": "2026-11-23T07:49:15.047Z",
+    "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
+  },
+  "40-toy-goat-truck.mp4": {
+    "approved": true,
+    "sha1": "a606ecee44f8f984dc5810eb75a35b55c950d51d",
+    "checked_at": "2026-11-23T13:14:34.668Z",
+    "note": "validated 2026-11-23 08:20 ET: pronunciation OK (no names/odd words; ASR model unavailable, lines read by hand), frames OK (7 shots checked, hook/callouts/caption zone clear, rival shop sign slightly cropped but readable), analytics: story-hook comedic toy-world reel with a concrete pain hook under 4s, ~26s, KEEP CTA; topic differs from last post (Sewell fee), best fit vs recent weak explainers"
+  },
+  "41-toy-what-is-msghealth.mp4": {
+    "approved": true,
+    "sha1": "9c3212305427af3470d2b3ab85eb4247d3ffe49a",
+    "checked_at": "2026-11-23T08:50:57.603Z",
+    "note": ""
+  },
+  "44-toy-why-clients-leave.mp4": {
+    "approved": true,
+    "sha1": "f27474f72c41d45f023b64e8fe88e707ae707171",
+    "checked_at": "2026-11-23T15:14:47.664Z",
+    "note": "validated 2026-11-23 10:20 ET: pronunciation OK (plain words, no names; no ASR here, script read by hand), frames OK (contact sheet: subject in frame, callouts clear of caption zone, no broken shot), analytics: why-clients-leave question hook matches the 1.7M-view research topic, explainer follows the viral goat-truck so style alternates, no topic repeat, caption has KEEP CTA + 3 hashtags"
+  },
+  "42-toy-swat-wrong-door.mp4": {
+    "approved": true,
+    "sha1": "7e60b3d3f03cf65cb4c8f8f84fbf09bbe82214e3",
+    "checked_at": "2026-11-23T17:14:54.498Z",
+    "note": "validated 2026-11-23 12:30 ET: pronunciation OK (plain words, no names spoken; no ASR model here, script read by hand), frames OK (contact sheet + extra frames: Dre centered, callouts clear of caption zone, bakery sign edge-cropped only mid-crush), analytics: viral escalation hook <4s follows explainer 44 so style alternates; same shape as goat reel but different topic and 5h apart; no better-performing alternative in data (toy reels unmeasured); caption fixed to one emoji + question + KEEP + 3 hashtags"
+  },
+  "43-toy-parade-goat.mp4": {
+    "approved": true,
+    "sha1": "a040f1497983972e46f7dfa83e2170e33d6a8902",
+    "checked_at": "2026-11-23T08:50:57.646Z",
+    "note": ""
+  },
+  "45-toy-door-kick.mp4": {
+    "approved": true,
+    "sha1": "c09f4043ac84e9315f2ad1b9fc593afaa648bb23",
+    "checked_at": "2026-11-23T19:10:48.274Z",
+    "note": "validated toydoor: pronunciation OK (ASR 'message health', Dray), frames OK (flicker none, contact sheets reviewed), analytics: viral story w/ KEEP chip all video; real performance unverified"
+  },
+  "46-toy-missing-client.mp4": {
+    "approved": true,
+    "sha1": "cb19e73d25f8156e1f66ed9b159611d7096032f4",
+    "checked_at": "2026-11-23T19:16:31.883Z",
+    "note": "validated toymissing: pronunciation OK, frames OK (flicker none, sheets reviewed), viral escalation; real performance unverified"
+  },
+  "47-toy-what-is-msghealth.mp4": {
+    "approved": true,
+    "sha1": "af84a27609c71eedfc4b345b0e429b30336f6513",
+    "checked_at": "2026-11-23T19:28:05.247Z",
+    "note": "validated toyexplain2: pronunciation OK (ASR 'Message Health'), frames OK (chat card/stat overlap fixed, flicker none); explainer; real performance unverified"
+  },
+  "48-toy-funeral-client.mp4": {
+    "approved": true,
+    "sha1": "f1bc80320a24175de02faf94e64184601203ce93",
+    "checked_at": "2026-11-23T20:07:52.229Z",
+    "note": "reviewed 2026-11-23 VIRAL funeral. Gate1 words: ASR matches script (Terrell, lineup, haircut; 'fade' swapped to 'haircut' after ASR heard 'fate'). Gate2 frames: contact sheet one frame per shot, re-rendered after fixing off-edge client and flowers panel overlap; nothing in caption zone. Gate3: absurd escalating hook (assumed he died, funeral), 54s, withheld ending, text-at-week-three payoff, KEEP caption + question; no toy-world view data yet (3 posted today too new), so predicted from hook shape of top reels (odd scene, outcome withheld), not proven"
+  },
+  "49-toy-barber-duel.mp4": {
+    "approved": true,
+    "sha1": "3ea7ef56dec86a0193cfed2d1b43a2736e01d4c1",
+    "checked_at": "2026-11-23T20:13:49.822Z",
+    "note": "validated 2026-11-23 15:14 ET after 20:13Z stats refresh: pronunciation OK (ASR matched script on this sha, Jaylen read as Jalen ok), frames OK (contact sheet checked, actors pulled in from edges, caption zone clear), analytics: no toy view data yet, top reels are one concrete absurd true-scene hooks; duel hook is concrete+absurd, new topic (not door/missing/why-leave like last 3 posts), viral style after explainer 44 and SWAT 42"
+  },
+  "50-toy-three-steps.mp4": {
+    "approved": true,
+    "sha1": "f980e40be71b1359bf7a74ef6d56253d20f23fcd",
+    "checked_at": "2026-11-23T20:07:52.368Z",
+    "note": "reviewed 2026-11-23 EXPLAINER. Gate1: ASR matches script, Message Health pronounced right. Gate2: contact sheet checked, re-rendered to move STEP 3 counter off the chat header; panels readable, caption zone clear. Gate3: 38s, hook 'someone in your book went quiet' then score, text, book, reviews/payments/inbox per PRODUCT.md only; caption ends with KEEP CTA; no toy view data yet, unproven"
+  }
 }
