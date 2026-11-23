@@ -67,3 +67,10 @@ Props available: truck, goat, building (crush), panel (floating app screen), car
 
 ## Explainer toy reels (about 1 in 3 of a batch)
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Clear steps (1 score, 2 text, 3 book), no profanity, 20-30 s. Reference: src/toyexplain-reel.js.
+
+## Release gate (re-render if ANY of these fail)
+A reel may only post if all three hold. If one fails, fix the script and re-render it (ads-vo.py, then render.mjs, then re-encode and approve again); if it can't be fixed, move it to posting/held/.
+1. Every word is pronounced correctly. Listen to the ASR transcript from python3 scripts/qa.py NAME against the script; any name or word that comes out wrong (e.g. "Dre" must be spoken "Dray") gets respelled phonetically in the "say" text and rebuilt. Captions keep the real spelling.
+2. Every frame is properly defined. Look at a frame for each shot (ffmpeg contact sheet): subject in frame and not cropped, nothing overlapping the caption zone (callouts at y about 520 or 1240), text readable, no empty or broken shot. Fix the camera, actors or callout and re-render.
+3. It is predicted to beat the previous videos' analytics. Compare against posting/stats.json (top_reels, last posts): hook type, style, length, topic and caption shape must match what is winning, and the hook must be at least as strong as the best recent reel. If not, rewrite the hook or script and re-render rather than posting a weaker reel.
+Record the three checks in the approve note.
