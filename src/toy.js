@@ -241,7 +241,7 @@ const overlay = (t, c, a, wy) => { drawStat(c, t - a); drawWords(t, wy); drawChi
 
 
 function chat2(t, a, b, c) {
-  stage(t, 0.14); const X = 90, Y = c.stat ? 330 : 230, Wd = 900, H = c.stat ? 960 : 1080; ctx.save();
+  stage(t, 0.14); const X = 90, Y = c.stat ? 420 : 230, Wd = 900, H = c.stat ? 900 : 1080; ctx.save();
   fillRR(X + 8, Y + 14, Wd, H, 64, 'rgba(0,0,0,0.4)'); fillRR(X, Y, Wd, H, 64, '#f4f5fa'); fillRR(X, Y, Wd, 170, 64, '#ffffff'); ctx.fillStyle = '#ffffff'; ctx.fillRect(X, Y + 100, Wd, 70);
   circle(X + 100, Y + 88, 44, '#4f46e5'); text((R.who || 'Client')[0], X + 100, Y + 90, 48, 800, '#fff', 'center', 0); text(R.who || 'Client', X + 170, Y + 88, 54, 800, '#16161d', 'left', 0);
   let y = Y + 230;

@@ -256,5 +256,11 @@
     "sha1": "cb19e73d25f8156e1f66ed9b159611d7096032f4",
     "checked_at": "2026-11-23T19:16:31.883Z",
     "note": "validated toymissing: pronunciation OK, frames OK (flicker none, sheets reviewed), viral escalation; real performance unverified"
+  },
+  "47-toy-what-is-msghealth.mp4": {
+    "approved": true,
+    "sha1": "af84a27609c71eedfc4b345b0e429b30336f6513",
+    "checked_at": "2026-11-23T19:28:05.247Z",
+    "note": "validated toyexplain2: pronunciation OK (ASR 'Message Health'), frames OK (chat card/stat overlap fixed, flicker none); explainer; real performance unverified"
   }
 }
