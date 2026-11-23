@@ -3,13 +3,14 @@
   "timezone": "America/New_York",
   "slots": [
     8,
-    11,
-    14,
-    17,
+    10,
+    13,
+    15,
+    18,
     20
   ],
-  "per_day": 5,
+  "per_day": 6,
   "trial": null,
   "basis": "median views of your own reels by posting hour",
-  "slots_updated": "2026-11-18T21:13:26.915Z"
+  "slots_updated": "2026-11-23T00:11:30.636Z"
 }
