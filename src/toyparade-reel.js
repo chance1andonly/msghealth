@@ -1,0 +1,20 @@
+window.TOY = { name: 'toyparade', who: 'Dre', scenes: [
+  { set: 'street', cam: { p: [[0, 0, 4, 17], [4, 0, 4, 14]], look: [[0, 0, 2.2, 3]] },
+    actors: [{ id: 'w', k: 'crowd', n: 14, x: 0, z: 3, pose: 'wave' }, { id: 'y', who: 'stylist', x: -4, z: 5, ry: 0.3, pose: 'point' }],
+    big: [{ text: '200 SIGNS', at: 0.6, y: 520, col: '#ff3b3b', fg: '#fff', size: 110, rot: -0.03 }], sfx: [{ at: 0.5, kind: 'pop' }] },
+  { set: 'street', cam: { p: [[0, -6, 4, 18], [4, 6, 4, 16]], look: [[0, -6, 2.4, 3], [4, 6, 2.4, 3]] },
+    actors: [{ id: 'w', k: 'crowd', n: 14, path: [[0, -8, 3], [4, 8, 3]], pose: 'walk' }, { id: 't', k: 'truck', col: '#9b4fd0', path: [[0, -12, 6.5], [4, 10, 6.5]] }],
+    big: [{ text: 'DAMN FLOAT', at: 2.4, y: 520, col: '#f6b800', size: 100, rot: 0.03 }], sfx: [{ at: 2.4, kind: 'pop' }] },
+  { set: 'street', cam: { p: [[0, 0, 3.4, 11], [3, 0, 3.2, 9]], look: [[0, 0, 1.6, 3]] },
+    actors: [{ id: 'g', k: 'goat', path: [[0, -6, 3], [3, 5, 3]] }, { id: 'w', k: 'crowd', n: 10, path: [[0, -9, 3], [3, 2, 3]], pose: 'walk' }],
+    big: [{ text: 'THE GOAT IS LEADING', at: 0.6, y: 520, col: '#f6b800', size: 70, rot: -0.03 }], sfx: [{ at: 0.5, kind: 'pop' }] },
+  { set: 'street', cam: { p: [[0, 0, 3.4, 10], [3.5, 0, 3.2, 8.6]], look: [[0, 0, 2.2, 3]] },
+    actors: [{ id: 'd', who: 'dre', x: 0, z: 3, ry: 0, pose: [[0, 'idle'], [1.6, 'shock']] }],
+    tags: [{ a: 'd', text: 'DRE (IN A ROBE)', col: '#ec407a', at: 0.5 }], big: [{ text: 'I WAS JUST BUSY', at: 2.4, y: 520, col: '#f6b800', size: 90, rot: 0.03 }], sfx: [{ at: 2.4, kind: 'pop' }] },
+  { set: 'shop', cam: { p: [[0, 0, 3.6, 12], [4, 0, 3.2, 10]], look: [[0, 0, 2.3, 0]] }, chairs: [-3.2, 3.2],
+    actors: [{ id: 'y', who: 'stylist', x: 0, z: 1, ry: 0, pose: [[0, 'phone'], [2.5, 'wave']] }],
+    big: [{ text: 'WEEK THREE', at: 1.2, y: 520, col: '#2f6bff', fg: '#fff', size: 110, rot: -0.03 }], sfx: [{ at: 1.2, kind: 'pop' }] },
+  { set: 'shop', cam: { p: [[0, 0, 3.4, 11], [3.5, 0, 3.2, 9.5]], look: [[0, 0, 2.4, 0]] }, chairs: [-4, 4],
+    actors: [{ id: 'panel', k: 'panel', x: 0, z: -1, y: 4.4, w: 5.2, h: 3, col: '#4f46e5', pop: 0.5, text: ['MsgHealth', 'Dre — 7 weeks quiet', 'Text sent ✓', 'Booked: Thu 4pm ✓'], rows: { 1: '#fdecec', 2: '#e6f6ea', 3: '#e6f6ea' } }, { id: 'y', who: 'stylist', x: -3.5, z: 1.5, ry: 0.4, pose: 'point' }],
+    big: [{ text: 'NO PARADE NEEDED', at: 2.8, y: 1240, col: '#f6b800', size: 84, rot: 0.02 }], sfx: [{ at: 0.5, kind: 'ding' }, { at: 2.8, kind: 'pop' }] }
+] };

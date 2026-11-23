@@ -218,13 +218,31 @@
   "40-toy-goat-truck.mp4": {
     "approved": true,
     "sha1": "a606ecee44f8f984dc5810eb75a35b55c950d51d",
-    "checked_at": "2026-11-23T08:32:39.739Z",
+    "checked_at": "2026-11-23T08:50:57.166Z",
     "note": ""
   },
   "41-toy-what-is-msghealth.mp4": {
     "approved": true,
     "sha1": "9c3212305427af3470d2b3ab85eb4247d3ffe49a",
-    "checked_at": "2026-11-23T08:32:39.783Z",
+    "checked_at": "2026-11-23T08:50:57.603Z",
+    "note": ""
+  },
+  "44-toy-why-clients-leave.mp4": {
+    "approved": true,
+    "sha1": "f27474f72c41d45f023b64e8fe88e707ae707171",
+    "checked_at": "2026-11-23T08:50:57.216Z",
+    "note": ""
+  },
+  "42-toy-swat-wrong-door.mp4": {
+    "approved": true,
+    "sha1": "7e60b3d3f03cf65cb4c8f8f84fbf09bbe82214e3",
+    "checked_at": "2026-11-23T08:50:57.259Z",
+    "note": ""
+  },
+  "43-toy-parade-goat.mp4": {
+    "approved": true,
+    "sha1": "a040f1497983972e46f7dfa83e2170e33d6a8902",
+    "checked_at": "2026-11-23T08:50:57.646Z",
     "note": ""
   }
 }

@@ -1,0 +1,66 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Your best client ghosts you. So you hire two hundred people to hold signs outside his house.",
+   "caps": [
+    "Best client *ghosts you.*",
+    "So you hire *200 people.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.1
+  },
+  {
+   "say": "Now it's a protest. Now it's a parade. Now there's a damn float.",
+   "caps": [
+    "Now a *protest.* Now a *parade.*",
+    "Now a *damn float.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "A goat joins. Nobody asked the goat. The goat is leading.",
+   "caps": [
+    "A *goat* joins.",
+    "Nobody asked. The goat is *leading.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "He opens the door in a robe going, what the fuck is happening? I was just busy.",
+   "caps": [
+    "He opens the door: \"What the",
+    "*fuck* is this? I was just busy.\""
+   ],
+   "gap": 0.45,
+   "speed": 1.1
+  },
+  {
+   "say": "And you would've gotten away with it, if you'd just texted him at week three.",
+   "caps": [
+    "You'd have gotten away with it",
+    "if you *texted at week three.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.1
+  },
+  {
+   "say": "MsgHealth spots who's gone quiet, and texts them for you. No parade needed.",
+   "caps": [
+    "MsgHealth spots who's *gone quiet*",
+    "and *texts them for you.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

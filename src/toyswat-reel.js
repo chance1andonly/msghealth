@@ -1,0 +1,21 @@
+window.TOY = { name: 'toyswat', who: 'Dre', scenes: [
+  { set: 'shop', cam: { p: [[0, 0, 3.8, 14], [5, 0, 3.2, 11.5]], look: [[0, 0, 2.3, 0]] }, chairs: [-3.2, 3.2],
+    actors: [{ id: 'y', who: 'stylist', x: 3.2, z: 0.6, ry: 0, pose: [[0, 'phone'], [2.6, 'shock']] }],
+    big: [{ text: '7 WEEKS QUIET', at: 0.5, y: 520, col: '#ff3b3b', fg: '#fff', size: 96, rot: -0.03 }], sfx: [{ at: 0.5, kind: 'pop' }] },
+  { set: 'street', cam: { p: [[0, -3, 4, 18], [4, 3, 4, 16]], look: [[0, 0, 2.5, 3], [4, 3, 2.5, 3]] },
+    actors: [{ id: 'b1', k: 'building', name: 'WRONG DOOR', col: '#7b3fa0', signBg: '#f6b800', signFg: '#111', w: 6, x: -3, z: 3, crush: 1.0 }, { id: 'b2', k: 'building', name: 'BAKERY', col: '#d9453a', signBg: '#fff', signFg: '#111', w: 6, x: 4, z: 3, crush: 2.8 },
+      { id: 'p', who: 'cop', path: [[0, -6, 8], [1.5, -3, 4.5]], pose: 'run' }, { id: 'p2', who: 'cop', path: [[0, -1, 8], [2.5, 4, 4.5]], pose: 'run' }],
+    big: [{ text: 'WRONG DOOR', at: 1.0, y: 520, col: '#ff3b3b', fg: '#fff', size: 100, rot: 0.03 }], sfx: [{ at: 1.0, kind: 'pop' }, { at: 2.8, kind: 'pop' }] },
+  { set: 'street', cam: { p: [[0, 0, 4, 17], [4, 0, 4.5, 15]], look: [[0, 0, 2.2, 3]] },
+    actors: [{ id: 'c', k: 'car', col: '#f2f2f2', siren: true, path: [[0, -14, 6], [4, 6, 6]] }, { id: 'w', k: 'crowd', n: 9, x: 0, z: 3, pose: 'wave' }, { id: 'g', k: 'goat', x: 4, z: 4 }],
+    big: [{ text: 'NEWS. HOT DOGS.', at: 0.6, y: 520, col: '#f6b800', size: 90, rot: -0.03 }], sfx: [{ at: 0.5, kind: 'whoosh' }] },
+  { set: 'street', cam: { p: [[0, 0, 3.4, 10], [3.5, 0, 3.2, 8.6]], look: [[0, 0, 2.2, 3]] },
+    actors: [{ id: 'd', who: 'dre', path: [[0, -3, 3], [3, 0, 3]], pose: [[0, 'walk'], [2.2, 'shock']] }],
+    tags: [{ a: 'd', text: 'DRE', col: '#ec407a', at: 0.5 }], big: [{ text: 'I WAS JUST BUSY', at: 2.2, y: 520, col: '#f6b800', size: 90, rot: 0.03 }], sfx: [{ at: 2.2, kind: 'pop' }] },
+  { set: 'street', cam: { p: [[0, 0, 3.6, 13], [4.5, 0, 3.2, 11]], look: [[0, 0, 1.8, 3]] },
+    actors: [{ id: 'c', k: 'car', col: '#f2f2f2', siren: true, path: [[0, -13, 5], [1.2, -1.5, 5]] }, { id: 'y', who: 'stylist', x: 1.5, z: 2.6, ry: 3.1, pose: 'shock' }, { id: 'p', who: 'cop', x: -1.2, z: 2.2, ry: 0.6, pose: 'point' }],
+    big: [{ text: 'WEEK THREE', at: 1.2, y: 520, col: '#2f6bff', fg: '#fff', size: 110, rot: -0.03 }], sfx: [{ at: 1.2, kind: 'pop' }] },
+  { set: 'shop', cam: { p: [[0, 0, 3.4, 11], [3.5, 0, 3.2, 9.5]], look: [[0, 0, 2.4, 0]] }, chairs: [-4, 4],
+    actors: [{ id: 'panel', k: 'panel', x: 0, z: -1, y: 4.4, w: 5.2, h: 3, col: '#4f46e5', pop: 0.5, text: ['MsgHealth', 'Dre — 7 weeks quiet', 'Text sent ✓', 'Booked: Thu 4pm ✓'], rows: { 1: '#fdecec', 2: '#e6f6ea', 3: '#e6f6ea' } }, { id: 'y', who: 'stylist', x: -3.5, z: 1.5, ry: 0.4, pose: 'point' }],
+    big: [{ text: 'NO SWAT REQUIRED', at: 2.8, y: 1240, col: '#f6b800', size: 84, rot: 0.02 }], sfx: [{ at: 0.5, kind: 'ding' }, { at: 2.8, kind: 'pop' }] }
+] };

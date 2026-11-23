@@ -1,0 +1,56 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Why do clients really leave? Because nobody texted them first.",
+   "caps": [
+    "Why do clients *really* leave?",
+    "Nobody *texted them first.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "MsgHealth shows who's gone quiet, and how long it's been.",
+   "caps": [
+    "MsgHealth shows who's *gone quiet*",
+    "and *how long.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "It texts them for you, and books them the second they reply.",
+   "caps": [
+    "It *texts them for you,*",
+    "books them when they *reply.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "It also asks happy clients for reviews, and takes payment. All in one inbox.",
+   "caps": [
+    "It asks happy clients for *reviews,*",
+    "takes *payment.* One *inbox.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.1
+  },
+  {
+   "say": "Built for Atlanta barbers and stylists. You cut. It chases.",
+   "caps": [
+    "Built for *Atlanta* barbers and stylists.",
+    "You *cut.* It *chases.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

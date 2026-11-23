@@ -1,0 +1,66 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Your regular hasn't booked in seven weeks. So you call a SWAT team.",
+   "caps": [
+    "Regular gone *seven weeks.*",
+    "So you call a *SWAT team.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "They kick in the fucking wrong door. Then another wrong door. Then a bakery.",
+   "caps": [
+    "They kick in the *wrong door.*",
+    "Then a *bakery.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.1
+  },
+  {
+   "say": "Now there's a helicopter, a news crew, and a guy selling hot dogs.",
+   "caps": [
+    "Now a *helicopter,* a news crew,",
+    "and a guy *selling hot dogs.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Your client walks up with a coffee going, what the hell is all this? I was just busy.",
+   "caps": [
+    "He walks up: \"What the hell?",
+    "I was *just busy.*\""
+   ],
+   "gap": 0.45,
+   "speed": 1.1
+  },
+  {
+   "say": "And you would've gotten away with it, if you'd just texted him at week three.",
+   "caps": [
+    "You'd have gotten away with it",
+    "if you *texted at week three.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.1
+  },
+  {
+   "say": "MsgHealth flags who's gone quiet, and texts them for you. No SWAT required.",
+   "caps": [
+    "MsgHealth flags who's *gone quiet*",
+    "and *texts them for you.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
