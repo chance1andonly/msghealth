@@ -278,7 +278,7 @@
   "50-toy-three-steps.mp4": {
     "approved": true,
     "sha1": "f980e40be71b1359bf7a74ef6d56253d20f23fcd",
-    "checked_at": "2026-11-23T20:07:52.368Z",
-    "note": "reviewed 2026-11-23 EXPLAINER. Gate1: ASR matches script, Message Health pronounced right. Gate2: contact sheet checked, re-rendered to move STEP 3 counter off the chat header; panels readable, caption zone clear. Gate3: 38s, hook 'someone in your book went quiet' then score, text, book, reviews/payments/inbox per PRODUCT.md only; caption ends with KEEP CTA; no toy view data yet, unproven"
+    "checked_at": "2026-11-23T23:10:56.833Z",
+    "note": "validated 2026-11-23 18:15 ET after 21:35Z stats refresh: pronunciation OK (file sha unchanged since ASR-matched gate today, Message Health said right), frames OK (contact sheet rechecked, text readable, caption zone clear), analytics: last 3 posts were viral (goat, swat, duel) so explainer is due; 36s, concrete 'somebody in your book went quiet' hook, real app screens, question+KEEP caption; no toy view data yet so unproven"
   }
 }
