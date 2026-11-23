@@ -1,8 +1,8 @@
 {
-  "updated": "2026-11-23T00:11:30.635Z",
+  "updated": "2026-11-23T01:14:11.874Z",
   "timezone": "America/New_York",
   "metric": "views",
-  "reels_analyzed": 64,
+  "reels_analyzed": 65,
   "by_hour": [
     {
       "hour": 23,
@@ -20,14 +20,14 @@
       "median_score": 133
     },
     {
-      "hour": 20,
-      "reels": 5,
-      "median_score": 131
-    },
-    {
       "hour": 8,
       "reels": 11,
       "median_score": 122
+    },
+    {
+      "hour": 20,
+      "reels": 6,
+      "median_score": 112
     },
     {
       "hour": 11,
@@ -56,11 +56,11 @@
       "median_score": 129
     },
     "5": {
-      "reels": 13,
-      "median_score": 93
+      "reels": 14,
+      "median_score": 28
     }
   },
-  "per_day_decision": "trying 6 a day: 5 a day is holding up (median 93 per reel)",
+  "per_day_decision": "holding: not enough reels at this rate yet (need 4, have 0)",
   "top_reels": [
     {
       "id": "17912640258490606",
