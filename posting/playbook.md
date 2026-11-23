@@ -60,13 +60,18 @@ Shots: set shop|street|lot|road|night; actors p/car/crowd with poses idle walk r
 Camera notes (portrait, fov 58): stay 8 to 11 units from one or two people, 15 to 19 for wide shots; keep actors inside +-3 of the camera x.
 Reference reel: src/toydre-reel.js. Set sky/grass per shot for snow (sky #c9d3dd, grass #eef3f8) or dawn (sky #f2a86e); crowds (k:crowd) take pose idle/wave/shock and are about 8 units wide, so put the camera 14 to 17 away. The renderer needs node_modules/playwright (symlink to the global one if the repo link is dangling); the Kokoro files live in /home/claude/models (kokoro-v1.0.onnx, voices-v1.0.bin from the kokoro-onnx GitHub release model-files-v1.0). Render takes about 4 minutes per reel.
 
-## Viral toy reels (about 2 in 3 of a batch)
-Goal: views and new audience. 3D toy-world (src/toy.js), 6-7 shots, 40-50 s. Profanity is allowed (no slurs). Original archetypes only: no real named people, no copyrighted characters.
-Shape: a real pain (a client ghosts you) -> absurd escalation, each line crazier (monster truck, goat, flattened shop) -> "you'd have gotten away with it if you'd texted at week three" -> MsgHealth in one line -> KEEP CTA.
-Props available: truck, goat, building (crush), panel (floating app screen), car with siren, crowd. Reference: src/toygoat-reel.js.
+## Toy-world reel format (viral AND explainer; this is the house style)
+Reference look: the user's chase4 video: 3D toy world, one big white outlined WORD at a time in the middle of the screen, pink tilted name tags with a leader line, white counters at the top ("TEXTS SENT: 0"), a cut every 2-3 seconds, slow camera push. Engine: src/toy.js (word captions, tags, stats, chat UI, the Comment KEEP chip all built in).
+Length 50-75 s. The Comment KEEP chip shows the whole video; KEEP is also spoken mid-story and at the end card. Say "Message Health" in the voice text (field "say"), show "MsgHealth" on screen (field "show"). "Dre" is spoken "Dray".
+Shots are placed with at: [lineIndex, offsetSeconds] and a focus point f:[x,z] (d distance, h height, ly look height). Never move a character with a path while it is sitting or lying (it slides): only walk/run poses travel. Keep 1-2 people 6-9 units from the camera, house names short (sign width 6).
+Props: door (falls), house/hospital buildings, bed, bowl of soup with bones, helicopter, truck, goat, car with siren, floating app panel, chat UI with BOOKED card. Poses: idle walk run sit phone wave shock point cut kick punch swing faint choke chokesit cheer cry slump hold.
+Rendering: never run other heavy jobs while a reel renders (it makes the 3D floor glitch). After every render run python3 scripts/flicker.py on the mp4 and look at frames (python3 scripts/still.mjs / scripts/sheet.py) before approving.
 
-## Explainer toy reels (about 1 in 3 of a batch)
-Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Clear steps (1 score, 2 text, 3 book), no profanity, 20-30 s. Reference: src/toyexplain-reel.js.
+### Viral reels (about 2 in 3 of a batch)
+Goal: views and new audience. Profanity allowed (no slurs). Original archetypes only (no real people or copyrighted characters). Structure: HOOK = something happens that sets off a chain ("My client stopped coming in, so I kicked his fucking door down"), then each line escalates the absurdity (rule of three: mom, grandma, hospital), counters track the chaos, a deadpan reveal ("I just forgot"), the lesson ("nobody told him to come back"), the product in one line, "no door, no grandma, no soup, just a text", KEEP. A running joke gets a callback at the end (counters back to 0). Reference: src/toydoor-reel.js, src/toymissing-reel.js.
+
+### Explainer reels (about 1 in 3 of a batch)
+Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Release gate (re-render if ANY of these fail)
 A reel may only post if all three hold. If one fails, fix the script and re-render it (ads-vo.py, then render.mjs, then re-encode and approve again); if it can't be fixed, move it to posting/held/.

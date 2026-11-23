@@ -1,0 +1,88 @@
+{
+ "voice": "am_adam",
+ "speed": 1.05,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "Your regulars aren't mad at you. They just forgot.",
+   "caps": [
+    "Your regulars aren't mad at you.",
+    "They just forgot."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Meet Message Health. It's an app for barbers and stylists that brings your clients back.",
+   "caps": [
+    "Meet *MsgHealth.*",
+    "It brings your clients back."
+   ],
+   "gap": 0.34,
+   "show": "Meet MsgHealth. It's an app for barbers and stylists that brings your clients back."
+  },
+  {
+   "say": "Step one. It scores every client in your book. Active. Drifting. Or gone quiet.",
+   "caps": [
+    "Step 1: it *scores every client.*",
+    "Active. Drifting. Gone quiet."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Step two. When someone drifts, it texts them for you. In your voice. At the right time.",
+   "caps": [
+    "Step 2: it *texts them for you.*",
+    "In your voice."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Step three. They reply, and it books the chair. Right there in the text.",
+   "caps": [
+    "Step 3: they reply,",
+    "and it *books the chair.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet in your book.",
+   "caps": [
+    "Comment *KEEP* and we'll show you",
+    "who's *gone quiet* in your book."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "It also asks happy clients for reviews, takes payment, and keeps every message in one inbox.",
+   "caps": [
+    "It also asks for *reviews,*",
+    "takes *payment,* one *inbox.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "You cut hair. It does the chasing.",
+   "caps": [
+    "You *cut hair.*",
+    "It does the *chasing.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "No door kicking. No grandma. Just a text, before they forget.",
+   "caps": [
+    "No door kicking. No grandma.",
+    "Just a text, *before they forget.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}

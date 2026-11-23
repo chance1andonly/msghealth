@@ -1,0 +1,106 @@
+{
+ "voice": "am_adam",
+ "speed": 1.05,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "My best client stopped getting his hair cut. So I kicked his fucking door down.",
+   "caps": [
+    "My best client stopped getting his hair cut.",
+    "So I kicked his *fucking* door down."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "His mom came out swinging. So I fought his mom. In the front yard. In my apron.",
+   "caps": [
+    "His mom came out swinging.",
+    "So I fought his mom."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then I drove to his grandma's house. Because I'm thorough. She is eighty one years old. She hit me with a skillet. Twice.",
+   "caps": [
+    "Then I drove to his grandma's house.",
+    "She hit me with a skillet."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP if you've ever chased a client this hard.",
+   "caps": [
+    "Comment *KEEP* if you've ever",
+    "chased a client this hard."
+   ],
+   "gap": 0.34,
+   "show": "Comment KEEP if you've ever chased a client this hard."
+  },
+  {
+   "say": "Turns out, Dray wasn't even home. He heard what I did, and fainted. Now he's in the hospital.",
+   "caps": [
+    "Dre wasn't even home.",
+    "He heard, and fainted."
+   ],
+   "gap": 0.34,
+   "show": "Turns out, Dre wasn't even home. He heard what I did, and fainted. Now he's in the hospital."
+  },
+  {
+   "say": "So I brought him soup. Chicken noodle. I left the big bones in, for flavor.",
+   "caps": [
+    "So I brought him soup.",
+    "I left the big bones in."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He choked. Flatlined. Nurses screaming. Then he coughed up one bone, grabbed my hand, and whispered his last words.",
+   "caps": [
+    "He choked. Flatlined.",
+    "He whispered his last words."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "I... just forgot.",
+   "caps": [
+    "I just forgot."
+   ],
+   "gap": 0.5,
+   "show": "I just forgot."
+  },
+  {
+   "say": "That's it. That's the whole reason. He never left me. Nobody told him to come back.",
+   "caps": [
+    "That's the whole reason.",
+    "Nobody told him to come back."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "So now I use Message Health. It spots who's gone quiet, and texts them for me, before they forget.",
+   "caps": [
+    "So now I use *MsgHealth.*",
+    "It texts them *before they forget.*"
+   ],
+   "gap": 0.34,
+   "show": "So now I use MsgHealth. It spots who's gone quiet, and texts them for me, before they forget."
+  },
+  {
+   "say": "No door. No grandma. No soup. Just a text.",
+   "caps": [
+    "No door. No grandma.",
+    "No soup. *Just a text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}

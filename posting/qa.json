@@ -244,5 +244,11 @@
     "sha1": "a040f1497983972e46f7dfa83e2170e33d6a8902",
     "checked_at": "2026-11-23T08:50:57.646Z",
     "note": ""
+  },
+  "45-toy-door-kick.mp4": {
+    "approved": true,
+    "sha1": "c09f4043ac84e9315f2ad1b9fc593afaa648bb23",
+    "checked_at": "2026-11-23T19:10:48.274Z",
+    "note": "validated toydoor: pronunciation OK (ASR 'message health', Dray), frames OK (flicker none, contact sheets reviewed), analytics: viral story w/ KEEP chip all video; real performance unverified"
   }
 }

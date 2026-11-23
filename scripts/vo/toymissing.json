@@ -1,0 +1,104 @@
+{
+ "voice": "am_adam",
+ "speed": 1.05,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "My regular stopped coming in. So I filed a missing persons report. On a Tuesday.",
+   "caps": [
+    "My regular stopped coming in.",
+    "So I filed a missing persons report."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "The cops said, sir, he's an adult. So I made posters. Four thousand posters.",
+   "caps": [
+    "The cops said, he's an adult.",
+    "So I made four thousand posters."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then a milk carton. Then a billboard. Then a helicopter with a loudspeaker, hovering over his house.",
+   "caps": [
+    "Then a milk carton. A billboard.",
+    "Then a helicopter."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP if you've ever gone this far for a client.",
+   "caps": [
+    "Comment *KEEP* if you've ever",
+    "gone this far for a client."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then the National Guard showed up. I don't know who called them. Probably the helicopter.",
+   "caps": [
+    "Then the National Guard.",
+    "I don't know who called them."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "And that's when he walks out of a gas station, holding a hot dog.",
+   "caps": [
+    "He walks out of a gas station,",
+    "holding a hot dog."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He goes, bro, what is happening? I thought you moved.",
+   "caps": [
+    "\"Bro, what is happening?",
+    "I thought you moved.\""
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Moved. I was ten minutes away. The whole time.",
+   "caps": [
+    "Moved?",
+    "I was ten minutes away."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Four thousand posters, to learn he'd have come back. If I just asked.",
+   "caps": [
+    "Four thousand posters.",
+    "He'd have come back if I just asked."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "So now I use Message Health. It spots who's gone quiet, and texts them for me. Week three. Not week nine.",
+   "caps": [
+    "So now I use *MsgHealth.*",
+    "Week three. Not week nine."
+   ],
+   "gap": 0.34,
+   "show": "So now I use MsgHealth. It spots who's gone quiet, and texts them for me. Week three. Not week nine."
+  },
+  {
+   "say": "No posters. No helicopter. Just a text.",
+   "caps": [
+    "No posters. No helicopter.",
+    "*Just a text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}
