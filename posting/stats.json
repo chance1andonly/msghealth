@@ -1,8 +1,8 @@
 {
-  "updated": "2026-11-23T15:13:50.365Z",
+  "updated": "2026-11-23T17:13:14.189Z",
   "timezone": "America/New_York",
   "metric": "views",
-  "reels_analyzed": 66,
+  "reels_analyzed": 67,
   "by_hour": [
     {
       "hour": 23,
@@ -30,11 +30,6 @@
       "median_score": 112
     },
     {
-      "hour": 11,
-      "reels": 3,
-      "median_score": 105
-    },
-    {
       "hour": 14,
       "reels": 3,
       "median_score": 93
@@ -48,6 +43,11 @@
       "hour": 17,
       "reels": 4,
       "median_score": 27
+    },
+    {
+      "hour": 11,
+      "reels": 4,
+      "median_score": 4
     }
   ],
   "per_day_scores": {
@@ -56,8 +56,8 @@
       "median_score": 129
     },
     "5": {
-      "reels": 15,
-      "median_score": 93
+      "reels": 16,
+      "median_score": 28
     }
   },
   "per_day_decision": "holding: not enough reels at this rate yet (need 4, have 0)",
