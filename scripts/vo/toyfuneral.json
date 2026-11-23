@@ -1,0 +1,97 @@
+{
+ "voice": "am_adam",
+ "speed": 1.05,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "My regular stopped coming in. So I assumed he died. I'm not proud of this.",
+   "caps": [
+    "My regular stopped coming in.",
+    "So I assumed he died."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "I ordered forty flowers. I booked a church. I hired a guy to play the organ.",
+   "caps": [
+    "Forty flowers. A church.",
+    "A guy on the organ."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Two hundred people came. I gave the eulogy. I said he had the best haircut in Georgia. A kid fainted.",
+   "caps": [
+    "Two hundred people came.",
+    "I gave the eulogy. A kid fainted."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP if you've ever buried a client who was still alive.",
+   "caps": [
+    "Comment *KEEP* if you've ever",
+    "buried a client who was alive."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then the church doors open. And Terrell walks in. Eating a sandwich.",
+   "caps": [
+    "The church doors open.",
+    "Terrell walks in, eating a sandwich."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He goes, bro, who died? Then he asks if I've got time for a lineup.",
+   "caps": [
+    "\"Bro, who died?\"",
+    "Then: \"got time for a lineup?\""
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He wasn't dead. He'd been going to another barber for two months. Nobody ever texted him.",
+   "caps": [
+    "He'd been at another barber",
+    "for two months. Nobody texted him."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Two hundred mourners. Forty flowers. An organ guy. And I never sent one text.",
+   "caps": [
+    "Two hundred mourners. Forty flowers.",
+    "Zero texts sent."
+   ],
+   "speed": 1.0,
+   "gap": 0.34
+  },
+  {
+   "say": "So now I use Message Health. It spots who's gone quiet, and texts them for me. Week three, not month two.",
+   "caps": [
+    "So now I use *MsgHealth.*",
+    "Week three. Not month two."
+   ],
+   "show": "So now I use MsgHealth. It spots who's gone quiet, and texts them for me. Week three, not month two.",
+   "gap": 0.34
+  },
+  {
+   "say": "No casket. No organ guy. Just a text.",
+   "caps": [
+    "No casket. No organ guy.",
+    "*Just a text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}

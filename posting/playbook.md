@@ -73,6 +73,13 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 ### Explainer reels (about 1 in 3 of a batch)
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
+## Daily review
+### 2026-11-23 (evening run)
+- Found: 68 reels analyzed. The 3 toy reels posted today (40-toy-goat-truck 08:00, 44-toy-why-clients-leave 10:00, 42-toy-swat-wrong-door 13:00) are not in the top 15 yet and have only hours of data, so there is no viral vs explainer comparison to act on. Yesterday 5 graphics reels went out in the 8/11/14/17/20 slots (per_day 5, one short of the 6 slots now in schedule.json). No release-gate failures are logged for posted reels. The queue held only 2 approved reels (45, 46), so this run built 3 more.
+- Hour data unchanged (23 and 22 best, 16 and 17 worst, small samples). per_day_decision is "holding".
+- Changed: nothing in the strategy. Mix stays 2 viral : 1 explainer. New batch: funeral (viral), barber duel (viral), three-step explainer.
+- Process notes: the Kokoro files (/home/claude/models) and the ASR model (/home/claude/work/ref/sherpa-onnx-whisper-base.en) are NOT present at the start of a routine run; download from the kokoro-onnx model-files-v1.0 release and the sherpa-onnx asr-models whisper-base.en release, and `pip install kokoro-onnx soundfile sherpa-onnx --break-system-packages`. node_modules is a dangling symlink: create /home/claude/ext/msghealth/node_modules and link the global playwright into it. Frame checks caught shots where a seated client was off the left edge (shop shot with a client at x -1.7 or less): keep f x about -0.7 and d 7+ for two-person shop shots.
+
 ## Release gate (re-render if ANY of these fail)
 A reel may only post if all three hold. If one fails, fix the script and re-render it (ads-vo.py, then render.mjs, then re-encode and approve again); if it can't be fixed, move it to posting/held/.
 1. Every word is pronounced correctly. Listen to the ASR transcript from python3 scripts/qa.py NAME against the script; any name or word that comes out wrong (e.g. "Dre" must be spoken "Dray") gets respelled phonetically in the "say" text and rebuilt. Captions keep the real spelling.

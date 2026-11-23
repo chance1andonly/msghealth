@@ -1,0 +1,80 @@
+{
+ "voice": "am_adam",
+ "speed": 1.05,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "Somebody in your book went quiet this month. And you were too busy cutting to notice.",
+   "caps": [
+    "Someone in your book went quiet.",
+    "You were too busy cutting."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "That's what Message Health is for. It's an app built for Atlanta barbers and stylists.",
+   "caps": [
+    "That's what *MsgHealth* is for.",
+    "Built for Atlanta barbers."
+   ],
+   "show": "That's what MsgHealth is for. It's an app built for Atlanta barbers and stylists.",
+   "gap": 0.34
+  },
+  {
+   "say": "Step one. It scores every client in your book. Active, drifting, or gone quiet.",
+   "caps": [
+    "Step 1: it *scores every client.*",
+    "Active. Drifting. Gone quiet."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Step two. It texts the quiet ones for you. Automatically.",
+   "caps": [
+    "Step 2: it *texts the quiet ones.*",
+    "Automatically."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Step three. They reply, and it books them. Thursday at four, done.",
+   "caps": [
+    "Step 3: they reply,",
+    "and it *books them.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP if you want to see your own quiet list.",
+   "caps": [
+    "Comment *KEEP* to see",
+    "your own quiet list."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "It also handles review requests, payments, and one shared inbox for your texts.",
+   "caps": [
+    "Reviews. Payments.",
+    "One shared inbox."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "So your whole job is the part you're good at. Cutting hair.",
+   "caps": [
+    "Your whole job:",
+    "*cutting hair.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}

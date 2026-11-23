@@ -1,0 +1,97 @@
+{
+ "voice": "am_adam",
+ "speed": 1.05,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "My client got a haircut somewhere else. So I challenged that barber to a duel.",
+   "caps": [
+    "My client got a haircut elsewhere.",
+    "So I challenged the barber to a duel."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Dawn. Parking lot. Clippers at ten paces. I wore a cape. For no reason.",
+   "caps": [
+    "Dawn. Parking lot. Ten paces.",
+    "I wore a cape. For no reason."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Word spread. Three hundred people showed up. A news helicopter. A guy selling hot dogs.",
+   "caps": [
+    "Three hundred people showed up.",
+    "A news helicopter. Hot dogs."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP if you've ever taken a client leaving personally.",
+   "caps": [
+    "Comment *KEEP* if you've ever",
+    "taken a client leaving personally."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "We turned. We fired. He hit me with a hot towel. Direct hit. I went down.",
+   "caps": [
+    "We turned. We fired.",
+    "Hot towel. Direct hit."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then Jaylen runs through the crowd, in the new fade, yelling stop, stop, stop.",
+   "caps": [
+    "Jaylen runs through the crowd,",
+    "yelling stop, stop, stop."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He goes, bro, I only went there because you never texted me.",
+   "caps": [
+    "\"I only went there",
+    "because you never texted me.\""
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "I dueled a stranger, in a cape, over a text I never sent. You'd have gotten away with it if you'd texted at week three.",
+   "caps": [
+    "A duel. A cape. A helicopter.",
+    "Over a text I never sent."
+   ],
+   "speed": 1.0,
+   "gap": 0.34
+  },
+  {
+   "say": "So now I use Message Health. It spots who's gone quiet, and texts them for me, at week three.",
+   "caps": [
+    "So now I use *MsgHealth.*",
+    "It texts them at week three."
+   ],
+   "show": "So now I use MsgHealth. It spots who's gone quiet, and texts them for me, at week three.",
+   "gap": 0.34
+  },
+  {
+   "say": "No cape. No hot towels. No helicopter. Just a text.",
+   "caps": [
+    "No cape. No hot towels.",
+    "*Just a text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}
