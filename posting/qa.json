@@ -236,8 +236,8 @@
   "42-toy-swat-wrong-door.mp4": {
     "approved": true,
     "sha1": "7e60b3d3f03cf65cb4c8f8f84fbf09bbe82214e3",
-    "checked_at": "2026-11-23T08:50:57.259Z",
-    "note": ""
+    "checked_at": "2026-11-23T17:14:54.498Z",
+    "note": "validated 2026-11-23 12:30 ET: pronunciation OK (plain words, no names spoken; no ASR model here, script read by hand), frames OK (contact sheet + extra frames: Dre centered, callouts clear of caption zone, bakery sign edge-cropped only mid-crush), analytics: viral escalation hook <4s follows explainer 44 so style alternates; same shape as goat reel but different topic and 5h apart; no better-performing alternative in data (toy reels unmeasured); caption fixed to one emoji + question + KEEP + 3 hashtags"
   },
   "43-toy-parade-goat.mp4": {
     "approved": true,
