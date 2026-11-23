@@ -1,0 +1,60 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Nearly seven hours stuck on a snowy Alabama highway, with no food or water.",
+   "caps": [
+    "*Nearly 7 hours* stuck on a",
+    "snowy Alabama highway. *No food.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.18
+  },
+  {
+   "say": "A Chick fil A by the road was snowed in too, so the staff decided to feed them.",
+   "caps": [
+    "A *Chick-fil-A* was snowed in too,",
+    "so the staff *fed them.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Several hundred sandwiches, handed out free, that Wednesday in January twenty fourteen.",
+   "caps": [
+    "*Several hundred sandwiches,*",
+    "free, in January *2014.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The manager said drivers were especially surprised that they were free.",
+   "caps": [
+    "The manager said drivers were",
+    "*surprised they were free.*"
+   ],
+   "gap": 0.55,
+   "speed": 1.08
+  },
+  {
+   "say": "Your quiet clients aren't snowed in, but they'll remember who texted first. Hey Jay, got you a spot Thursday.",
+   "caps": [
+    "Quiet clients remember",
+    "who *texted first:*",
+    "*\"Hey Jay, got you a",
+    "spot Thursday.\"*"
+   ],
+   "gap": 0.5,
+   "speed": 1.05
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

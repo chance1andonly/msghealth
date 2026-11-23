@@ -1,0 +1,60 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Hundreds of people lined up at six in the morning, for ice cream that had been gone four months.",
+   "caps": [
+    "Hundreds lined up at *6 a.m.*",
+    "for ice cream *gone four months.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.18
+  },
+  {
+   "say": "Blue Bell had pulled all of it in April, after a lis-teer-ee-uh outbreak.",
+   "caps": [
+    "Blue Bell *pulled all of it* in April,",
+    "after a *listeria outbreak.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The week before, they posted the four flavors coming back on Instagram.",
+   "caps": [
+    "The week before, they posted",
+    "the *four flavors* on Instagram."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "At one Texas grocery, nearly half of the first eleven hundred half gallons were gone by seven.",
+   "caps": [
+    "At one Texas grocery, *nearly half*",
+    "of 1,100 half gallons *gone by 7.*"
+   ],
+   "gap": 0.55,
+   "speed": 1.08
+  },
+  {
+   "say": "So text your quiet ones: hey Jay, your chair's open Thursday. Some of them are just waiting for a reason.",
+   "caps": [
+    "Text your quiet ones:",
+    "*\"Hey Jay, your chair's",
+    "open Thursday.\"*",
+    "Some are *waiting.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.05
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

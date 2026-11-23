@@ -196,5 +196,23 @@
     "sha1": "c7ca16dfd75cf5a29a5ed861f3f1d8ab30568144",
     "checked_at": "2026-11-22T19:33:52.003Z",
     "note": "reviewed 2026-11-22: toy-world reel: hook 4.2s, 5 frames checked (people in frame, signs readable, no overlap with caption strip), facts per AP Nov 17 2012 (about $5 box, 3 boxes listed $300, Walgreens then Target), speech ASR unavailable, lines read aloud; one 'didn't X, just Y' pair"
+  },
+  "37-bluebell-return.mp4": {
+    "approved": true,
+    "sha1": "6cb9145e6dda6624a3f58306caf218f08f327bd1",
+    "checked_at": "2026-11-23T07:49:11.398Z",
+    "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
+  },
+  "38-saturn-homecoming.mp4": {
+    "approved": true,
+    "sha1": "5bd4fda08dd264ca5a96db9fdb006baf4124dca4",
+    "checked_at": "2026-11-23T07:49:13.273Z",
+    "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
+  },
+  "39-chickfila-snow.mp4": {
+    "approved": true,
+    "sha1": "bb6e39cf4679c7d8bdfa98aa42e74c24cfcd1147",
+    "checked_at": "2026-11-23T07:49:15.047Z",
+    "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
   }
 }
