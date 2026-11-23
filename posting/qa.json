@@ -218,8 +218,8 @@
   "40-toy-goat-truck.mp4": {
     "approved": true,
     "sha1": "a606ecee44f8f984dc5810eb75a35b55c950d51d",
-    "checked_at": "2026-11-23T08:50:57.166Z",
-    "note": ""
+    "checked_at": "2026-11-23T13:14:34.668Z",
+    "note": "validated 2026-11-23 08:20 ET: pronunciation OK (no names/odd words; ASR model unavailable, lines read by hand), frames OK (7 shots checked, hook/callouts/caption zone clear, rival shop sign slightly cropped but readable), analytics: story-hook comedic toy-world reel with a concrete pain hook under 4s, ~26s, KEEP CTA; topic differs from last post (Sewell fee), best fit vs recent weak explainers"
   },
   "41-toy-what-is-msghealth.mp4": {
     "approved": true,
