@@ -1,0 +1,7 @@
+What is MsgHealth? The app that brings your clients back 💈
+
+1. It scores every client by how long they've been gone. 2. It texts the quiet ones for you. 3. They reply and book. You just cut hair.
+
+Built for Atlanta barbers and stylists.
+
+Comment KEEP and we'll show you who's gone quiet.

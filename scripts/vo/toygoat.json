@@ -1,0 +1,65 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Your best client hasn't texted in six weeks. So you lose your fucking mind.",
+   "caps": [
+    "Best client *quiet for six weeks.*",
+    "So you *lose your fucking mind.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "You buy a monster truck. And a goat. For security.",
+   "caps": [
+    "You buy a *monster truck.*",
+    "And a *goat.* For security."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "You flatten the shop he's been going to instead. Every last chair.",
+   "caps": [
+    "You *flatten* the rival shop.",
+    "Every *last chair.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "He walks out going, damn, I just forgot. Forgot!",
+   "caps": [
+    "He walks out: \"Damn,",
+    "I *just forgot.*\""
+   ],
+   "gap": 0.45,
+   "speed": 1.1
+  },
+  {
+   "say": "And you would've gotten away with it, if you'd just texted him at week three.",
+   "caps": [
+    "You'd have gotten away with it",
+    "if you *texted at week three.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.1
+  },
+  {
+   "say": "MsgHealth spots who's gone quiet, and texts them for you. No truck needed.",
+   "caps": [
+    "MsgHealth spots who's *gone quiet*",
+    "and *texts them for you.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

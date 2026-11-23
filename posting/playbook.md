@@ -59,3 +59,11 @@ one callout word or tag per shot. Keep the comic, specific, absurd hook, and end
 Shots: set shop|street|lot|road|night; actors p/car/crowd with poses idle walk run sit phone sitphone wave shock point cut sleep.
 Camera notes (portrait, fov 58): stay 8 to 11 units from one or two people, 15 to 19 for wide shots; keep actors inside +-3 of the camera x.
 Reference reel: src/toydre-reel.js. Set sky/grass per shot for snow (sky #c9d3dd, grass #eef3f8) or dawn (sky #f2a86e); crowds (k:crowd) take pose idle/wave/shock and are about 8 units wide, so put the camera 14 to 17 away. The renderer needs node_modules/playwright (symlink to the global one if the repo link is dangling); the Kokoro files live in /home/claude/models (kokoro-v1.0.onnx, voices-v1.0.bin from the kokoro-onnx GitHub release model-files-v1.0). Render takes about 4 minutes per reel.
+
+## Viral toy reels (about 2 in 3 of a batch)
+Goal: views and new audience. 3D toy-world (src/toy.js), 6-7 shots, 40-50 s. Profanity is allowed (no slurs). Original archetypes only: no real named people, no copyrighted characters.
+Shape: a real pain (a client ghosts you) -> absurd escalation, each line crazier (monster truck, goat, flattened shop) -> "you'd have gotten away with it if you'd texted at week three" -> MsgHealth in one line -> KEEP CTA.
+Props available: truck, goat, building (crush), panel (floating app screen), car with siren, crowd. Reference: src/toygoat-reel.js.
+
+## Explainer toy reels (about 1 in 3 of a batch)
+Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Clear steps (1 score, 2 text, 3 book), no profanity, 20-30 s. Reference: src/toyexplain-reel.js.

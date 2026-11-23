@@ -35,7 +35,7 @@ for i, ln in enumerate(lines[:len(durs)]):
     if i < len(lines) - 1 and ln.get('gap', 0.22) > 0.8: flags.append(f'line {i}: gap {ln.get("gap")}s after it feels like dead air')
 if durs and durs[0] > 4.5: flags.append(f'hook line is {durs[0]:.1f}s; the first line should land in under 4.5s')
 if durs and len(re.findall(r"[A-Za-z0-9']+", lines[0]['say'])) > 14: flags.append('hook line is over 14 words')
-if durs and not 14 <= total + 3 <= 45: flags.append(f'total length about {total + 3:.0f}s; aim for 15-40s')
+if durs and not 14 <= total + 3 <= 60: flags.append(f'total length about {total + 3:.0f}s; aim for 15-50s')
 if not re.search(r'keep', lines[-1]['say'], re.I): blocks.append('last line is not the KEEP call to action')
 
 # ---- wording ----------------------------------------------------------------------------------------------------------

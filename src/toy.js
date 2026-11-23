@@ -10,6 +10,8 @@
 //   sfx: [{ at, kind, gain }]  kinds: swoosh swish transition key ding notification tap pop whoosh click
 // }
 // cam.lin:true uses linear camera moves (to track a car moving linearly).
+// extra actors: k:'truck' (monster truck, col), k:'goat', k:'building' {name,col,w,crush:t} (squashes flat at t seconds), k:'panel' {text:[lines], w,h,col,fg} floating screen at x,z,y,
+//   k:'crowd' {n}; person fields: tool:3 scales clippers, run:true.
 // poses: idle walk run sit phone wave shock point cut (clippers) sleep.   Units: 1 = about half a person width; person is 2 tall.
 // Characters are original blocky toy figures. Everything is a pure function of the time t.
 'use strict';
@@ -89,6 +91,9 @@ function makeCar(c = '#d9453a', siren = false, plants = false) {
   if (plants) for (let i = 0; i < 9; i++) { const x = (hsh(i) - 0.5) * 1.5, z = -1.1 + hsh(i + 3) * 2.2, y = i < 4 ? 1.6 : 1.1, k = 0.5 + hsh(i + 7) * 0.4; cyl(0, 0.35 * k, 0.9 * k, '#2f9a52', x, y + 0.2 + 0.45 * k, z, 6, g); cyl(0.07, 0.07, 0.3, '#6b4a2f', x, y + 0.1, z, 5, g); }
   return g;
 }
+function makeTruck(c = '#e8a43a') { const g = makeCar(c, false); g.children.forEach((m) => { m.position.y += 1.1; }); (g.userData.wheels || []).forEach((w) => { w.scale.set(1.9, 1, 1.9); w.position.y = 0.8; }); return g; }
+function makeGoat() { const g = new THREE.Group(); box(1.6, 0.9, 0.8, '#e9e4d8', 0, 1.1, 0, g); box(0.6, 0.6, 0.6, '#e9e4d8', 0.95, 1.7, 0, g); box(0.12, 0.5, 0.12, '#3a3340', 1.0, 2.2, 0.18, g); box(0.12, 0.5, 0.12, '#3a3340', 1.0, 2.2, -0.18, g); box(0.2, 0.2, 0.08, '#d8a8a0', 1.3, 1.6, 0, g); [[-0.6, 0.3], [-0.6, -0.3], [0.6, 0.3], [0.6, -0.3]].forEach(([x, z]) => box(0.18, 0.8, 0.18, '#cfc8b8', x, 0.4, z, g)); box(0.2, 0.2, 0.1, '#17151c', 1.28, 1.8, 0.2, g); g.userData.leg = true; return g; }
+function makePanel(a) { const g = new THREE.Group(), w = a.w || 4.4, h = a.h || 2.8; box(w + 0.3, h + 0.3, 0.2, '#17181f', 0, 0, 0, g); const lines = a.text || []; lines.forEach((t, i) => { const bg = i === 0 ? (a.col || '#4f46e5') : (a.rows && a.rows[i] ? a.rows[i] : '#fdfdfb'); const fg = i === 0 ? '#fff' : (a.fg && a.fg[i]) || '#16161d'; const m = label(t, w, h / lines.length, bg, fg, 800); m.position.set(0, h / 2 - (i + 0.5) * h / lines.length, 0.12); g.add(m); }); return g; }
 function makeShop(s) {
   const g = new THREE.Group(), w = s.w || 8, h = s.h || 5, d = 6, col = s.col || '#c9763a';
   box(w, h, d, col, 0, h / 2, 0, g); box(w + 0.4, 0.3, d + 0.4, '#2a2d3a', 0, h + 0.15, 0, g);
@@ -138,6 +143,10 @@ function buildWorld(si) {
   (c.actors || []).forEach((a, i) => {
     let o;
     if (a.k === 'car') { o = makeCar(a.col, a.siren, a.plants); }
+    else if (a.k === 'truck') { o = makeTruck(a.col); }
+    else if (a.k === 'goat') { o = makeGoat(); }
+    else if (a.k === 'panel') { o = makePanel(a); }
+    else if (a.k === 'building') { o = makeShop(a); if (!a.crushY) a.crushY = 0; }
     else if (a.k === 'crowd') { o = new THREE.Group(); const n = a.n || 12; for (let j = 0; j < n; j++) { const p = makePerson({ skin: ['#e8b48f', '#c98b62', '#8d5a3b', '#f1c9a5'][j % 4], shirt: ['#3a4a8a', '#8a3a3a', '#3a8a5a', '#8a7a3a', '#6a3a8a'][j % 5], pants: '#25283a', hair: '#1a1210' }, j); p.position.set(-4 + (j % 6) * 1.6 + hsh(j) * 0.4, 0, Math.floor(j / 6) * 1.5); p.userData.crowd = true; p.userData.phase = hsh(j + 2) * 6; o.add(p); } }
     else { o = makePerson(a.who || 'guy', i + 1); if (a.big) o.scale.setScalar(a.big); }
     sc.add(o); W.actors[a.id || 'a' + i] = { o, c: a };
@@ -155,9 +164,13 @@ function frame3d(si, t0, t) {
     const mv = Math.hypot(p[0] - prev[0], p[1] - prev[1]) > 0.0005;
     o.position.x = p[0]; o.position.z = p[1]; o.rotation.y = mv ? Math.atan2(p[0] - prev[0], p[1] - prev[1]) : (a.ry ?? 0);
     if (a.yFrom != null) o.position.y = a.yFrom;
-    if (a.k === 'car') { (o.userData.wheels || []).forEach((w) => w.rotation.x = lt * 9); if (o.userData.siren) { const f = Math.sin(lt * 14) > 0; o.userData.siren[0].material = mat(f ? '#ff2d2d' : '#5a1010'); o.userData.siren[1].material = mat(f ? '#102a5a' : '#2d6bff'); } if (a.hop) o.position.y = Math.abs(Math.sin(lt * 7)) * 0.1; o.rotation.y += a.yaw || 0; }
+    if (a.k === 'panel') { o.position.y = a.y ?? 3; o.rotation.y = a.ry ?? 0; o.position.y += Math.sin(lt * 1.6) * 0.1; if (a.pop != null) o.scale.setScalar(Math.max(0.001, ease.out(seg(lt, a.pop, a.pop + 0.35)))); }
+    else if (a.k === 'goat') { o.position.y = Math.abs(Math.sin(lt * 9)) * (mv ? 0.15 : 0.02); }
+    else if (a.k === 'building') { o.position.y = 0; const cr = a.crush != null ? ease.out(seg(lt, a.crush, a.crush + 0.35)) : 0; o.scale.set(1 + cr * 0.15, 1 - cr * 0.88, 1 + cr * 0.15); o.position.x += cr > 0 && cr < 1 ? Math.sin(lt * 60) * 0.1 : 0; o.rotation.y = a.ry ?? 0; }
+    else if (a.k === 'truck') { (o.userData.wheels || []).forEach((w) => w.rotation.x = lt * 7); o.position.y = Math.abs(Math.sin(lt * 6)) * 0.12; o.rotation.y += a.yaw || 0; }
+    else if (a.k === 'car') { (o.userData.wheels || []).forEach((w) => w.rotation.x = lt * 9); if (o.userData.siren) { const f = Math.sin(lt * 14) > 0; o.userData.siren[0].material = mat(f ? '#ff2d2d' : '#5a1010'); o.userData.siren[1].material = mat(f ? '#102a5a' : '#2d6bff'); } if (a.hop) o.position.y = Math.abs(Math.sin(lt * 7)) * 0.1; o.rotation.y += a.yaw || 0; }
     else if (a.k === 'crowd') o.children.forEach((q) => { pose(q, a.pose || 'idle', lt + q.userData.phase, false); });
-    else { const pn = typeof a.pose === 'function' ? a.pose(lt) : a.pose ? (Array.isArray(a.pose) ? lin1(a.pose, lt) : a.pose) : mv ? (a.run ? 'run' : 'walk') : 'idle'; pose(o, pn, lt, mv); const y0 = o.position.y; o.position.y = y0 + (a.sitY ?? 0); }
+    else { const pn = typeof a.pose === 'function' ? a.pose(lt) : a.pose ? (Array.isArray(a.pose) ? lin1(a.pose, lt) : a.pose) : mv ? (a.run ? 'run' : 'walk') : 'idle'; pose(o, pn, lt, mv); if (a.tool) o.userData.tool.scale.setScalar(a.tool); const y0 = o.position.y; o.position.y = y0 + (a.sitY ?? 0); }
   });
   const cam = c.cam || { p: [[0, 0, 4, 12]], look: [[0, 0, 1.5, 0]] };
   const kk = cam.lin ? lin : kfv, cp = kk(cam.p, lt), cl = kk(cam.look, lt); CAM.fov = cam.fov || 58; CAM.updateProjectionMatrix(); CAM.position.set(...cp);

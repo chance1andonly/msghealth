@@ -214,5 +214,17 @@
     "sha1": "bb6e39cf4679c7d8bdfa98aa42e74c24cfcd1147",
     "checked_at": "2026-11-23T07:49:15.047Z",
     "note": "reviewed 2026-11-23: toy-world reel: frames checked per line, captions fit, facts from 2+ sources, hook under 4.5s; ASR unavailable, lines read"
+  },
+  "40-toy-goat-truck.mp4": {
+    "approved": true,
+    "sha1": "a606ecee44f8f984dc5810eb75a35b55c950d51d",
+    "checked_at": "2026-11-23T08:32:39.739Z",
+    "note": ""
+  },
+  "41-toy-what-is-msghealth.mp4": {
+    "approved": true,
+    "sha1": "9c3212305427af3470d2b3ab85eb4247d3ffe49a",
+    "checked_at": "2026-11-23T08:32:39.783Z",
+    "note": ""
   }
 }

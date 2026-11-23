@@ -1,0 +1,56 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "What is MsgHealth? It's the app that brings your clients back.",
+   "caps": [
+    "What is *MsgHealth?*",
+    "The app that *brings clients back.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Step one. It scores every client in your book by how long they've been gone.",
+   "caps": [
+    "Step 1: it *scores every client*",
+    "by how long they've *been gone.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.1
+  },
+  {
+   "say": "Step two. When someone goes quiet, it texts them for you. In your voice.",
+   "caps": [
+    "Step 2: when they go quiet,",
+    "it *texts them for you.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Step three. They reply, and it books the appointment right there.",
+   "caps": [
+    "Step 3: they reply and",
+    "it *books the chair.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "You cut hair. It handles the chasing. Built for Atlanta barbers and stylists.",
+   "caps": [
+    "You *cut hair.*",
+    "It handles the *chasing.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
