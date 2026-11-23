@@ -140,8 +140,8 @@
   "28-sewell-fee.mp4": {
     "approved": true,
     "sha1": "6d510807e190f7d780896077e17beaa5157e2b6b",
-    "checked_at": "2026-11-21T19:30:09.219Z",
-    "note": "reviewed 2026-11-21: graphics reel (draw 0.795): script, frames and wording flags checked, $332,000 and $25 fee attributed to Selling Power, caption adds source"
+    "checked_at": "2026-11-23T00:13:18.581Z",
+    "note": "validated 2026-11-22 19:20 ET: stats.json (64 reels) shows no new winners; last 2 posts were candy and pizza food reels, so picked non-food car-dealer story (odd true scene, outcome withheld, then barber action) that matches top-reel structure; qa no flags, 24s, hook 3.6s, $332K and 115 loaners attributed to Selling Power, frames match each line, caption has KEEP CTA, verdict, 3 hashtags"
   },
   "29-wendys-key-tag.mp4": {
     "approved": true,
