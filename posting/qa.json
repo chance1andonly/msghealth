@@ -170,8 +170,8 @@
   "33-harley-hog.mp4": {
     "approved": true,
     "sha1": "9f848e3a69c44e8de2aae1907c9023b8f59424a1",
-    "checked_at": "2026-11-22T07:33:08.577Z",
-    "note": "reviewed 2026-11-22: PEOPLE reel (3 of 5 scenes cast, draw 0.25): qa no flags, ~24s; HOG 1983, 25,000 expected per Fessler/Rider, ~1M members per Rider 2013, only-one-bike rule per Wikipedia; cast frames checked, people fully visible; lines read by hand"
+    "checked_at": "2026-11-23T01:15:24.931Z",
+    "note": "validated 2026-11-22 20:20 ET: stats refreshed (65 reels, no views yet for last 6 posts; 20-23h and 8h best hours). Picked HOG people reel: not food, differs from last 3 (wispa, mexican pizza, sewell); script/frames/caption checked, facts not date-bound, qa no flags"
   },
   "34-chewy-flowers.mp4": {
     "approved": true,
