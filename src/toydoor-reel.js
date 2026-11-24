@@ -45,7 +45,7 @@ window.TOY = { name: 'toydoor', who: 'Dre', emph: ['keep', 'fucking', 'msghealth
   { at: [8, 2.4], set: 'shop', f: [0, 1.2], d: 6.4, stat: [[0.1, 'TEXTS SENT: 0']], chairs: [-2.6, 2.6],
     actors: [{ id: 'y', who: 'stylist', x: 0.4, z: 1.2, ry: 0, pose: 'slump' }], tags: [{ a: 'y', text: 'nobody told him', at: 0.5 }] },
   // L9 the product
-  { at: [9, 0], set: 'shop', chairs: [-4.5, 4.5], f: [0, 0], d: 8, h: 3.4, ly: 3.9, wy: 1205,
+  { at: [9, 0], set: 'shop', chairs: [-4.5, 4.5], f: [0, 0], d: 8, h: 3.4, ly: 3.9, wy: 1500,
     actors: [{ id: 'panel', k: 'panel', x: 0, z: -1, y: 5.0, w: 5.4, h: 3.1, col: '#4f46e5', pop: 0.2, text: ['MsgHealth', 'Marcus — active ✓', 'Dre — 3 weeks quiet', 'Text sent ✓'], rows: { 1: '#e6f6ea', 2: '#fff1d6', 3: '#e6f6ea' } }, { id: 'y', who: 'stylist', x: -3.2, z: 1.6, ry: 0.5, pose: 'point' }], sfx: [{ at: 0.2, kind: 'ding', gain: 0.2 }] },
   { at: [9, 2.5], chatOnly: true, chat: [{ out: true, lines: ['Hey Dre! It\'s been 3 weeks', 'since your fade.', 'Want Thursday at 4?'], at: 0.2, note: 'Sent automatically by MsgHealth ✓' }, { out: false, lines: ['bet. see you thursday'], at: 1.4 }, { card: ['BOOKED', 'Thu · 4:00 PM'], at: 2.2 }] },
   // L10 callback

@@ -1,0 +1,35 @@
+# Format experiments (started 2026-11-24)
+
+Why: profile views fell about 30%, the whole platform is down (Reels reach about -35% YoY per Metricool), and our own data says volume is hurting: 3 posts/day median 129 views, 5/day median 28 (small sample, confounded by format and time). We stop guessing and run a ledger.
+
+## What the 2026 research says (use as priors, not rules)
+- Ranking leans on watch time, sends per reach, likes per reach; sends (DM shares) is the strongest reach signal. Originality is rewarded, reposts/AI-slop sameness is demoted.
+- Topic dilution: a feed that jumps topics gets shown to colder audiences. Keep ONE promise (retention for barbers/stylists) but vary the FORMAT.
+- Trial Reels (Graph API `trial_params`, graduation MANUAL or SS_PERFORMANCE) show a reel to non-followers first, so formats can be tested without hurting the main grid. Needs a professional account with 200+ followers. posting/ig.mjs already supports it: set `"trial": "MANUAL"` in schedule.json (falls back to a normal reel if refused).
+- Best SaaS short-form pattern: a concrete problem the viewer feels, shown not told, with a comment-keyword CTA that delivers something (lead magnet) via DM automation. Founder/POV, screen-demo, and fast "before/after" formats outperform polished brand spots.
+
+## Format matrix (each gets at least 3 reels before judging)
+| ID | Format | Hook type |
+|----|--------|-----------|
+| F1 | Toy-world story (door kick, sheep) | absurd story, product reveal at end |
+| F2 | True-story reel (Pentagon pizza style) | odd true scene + date/number |
+| F3 | Screen demo: real MsgHealth texting a lapsed client | "Watch this client come back in 40s" |
+| F4 | Talking POV/founder: one sentence on what stylists lose per ghosted client | direct number claim |
+| F5 | Reaction/stitch of a viral barber reel with the retention angle | borrowed attention |
+| F6 | Text-on-footage list ("3 texts that bring clients back") | utility, saveable |
+| F7 | Poll/verdict: "Would you text this client? Y/N" | comments |
+
+## Ledger (fill after 48h per reel; read posting/stats.json)
+format | reel | views | sends/reach | likes/reach | follows | profile visits | verdict
+
+## Decision rules
+- WIN: above the account median views AND sends/reach or follows above median. REPLICATE: next 3 reels reuse the format with new content. Stop when two in a row fall below median; then kill it.
+- KILL: 3 reels all below median. Log why in one line.
+- Never judge before 48h. Always compare within the same posting-hour band.
+- One variable per test: change format OR hook OR hour, not all.
+
+## Parallel checks
+1. Cadence A/B: 3/day for 7 days vs the 6/day we run now. Pick the better median views per post AND total profile visits.
+2. Trial track: when the account is eligible, post each new format as a trial first (MANUAL graduation), graduate only winners.
+3. Funnel: "Comment KEEP" must DM a real "retention audit" (comment-to-DM automation) or the CTA is dead. Check follows / profile visits conversion; bio must state the promise and link msghealth.net.
+4. Paid: after a week, put $5-10/day behind the single best organic reel to the same audience; judge on cost per profile visit.

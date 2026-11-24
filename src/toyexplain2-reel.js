@@ -1,7 +1,7 @@
 const DH = { x: 0, name: "DRE'S HOUSE", house: true, col: '#e8d4a8', roof: '#7a3b2e', signBg: '#4a8fd9', signFg: '#fff', pole: false, w: 6 };
 const SH = (c, a) => ({ set: 'shop', f: [0, 1.2], d: 6.2, chairs: [-2.6, 2.6], ...c, actors: a });
 const PANEL = (text, rows, o = {}) => ({ id: 'panel', k: 'panel', x: 0, z: -1, y: 5.0, w: 5.6, h: o.h || 3.4, col: '#4f46e5', pop: 0.15, text, rows });
-const PS = (c, text, rows, more = []) => ({ set: 'shop', chairs: [-4.5, 4.5], f: [0, 0], d: 10, h: 3.4, ly: 3.9, wy: 1205, ...c, actors: [PANEL(text, rows, { h: text.length > 4 ? 3.9 : 3.2 }), ...more] });
+const PS = (c, text, rows, more = []) => ({ set: 'shop', chairs: [-4.5, 4.5], f: [0, 0], d: 10, h: 3.4, ly: 3.9, wy: 1500, ...c, actors: [PANEL(text, rows, { h: text.length > 4 ? 3.9 : 3.2 }), ...more] });
 window.TOY = { name: 'toyexplain2', who: 'Dre', emph: ['keep', 'msghealth'], scenes: [
   SH({ stat: [[0.2, 'REGULARS MAD AT YOU: 0']], tags: [{ a: 'y', text: 'YOU', at: 0.5 }] }, [{ id: 'y', who: 'stylist', x: 0, z: 1.2, ry: 0, pose: 'idle' }]),
   { at: [0, 1.5], set: 'street', f: [0, 3], d: 7, h: 3.0, ly: 2.0, shops: [{ x: -2, name: 'COFFEE', col: '#8a5a3b', signBg: '#fff', signFg: '#3a2a1a', w: 6, pole: false }],

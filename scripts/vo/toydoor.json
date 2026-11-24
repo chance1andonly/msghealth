@@ -28,13 +28,11 @@
    "gap": 0.34
   },
   {
-   "say": "Comment KEEP if you've ever chased a client this hard.",
+   "say": "And honestly? Worth it.",
    "caps": [
-    "Comment *KEEP* if you've ever",
-    "chased a client this hard."
+    "And honestly? Worth it."
    ],
-   "gap": 0.34,
-   "show": "Comment KEEP if you've ever chased a client this hard."
+   "gap": 0.34
   },
   {
    "say": "Turns out, Dray wasn't even home. He heard what I did, and fainted. Now he's in the hospital.",

@@ -105,7 +105,7 @@ function person(x, y, h, seed, o = {}) {
 }
 
 // ── dark product-UI helpers ──────────────────────────────────────────────────
-const IN = { hi: '#c7c3ff', mid: '#a5a0ff', deep: '#7168ff' };
+const IN = { hi: '#c7c3ff', mid: '#ffffff', deep: '#7168ff' };
 const MUTED = 'rgba(235,235,245,0.5)', SOFT = 'rgba(235,235,245,0.78)', DIM = 'rgba(235,235,245,0.32)';
 const RED = C.risk, GREEN = C.healthy, AMBER = C.attention;
 const CARD = { x: 100, w: 880 };

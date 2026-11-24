@@ -1,0 +1,118 @@
+{
+ "voice": "am_adam",
+ "speed": 1.05,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "Alright kids, I'm gonna read you a story. It's gonna be a little crazy, but I think y'all are old enough for it.",
+   "caps": [
+    "Alright kids, I'm gonna read you a story.",
+    "It's gonna be a little crazy."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Once upon a time, there was a sheep farmer. And every single month, a man came to buy a sheep.",
+   "caps": [
+    "Once upon a time, a sheep farmer.",
+    "Every month, a man bought a sheep."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then it was every two months. Then every three months. Then he just stopped. Never came back.",
+   "caps": [
+    "Then every two months.",
+    "Then every three. Then he stopped."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "And the farmer said, nah, fuck this.",
+   "caps": [
+    "The farmer said, nah, *fuck* this."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He found the guy, hooked him by the neck with his staff, and yanked him in.",
+   "caps": [
+    "He hooked him by the neck",
+    "and yanked him in."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "How dare you stop buying my sheep! After everything I did for you! I gave you the best sheep in the whole pasture!",
+   "caps": [
+    "How dare you stop buying my sheep!",
+    "I gave you the best sheep in the pasture!"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "They argued. It got heated. Then a different sheep walked out, and the farmer lost it. I can't believe you cheated on me!",
+   "caps": [
+    "They argued. A different sheep walked out.",
+    "I can't believe you cheated on me!"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "So he pulled out a Glock with a switch, and went full auto. Thirty shots.",
+   "caps": [
+    "He pulled out a Glock with a switch",
+    "and went full auto."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "And the man dodged every single one. I just dodged every bullet, bitch. I left because you never noticed me. You never texted to check in. I felt unappreciated.",
+   "caps": [
+    "He dodged every single one.",
+    "\"I left because you never texted me.\""
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Kids, that's what happens to the shepherd who never checks in.",
+   "caps": [
+    "Kids, that's what happens",
+    "to the shepherd who never checks in."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Now the other shepherd uses Message Health. It texts every customer, so he stays close with all of them.",
+   "caps": [
+    "The other shepherd uses *MsgHealth.*",
+    "It texts every customer for him."
+   ],
+   "gap": 0.34,
+   "show": "Now the other shepherd uses MsgHealth. It texts every customer, so he stays close with all of them."
+  },
+  {
+   "say": "And they all came back. Even the man who left. He bought three sheep.",
+   "caps": [
+    "They all came back.",
+    "Even the man who left."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "And they lived happily ever after.",
+   "caps": [
+    "And they lived happily ever after."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get",
+    "a full *retention audit.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}

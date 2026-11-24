@@ -30,7 +30,7 @@ window.TOY = { name: 'toymissing', who: 'Marcus', emph: ['keep', 'msghealth'], s
   { at: [8, 0], set: 'street', f: [0, -2.4], d: 11, h: 3.8, ly: 2.2, stat: [[0.1, 'POSTERS USED: 4,000']], shops: [MISSING(-5), MISSING(0), MISSING(5)],
     actors: [{ id: 'y', who: 'stylist', x: 0, z: -1, ry: 0, pose: 'slump' }] },
   SHOPS({ at: [8, 2.2], d: 6.5, tags: [{ a: 'm', text: "WOULD'VE COME BACK", at: 0.5 }] }, [{ id: 'm', who: 'marcus', x: -2.6, z: 0.5, ry: 0, pose: 'sit', sitY: 0.95 }, { id: 'y', who: 'stylist', x: 0.6, z: 1.4, ry: -0.3, pose: 'wave' }]),
-  { at: [9, 0], set: 'shop', chairs: [-4.5, 4.5], f: [0, 0], d: 8, h: 3.4, ly: 3.9, wy: 1205,
+  { at: [9, 0], set: 'shop', chairs: [-4.5, 4.5], f: [0, 0], d: 8, h: 3.4, ly: 3.9, wy: 1500,
     actors: [{ id: 'panel', k: 'panel', x: 0, z: -1, y: 5.0, w: 5.4, h: 3.1, col: '#4f46e5', pop: 0.2, text: ['MsgHealth', 'Marcus — 3 weeks quiet', 'Text sent ✓', 'Booked: Thu 4pm ✓'], rows: { 1: '#fff1d6', 2: '#e6f6ea', 3: '#e6f6ea' } }, { id: 'y', who: 'stylist', x: -3.2, z: 1.6, ry: 0.5, pose: 'point' }], sfx: [{ at: 0.2, kind: 'ding', gain: 0.2 }] },
   { at: [9, 3.0], chatOnly: true, chat: [{ out: true, lines: ['Hey Marcus! It\'s been', '3 weeks since your fade.', 'Want Thursday at 4?'], at: 0.2, note: 'Sent automatically by MsgHealth ✓' }, { out: false, lines: ['bet. see you thursday'], at: 1.4 }, { card: ['BOOKED', 'Thu · 4:00 PM'], at: 2.4 }] },
   SHOPS({ at: [10, 0], d: 6.4, stat: [[0.1, 'POSTERS: 0'], [0.9, 'HELICOPTERS: 0'], [1.7, 'TEXTS SENT: 1']] }, [{ id: 'y', who: 'stylist', x: 0.4, z: 1.2, ry: 0, pose: 'cheer' }, { id: 'm', who: 'marcus', x: -1.7, z: 0.5, ry: 0, pose: 'sit', sitY: 0.95 }])

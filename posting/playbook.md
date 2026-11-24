@@ -2,6 +2,9 @@
 
 Updated 2026-11-23 am (research.json 2026-11-22, stats.json 2026-11-23, 65 reels, per_day 6). Judged from titles, captions and numbers only; I did not watch the videos.
 
+## Testing system
+See posting/experiments.md: rotate formats F1 to F7, judge after 48h on views, sends/reach and follows, replicate winners, kill after 3 misses. Keep one topic, vary the format.
+
 ## What the winners share
 1. One human scene, a number or an age as the stake, outcome withheld: "He Waited 13 Years For A Haircut" (6.8M views on a 4,680-subscriber channel, 1.9% like rate); "I SHAVED HIS MOLE" (4.1M, 2.8% like rate, 17k subscribers). The title is the whole hook.
 2. Verdict or vote devices keep people in the comments: vicblends ends with "vote below" and gets 25,894 comments on one reel; sami2fresh asks "Would you trust your barber to do this?".
