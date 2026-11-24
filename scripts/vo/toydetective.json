@@ -1,0 +1,96 @@
+{
+ "voice": "am_adam",
+ "speed": 1.05,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "My regular stopped coming in. So I hired a very expensive detective.",
+   "caps": [
+    "My regular stopped coming in.",
+    "So I hired a *detective.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He followed him for nine days. In a trench coat. In August.",
+   "caps": [
+    "Followed him for nine days.",
+    "Trench coat. In *August.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then a tracker. Then a drone. Then a second detective, to follow the first.",
+   "caps": [
+    "A tracker. A drone.",
+    "A second detective."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP if you've ever creeped a client's Instagram.",
+   "caps": [
+    "Comment *KEEP* if you've ever",
+    "creeped a client's Instagram."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "The invoice was four thousand dollars. For a man's grocery list.",
+   "caps": [
+    "Invoice: four thousand dollars.",
+    "For a man's grocery list."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "So I cornered him at the grocery store. In front of forty people. By the oat milk.",
+   "caps": [
+    "I cornered him at the grocery store.",
+    "In front of forty people."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He goes, bro. I didn't know you wanted me back. I figured you were booked up.",
+   "caps": [
+    "\"I didn't know you wanted me back.",
+    "I figured you were booked up.\""
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Two detectives. A drone. Four thousand dollars. And he just needed one text.",
+   "caps": [
+    "Two detectives. A drone.",
+    "He needed *one text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "So now I use Message Health. It spots who's gone quiet and texts them first.",
+   "caps": [
+    "So now I use *MsgHealth.*",
+    "It texts them *first.*"
+   ],
+   "gap": 0.34,
+   "show": "So now I use MsgHealth. It spots who's gone quiet and texts them first."
+  },
+  {
+   "say": "No detective. No drone. No oat milk. Just a text.",
+   "caps": [
+    "No detective. No drone.",
+    "*Just a text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}

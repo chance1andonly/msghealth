@@ -1,0 +1,96 @@
+{
+ "voice": "am_adam",
+ "speed": 1.05,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "My client stopped coming in. So I moved my shop into his living room.",
+   "caps": [
+    "My client stopped coming in.",
+    "So I moved my shop into his living room."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "I put the chair on a monster truck. Drove it through his front wall.",
+   "caps": [
+    "Chair on a monster truck.",
+    "Through his *front wall.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "His wife brought coffee. His goat got a fade. Then forty neighbors lined up.",
+   "caps": [
+    "His wife brought coffee.",
+    "His goat got a fade."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP if you've ever gone this far for one client.",
+   "caps": [
+    "Comment *KEEP* if you've ever",
+    "gone this far for one client."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then a cop showed up. To arrest me. He sat down, and asked for a taper.",
+   "caps": [
+    "Then a cop showed up.",
+    "He asked for a taper."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then Terrence walks in with groceries. His living room is a barbershop.",
+   "caps": [
+    "Terrence walks in with groceries.",
+    "His living room is a barbershop."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He goes, bro. I meant to book. Then it was week eight, and it got weird.",
+   "caps": [
+    "\"I meant to book.",
+    "Then week eight got weird.\""
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "A truck. A wall. A goat. Because he needed one text.",
+   "caps": [
+    "A truck. A wall. A goat.",
+    "He needed *one text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "So now I use Message Health. It spots who's gone quiet and texts them before it gets weird.",
+   "caps": [
+    "So now I use *MsgHealth.*",
+    "It texts them *before it gets weird.*"
+   ],
+   "gap": 0.34,
+   "show": "So now I use MsgHealth. It spots who's gone quiet and texts them before it gets weird."
+  },
+  {
+   "say": "No truck. No wall. No goat fade. Just a text.",
+   "caps": [
+    "No truck. No wall. No goat.",
+    "*Just a text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}

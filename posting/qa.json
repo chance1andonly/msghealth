@@ -280,5 +280,17 @@
     "sha1": "f980e40be71b1359bf7a74ef6d56253d20f23fcd",
     "checked_at": "2026-11-23T23:10:56.833Z",
     "note": "validated 2026-11-23 18:15 ET after 21:35Z stats refresh: pronunciation OK (file sha unchanged since ASR-matched gate today, Message Health said right), frames OK (contact sheet rechecked, text readable, caption zone clear), analytics: last 3 posts were viral (goat, swat, duel) so explainer is due; 36s, concrete 'somebody in your book went quiet' hook, real app screens, question+KEEP caption; no toy view data yet so unproven"
+  },
+  "51-toy-moved-shop.mp4": {
+    "approved": true,
+    "sha1": "451cab13af1a8268070680f3a0c7401bea20458b",
+    "checked_at": "2026-11-24T07:56:40.376Z",
+    "note": "reviewed 2026-11-24 (viral, ~45s, 12-14 word hook <4s). Gate: (1) pronunciation: qa.py ASR hears 'message health', Terrence/numbers fine; (2) frames: flicker none, hard cuts only at shot boundaries, contact sheets looked at, subjects framed, no overlaps (living room re-skinned after hospital-cross wall, tracker car shot fixed, re-rendered); (3) beats analytics: outlandish chain hook + withheld lesson + KEEP CTA mid/end, same shape as other toy viral reels, caption ends with question + KEEP CTA; toy-world has only hours of data so no stronger recent signal to compare, hook is concrete odd scene like the top true-story hooks. PRODUCT.md claims only (spots quiet clients, texts them)."
+  },
+  "52-toy-detective.mp4": {
+    "approved": true,
+    "sha1": "112c8083a83cf5f47431b9f71f96254c36378399",
+    "checked_at": "2026-11-24T07:56:40.434Z",
+    "note": "reviewed 2026-11-24 (viral, ~45s, 12-14 word hook <4s). Gate: (1) pronunciation: qa.py ASR hears 'message health', Terrence/numbers fine; (2) frames: flicker none, hard cuts only at shot boundaries, contact sheets looked at, subjects framed, no overlaps (living room re-skinned after hospital-cross wall, tracker car shot fixed, re-rendered); (3) beats analytics: outlandish chain hook + withheld lesson + KEEP CTA mid/end, same shape as other toy viral reels, caption ends with question + KEEP CTA; toy-world has only hours of data so no stronger recent signal to compare, hook is concrete odd scene like the top true-story hooks. PRODUCT.md claims only (spots quiet clients, texts them)."
   }
 }

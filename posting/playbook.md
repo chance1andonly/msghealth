@@ -74,6 +74,11 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-24 (morning run)
+- Found: 70 reels analyzed. All 6 slots posted on 2026-11-23 (40, 44, 42, 49, 50, 48 toy reels). The toy reels have only hours of data and none is in the top 15 yet (top is still the true-story graphics reels at 1,709 / 1,291 / 794), so no viral vs explainer, hook, length or caption conclusion is supported. No release-gate failures logged. Queue held 3 approved (45, 46, 47), so this run built 2 viral reels to reach 5.
+- Changed: nothing in strategy. Two new viral ideas: moved the shop into his living room (51), hired a private detective (52). Reveals vary on purpose (it got weird at week eight; I thought you were booked up).
+- Process notes: `ST` is a global in src/toy.js, so do not name a const ST in a reel config (it breaks the page: DURATION is not defined). bare shop sets show a red hospital cross; for a living room use the normal shop with a wall colour and chairs. Do not chain two renders in one command (10 min tool limit).
+
 ### 2026-11-23 (evening run)
 - Found: 68 reels analyzed. The 3 toy reels posted today (40-toy-goat-truck 08:00, 44-toy-why-clients-leave 10:00, 42-toy-swat-wrong-door 13:00) are not in the top 15 yet and have only hours of data, so there is no viral vs explainer comparison to act on. Yesterday 5 graphics reels went out in the 8/11/14/17/20 slots (per_day 5, one short of the 6 slots now in schedule.json). No release-gate failures are logged for posted reels. The queue held only 2 approved reels (45, 46), so this run built 3 more.
 - Hour data unchanged (23 and 22 best, 16 and 17 worst, small samples). per_day_decision is "holding".
