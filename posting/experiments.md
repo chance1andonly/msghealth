@@ -32,4 +32,8 @@ format | reel | views | sends/reach | likes/reach | follows | profile visits | v
 1. Cadence A/B: 3/day for 7 days vs the 6/day we run now. Pick the better median views per post AND total profile visits.
 2. Trial track: when the account is eligible, post each new format as a trial first (MANUAL graduation), graduate only winners.
 3. Funnel: "Comment KEEP" must DM a real "retention audit" (comment-to-DM automation) or the CTA is dead. Check follows / profile visits conversion; bio must state the promise and link msghealth.net.
-4. Paid: after a week, put $5-10/day behind the single best organic reel to the same audience; judge on cost per profile visit.
+4. Paid: NO. Owner decision 2026-11-24: organic only.
+5. Trial Reels: blocked, account has 9 followers (needs 200). Keep schedule.json trial null.
+6. Cadence: owner said do whatever proves best; the optimizer (ig.mjs optimize) already compares posts/day groups, so leave per_day automatic.
+7. Trendjacking (owner asked to study @robertmokeaveney): not yet studied, Instagram could not be read from here. Rule meanwhile: tie each reel to a trend from the last 7 days, hook in the first second, product reveal last.
+8. Profile (9 followers, 9.6K views/30d, avatar still purple): bio should name who it is for (barbers and stylists) and what it does, not just the tagline.
