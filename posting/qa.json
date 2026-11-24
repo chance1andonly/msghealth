@@ -266,8 +266,8 @@
   "48-toy-funeral-client.mp4": {
     "approved": true,
     "sha1": "f1bc80320a24175de02faf94e64184601203ce93",
-    "checked_at": "2026-11-23T20:07:52.229Z",
-    "note": "reviewed 2026-11-23 VIRAL funeral. Gate1 words: ASR matches script (Terrell, lineup, haircut; 'fade' swapped to 'haircut' after ASR heard 'fate'). Gate2 frames: contact sheet one frame per shot, re-rendered after fixing off-edge client and flowers panel overlap; nothing in caption zone. Gate3: absurd escalating hook (assumed he died, funeral), 54s, withheld ending, text-at-week-three payoff, KEEP caption + question; no toy-world view data yet (3 posted today too new), so predicted from hook shape of top reels (odd scene, outcome withheld), not proven"
+    "checked_at": "2026-11-24T01:16:42.219Z",
+    "note": "validated 2026-11-23 20:20 ET after 01:15Z stats refresh: pronunciation OK (sha unchanged since ASR-matched gate, Terrell/lineup/haircut), frames OK (contact sheet rechecked, caption zone clear, text readable), analytics: last two posts were viral duel then explainer; funeral is a new topic with concrete absurd withheld-outcome hook like top reels, 54s, question+KEEP caption; no toy view data yet so unproven"
   },
   "49-toy-barber-duel.mp4": {
     "approved": true,
