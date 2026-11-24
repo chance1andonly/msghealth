@@ -290,7 +290,7 @@
   "52-toy-detective.mp4": {
     "approved": true,
     "sha1": "387dd8ac637f02105d1e4bc381f72377cd92e03f",
-    "checked_at": "2026-11-24T08:08:57.780Z",
-    "note": "reviewed 2026-11-24, re-rendered after the floating KEEP chip was removed from toy.js. Gate: (1) pronunciation: qa.py ASR hears 'message health'; (2) frames: flicker none, hard cuts only at shot boundaries, contact sheets viewed (living room, tracker car shots fixed earlier), subjects framed, no overlaps; (3) predicted to match toy-world viral shape: outlandish escalating chain hook, withheld lesson, spoken KEEP mid and end, caption question + KEEP CTA; toy reels have only hours of data so no stronger signal to compare; PRODUCT.md-only claims."
+    "checked_at": "2026-11-24T15:14:13.174Z",
+    "note": "validated 2026-11-24 10:20 ET after 15:13Z stats refresh: pronunciation OK (sha unchanged since ASR 'message health' gate, script re-read), frames OK (contact sheet viewed, subjects framed, caption zone clear), analytics: only reel left; toy viral escalating-chain hook, different topic from 51 moved-shop (follows 1 viral->this viral but new premise), 44s, question+KEEP caption, no toy view data yet so unproven"
   }
 }
