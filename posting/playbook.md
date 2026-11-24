@@ -77,6 +77,7 @@ Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md.
 ### 2026-11-24 (morning run)
 - Found: 70 reels analyzed. All 6 slots posted on 2026-11-23 (40, 44, 42, 49, 50, 48 toy reels). The toy reels have only hours of data and none is in the top 15 yet (top is still the true-story graphics reels at 1,709 / 1,291 / 794), so no viral vs explainer, hook, length or caption conclusion is supported. No release-gate failures logged. Queue held 3 approved (45, 46, 47), so this run built 2 viral reels to reach 5.
 - Changed: nothing in strategy. Two new viral ideas: moved the shop into his living room (51), hired a private detective (52). Reveals vary on purpose (it got weird at week eight; I thought you were booked up).
+- Mid-run, the floating KEEP chip was removed from src/toy.js and 45-47 were held (other session), so 51 and 52 were re-rendered without the chip. Queue now has only 2 approved reels (below the 5 target): 45-47 are held pending a rewrite, so I did not build a third reel in the old style.
 - Process notes: `ST` is a global in src/toy.js, so do not name a const ST in a reel config (it breaks the page: DURATION is not defined). bare shop sets show a red hospital cross; for a living room use the normal shop with a wall colour and chairs. Do not chain two renders in one command (10 min tool limit).
 
 ### 2026-11-23 (evening run)

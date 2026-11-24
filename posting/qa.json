@@ -283,14 +283,14 @@
   },
   "51-toy-moved-shop.mp4": {
     "approved": true,
-    "sha1": "451cab13af1a8268070680f3a0c7401bea20458b",
-    "checked_at": "2026-11-24T07:56:40.376Z",
-    "note": "reviewed 2026-11-24 (viral, ~45s, 12-14 word hook <4s). Gate: (1) pronunciation: qa.py ASR hears 'message health', Terrence/numbers fine; (2) frames: flicker none, hard cuts only at shot boundaries, contact sheets looked at, subjects framed, no overlaps (living room re-skinned after hospital-cross wall, tracker car shot fixed, re-rendered); (3) beats analytics: outlandish chain hook + withheld lesson + KEEP CTA mid/end, same shape as other toy viral reels, caption ends with question + KEEP CTA; toy-world has only hours of data so no stronger recent signal to compare, hook is concrete odd scene like the top true-story hooks. PRODUCT.md claims only (spots quiet clients, texts them)."
+    "sha1": "18f8fa6139c51fdf3d9c95bf126f155ac04b242c",
+    "checked_at": "2026-11-24T08:08:57.720Z",
+    "note": "reviewed 2026-11-24, re-rendered after the floating KEEP chip was removed from toy.js. Gate: (1) pronunciation: qa.py ASR hears 'message health'; (2) frames: flicker none, hard cuts only at shot boundaries, contact sheets viewed (living room, tracker car shots fixed earlier), subjects framed, no overlaps; (3) predicted to match toy-world viral shape: outlandish escalating chain hook, withheld lesson, spoken KEEP mid and end, caption question + KEEP CTA; toy reels have only hours of data so no stronger signal to compare; PRODUCT.md-only claims."
   },
   "52-toy-detective.mp4": {
     "approved": true,
-    "sha1": "112c8083a83cf5f47431b9f71f96254c36378399",
-    "checked_at": "2026-11-24T07:56:40.434Z",
-    "note": "reviewed 2026-11-24 (viral, ~45s, 12-14 word hook <4s). Gate: (1) pronunciation: qa.py ASR hears 'message health', Terrence/numbers fine; (2) frames: flicker none, hard cuts only at shot boundaries, contact sheets looked at, subjects framed, no overlaps (living room re-skinned after hospital-cross wall, tracker car shot fixed, re-rendered); (3) beats analytics: outlandish chain hook + withheld lesson + KEEP CTA mid/end, same shape as other toy viral reels, caption ends with question + KEEP CTA; toy-world has only hours of data so no stronger recent signal to compare, hook is concrete odd scene like the top true-story hooks. PRODUCT.md claims only (spots quiet clients, texts them)."
+    "sha1": "387dd8ac637f02105d1e4bc381f72377cd92e03f",
+    "checked_at": "2026-11-24T08:08:57.780Z",
+    "note": "reviewed 2026-11-24, re-rendered after the floating KEEP chip was removed from toy.js. Gate: (1) pronunciation: qa.py ASR hears 'message health'; (2) frames: flicker none, hard cuts only at shot boundaries, contact sheets viewed (living room, tracker car shots fixed earlier), subjects framed, no overlaps; (3) predicted to match toy-world viral shape: outlandish escalating chain hook, withheld lesson, spoken KEEP mid and end, caption question + KEEP CTA; toy reels have only hours of data so no stronger signal to compare; PRODUCT.md-only claims."
   }
 }
