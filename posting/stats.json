@@ -1,8 +1,8 @@
 {
-  "updated": "2026-11-23T21:35:53.706Z",
+  "updated": "2026-11-24T01:15:15.605Z",
   "timezone": "America/New_York",
   "metric": "views",
-  "reels_analyzed": 68,
+  "reels_analyzed": 70,
   "by_hour": [
     {
       "hour": 23,
@@ -20,14 +20,14 @@
       "median_score": 133
     },
     {
+      "hour": 20,
+      "reels": 7,
+      "median_score": 131
+    },
+    {
       "hour": 8,
       "reels": 12,
       "median_score": 122
-    },
-    {
-      "hour": 20,
-      "reels": 6,
-      "median_score": 112
     },
     {
       "hour": 16,
@@ -36,7 +36,7 @@
     },
     {
       "hour": 17,
-      "reels": 4,
+      "reels": 5,
       "median_score": 27
     },
     {
@@ -56,7 +56,7 @@
       "median_score": 129
     },
     "5": {
-      "reels": 17,
+      "reels": 19,
       "median_score": 28
     }
   },
