@@ -292,5 +292,23 @@
     "sha1": "387dd8ac637f02105d1e4bc381f72377cd92e03f",
     "checked_at": "2026-11-24T15:14:13.174Z",
     "note": "validated 2026-11-24 10:20 ET after 15:13Z stats refresh: pronunciation OK (sha unchanged since ASR 'message health' gate, script re-read), frames OK (contact sheet viewed, subjects framed, caption zone clear), analytics: only reel left; toy viral escalating-chain hook, different topic from 51 moved-shop (follows 1 viral->this viral but new premise), 44s, question+KEEP caption, no toy view data yet so unproven"
+  },
+  "53-toy-wedding-helicopter.mp4": {
+    "approved": true,
+    "sha1": "0ed630a79e17492454acc33cf4f2d8e8ea41b9f4",
+    "checked_at": "2026-11-24T19:58:56.784Z",
+    "note": "Gate: (1) qa.py ASR hears 'message health', 'four layers' fixed from tiers; (2) flicker none, hard cuts only at shot boundaries, contact sheets viewed, no overlaps, uncle/stylist and sign-vs-stat overlaps fixed; (3) viral absurd-chain hook (event + escalation, counters, mid and end KEEP, 51s) matches the toy viral format; true-story graphics still lead stats, toy reels too new to judge, so kept hook one event with a withheld reason."
+  },
+  "54-toy-monster-chase.mp4": {
+    "approved": true,
+    "sha1": "7e7ad0262756af4cf57333e7f94010f246eb5e37",
+    "checked_at": "2026-11-24T19:58:56.837Z",
+    "note": "Gate: (1) ASR hears 'message health'; (2) flicker none, cuts at shot boundaries, runner/truck/car and window shots reframed after first render, sheets viewed; (3) viral chase hook (11 words, under 4.5s) with escalating chain, new reveal 'you could've just texted me', KEEP mid+end, 47s."
+  },
+  "55-toy-quiet-test.mp4": {
+    "approved": true,
+    "sha1": "abccdd74398508eaacd0f89d78cbe2f8762d4a06",
+    "checked_at": "2026-11-24T19:58:56.885Z",
+    "note": "Gate: (1) ASR hears 'message health'; (2) flicker none, cuts at shot boundaries (chat overlays), sheets viewed; (3) explainer 37s, no profanity, PRODUCT.md facts only (score, text quiet clients, reply/book, review, payment, inbox), question hook 'name five clients', KEEP mid+end."
   }
 }

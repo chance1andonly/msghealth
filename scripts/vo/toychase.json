@@ -1,0 +1,89 @@
+{
+ "voice": "am_adam",
+ "speed": 0.97,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "My client stopped coming in. So I chased his car. On foot.",
+   "caps": [
+    "My client stopped coming in.",
+    "So I chased his car. *On foot.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Four miles. Then I stole a monster truck, and kept going.",
+   "caps": [
+    "Four miles.",
+    "Then I stole a *monster truck.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then I hijacked a helicopter. The pilot was a very nice man. He just kept saying, sir, please.",
+   "caps": [
+    "Then I hijacked a helicopter.",
+    "The pilot kept saying, *sir, please.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP if you've ever chased down a client who ghosted you.",
+   "caps": [
+    "Comment *KEEP* if you've ever chased",
+    "down a client who ghosted you."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then the cops joined in. Eleven cars. Then the news. Then, somehow, a parade.",
+   "caps": [
+    "Then the cops joined in. Eleven cars.",
+    "Then the news. Then, a *parade.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He finally pulled over. Rolled down the window. Looked at me, and said, bro. You could've just texted me.",
+   "caps": [
+    "He finally pulled over.",
+    "He said, bro. You could've",
+    "*just texted me.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "He was just busy. That's it. Four miles, a monster truck, a helicopter, and nobody sent one text.",
+   "caps": [
+    "He was just busy.",
+    "And nobody sent *one text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "So now I use Message Health. It spots who's gone quiet, and texts them before they forget.",
+   "caps": [
+    "So now I use *MsgHealth.*",
+    "It texts them *before they forget.*"
+   ],
+   "gap": 0.34,
+   "show": "So now I use MsgHealth. It spots who's gone quiet, and texts them before they forget."
+  },
+  {
+   "say": "No chase. No helicopter. No parade. Just a text.",
+   "caps": [
+    "No chase. No helicopter. No parade.",
+    "*Just a text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}

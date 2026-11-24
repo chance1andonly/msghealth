@@ -1,0 +1,81 @@
+{
+ "voice": "am_adam",
+ "speed": 1.0,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "Quick test. Name five clients who haven't booked in a month. Hard, right?",
+   "caps": [
+    "Quick test. Name five clients",
+    "who haven't booked in a month."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Message Health scores every client. So you see who's active, who's drifting, and who's gone quiet.",
+   "caps": [
+    "*MsgHealth* scores every client.",
+    "Active. Drifting. *Gone quiet.*"
+   ],
+   "gap": 0.34,
+   "show": "MsgHealth scores every client. So you see who's active, who's drifting, and who's gone quiet."
+  },
+  {
+   "say": "No digging through your texts. No guessing. It's already sorted for you.",
+   "caps": [
+    "No digging through your texts.",
+    "No guessing. *Already sorted.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then it texts the quiet ones for you, in your voice, before they forget.",
+   "caps": [
+    "Then it texts the quiet ones",
+    "for you, *before they forget.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and I'll show you who's gone quiet on your list.",
+   "caps": [
+    "Comment *KEEP* and I'll show you",
+    "who's gone quiet on your list."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "They reply. They book. You stay on the cut.",
+   "caps": [
+    "They reply. They book.",
+    "You stay on the cut."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "After the cut, it asks for the review, takes the payment, and keeps every message in one inbox.",
+   "caps": [
+    "Then it asks for the review,",
+    "takes the payment,",
+    "one inbox for it all."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Score. Text. Book. You just cut hair.",
+   "caps": [
+    "Score. Text. Book.",
+    "*You just cut hair.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}

@@ -1,0 +1,89 @@
+{
+ "voice": "am_adam",
+ "speed": 0.97,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "My regular stopped coming in. So I landed a helicopter at his wedding.",
+   "caps": [
+    "My regular stopped coming in.",
+    "So I landed a helicopter at his wedding."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "The bride screamed. The band stopped. I climbed out in my apron, holding clippers, and yelled, nobody move!",
+   "caps": [
+    "The bride screamed. The band stopped.",
+    "I yelled, *nobody move!*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "His uncle tackled me. Straight into the cake. Four layers. Gone.",
+   "caps": [
+    "His uncle tackled me.",
+    "Straight into the cake. Four layers. Gone."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP if a client has ever just disappeared on you.",
+   "caps": [
+    "Comment *KEEP* if a client",
+    "has ever just disappeared on you."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then three cop cars showed up. The officer asked why I did it. I said, he missed two fades, officer.",
+   "caps": [
+    "Then three cop cars showed up.",
+    "I said, *he missed two fades,* officer."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "And the groom walks up. In a tux. Crying. He goes, bro. I was busy getting married. You could've just texted me.",
+   "caps": [
+    "The groom walks up. In a tux. Crying.",
+    "He goes, bro. I was busy getting married.",
+    "You could've just *texted me.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "That's the whole reason. Nobody texted him. Now I'm banned from every venue in Atlanta.",
+   "caps": [
+    "That's the whole reason.",
+    "Nobody texted him."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "So now I use Message Health. It spots who's gone quiet, and texts them before they forget.",
+   "caps": [
+    "So now I use *MsgHealth.*",
+    "It texts them *before they forget.*"
+   ],
+   "gap": 0.34,
+   "show": "So now I use MsgHealth. It spots who's gone quiet, and texts them before they forget."
+  },
+  {
+   "say": "No helicopter. No cake. No cops. Just a text.",
+   "caps": [
+    "No helicopter. No cake. No cops.",
+    "*Just a text.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Comment KEEP and we'll show you who's gone quiet.",
+   "caps": [
+    "Comment *KEEP* and we'll show",
+    "you who's *gone quiet.*"
+   ],
+   "gap": 0.34
+  }
+ ]
+}
