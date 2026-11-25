@@ -1,0 +1,88 @@
+{
+ "voice": "am_adam",
+ "speed": 1.12,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "He drove forty-one miles to dodge a barber ten minutes away.",
+   "caps": [
+    "He drove *41 miles* to dodge",
+    "a barber ten minutes away."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Every two weeks, for nine years. Nearly twenty thousand fucking miles for a haircut.",
+   "caps": [
+    "Every two weeks,",
+    "for nine years.",
+    "Nearly *20,000 miles*",
+    "for a haircut."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "And all because his barber raised the price five dollars and never said a damn word about it.",
+   "caps": [
+    "All because his barber raised",
+    "the price *five bucks,*",
+    "and said nothing."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "No text. No heads up. Just a new number on the sign.",
+   "caps": [
+    "No text. No heads up.",
+    "Just *a new number* on the sign."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "So he left without a word. The barber told everybody that guy was a flaky son of a bitch.",
+   "caps": [
+    "He left without a word.",
+    "The barber called him",
+    "*a flaky son of a bitch.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Meanwhile the guy told ninety-one people that barber was a prick. He counted.",
+   "caps": [
+    "The guy told *91 people*",
+    "the barber was a",
+    "prick. He counted."
+   ],
+   "gap": 0.5,
+   "speed": 1.04
+  },
+  {
+   "say": "I made that guy up. But you've got three of him on your books right now.",
+   "caps": [
+    "I made that guy up.",
+    "You've got *three",
+    "*of him* right now."
+   ],
+   "gap": 0.7,
+   "speed": 1.0
+  },
+  {
+   "say": "Message Health shows you who they are, and sends the text you never got around to.",
+   "caps": [
+    "Message Health shows you who,",
+    "and *sends the text*",
+    "you never sent."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

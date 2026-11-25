@@ -7,7 +7,34 @@ const R = window.REEL; window.CHAT_WHO = R.who || 'Marcus';
 const N = R.scenes.length, END = VO_AT[N] - 0.1, DURATION = +Math.max(END + 2.4, lineEnd(N) + 1.1).toFixed(2);
 window.CUES = { end: END }; window.SFX = []; const cue = (t, kind, gain) => window.SFX.push({ t, kind, gain });
 window.MUSIC = { bpm: 90, root: 41, brandAt: END, mood: 'sneaky' };
-const GOLD = '#f5d68a';
+const GOLD = '#ffffff';
+// ── black & white theme (owner 2026-11-24): no purple, no gold ──
+C.primary = '#3a3a3a'; IN.deep = '#888888'; IN.hi = '#dddddd';
+function stage(t, glowA = 0.22) { // eslint-disable-line no-unused-vars
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1;
+  ctx.beginPath(); for (let x = 0; x <= W; x += 60) { ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, H); } for (let y = 0; y <= H; y += 60) { ctx.moveTo(0, y + 0.5); ctx.lineTo(W, y + 0.5); } ctx.stroke();
+  const g = ctx.createRadialGradient(CX, 800, 0, CX, 800, 760); g.addColorStop(0, `rgba(255,255,255,${glowA * 0.35})`); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const v = ctx.createLinearGradient(0, 0, 0, H); v.addColorStop(0, 'rgba(0,0,0,0.5)'); v.addColorStop(0.2, 'rgba(0,0,0,0)'); v.addColorStop(0.8, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.6)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+}
+function drawCaption(caps, t, hide) { // black label, white words, accent word inverted
+  const c = caps.find((c) => t >= c.at && t < c.out);
+  if (!c || (hide && hide(t, c))) return;
+  let acc = false;
+  const words = c.s.split(' ').map((w) => { if (w.startsWith('*')) acc = true; const o = { w: w.replace(/\*/g, '').toUpperCase(), acc }; if (/\*[.,?!…:"]*$/.test(w)) acc = false; return o; });
+  const sp = tw(' ', CAP_SIZE, 800, 0); words.forEach((w) => (w.width = tw(w.w, CAP_SIZE, 800, 0.01)));
+  const tot = words.reduce((p, w) => p + w.width, 0) + sp * (words.length - 1), k = ease.back(seg(t, c.at, c.at + 0.14)), sc = 0.9 + 0.1 * k;
+  ctx.save(); ctx.translate(CX, CAP_Y); ctx.scale(sc, sc); ctx.translate(-CX, -CAP_Y);
+  fillRR(CX - tot / 2 - 28, CAP_Y - 40, tot + 56, 80, 12, 'rgba(0,0,0,0.94)'); strokeRR(CX - tot / 2 - 28, CAP_Y - 40, tot + 56, 80, 12, 'rgba(255,255,255,0.35)', 2);
+  let x = CX - tot / 2;
+  words.forEach((w) => { if (w.acc) fillRR(x - 8, CAP_Y - 31, w.width + 16, 62, 8, '#fff'); text(w.w, x, CAP_Y + 2, CAP_SIZE, 800, w.acc ? '#000' : '#fff', 'left', 0.01); x += w.width + sp; });
+  ctx.restore();
+}
+function finale(t, at) { // the toy end card: black, wordmark, tagline, url, then the KEEP line
+  const k = ease.quint(seg(t, at, at + 0.4)); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1080, 1920); ctx.save(); ctx.globalAlpha = k;
+  text('MsgHealth', 540, 700, 130, 900, '#fff', 'center', 0); text('Know your customers. Keep your customers.', 540, 800, 36, 500, '#bbb', 'center', 0); ctx.fillStyle = '#fff'; ctx.fillRect(300, 880, 480, 4); text('MSGHEALTH.NET', 540, 960, 40, 800, '#fff', 'center', 0.12); ctx.restore();
+  withFade(seg(t, at + 0.9, at + 1.2), () => { fillRR(120, 1090, 840, 130, 20, '#fff'); text('Comment KEEP to get a full', 540, 1137, 44, 800, '#000', 'center', 0); text('retention audit.', 540, 1189, 44, 800, '#000', 'center', 0); });
+}
 const fit = (s, size, maxW, w = 800) => Math.min(size, size * maxW / tw(s, size, w));
 const ch = (l, k) => wordAt(l, Math.min(k, VO_CLIPS[l].chunks.length - 1)) - 0.05; // time of caption chunk k of line l
 function env(x, y, w, h, col, a = 1) { // envelope
@@ -24,6 +51,12 @@ const SCENES = {
     withFade(seg(t, a + 0.5, a + 0.9), () => text(c.unit, CX, 960, 58, 800, '#fff', 'center', -0.02));
     if (c.sub) withFade(seg(t, a + 1.0, a + 1.4), () => text(c.sub, CX, 1050, 36, 600, SOFT, 'center'));
     if (c.chip) { const p = pop(t, a + 1.3, 0.35); if (p > 0) xf(CX, 1190, clamp(p), 0, () => chip(c.chip, CX, 1190, GOLD, 1, 28)); }
+  },
+  slam(t, a, c, L) { // big white lines slam in one by one; optional big number
+    stage(t, 0.14); eyebrow(c.eyebrow, 400, IN.mid);
+    if (c.num) { const e = pop(t, a + 0.05, 0.4); xf(CX, 700, clamp(e), 0, () => text(c.num, CX, 700, fit(c.num, c.numSize || 260, 920), 900, '#fff', 'center', -0.04)); if (c.unit) withFade(seg(t, a + 0.4, a + 0.8), () => text(c.unit, CX, 700 + (c.numSize || 260) * 0.5 + 40, 54, 800, SOFT, 'center', 0.02)); }
+    const sz = c.size || 104, gap = sz * 1.2, n = c.lines.length, y0 = c.num ? 1090 : 800 - (n - 1) * gap / 2;
+    c.lines.forEach((l, i) => { const e = pop(t, a + (c.at ? c.at[i] : 0.2 + i * 0.7), 0.35); if (e <= 0) return; const hot = c.hot === i, y = y0 + i * gap; xf(CX, y, clamp(e), 0, () => { const fs = fit(l, sz, 880); if (hot) { const w = tw(l, fs, 900) + 48; fillRR(CX - w / 2, y - fs * 0.62, w, fs * 1.15, 10, '#fff'); } text(l, CX, y, fs, 900, hot ? '#000' : '#fff', 'center', -0.03); }); });
   },
   stack(t, a, c) { // a wall of envelopes
     stage(t, 0.16); eyebrow(c.eyebrow, 330, IN.mid);
@@ -52,7 +85,7 @@ const SCENES = {
   people(t, a, c) { // grid of client dots; some highlighted
     stage(t, 0.16); eyebrow(c.eyebrow, 330, IN.mid);
     const n = c.n || 10; for (let i = 0; i < n; i++) { const r = Math.floor(i / 5), q = i % 5, x = 190 + q * 175, y = 640 + r * 250, e = pop(t, a + 0.1 + i * 0.06, 0.3), hi = i < (c.hi || 2); if (e <= 0) continue; const on = hi && seg(t, a + (c.hiAt || 0.9), a + (c.hiAt || 0.9) + 0.4);
-      xf(x, y, clamp(e), 0, () => { dotPerson(x, y, 150, hi && on > 0.5 ? GOLD : 'rgba(165,160,255,0.45)'); if (hi && on > 0.5 && c.mystery) text('?', x, y - 90, 54, 800, GOLD, 'center'); }); }
+      xf(x, y, clamp(e), 0, () => { dotPerson(x, y, 150, hi && on > 0.5 ? GOLD : 'rgba(255,255,255,0.4)'); if (hi && on > 0.5 && c.mystery) text('?', x, y - 90, 54, 800, GOLD, 'center'); }); }
     if (c.label) withFade(seg(t, a + 1.2, a + 1.6), () => text(c.label, CX, 1260, 44, 800, '#fff', 'center', -0.02));
     if (c.sub) withFade(seg(t, a + 1.7, a + 2.1), () => text(c.sub, CX, 1340, 32, 600, SOFT, 'center'));
   },
@@ -60,7 +93,7 @@ const SCENES = {
     stage(t, 0.16); eyebrow(c.eyebrow, 330, IN.mid);
     c.items.forEach((s, i) => { const e = pop(t, ch(L, i), 0.4), x = 110 + i * 295; if (e <= 0) return;
       xf(x + 130, 820, clamp(e), 0, () => { card(x, 600, 260, 440, { r: 28, stroke: rgba(GOLD, 0.5), fill: 'rgba(255,255,255,0.05)' });
-        fillRR(x + 20, 620, 220, 300, 16, vgrad(620, 920, 'rgba(245,214,138,0.28)', 'rgba(113,104,255,0.25)'));
+        fillRR(x + 20, 620, 220, 300, 16, vgrad(620, 920, 'rgba(255,255,255,0.2)', 'rgba(255,255,255,0.12)'));
         [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(([qx, qy]) => { const cx = x + 36 + qx * 188, cy = 636 + qy * 268; line(cx, cy + (qy ? 0 : 20), cx, cy, GOLD, 4); line(cx, cy, cx + (qx ? -20 : 20), cy, GOLD, 4); });
         circle(x + 130, 770, 46, rgba(GOLD, 0.35)); text(s, x + 130, 980, 34, 800, GOLD, 'center', 0.08); }); });
   },
@@ -75,7 +108,7 @@ const SCENES = {
     stage(t, 0.14); eyebrow(c.eyebrow, 330, IN.mid);
     const FY = 1390; // floor line, above the caption strip
     fillRR(0, FY, W, H - FY, 0, 'rgba(255,255,255,0.03)'); line(0, FY, W, FY, 'rgba(255,255,255,0.12)', 2);
-    if (c.set === 'shop') { card(120, 460, 840, 860, { r: 36, fill: 'rgba(165,160,255,0.06)', stroke: rgba(IN.mid, 0.4), lw: 4 }); line(120, 860, 960, 860, 'rgba(255,255,255,0.05)', 2); }
+    if (c.set === 'shop') { card(120, 460, 840, 860, { r: 36, fill: 'rgba(255,255,255,0.05)', stroke: rgba(IN.mid, 0.4), lw: 4 }); line(120, 860, 960, 860, 'rgba(255,255,255,0.05)', 2); }
     if (c.set === 'street') [200, 540, 880].forEach((x, i) => { fillRR(x - 70, 760 - i % 2 * 60, 140, 740 + i % 2 * 60, 8, 'rgba(255,255,255,0.04)'); });
     (c.cast || []).forEach((p, i) => {
       const at = a + (p.at ?? 0.2 + i * 0.35), e = ease.out(seg(t, at, at + 0.55)); if (e <= 0) return;
@@ -98,4 +131,4 @@ const SC = R.scenes.map((c, i) => [i ? VO_AT[i] : 0, VO_AT[i + 1], (t) => SCENES
 SC.push([END, 999, (t) => finale(t, END)]);
 R.scenes.forEach((c, i) => { if (c.type === 'chat') c.msgs.forEach((m) => cue(VO_AT[i] + m.at, 'notification', 0.22)); });
 cue(END + 1.25, 'tap', 0.3);
-boot({ duration: DURATION, scenes: SC, brandAt: END, hideCaption: (t) => t >= END + 0.6 }, R.name);
+boot({ duration: DURATION, scenes: SC, brandAt: END, hideCaption: (t) => t >= END }, R.name);

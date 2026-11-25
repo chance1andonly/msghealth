@@ -1,0 +1,95 @@
+{
+ "voice": "am_adam",
+ "speed": 1.12,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 1919, molasses burst in Boston and killed twenty-one people.",
+   "caps": [
+    "In 1919, molasses burst in",
+    "Boston and *killed 21 people.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Two million gallons, all at once. A wall of fucking syrup, down the street.",
+   "caps": [
+    "Two million gallons,",
+    "all at once.",
+    "A wall of *fucking syrup.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "It knocked buildings off their foundations and pinned people in the sludge.",
+   "caps": [
+    "It knocked buildings off their",
+    "foundations and *pinned people.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And here's the shit nobody tells you. That tank had been leaking for months.",
+   "caps": [
+    "Here's the shit",
+    "nobody tells you.",
+    "The tank had been",
+    "*leaking for months.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The neighbors saw it. Kids were scooping molasses out of the cracks with cups.",
+   "caps": [
+    "The neighbors",
+    "saw it. Kids were",
+    "scooping it out of *the cracks.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So what did the company do? They painted the tank brown, so the leaks wouldn't show.",
+   "caps": [
+    "The company's fix?",
+    "They *painted it brown.*",
+    "So the leaks wouldn't show."
+   ],
+   "gap": 0.55,
+   "speed": 1.02
+  },
+  {
+   "say": "Paint. Instead of one damn inspection. Twenty-one dead.",
+   "caps": [
+    "Paint. Instead of",
+    "one damn inspection."
+   ],
+   "gap": 0.8,
+   "speed": 1.0
+  },
+  {
+   "say": "Clients leak out the same way. Three weeks becomes nine, and you call it a slow month.",
+   "caps": [
+    "Clients leak out the same way.",
+    "Three weeks becomes nine.",
+    "You call it *a slow month.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Message Health shows you who's leaking before the tank blows, and texts them for you.",
+   "caps": [
+    "Message Health shows you",
+    "*who's leaking,* and texts them."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

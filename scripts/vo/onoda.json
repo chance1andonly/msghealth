@@ -1,0 +1,97 @@
+{
+ "voice": "am_adam",
+ "speed": 1.12,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 1974, a soldier was still fighting World War Two.",
+   "caps": [
+    "In 1974, a soldier was still",
+    "fighting *World War Two.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The war had ended twenty-nine fucking years earlier. Nobody had told him.",
+   "caps": [
+    "It ended *29 fucking",
+    "*years* earlier.",
+    "Nobody had told him."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Planes dropped leaflets saying it was over. He figured the leaflets were an enemy trick.",
+   "caps": [
+    "Planes dropped",
+    "leaflets: it's over.",
+    "He thought it was *a trick.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "His own family came with a loudspeaker. Still thought it was a trap, the bastard.",
+   "caps": [
+    "His own family came with a",
+    "loudspeaker. Still",
+    "thought *it's a trap.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Because the only order that counted was the one from his commanding officer.",
+   "caps": [
+    "The only order that counted",
+    "was from *his commander.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "So they found his old major, a bookseller by then, and flew him out to read the order.",
+   "caps": [
+    "They found his old major,",
+    "*a bookseller by then,*",
+    "and flew him out",
+    "to read the order."
+   ],
+   "gap": 0.55,
+   "speed": 1.04
+  },
+  {
+   "say": "Twenty-nine years. One sentence from somebody he trusted.",
+   "caps": [
+    "29 years. One sentence from",
+    "*somebody he trusted.*"
+   ],
+   "gap": 0.8,
+   "speed": 1.0
+  },
+  {
+   "say": "You've got clients out in the jungle too. Waiting on somebody they know to say the war's over.",
+   "caps": [
+    "Your lapsed clients",
+    "are out there",
+    "waiting for *somebody they know*",
+    "to say it's over."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Message Health finds the ones who've gone quiet and texts them for you. In your voice.",
+   "caps": [
+    "Message Health finds",
+    "who's gone quiet",
+    "and *texts them for you.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

@@ -37,3 +37,7 @@ format | reel | views | sends/reach | likes/reach | follows | profile visits | v
 6. Cadence: owner said do whatever proves best; the optimizer (ig.mjs optimize) already compares posts/day groups, so leave per_day automatic.
 7. Trendjacking (owner asked to study @robertmokeaveney): not yet studied, Instagram could not be read from here. Rule meanwhile: tie each reel to a trend from the last 7 days, hook in the first second, product reveal last.
 8. Profile (9 followers, 9.6K views/30d, avatar still purple): bio should name who it is for (barbers and stylists) and what it does, not just the tagline.
+
+## Ledger entries
+2026-11-24 night | F1 toy-world (40-55, 16 reels posted 11-23/24) | none in top 15 (all under 150 views) | sends n/a | n/a | follows n/a (per-reel stats not in stats.json) | verdict: no win yet, kill after 3 below median per the rules; capped at 1 in 5
+2026-11-24 night | F2 true-story, now black/white + cussing | 56 molasses, 57 Onoda, 58 original fiction queued (not posted yet) | judge after 48h | | | REPLICATE (prior F2 winners: 1,709 / 1,291 / 794)
