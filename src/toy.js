@@ -166,7 +166,7 @@ function buildWorld(si) {
   sc.add(new THREE.HemisphereLight(night ? '#6f7fd8' : '#ffffff', night ? '#0a0c1c' : '#8a9a70', night ? 0.75 : 1.05));
   const sun = new THREE.DirectionalLight(night ? '#8fa4ff' : '#fff2dc', night ? 0.8 : 1.25); sun.position.set(-14, 26, 18); sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024);
   Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30, near: 1, far: 90 }); sc.add(sun);
-  const W = { sc, actors: {}, anim: [], tags: c.tags || [] };
+  const W = { sc, actors: {}, anim: [], tags: [] };
   if (set === 'room') { sc.add(roomSet(c)); const l = new THREE.PointLight('#ffd9a8', 1.1, 40); l.position.set(5.2, 4, -1.5); sc.add(l); const l2 = new THREE.PointLight('#fff2dc', 1.5, 60); l2.position.set(0, 9, 4); sc.add(l2); }
   else if (inside) {
     sc.add(shopInterior(c)); (c.chairs || [-3.2, 3.2]).forEach((x) => sc.add(chair(x, 0.5, c.chairCol)));
@@ -258,13 +258,13 @@ WORDS.forEach((w, j) => { const nx = WORDS[j + 1]; w.t1 = nx && nx.line === w.li
 const EMPH = new RegExp('^(' + (R.emph || ['keep']).join('|') + ')\\W*$', 'i');
 function strokeTxt(str, x, y, size, fill, lw) { ctx.save(); ctx.font = `900 ${size}px Inter, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round'; ctx.lineWidth = lw; ctx.strokeStyle = '#000'; ctx.strokeText(str, x, y); ctx.fillStyle = fill; ctx.fillText(str, x, y); ctx.restore(); }
 function drawWords(t, y) { if (t >= END) return; const w = WORDS.find((q) => t >= q.t0 && t < q.t1); if (!w) return; const e = Math.min(1, (t - w.t0) / 0.09), sc = 0.78 + 0.22 * (1 - Math.pow(1 - e, 3)) + (e < 1 ? 0.06 : 0); let sz = 124; ctx.save(); ctx.font = `900 ${sz}px Inter, sans-serif`; const mw = ctx.measureText(w.w).width; if (mw > 940) sz = Math.floor(sz * 940 / mw); ctx.restore(); ctx.save(); ctx.translate(540, y); ctx.scale(sc, sc); strokeTxt(w.w, 0, 0, sz, EMPH.test(w.w) ? '#ffd23a' : '#fff', 22); ctx.restore(); }
-function drawStat(c, lt) { if (!c.stat) return; let cur = null; c.stat.forEach((s) => { if (lt >= s[0]) cur = s; }); if (!cur) return; const e = Math.min(1, (lt - cur[0]) / 0.22), sc = 0.7 + 0.3 * (1 - Math.pow(1 - e, 3)) + (e < 1 ? 0.12 : 0); ctx.save(); ctx.translate(540, c.statY ?? 340); ctx.scale(sc, sc); let sz = 92; ctx.font = `900 ${sz}px Inter, sans-serif`; const mw = ctx.measureText(cur[1]).width; if (mw > 880) sz = Math.floor(sz * 880 / mw); strokeTxt(cur[1], 0, 0, sz, '#fff', 20); ctx.restore(); }
+function drawStat(c, lt) { return; if (!c.stat) return; let cur = null; c.stat.forEach((s) => { if (lt >= s[0]) cur = s; }); if (!cur) return; const e = Math.min(1, (lt - cur[0]) / 0.22), sc = 0.7 + 0.3 * (1 - Math.pow(1 - e, 3)) + (e < 1 ? 0.12 : 0); ctx.save(); ctx.translate(540, c.statY ?? 340); ctx.scale(sc, sc); let sz = 92; ctx.font = `900 ${sz}px Inter, sans-serif`; const mw = ctx.measureText(cur[1]).width; if (mw > 880) sz = Math.floor(sz * 880 / mw); strokeTxt(cur[1], 0, 0, sz, '#fff', 20); ctx.restore(); }
 function drawChip(t) { return; if (t < 2.4 || t >= END) return; const pu = 1 + 0.035 * Math.max(0, Math.sin(t * 2.6)), w = 800, h = 132, y = 1385; ctx.save(); ctx.globalAlpha *= Math.min(1, (t - 2.4) / 0.4); ctx.translate(540, y); ctx.scale(pu, pu); fillRR(-w / 2 + 6, -h / 2 + 8, w, h, 36, 'rgba(0,0,0,0.35)'); fillRR(-w / 2, -h / 2, w, h, 36, '#111111'); ctx.font = '900 54px Inter, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#fff'; const a = 'Comment ', b = 'KEEP', wa = ctx.measureText(a).width, wb = ctx.measureText(b).width, x0 = -(wa + wb) / 2; ctx.textAlign = 'left'; ctx.fillText(a, x0, -20); ctx.fillStyle = '#ffd23a'; ctx.fillText(b, x0 + wa, -20); ctx.textAlign = 'center'; ctx.fillStyle = '#dcdcff'; ctx.font = '700 32px Inter, sans-serif'; ctx.fillText("to see who's gone quiet", 0, 34); ctx.restore(); }
 const overlay = (t, c, a, wy) => { drawStat(c, t - a); drawWords(t, wy ?? 1480); drawChip(t); };
 
 
 function chat2(t, a, b, c) {
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1080, 1920); const X = 90, Y = c.stat ? 420 : 230, Wd = 900, H = c.stat ? 900 : 1080; ctx.save();
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1080, 1920); const X = 90, Y = 230, Wd = 900, H = 1080; ctx.save();
   fillRR(X + 8, Y + 14, Wd, H, 64, 'rgba(0,0,0,0.4)'); fillRR(X, Y, Wd, H, 64, '#f4f5fa'); fillRR(X, Y, Wd, 170, 64, '#ffffff'); ctx.fillStyle = '#ffffff'; ctx.fillRect(X, Y + 100, Wd, 70);
   circle(X + 100, Y + 88, 44, '#111111'); text((R.who || 'Client')[0], X + 100, Y + 90, 48, 800, '#fff', 'center', 0); text(R.who || 'Client', X + 170, Y + 88, 54, 800, '#16161d', 'left', 0);
   let y = Y + 230;

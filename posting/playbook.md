@@ -2,6 +2,9 @@
 
 Updated 2026-11-23 am (research.json 2026-11-22, stats.json 2026-11-23, 65 reels, per_day 6). Judged from titles, captions and numbers only; I did not watch the videos.
 
+## OWNER DIRECTION 2026-11-24
+Story-type reels (src/hist.js: pizza, coffin ship, London time lady) outperform everything; viewer must not know it is an ad until the end. Make them more outlandish, with cussing, black/white theme, captions low, KEEP only at the end. Toy-world max 1 in 5 and without stat counters, pink tags or chip.
+
 ## Testing system
 See posting/experiments.md: rotate formats F1 to F7, judge after 48h on views, sends/reach and follows, replicate winners, kill after 3 misses. Keep one topic, vary the format.
 
