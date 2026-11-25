@@ -368,8 +368,8 @@
   "64-whale-dynamite.mp4": {
     "approved": true,
     "sha1": "535c939ebcec4e5ef78f7df745588fab70d05654",
-    "checked_at": "2026-11-25T19:57:59.612Z",
-    "note": "Release gate 2026-11-25: (1) pronunciation OK, qa.py + whisper on final mix hear Message Health and every word (rained heard as homophone reigned); (2) flicker.py none, contact sheet viewed, art readable, caption zone clear; (3) predicted to beat recent: dated true story, absurd hook 3.4s, illustrated motion graphics, brand only last ~11s. Facts: Mental Floss, KOMO, AllThatsInteresting."
+    "checked_at": "2026-11-25T21:15:55.055Z",
+    "note": "validated 2026-11-25 16:2x ET after 21:13Z stats refresh: pronunciation OK (qa.py clips + whisper-base.en int8 and fp32 on final mix hear every word and Message Health; rained heard as homophone reigned), frames OK (two frames per spoken line plus the slogan pop-in checked, flicker.py none, captions clear), analytics: dated true story with an absurd 3.4s hook and illustrated art like the 1709-view pizza reel; era, topic and art style differ from the last two posts (Tylenol recall, 897 dead pope); 63 held back one turn because it is also medieval. Prediction, not proven: no per-reel views yet for the new style"
   },
   "65-headless-mike.mp4": {
     "approved": true,
