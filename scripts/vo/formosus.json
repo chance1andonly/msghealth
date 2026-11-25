@@ -1,0 +1,84 @@
+{
+ "voice": "am_adam",
+ "speed": 1.12,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A pope dug up a corpse and put it on trial.",
+   "caps": [
+    "A pope dug up a corpse",
+    "and put it *on trial.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The guy had been dead nine months. They sat him on a throne and gave him a lawyer.",
+   "caps": [
+    "Dead *9 months.*",
+    "Sat on a throne.",
+    "Given a lawyer."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Guilty. They cut off three fucking fingers and threw him in the river.",
+   "caps": [
+    "*Guilty.* Three fingers",
+    "cut off. Thrown",
+    "in the river."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Not one word in his own defense. Dead guys don't text back.",
+   "caps": [
+    "Not one word",
+    "in his defense.",
+    "Dead guys *don't text back.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Within months, the pope who ran it got thrown in prison and strangled. Karma, bitch.",
+   "caps": [
+    "Within months, that pope",
+    "got *strangled* in prison."
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "You do the same thing. A client goes quiet, and you've already decided he's gone.",
+   "caps": [
+    "You do this too.",
+    "A client goes quiet and",
+    "you *decide he's gone.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Maybe he's not mad. He's just busy as hell, and nobody asked.",
+   "caps": [
+    "Maybe he's just busy",
+    "as hell. *Nobody asked.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health finds the ones who've gone quiet and texts them for you.",
+   "caps": [
+    "Message Health finds",
+    "who's gone quiet",
+    "and *texts them for you.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

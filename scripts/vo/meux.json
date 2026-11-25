@@ -1,0 +1,86 @@
+{
+ "voice": "am_adam",
+ "speed": 1.12,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A beer vat burst in London and killed eight people.",
+   "caps": [
+    "A London beer vat",
+    "*burst.* *8 dead.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "A hoop on that vat had slipped off that afternoon. Nobody gave a shit.",
+   "caps": [
+    "A hoop slipped off",
+    "that afternoon.",
+    "*Nobody gave a shit.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Over a hundred thousand gallons of beer hit the slums like a wave.",
+   "caps": [
+    "*100,000+ gallons*",
+    "of beer hit the slums",
+    "like a wave."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Eight drowned. Mourners at a toddler's wake, in a basement.",
+   "caps": [
+    "*8 drowned.*",
+    "Mourners at a toddler's wake",
+    "in a basement."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The court called it an act of God. The brewery paid nothing.",
+   "caps": [
+    "The court: *act of God.*",
+    "The brewery paid",
+    "*nothing.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "God didn't do it. The warning came first, like it always does.",
+   "caps": [
+    "*God didn't do it.*",
+    "The warning came first,",
+    "like always."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Your clients do it too. Four weeks between cuts, then six, then nine, then it bursts.",
+   "caps": [
+    "Four weeks. Six. Nine.",
+    "The hoop is *slipping.*",
+    "Then it bursts."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Message Health spots the slipping ones and texts them for you, before it bursts.",
+   "caps": [
+    "Message Health spots",
+    "the slipping ones and",
+    "*texts them for you.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

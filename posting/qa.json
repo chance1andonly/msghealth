@@ -346,5 +346,17 @@
     "sha1": "9a4abbc399279ad843b1cbc0216472229e782d0d",
     "checked_at": "2026-11-25T04:51:19.796Z",
     "note": "validated 2026-11-24: pronunciation OK (ASR), frames OK (no flicker, contact sheet), analytics: true-story hook with numbers like top reels, ad only at end"
+  },
+  "61-formosus-dead-pope.mp4": {
+    "approved": true,
+    "sha1": "a156d097cb0a04133427b2f7261fb5d2680037f1",
+    "checked_at": "2026-11-25T07:35:36.686Z",
+    "note": "QA ASR ok (message health heard, words right); flicker none + contact sheet readable, captions clear of content; true-story F2 format matches top reels (hook ~2.5s, brand only in last ~10s)"
+  },
+  "62-meux-beer-flood.mp4": {
+    "approved": true,
+    "sha1": "a99b44532386bf191c0ded8a6248da2f4e0849a5",
+    "checked_at": "2026-11-25T07:35:36.726Z",
+    "note": "QA ASR ok (message health heard, words right); flicker none + contact sheet readable, captions clear of content; true-story F2 format matches top reels (hook ~2.5s, brand only in last ~10s)"
   }
 }

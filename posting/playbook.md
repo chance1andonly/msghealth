@@ -80,6 +80,11 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-25 (night run)
+- Found: stats.json still the 2026-11-25 03:55 UTC snapshot (75 reels; optimize workflow dispatched, per_day_decision still holding: 3/day median 129 vs 5/day 93, 6/day n=1). Top 3 remain the true-story graphics reels (1,709 / 1,291 / 794); no toy reel in the top 15. Queue already held 6 approved (56 molasses, 56 stamps, 57 onoda, 58 fortyone, 59 heater, 60 tylenol). IG_TOKEN is not set here, so node posting/ig.mjs research could not run.
+- Changed: nothing in strategy (numbers do not support a change). Built 2 more true-story reels in the replicate format: 61 formosus (Cadaver Synod, 897: dead pope tried, three fingers cut, thrown in the Tiber, Stephen VI strangled within months; pivot: you judge quiet clients without asking) and 62 meux (London Beer Flood 1814: hoop slipped that afternoon, 8 dead, over 100,000 gallons (low of 128k-323k), ruled an Act of God; pivot: the warning comes first). Queue 8 approved.
+- Process notes: Kokoro/ASR/pip packages must be re-downloaded each run; node_modules symlink target needs real dir with global playwright links; a local checkout can be stale, use git stash then pull. Start renders with setsid nohup; hook line must be 4.4s or less (11 words with a year ran 4.5-4.7s).
+
 ### 2026-11-24 (night run, second firing: owner waiting)
 - Queue already held 56-58 (approved); added 59 heater (original fiction: 40 regulars, sign never flipped) and 60 Tylenol 1982 (7 deaths, 31 million bottles pulled, $100M+; Kokoro says Tylenol wrong, use "Tie-lenol"). Queue: 5 approved.
 
