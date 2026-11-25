@@ -1,0 +1,98 @@
+{
+ "voice": "am_adam",
+ "speed": 1.12,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 1982, seven people died in Chicago from poisoned pills.",
+   "caps": [
+    "In 1982, *seven people died*",
+    "in Chicago from",
+    "poisoned pills."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The pills were Tie-lenol, and nobody even knew yet how far it went.",
+   "caps": [
+    "The pills were Tylenol.",
+    "Nobody knew yet",
+    "how far it went."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So the company pulled every bottle off every shelf. Thirty-one million bottles. Over a hundred million dollars, gone.",
+   "caps": [
+    "They pulled *every bottle.*",
+    "31 million of them.",
+    "Over *$100 million,* gone."
+   ],
+   "gap": 0.5,
+   "speed": 1.04
+  },
+  {
+   "say": "The tampering wasn't even their fault. Someone put the poison in after the bottles left the factory.",
+   "caps": [
+    "It wasn't even their fault.",
+    "Someone tampered",
+    "*after the factory.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "They ran warnings everywhere, then rebuilt the packaging with a safety seal. Damn expensive.",
+   "caps": [
+    "They ran warnings everywhere,",
+    "then rebuilt the packaging",
+    "*with a safety seal.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "People expected the brand to die. Instead, customers came back, because the company had put them first.",
+   "caps": [
+    "Everyone expected it to die.",
+    "Customers came back because",
+    "they'd been *put first.*"
+   ],
+   "gap": 0.6,
+   "speed": 1.02
+  },
+  {
+   "say": "Thirty-one million bottles, pulled before anyone forced them to.",
+   "caps": [
+    "31 million bottles, pulled",
+    "before anyone *forced them.*"
+   ],
+   "gap": 0.8,
+   "speed": 1.0
+  },
+  {
+   "say": "Your clients are the same. The ones who stay are the ones you reach out to first.",
+   "caps": [
+    "Your clients are the same.",
+    "The ones who stay are the ones",
+    "you *reach first.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Message Health shows you who's slipping, and texts them before they're gone.",
+   "caps": [
+    "Message Health shows",
+    "you who's slipping",
+    "and *texts them first.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}

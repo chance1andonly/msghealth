@@ -328,5 +328,17 @@
     "sha1": "af2e91ea99895bc156692319ef83ce6db7119523",
     "checked_at": "2026-11-25T04:15:39.966Z",
     "note": "Release gate: (1) qa.py ASR hears Message Health, every word right; (2) flicker.py none, contact sheet readable, nothing cropped or in caption zone; (3) black/white true-story format (or labeled original fiction), hook under 4.5s, like top story reels. New idea, cussing, brand only last ~12s."
+  },
+  "59-heater-sign.mp4": {
+    "approved": true,
+    "sha1": "a5d204b0279cd4065aca9db2d81d479175aef3fd",
+    "checked_at": "2026-11-25T04:30:52.044Z",
+    "note": "Release gate: (1) qa.py ASR hears Message Health and all words right (Tylenol respelled Tie-lenol); (2) flicker none, contact sheet readable, nothing cropped or in caption zone; (3) black/white story format like top reels, hook under 4.5s, new idea, cussing, brand only last ~12s."
+  },
+  "60-tylenol-31-million.mp4": {
+    "approved": true,
+    "sha1": "97043588590308d014bb2fec1b13f7eb0b9dd651",
+    "checked_at": "2026-11-25T04:30:52.096Z",
+    "note": "Release gate: (1) qa.py ASR hears Message Health and all words right (Tylenol respelled Tie-lenol); (2) flicker none, contact sheet readable, nothing cropped or in caption zone; (3) black/white story format like top reels, hook under 4.5s, new idea, cussing, brand only last ~12s."
   }
 }

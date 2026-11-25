@@ -80,6 +80,9 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-24 (night run, second firing: owner waiting)
+- Queue already held 56-58 (approved); added 59 heater (original fiction: 40 regulars, sign never flipped) and 60 Tylenol 1982 (7 deaths, 31 million bottles pulled, $100M+; Kokoro says Tylenol wrong, use "Tie-lenol"). Queue: 5 approved.
+
 ### 2026-11-24 (night run)
 - Found: 75 reels analyzed (stats 2026-11-25 03:55 UTC). Top 15 is still entirely graphics reels (Pentagon pizza 1,709, coffin ship 1,291, London time lady 794); no toy-world reel is in it, so toy reels have not shown a win. 3/day median 129 vs 5/day 93, 6/day only 1 reel: per_day_decision holding. Queue was empty (dir missing); node posting/ig.mjs research could not run here (IG_TOKEN not set in this environment), so research.json is unchanged.
 - Changed: owner direction applied. src/hist.js is now black and white (new stage, caption with inverted accent words, toy-style end card with the exact KEEP line, new `slam` scene). Built 3 true-story/original-story reels, brand only in the last ~12s, cussing in narration and captions: 56 Boston molasses flood 1919 (tank painted brown to hide leaks), 57 Onoda, 29 years after WWII until his old major read the order, 58 "41 miles to dodge his barber" (labeled original fiction). Queue: 3 approved, below the 5 target; next run builds 3 more (and re-renders held 13-39 in the new look).

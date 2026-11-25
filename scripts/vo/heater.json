@@ -1,0 +1,97 @@
+{
+ "voice": "am_adam",
+ "speed": 1.12,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Forty of his regulars quit in one winter. The heater was already fixed.",
+   "caps": [
+    "*40 regulars* quit",
+    "in one winter.",
+    "The heater was already fixed."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "A barber in a town of three hundred and eleven. His heater died in January, so he shut six days.",
+   "caps": [
+    "Town of 311",
+    "people. One barber.",
+    "His heater died in January,",
+    "so he shut for *six days.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Six days. By day three, his regulars were at a gas station guy's cold garage.",
+   "caps": [
+    "By day three,",
+    "his regulars were",
+    "at a gas station",
+    "guy's *cold garage.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "He fixed it on day seven, told nobody, and sat there. Five weeks. Nobody came in.",
+   "caps": [
+    "He fixed it on day seven,",
+    "told no one, and sat there.",
+    "*Five weeks.* Nobody walked in."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Forty clients, all sure his shop was still shut. Still freezing. Damn.",
+   "caps": [
+    "Forty clients,",
+    "all sure the shop",
+    "was *still shut and freezing.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Then a kid asked in March why the sign still said closed. He'd never flipped it.",
+   "caps": [
+    "A kid asked in March why",
+    "the sign still said *closed.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.04
+  },
+  {
+   "say": "Five weeks. Forty clients. One fucking sign.",
+   "caps": [
+    "Five weeks. Forty clients.",
+    "One *fucking sign.*"
+   ],
+   "gap": 0.8,
+   "speed": 1.0
+  },
+  {
+   "say": "Your clients don't know your chair is open either. Nobody told them they were still welcome.",
+   "caps": [
+    "Your lapsed clients don't know",
+    "your chair is *still open.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Message Health finds who went quiet and texts them for you, so they know.",
+   "caps": [
+    "Message Health",
+    "finds who went quiet",
+    "and *texts them for you.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3
+  }
+ ]
+}
