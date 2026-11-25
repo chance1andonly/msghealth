@@ -302,8 +302,8 @@
   "54-toy-monster-chase.mp4": {
     "approved": true,
     "sha1": "7e7ad0262756af4cf57333e7f94010f246eb5e37",
-    "checked_at": "2026-11-24T19:58:56.837Z",
-    "note": "Gate: (1) ASR hears 'message health'; (2) flicker none, cuts at shot boundaries, runner/truck/car and window shots reframed after first render, sheets viewed; (3) viral chase hook (11 words, under 4.5s) with escalating chain, new reveal 'you could've just texted me', KEEP mid+end, 47s."
+    "checked_at": "2026-11-25T00:13:19.631Z",
+    "note": "validated 2026-11-24 19:20 ET after 00:12Z stats refresh: pronunciation OK (sha unchanged since 19:58Z ASR gate hearing 'message health'; no ASR model in this env), frames OK (contact sheet viewed, subjects framed, caption zone clear), analytics: stats unchanged (no toy reel in top 15, hold per_day), last post 55 was an explainer so a viral chain alternates; reveal overlaps 53 but it is the only approved reel; caption hook+1 emoji+question+KEEP+3 hashtags OK"
   },
   "55-toy-quiet-test.mp4": {
     "approved": true,
