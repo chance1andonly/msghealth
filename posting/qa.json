@@ -314,8 +314,8 @@
   "56-molasses-brown.mp4": {
     "approved": true,
     "sha1": "45f6ab5aa7e5313b522ca6b70fe2bd59ec3c93b7",
-    "checked_at": "2026-11-25T04:15:39.877Z",
-    "note": "Release gate: (1) qa.py ASR hears Message Health, every word right; (2) flicker.py none, contact sheet readable, nothing cropped or in caption zone; (3) black/white true-story format (or labeled original fiction), hook under 4.5s, like top story reels. New idea, cussing, brand only last ~12s."
+    "checked_at": "2026-11-25T13:17:49.369Z",
+    "note": "validated 2026-11-25 08:30 ET: pronunciation OK (ASR matches script), frames OK (sheet checked, captions low, nothing cropped), analytics: black/white true-story graphics hook with a number (21 dead) is the winning shape (top 3 are true-story graphics, 1709/1291/794), differs from last 5 toy posts, caption has hook+emoji, question, KEEP, 3 hashtags"
   },
   "57-onoda-29-years.mp4": {
     "approved": true,
