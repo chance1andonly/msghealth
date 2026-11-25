@@ -42,3 +42,8 @@ format | reel | views | sends/reach | likes/reach | follows | profile visits | v
 2026-11-24 night | F1 toy-world (40-55, 16 reels posted 11-23/24) | none in top 15 (all under 150 views) | sends n/a | n/a | follows n/a (per-reel stats not in stats.json) | verdict: no win yet, kill after 3 below median per the rules; capped at 1 in 5
 2026-11-24 night | F2 true-story, now black/white + cussing | 56 molasses, 57 Onoda, 58 original fiction queued (not posted yet) | judge after 48h | | | REPLICATE (prior F2 winners: 1,709 / 1,291 / 794)
 2026-11-25 night | F2 true-story black/white: 56-60 queued, 61 formosus + 62 meux added | not posted yet, judge after 48h | | | REPLICATE (3 of next 3 reels reuse format, new stories); toy F1 still no win
+2026-11-25 afternoon | F2 true-story (older, top 3) | 1,709 / 1,291 / 794 views | sends/reach 0.07% / 0.17% / 0% | follows n/a | still the only clear winner
+2026-11-25 afternoon | F2 black/white: 56, 57, 60 posted today | not in top 15 yet (<150), under 12h old | sends n/a | follows n/a | do not judge before 48h
+2026-11-25 afternoon | F1 toy-world (11-23 posts now over 48h) | none in top 15 (<150) | sends n/a | follows n/a | no win; account median per reel not available, stays capped at 1 in 5
+2026-11-25 afternoon | F2-art (illustrated scenes) 63 erfurt, 64 whale, 65 headless queued | pending | | | TEST vs F2 text slams (56-62), same hour bands, judge after 48h
+

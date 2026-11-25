@@ -1,0 +1,103 @@
+{
+ "voice": "am_adam",
+ "speed": 1.19,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "In 1184, a floor dropped a royal meeting into shit.",
+   "caps": [
+    "In 1184, a floor dropped",
+    "a royal meeting",
+    "into *shit.*"
+   ],
+   "gap": 0.35,
+   "speed": 1.12
+  },
+  {
+   "say": "The eighteen year old king had packed the room to settle one feud.",
+   "caps": [
+    "The 18-year-old king",
+    "had packed the room",
+    "to settle *one feud.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "The wooden beams under all those fancy asses were rotten.",
+   "caps": [
+    "The beams under all",
+    "those fancy asses",
+    "were *rotten.*"
+   ],
+   "gap": 0.37,
+   "speed": 1.13
+  },
+  {
+   "say": "The floor gave way, smashed through the one below, straight into the cesspit.",
+   "caps": [
+    "The floor gave way,",
+    "smashed through the next one,",
+    "straight into *the cesspit.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "About sixty nobles died. A bunch got crushed, and others suffocated in human shit.",
+   "caps": [
+    "About *60 nobles* died.",
+    "A bunch got crushed.",
+    "Others suffocated",
+    "in *human shit.*"
+   ],
+   "gap": 0.37,
+   "speed": 1.15
+  },
+  {
+   "say": "The king? He was perched in a stone window nook, waiting on a damn ladder.",
+   "caps": [
+    "The king?",
+    "Perched in a stone window nook,",
+    "waiting on a *damn ladder.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "One of the feuding guys fell in and got dragged out alive. The king left without settling shit.",
+   "caps": [
+    "One of the feuding guys",
+    "fell in, got dragged out alive.",
+    "The king left",
+    "without *settling shit.*"
+   ],
+   "gap": 0.57
+  },
+  {
+   "say": "Your client book has rotten boards too, and you can't see which ones.",
+   "caps": [
+    "Your client book has",
+    "*rotten boards* too.",
+    "You can't see which ones."
+   ],
+   "gap": 0.37,
+   "speed": 1.13
+  },
+  {
+   "say": "Message Health scores every client, spots who's going quiet, and sends them a text for you.",
+   "caps": [
+    "Message Health scores clients,",
+    "spots who's *going quiet,*",
+    "and *texts them for you.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  }
+ ]
+}

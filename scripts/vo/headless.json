@@ -1,0 +1,102 @@
+{
+ "voice": "am_adam",
+ "speed": 1.19,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "A chicken lived eighteen fucking months without its head.",
+   "caps": [
+    "A chicken lived",
+    "*18 fucking months*",
+    "without its head."
+   ],
+   "gap": 0.35,
+   "speed": 1.1
+  },
+  {
+   "say": "Colorado, 1945. The axe drops, and Mike the chicken gets right back up.",
+   "caps": [
+    "Colorado, 1945. The axe drops,",
+    "and Mike the chicken",
+    "*gets right back up.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "That blade missed his jugular and most of his brain stem, and a clot did the rest.",
+   "caps": [
+    "It missed his jugular",
+    "and most of his *brain stem.*",
+    "A clot did the rest."
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "So they fed him with an eyedropper, took him on tour, and charged a quarter to look.",
+   "caps": [
+    "Fed with an *eyedropper,*",
+    "taken on tour,",
+    "*25 cents* a look."
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "At his peak, this headless son of a bitch pulled in forty-five hundred dollars a month.",
+   "caps": [
+    "At his peak, this headless",
+    "son of a bitch made",
+    "*$4,500 a month.*"
+   ],
+   "gap": 0.42,
+   "speed": 1.15
+  },
+  {
+   "say": "Then one night in a Phoenix motel, he started choking.",
+   "caps": [
+    "Then one night",
+    "in a Phoenix motel,",
+    "he started *choking.*"
+   ],
+   "gap": 0.42,
+   "speed": 1.13
+  },
+  {
+   "say": "The syringe that cleared his throat was back at the last sideshow. Mike died.",
+   "caps": [
+    "The syringe for his throat",
+    "was back at the *last sideshow.*",
+    "Mike died."
+   ],
+   "gap": 0.57,
+   "speed": 1.13
+  },
+  {
+   "say": "You lose a good regular the same way, one forgotten follow-up at a time.",
+   "caps": [
+    "You lose a good regular",
+    "the same way: one *forgotten*",
+    "*follow-up* at a time."
+   ],
+   "gap": 0.37,
+   "speed": 1.13
+  },
+  {
+   "say": "Message Health spots who's drifting, and follows up for you.",
+   "caps": [
+    "Message Health spots",
+    "who's *drifting,*",
+    "and *follows up for you.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  }
+ ]
+}

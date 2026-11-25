@@ -1,0 +1,102 @@
+{
+ "voice": "am_adam",
+ "speed": 1.19,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "In 1970, Oregon tried to blow up a fucking whale.",
+   "caps": [
+    "In 1970, Oregon tried",
+    "to blow up",
+    "a *fucking whale.*"
+   ],
+   "gap": 0.35,
+   "speed": 1.1
+  },
+  {
+   "say": "Forty-five feet long, eight tons, rotting on the beach.",
+   "caps": [
+    "*45 feet* long.",
+    "*8 tons.*",
+    "Rotting on the beach."
+   ],
+   "gap": 0.27
+  },
+  {
+   "say": "The highway department was in charge, and their answer was half a ton of dynamite.",
+   "caps": [
+    "The highway department's",
+    "answer?",
+    "*Half a ton* of dynamite."
+   ],
+   "gap": 0.37,
+   "speed": 1.15
+  },
+  {
+   "say": "The plan was that the pieces would fly out toward the ocean.",
+   "caps": [
+    "The plan: the pieces",
+    "would fly out",
+    "toward *the ocean.*"
+   ],
+   "gap": 0.47
+  },
+  {
+   "say": "Instead, people a quarter mile back were running while rotten whale rained out of the sky.",
+   "caps": [
+    "People a quarter mile back",
+    "ran while *rotten whale*",
+    "rained out of the sky."
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "One giant chunk crushed a brand new Cadillac.",
+   "caps": [
+    "One giant chunk crushed",
+    "a *brand-new Cadillac.*"
+   ],
+   "gap": 0.37,
+   "speed": 1.13
+  },
+  {
+   "say": "And the dealership that sold it? Their slogan was, a whale of a deal. No shit.",
+   "caps": [
+    "The dealership that sold it?",
+    "Their slogan:",
+    "*\"a whale of a deal.\"*",
+    "*No shit.*"
+   ],
+   "gap": 0.57,
+   "speed": 1.15
+  },
+  {
+   "say": "So don't dynamite your whole client list with one blast text.",
+   "caps": [
+    "Don't *dynamite*",
+    "your whole client list",
+    "with one *blast text.*"
+   ],
+   "gap": 0.37,
+   "speed": 1.13
+  },
+  {
+   "say": "Message Health finds who's actually going quiet, and sends them a win-back text.",
+   "caps": [
+    "Message Health finds",
+    "who's *going quiet,*",
+    "and sends a *win-back text.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  }
+ ]
+}

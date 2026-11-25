@@ -348,15 +348,33 @@
     "note": "validated 2026-11-24: pronunciation OK (ASR), frames OK (no flicker, contact sheet), analytics: true-story hook with numbers like top reels, ad only at end"
   },
   "61-formosus-dead-pope.mp4": {
-    "approved": false,
-    "sha1": "a156d097cb0a04133427b2f7261fb5d2680037f1",
-    "checked_at": "2026-11-25T16:22:42.000Z",
-    "note": "HELD for fix 2026-11-25: line 6 'nobody asked' is heard as 'nobody asks' (whisper-base.en, both models, clip and final mix). Respell in scripts/vo/formosus.json 'say', rebuild with ads-vo.py, re-render, re-run the gate, then approve. Frames checked OK."
+    "approved": true,
+    "sha1": "9d0fc94d7839b935259a87289dae1a870571610b",
+    "checked_at": "2026-11-25T19:57:59.699Z",
+    "note": "Release gate 2026-11-25 (fix of held reel): lines 6 and 7 rewritten; qa.py + whisper on final mix hear every word and Message Health; flicker.py none, contact sheet viewed, readable, caption zone clear; true-story format with 897 date and absurd hook."
   },
   "62-meux-beer-flood.mp4": {
     "approved": true,
     "sha1": "a99b44532386bf191c0ded8a6248da2f4e0849a5",
     "checked_at": "2026-11-25T07:35:36.726Z",
     "note": "QA ASR ok (message health heard, words right); flicker none + contact sheet readable, captions clear of content; true-story F2 format matches top reels (hook ~2.5s, brand only in last ~10s)"
+  },
+  "63-erfurt-floor.mp4": {
+    "approved": true,
+    "sha1": "dbd08c1426b5059400f4178ec1c073313060a01b",
+    "checked_at": "2026-11-25T19:57:59.563Z",
+    "note": "Release gate 2026-11-25: (1) pronunciation OK, qa.py + whisper-base.en (int8 and fp32) on clips/final mix hear Message Health and every word; (2) flicker.py none, contact sheet viewed, art readable, nothing cropped, caption zone clear; (3) predicted to beat recent: dated true story with a number, 3.4s hook, new illustrated motion graphics (like the 1,709 pizza reel, unlike text-only slams), brand only last ~12s. Facts: Wikipedia, history.co.uk, TheCollector."
+  },
+  "64-whale-dynamite.mp4": {
+    "approved": true,
+    "sha1": "535c939ebcec4e5ef78f7df745588fab70d05654",
+    "checked_at": "2026-11-25T19:57:59.612Z",
+    "note": "Release gate 2026-11-25: (1) pronunciation OK, qa.py + whisper on final mix hear Message Health and every word (rained heard as homophone reigned); (2) flicker.py none, contact sheet viewed, art readable, caption zone clear; (3) predicted to beat recent: dated true story, absurd hook 3.4s, illustrated motion graphics, brand only last ~11s. Facts: Mental Floss, KOMO, AllThatsInteresting."
+  },
+  "65-headless-mike.mp4": {
+    "approved": true,
+    "sha1": "b1f3a875c67f7468518f088f0510d1663351d9b3",
+    "checked_at": "2026-11-25T19:57:59.660Z",
+    "note": "Release gate 2026-11-25: (1) pronunciation OK, qa.py + whisper-base.en (int8 and fp32) on final mix hear Message Health and every word; (2) flicker.py none, contact sheet viewed, art readable, no gore, caption zone clear; (3) predicted to beat recent: 2.6s absurd hook with a number, illustrated motion graphics, brand only last ~11s. Facts: Wikipedia, Guinness, Scientific American."
   }
 }

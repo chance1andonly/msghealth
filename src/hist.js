@@ -42,6 +42,10 @@ function env(x, y, w, h, col, a = 1) { // envelope
   ctx.beginPath(); ctx.moveTo(x + 6, y + 8); ctx.lineTo(x + w / 2, y + h * 0.58); ctx.lineTo(x + w - 6, y + 8); ctx.strokeStyle = rgba(col, 0.7); ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
 }
 const SCENES = {
+  art(t, a, c, L) { // illustrated documentary scene: c.draw(t, a, c, L) from the reel config (helpers in src/doc.js), slow push-in
+    stage(t, c.glow ?? 0.16); const z = 1 + 0.035 * ease.out(seg(t, a, VO_AT[L + 1] + 0.2));
+    ctx.save(); ctx.translate(CX, 800); ctx.scale(z, z); ctx.translate(-CX, -800); c.draw(t, a, c, L); ctx.restore();
+  },
   stat(t, a, c) { // count-up number
     stage(t, 0.18); eyebrow(c.eyebrow, 330, IN.mid);
     const k = ease.out(seg(t, a + 0.12, a + 1.3)), e = pop(t, a + 0.05, 0.4), v = lerp(c.from || 0, c.to, k);
@@ -130,5 +134,6 @@ const SCENES = {
 const SC = R.scenes.map((c, i) => [i ? VO_AT[i] : 0, VO_AT[i + 1], (t) => SCENES[c.type](t, VO_AT[i], c, i)]);
 SC.push([END, 999, (t) => finale(t, END)]);
 R.scenes.forEach((c, i) => { if (c.type === 'chat') c.msgs.forEach((m) => cue(VO_AT[i] + m.at, 'notification', 0.22)); });
+R.scenes.forEach((c, i) => (c.sfx || []).forEach(([k, kind, gain, d = 0]) => cue(ch(i, k) + 0.05 + d, kind, gain)));
 cue(END + 1.25, 'tap', 0.3);
 boot({ duration: DURATION, scenes: SC, brandAt: END, hideCaption: (t) => t >= END }, R.name);

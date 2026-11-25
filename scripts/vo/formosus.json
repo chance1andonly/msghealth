@@ -56,15 +56,15 @@
    "gap": 0.45
   },
   {
-   "say": "Maybe he's not mad. He's just busy as hell, and nobody asked.",
+   "say": "Maybe he's not mad. He's just busy as hell, and you never asked him.",
    "caps": [
     "Maybe he's just busy",
-    "as hell. *Nobody asked.*"
+    "as hell. *You never asked.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Message Health finds the ones who've gone quiet and texts them for you.",
+   "say": "Message Health finds the ones who've gone quiet, and sends them a text for you.",
    "caps": [
     "Message Health finds",
     "who's gone quiet",
