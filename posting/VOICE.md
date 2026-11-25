@@ -23,3 +23,5 @@ The viewer is one barber or stylist in Atlanta scrolling at 11pm. The voice shou
 
 ## Before anything posts
 `python3 scripts/qa.py NAME` (timing, transcript, wording flags), then read the script and caption once more, then `node posting/ig.mjs approve QUEUEFILE "note"`. Posting refuses any reel without a matching approval.
+
+- YEARS: always spoken as pairs, "nineteen nineteen", never "nineteen hundred nineteen". scripts/ads-vo.py now converts any 4-digit year in `say` automatically; still write the year in digits in captions.

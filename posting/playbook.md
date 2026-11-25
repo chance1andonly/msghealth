@@ -118,3 +118,5 @@ A reel may only post if all three hold. If one fails, fix the script and re-rend
 2. Every frame is properly defined. Look at a frame for each shot (ffmpeg contact sheet): subject in frame and not cropped, nothing overlapping the caption zone (callouts at y about 520 or 1240), text readable, no empty or broken shot. Fix the camera, actors or callout and re-render.
 3. It is predicted to beat the previous videos' analytics. Compare against posting/stats.json (top_reels, last posts): hook type, style, length, topic and caption shape must match what is winning, and the hook must be at least as strong as the best recent reel. If not, rewrite the hook or script and re-render rather than posting a weaker reel.
 Record the three checks in the approve note.
+
+- Release gate, pronunciation: years must be spoken as pairs ("nineteen nineteen", "twenty oh four"). Listen/ASR check every year; ads-vo.py converts them, but verify.

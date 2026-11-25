@@ -9,6 +9,21 @@ name, model, voices = sys.argv[1:4]
 spec = json.load(open(f'scripts/vo/{name}.json'))
 os.makedirs(f'assets/audio/{name}', exist_ok=True)
 k = Kokoro(model, voices)
+
+ONES = 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split()
+TENS = 'x x twenty thirty forty fifty sixty seventy eighty ninety'.split()
+def two(n):
+    return ONES[n] if n < 20 else TENS[n // 10] + ('' if n % 10 == 0 else '-' + ONES[n % 10])
+def year_words(y):
+    if y == 2000: return 'two thousand'
+    if 2001 <= y <= 2009: return 'two thousand ' + ONES[y - 2000]
+    a, b = divmod(y, 100)
+    if b == 0: return two(a) + ' hundred'
+    if b < 10: return two(a) + ' oh ' + ONES[b]
+    return two(a) + ' ' + two(b)
+def spoken_years(t):
+    # years must be read as pairs ("nineteen nineteen"), never "nineteen hundred nineteen"
+    return re.sub(r'(?<![\d,.$])(1[0-9]{3}|20[0-9]{2})(?![\d%])(?!,\d)(?!\s*(?:dollars|miles|people|views|calls|texts|clients|customers|years))', lambda m: year_words(int(m.group(1))), t)
 def syl(s):
     s = s.lower().replace('*', '')
     for a, b in {'msghealth.net': 'mes sage health dot net', 'msghealth': 'mes sage health', 'fifty-one': 'fif ty one'}.items(): s = s.replace(a, b)
@@ -20,7 +35,7 @@ def syl(s):
     return n
 clips, at, t = [], [], spec.get('start', 0.3)
 for i, ln in enumerate(spec['lines']):
-    x, sr = k.create(ln['say'], voice=spec['voice'], speed=ln.get('speed', spec['speed']), lang='en-us')
+    x, sr = k.create(spoken_years(ln['say']), voice=spec['voice'], speed=ln.get('speed', spec['speed']), lang='en-us')
     hop = int(sr * 0.005); e = np.array([np.sqrt((x[j:j + hop] ** 2).mean()) for j in range(0, len(x) - hop, hop)])
     v = np.where(e > e.max() * 0.04)[0]; a = max(0, (v[0] - 4) * hop); b = min(len(x), (v[-1] + 14) * hop)
     x = x[a:b]; sf.write(f'assets/audio/{name}/vo-{i:02d}.wav', x, sr)
