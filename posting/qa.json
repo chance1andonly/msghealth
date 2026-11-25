@@ -340,5 +340,11 @@
     "sha1": "97043588590308d014bb2fec1b13f7eb0b9dd651",
     "checked_at": "2026-11-25T04:30:52.096Z",
     "note": "Release gate: (1) qa.py ASR hears Message Health and all words right (Tylenol respelled Tie-lenol); (2) flicker none, contact sheet readable, nothing cropped or in caption zone; (3) black/white story format like top reels, hook under 4.5s, new idea, cussing, brand only last ~12s."
+  },
+  "56-stamps-card.mp4": {
+    "approved": true,
+    "sha1": "9a4abbc399279ad843b1cbc0216472229e782d0d",
+    "checked_at": "2026-11-25T04:51:19.796Z",
+    "note": "validated 2026-11-24: pronunciation OK (ASR), frames OK (no flicker, contact sheet), analytics: true-story hook with numbers like top reels, ad only at end"
   }
 }
