@@ -337,9 +337,9 @@
   },
   "60-tylenol-31-million.mp4": {
     "approved": true,
-    "sha1": "ddcd7d2e5c766c4854b385e80496ee21c5a32fcc",
-    "checked_at": "2026-11-25T16:24:32.834Z",
-    "note": "re-validated 2026-11-25 after year-pronunciation fix: years spoken as pairs, ASR OK, no flicker"
+    "sha1": "0d695bcb61d6e0d1ecc2a21d01dd1ee32cc0d918",
+    "checked_at": "2026-11-25T18:21:53.457Z",
+    "note": "validated 2026-11-25 13:25 ET after 18:14Z stats refresh: pronunciation OK (line 8 'texts them' was heard as 'text them', rewritten to 'so a text goes out before they're gone', re-rendered; both whisper-base.en models match the final mix), frames OK (contact sheet viewed, no flicker, captions clear), analytics: dated true story with a number and withheld outcome, same shape as the top 3 (1709/1291/794); corporate recall differs in topic from the last two posts (flood, war holdout); style is the winning one"
   },
   "56-stamps-card.mp4": {
     "approved": true,

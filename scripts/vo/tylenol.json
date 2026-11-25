@@ -52,9 +52,9 @@
   {
    "say": "People expected the brand to die. Instead, customers came back, because the company had put them first.",
    "caps": [
-    "Everyone expected it to die.",
-    "Customers came back because",
-    "they'd been *put first.*"
+    "People expected it to die.",
+    "Instead, customers came back",
+    "because they'd been *put first.*"
    ],
    "gap": 0.6,
    "speed": 1.02
@@ -73,16 +73,17 @@
    "caps": [
     "Your clients are the same.",
     "The ones who stay are the ones",
-    "you *reach first.*"
+    "you *reach out to first.*"
    ],
    "gap": 0.45
   },
   {
-   "say": "Message Health shows you who's slipping, and texts them before they're gone.",
+   "say": "Message Health shows you who's slipping, so a text goes out before they're gone.",
    "caps": [
-    "Message Health shows",
-    "you who's slipping",
-    "and *texts them first.*"
+    "MsgHealth shows",
+    "you who's slipping,",
+    "so a text goes out",
+    "*before they're gone.*"
    ],
    "gap": 0.5
   },
