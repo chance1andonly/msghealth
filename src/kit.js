@@ -105,16 +105,16 @@ function person(x, y, h, seed, o = {}) {
 }
 
 // ── dark product-UI helpers ──────────────────────────────────────────────────
-const IN = { hi: '#c7c3ff', mid: '#ffffff', deep: '#7168ff' };
+const IN = { hi: '#e6e6e6', mid: '#ffffff', deep: '#9a9a9a' };
 const MUTED = 'rgba(235,235,245,0.5)', SOFT = 'rgba(235,235,245,0.78)', DIM = 'rgba(235,235,245,0.32)';
 const RED = C.risk, GREEN = C.healthy, AMBER = C.attention;
 const CARD = { x: 100, w: 880 };
-const NAMES = [['Jordan', C.primary], ['Priya', '#d9468a'], ['Marcus', '#e5803b'], ['Ava', '#0ea5a4'], ['Sam K.', '#7168ff'], ['Dana', '#3dbb74'], ['Lee', '#d9468a'], ['Noor', '#e5803b'], ['Eli', '#0ea5a4'], ['Rae', C.primary]];
+const NAMES = [['Jordan', '#bdbdbd'], ['Priya', '#d9468a'], ['Marcus', '#e5803b'], ['Ava', '#0ea5a4'], ['Sam K.', '#8f8f8f'], ['Dana', '#3dbb74'], ['Lee', '#d9468a'], ['Noor', '#e5803b'], ['Eli', '#0ea5a4'], ['Rae', '#a8a8a8']];
 function stage(t, glowA = 0.22) {
   ctx.fillStyle = '#050508'; ctx.fillRect(0, 0, W, H);
   ctx.strokeStyle = 'rgba(255,255,255,0.035)'; ctx.lineWidth = 1;
   ctx.beginPath(); for (let x = 0; x <= W; x += 60) { ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, H); } for (let y = 0; y <= H; y += 60) { ctx.moveTo(0, y + 0.5); ctx.lineTo(W, y + 0.5); } ctx.stroke();
-  glow(CX, 860, 720, C.primary, glowA);
+  glow(CX, 860, 720, '#8a8a8a', glowA);
 }
 function eyebrow(s, y, col = MUTED) { text(s, CX, y, 22, 700, col, 'center', 0.22); }
 function card(x, y, w, h, o = {}) {
@@ -133,7 +133,7 @@ function bubble(x, y, maxW, lines, out, a = 1) {
   if (a <= 0) return 0;
   const size = 30, lh = 40, w = Math.max(...lines.map((l) => tw(l, size, 500))) + 48, h = lines.length * lh + 30, x0 = out ? x + maxW - w : x;
   ctx.save(); ctx.globalAlpha *= a;
-  fillRR(x0, y, w, h, 26, out ? C.primary : 'rgba(255,255,255,0.1)');
+  fillRR(x0, y, w, h, 26, out ? '#3a3a3a' : 'rgba(255,255,255,0.1)');
   lines.forEach((l, i) => text(l, x0 + 24, y + 15 + lh / 2 + i * lh, size, 500, '#fff'));
   ctx.restore();
   return h;
@@ -155,7 +155,7 @@ function phone(x, y, w, h, bg, fn) {
 function brandHit(t, at, until) {
   const hit = seg(t, at, at + 0.5);
   stage(t, 0.12 + 0.28 * ease.out(hit));
-  if (t >= at) glow(CX, 860, 800, C.primary, 0.5 * (1 - seg(t, at, at + 0.35)));
+  if (t >= at) glow(CX, 860, 800, '#8a8a8a', 0.5 * (1 - seg(t, at, at + 0.35)));
   withFade(enter(t, at - 0.02, until, 0.18), () => { const s = 1 + 0.25 * (1 - ease.quint(hit)); xf(CX, 860, s, 0, () => logoLockup(CX, 860, 92)); });
 }
 
@@ -187,37 +187,11 @@ function drawCaption(caps, t, hide) {
 }
 
 // ── end card: logo, tagline, button with a tap, msghealth.net ────────────────
-function endCard(t, at, tapAt, urlAt) {
+function endCard(t, at, tapAt, urlAt) { // black and white end card (no purple)
   const k = ease.quint(seg(t, at, at + 0.4));
-  stage(t, 0.18 + 0.2 * k);
-  if (t < at + 0.3) glow(CX, 860, 800, C.primary, 0.45 * (1 - seg(t, at, at + 0.3)));
-  xf(CX, 640, 1 + 0.2 * (1 - k), 0, () => { ctx.save(); ctx.globalAlpha = k; logoLockup(CX, 600, 96); text(BRAND.tagline, CX, 710, 32, 500, SOFT, 'center'); ctx.restore(); });
-  const b = ease.back(seg(t, at + 0.35, at + 0.75));
-  if (b <= 0) return;
-  const press = t > tapAt - 0.06 && t < tapAt + 0.16 ? 0.94 : 1, label = 'Try MsgHealth', bw = tw(label, 44, 800) + 160, bh = 116, by = 830;
-  ctx.save(); ctx.globalAlpha = clamp(b); ctx.translate(CX, by + bh / 2); ctx.scale(b * press, b * press); ctx.translate(-CX, -(by + bh / 2));
-  glow(CX, by + bh / 2, 360, C.primary, 0.45 + 0.15 * Math.sin(t * 4));
-  fillRR(CX - bw / 2, by, bw, bh, bh / 2, C.primary); strokeRR(CX - bw / 2, by, bw, bh, bh / 2, 'rgba(255,255,255,0.25)', 2);
-  text(label, CX - 30, by + bh / 2 + 2, 44, 800, '#fff', 'center');
-  const ax = CX + tw(label, 44, 800) / 2 + 10; ctx.strokeStyle = '#fff'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  ctx.beginPath(); ctx.moveTo(ax, by + bh / 2); ctx.lineTo(ax + 40, by + bh / 2); ctx.moveTo(ax + 24, by + bh / 2 - 16); ctx.lineTo(ax + 40, by + bh / 2); ctx.lineTo(ax + 24, by + bh / 2 + 16); ctx.stroke();
-  ctx.restore();
-  const o = ease.back(seg(t, at + 0.8, at + 1.1));
-  if (o > 0) {
-    ctx.save(); ctx.globalAlpha = clamp(o); const s2 = '50% OFF YOUR FIRST MONTH · MONTHLY PLANS', w = tw(s2, 20, 800, 0.1) + 40;
-    ctx.translate(CX, by + bh + 70); ctx.scale(o, o);
-    fillRR(-w / 2, -24, w, 48, 10, rgba(GREEN, 0.18)); strokeRR(-w / 2, -24, w, 48, 10, rgba(GREEN, 0.6), 2); text(s2, 0, 1, 20, 800, '#9ff0c0', 'center', 0.1);
-    ctx.restore();
-  }
-  withFade(seg(t, urlAt, urlAt + 0.3), () => text(BRAND.url.toUpperCase(), CX, by + bh + 160, 28, 800, IN.mid, 'center', 0.18));
-  if (HAND && t > tapAt - 0.7 && t < tapAt + 0.8) {
-    const p = seg(t, tapAt - 0.7, tapAt - 0.05), q = seg(t, tapAt + 0.25, tapAt + 0.8);
-    const hx = ax + 26 + (1 - ease.out(p)) * 220 + q * 160, hy = by + bh / 2 + 18 + (1 - ease.out(p)) * 300 + q * 240;
-    ctx.save(); ctx.globalAlpha = clamp(p * 3) * (1 - q);
-    if (t > tapAt && t < tapAt + 0.4) { const r = seg(t, tapAt, tapAt + 0.4); ctx.strokeStyle = rgba('#ffffff', 0.7 * (1 - r)); ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(hx, hy, 20 + r * 60, 0, Math.PI * 2); ctx.stroke(); }
-    ctx.translate(hx, hy); ctx.rotate(-0.12); ctx.scale(0.5, 0.5); ctx.translate(-110.5, -117); ctx.drawImage(HAND, 0, 0);
-    ctx.restore();
-  }
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1080, 1920);
+  xf(CX, 800, 1 + 0.2 * (1 - k), 0, () => { ctx.save(); ctx.globalAlpha = k; text('MsgHealth', CX, 800, 120, 800, '#ffffff', 'center', 0.01); text('Know your customers. Keep your customers.', CX, 900, 34, 500, 'rgba(255,255,255,0.8)', 'center'); ctx.restore(); });
+  withFade(seg(t, urlAt, urlAt + 0.3), () => text('MSGHEALTH.NET', CX, 1010, 30, 800, '#ffffff', 'center', 0.18));
 }
 
 // ── boot: renderFrame, ready, text audit hook and the browser player ─────────
@@ -286,7 +260,7 @@ function boot(cfg, voDir) {
 function offerCard(t, at, until) {
   const k = ease.back(seg(t, at, at + 0.4)), pulse = 0.5 + 0.5 * Math.sin((t - at) * 5);
   stage(t, 0.3 + 0.12 * pulse);
-  glow(CX, 560, 900, C.primary, 0.35 * (1 - seg(t, at, at + 0.5)));
+  glow(CX, 560, 900, '#8a8a8a', 0.35 * (1 - seg(t, at, at + 0.5)));
   withFade(enter(t, at - 0.02, until, 0.15), () => {
     eyebrow('LIMITED TIME OFFER', 330, IN.mid);
     xf(CX, 520, 0.6 + 0.4 * clamp(k), 0, () => { ctx.save(); ctx.globalAlpha = clamp(k * 1.5); ctx.shadowColor = rgba(C.primary, 0.9); ctx.shadowBlur = 60; text('50%', CX, 500, 290, 800, '#fff', 'center', -0.05); ctx.restore(); });

@@ -1,0 +1,95 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Same deal. Same price. One group showed up almost twice as often.",
+   "caps": [
+    "Same deal. Same price.",
+    "One group showed up *twice as often.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "April, 2004. A car wash. Three hundred customers each got a loyalty card.",
+   "caps": [
+    "*300 customers.*",
+    "One loyalty card each."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The first card had eight empty boxes. The second had ten boxes, but two were already stamped.",
+   "caps": [
+    "Card A: *8 empty boxes.*",
+    "Card B: 10 boxes, *2 pre-stamped.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Both cards needed exactly eight washes for a free one. Not one wash less.",
+   "caps": [
+    "Both cards needed *exactly 8 washes*",
+    "for a free one."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Nine months later, only nineteen percent of the empty cards ever got finished.",
+   "caps": [
+    "*9 months later,*",
+    "only *19%* of empty cards got finished."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The cards with the free head start? Thirty four percent. Almost double.",
+   "caps": [
+    "The head start cards?",
+    "*34%.* Almost double."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Two fake stamps. That's it. Two fucking stamps that cost nothing.",
+   "caps": [
+    "Two fake stamps.",
+    "*That's the whole difference.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "People don't finish what they never started. Give a shit about the ones who already did.",
+   "caps": [
+    "Nobody finishes",
+    "what they *never started.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Now look at your client list. Half your regulars are cards stuck at stamp three.",
+   "caps": [
+    "Your regulars are *cards stuck*",
+    "at *stamp three.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health spots who's gone quiet, and texts them before they forget you.",
+   "caps": [
+    "*Message Health* spots who's gone quiet",
+    "and texts them *before they forget.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

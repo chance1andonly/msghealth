@@ -13,9 +13,9 @@ window.BRAND = {
   logoFile: 'assets/logo.png', // official mark; a fallback mark is drawn if missing
 
   colors: {
-    primary: '#4f46e5',   // official brand colour (UI chrome, logo)
-    primaryDark: '#3730a3',
-    ink: '#1e1b4b',       // dark text / wordmark
+    primary: '#3a3a3a',   // official brand colour (UI chrome, logo)
+    primaryDark: '#222222',
+    ink: '#111111',       // dark text / wordmark
     healthy: '#3dbb74',
     attention: '#f2b441',
     risk: '#ec5f4f',
