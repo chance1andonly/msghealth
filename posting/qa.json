@@ -320,8 +320,8 @@
   "57-onoda-29-years.mp4": {
     "approved": true,
     "sha1": "b2a54b3068355fb6393ed5908410bf70d77172a1",
-    "checked_at": "2026-11-25T04:15:39.920Z",
-    "note": "Release gate: (1) qa.py ASR hears Message Health, every word right; (2) flicker.py none, contact sheet readable, nothing cropped or in caption zone; (3) black/white true-story format (or labeled original fiction), hook under 4.5s, like top story reels. New idea, cussing, brand only last ~12s."
+    "checked_at": "2026-11-25T16:22:42.234Z",
+    "note": "validated 2026-11-25 11:24 ET after 16:19Z stats refresh: pronunciation OK (whisper-base.en matches the script on every clip and the full mix), frames OK (per-line and 1fps sheets viewed, nothing cropped, captions low and clear, no flicker, cover readable), analytics: dated true-story hook 'In 1974...' (10 words, 3.9s) matches the 1709-view 'In 1990...' shape; top 3 are still true-story graphics (1709/1291/794); topic differs from last two posts (toy chase, molasses flood), style is the current black/white story format"
   },
   "58-fortyone-miles.mp4": {
     "approved": true,
@@ -348,10 +348,10 @@
     "note": "validated 2026-11-24: pronunciation OK (ASR), frames OK (no flicker, contact sheet), analytics: true-story hook with numbers like top reels, ad only at end"
   },
   "61-formosus-dead-pope.mp4": {
-    "approved": true,
+    "approved": false,
     "sha1": "a156d097cb0a04133427b2f7261fb5d2680037f1",
-    "checked_at": "2026-11-25T07:35:36.686Z",
-    "note": "QA ASR ok (message health heard, words right); flicker none + contact sheet readable, captions clear of content; true-story F2 format matches top reels (hook ~2.5s, brand only in last ~10s)"
+    "checked_at": "2026-11-25T16:22:42.000Z",
+    "note": "HELD for fix 2026-11-25: line 6 'nobody asked' is heard as 'nobody asks' (whisper-base.en, both models, clip and final mix). Respell in scripts/vo/formosus.json 'say', rebuild with ads-vo.py, re-render, re-run the gate, then approve. Frames checked OK."
   },
   "62-meux-beer-flood.mp4": {
     "approved": true,
