@@ -394,5 +394,11 @@
     "sha1": "f6aede547f5da6790c54392d8eea0fd72bb871a9",
     "checked_at": "2026-11-26T17:17:46.528Z",
     "note": "validated 2026-11-26 12:18 ET: pronunciation OK (audio stream bit-identical, md5 71acf94c, to the mix that passed whisper-base.en int8+fp32 at 07:51Z; recognizer not rerun, model download blocked), frames OK (re-rendered: caption now matches voice 'slapping down', shows MsgHealth, RAW MEAT/HOLY HELL stamps moved off the big meat chunk; 1fps grids viewed, flicker.py no A-B-A), analytics (stats 17:13Z): 3.6s dated hook with a number, illustrated true story like the 1709-view pizza reel; next in set order; topic differs from Pepsi and marathon, though gross dated tone is close to marathon. Prediction, not proven."
+  },
+  "63-thanksgiving-tv-dinner.mp4": {
+    "approved": true,
+    "sha1": "b5558b01d8020e664f59e9519c75d2611741886d",
+    "checked_at": "2026-11-26T19:20:05.120Z",
+    "note": "validated 2026-11-26: pronunciation OK (ASR, years as pairs), captions fit, flicker only counter ticks, analytics: true-story format like top reels, ad at end, Thanksgiving timely"
   }
 }

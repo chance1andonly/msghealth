@@ -1,0 +1,107 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 1953, one asshole ordered two hundred sixty tons of turkey.",
+   "caps": [
+    "In *1953,* one asshole",
+    "ordered *260 tons*",
+    "of turkey."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Ten railroad cars, packed with turkey, and Thanksgiving was already over.",
+   "caps": [
+    "*Ten railroad cars* of turkey,",
+    "and Thanksgiving",
+    "was *already over.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Nobody wanted it. Half a million pounds of dead bird, just sitting there.",
+   "caps": [
+    "*Nobody wanted it.*",
+    "Half a million pounds",
+    "of bird, *just sitting there.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "A salesman named Gerry Thomas saw an airline meal tray and thought, shit, that's it.",
+   "caps": [
+    "A salesman, *Gerry Thomas,*",
+    "saw an airline tray",
+    "and thought, *shit, that's it.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "He ordered five thousand aluminum trays and filled them with turkey, stuffing, peas, and sweet potatoes.",
+   "caps": [
+    "He ordered *5,000 trays*",
+    "and filled them with",
+    "*turkey, stuffing, peas,*",
+    "and sweet potatoes."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "They called it the TV dinner. Ninety-eight cents.",
+   "caps": [
+    "They called it",
+    "*the TV dinner.*",
+    "*98 cents.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The next year, they sold over ten million of them.",
+   "caps": [
+    "The next year,",
+    "they sold",
+    "*over 10 million.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Same turkey. Nobody wanted it, until it got a new job.",
+   "caps": [
+    "*Same turkey.*",
+    "Nobody wanted it,",
+    "until it got *a new job.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Now look at your old clients. They're your leftover turkey, sitting there for months, and nobody's texted them.",
+   "caps": [
+    "Your old clients are",
+    "*your leftover turkey.*",
+    "Nobody's *texted them.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health finds the ones who've gone quiet, and texts them before they forget you.",
+   "caps": [
+    "*Message Health*",
+    "finds who's gone quiet",
+    "and texts them",
+    "*before they forget.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}
