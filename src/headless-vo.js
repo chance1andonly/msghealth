@@ -9,7 +9,7 @@ window.VO_CLIPS = [
   { dur: 2.77, chunks: [["Then one night", 0.0], ["in a Phoenix motel,", 0.74], ["he started *choking.*", 1.82]] }, // 05
   { dur: 3.845, chunks: [["The syringe for his throat", 0.0], ["was back at the *last sideshow.*", 1.38], ["Mike died.", 3.43]] }, // 06
   { dur: 3.69, chunks: [["You lose a good regular", 0.0], ["the same way: one *forgotten*", 1.15], ["*follow-up* at a time.", 2.53]] }, // 07
-  { dur: 2.8, chunks: [["Message Health spots", 0.0], ["who's *drifting,*", 0.74], ["and *follows up for you.*", 1.46]] }, // 08
+  { dur: 2.8, chunks: [["MsgHealth spots", 0.0], ["who's *drifting,*", 0.74], ["and *follows up for you.*", 1.46]] }, // 08
   { dur: 2.16, chunks: [["Comment *KEEP* to get a full", 0.0], ["*retention audit.*", 1.1]] }, // 09
 ];
 window.VO_AT = [0.25, 3.21, 8.09, 12.44, 16.47, 20.66, 23.85, 28.27, 32.33, 35.58];

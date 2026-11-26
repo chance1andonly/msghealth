@@ -40,7 +40,7 @@
     { type: 'art', sfx: [[0, 'pop', 0.5], [1, 'swoosh', 0.5], [2, 'ding', 0.6]], draw(t, a, c, L) {
       dHead('ON TOUR'); const tour = dIn(t, ch(L, 1), 0.5); tent(tour); spot(); bird(CX, 1250, 1.05, t < ch(L, 1) ? 0 : t * 4);
       withFade(dIn(t, a) * (1 - dIn(t, ch(L, 1) + 0.2)), () => { ctx.save(); ctx.translate(CX - 155, 690); ctx.rotate(0.05); fillRR(-34, -230, 68, 200, 20, 'rgba(255,255,255,0.25)'); strokeRR(-34, -230, 68, 200, 20, D_W, 7); ellipse(0, -250, 54, 46, D_W); poly([[-26, -30], [26, -30], [8, 60], [-8, 60]], D_W); ctx.restore(); const d = ((t - a) * 1.5) % 1; circle(CX - 158, 770 + d * 60, 14 * (1 - d * 0.4), `rgba(255,255,255,${1 - d})`); });
-      const k = pop(t, ch(L, 2), 0.4); if (k > 0) xf(CX, 760, clamp(k), 0, () => { ctx.save(); ctx.translate(CX, 760); ctx.rotate(-0.06); fillRR(-330, -115, 660, 230, 16, D_W); ctx.save(); ctx.setLineDash([14, 12]); strokeRR(-305, -92, 610, 184, 8, '#000', 5); ctx.restore(); circle(-330, 0, 34, '#000'); circle(330, 0, 34, '#000'); text('ADMIT ONE', 0, -40, 52, 900, '#000', 'center', 0.14); text('25¢', 0, 48, 96, 900, '#000', 'center'); ctx.restore(); });
+      const k = pop(t, ch(L, 2), 0.4); if (k > 0) xf(CX, 580, clamp(k), 0, () => { ctx.save(); ctx.translate(CX, 580); ctx.rotate(-0.06); fillRR(-330, -115, 660, 230, 16, D_W); ctx.save(); ctx.setLineDash([14, 12]); strokeRR(-305, -92, 610, 184, 8, '#000', 5); ctx.restore(); circle(-330, 0, 34, '#000'); circle(330, 0, 34, '#000'); text('ADMIT ONE', 0, -40, 52, 900, '#000', 'center', 0.14); text('25¢', 0, 48, 96, 900, '#000', 'center'); ctx.restore(); });
     } },
     { type: 'art', sfx: [[2, 'punch', 0.7]], draw(t, a, c, L) {
       dHead('AT HIS PEAK'); spot();

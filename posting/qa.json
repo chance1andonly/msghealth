@@ -373,9 +373,9 @@
   },
   "65-headless-mike.mp4": {
     "approved": true,
-    "sha1": "b1f3a875c67f7468518f088f0510d1663351d9b3",
-    "checked_at": "2026-11-25T19:57:59.660Z",
-    "note": "Release gate 2026-11-25: (1) pronunciation OK, qa.py + whisper-base.en (int8 and fp32) on final mix hear Message Health and every word; (2) flicker.py none, contact sheet viewed, art readable, no gore, caption zone clear; (3) predicted to beat recent: 2.6s absurd hook with a number, illustrated motion graphics, brand only last ~11s. Facts: Wikipedia, Guinness, Scientific American."
+    "sha1": "dfeb458fb57b0628210f0b4c6093864622c52f7e",
+    "checked_at": "2026-11-26T17:23:16.724Z",
+    "note": "validated 2026-11-26 12:26 ET: pronunciation OK (audio stream bit-identical, md5 2d7239f2, to the mix that passed whisper-base.en int8+fp32 on 11-25; recognizer not rerun, model download blocked), frames OK (re-rendered: 25 cent ticket moved off the chicken, caption shows MsgHealth; 1fps grids viewed, flicker.py no A-B-A), analytics (stats 17:13Z): 2.6s absurd hook with a number, illustrated true story like the top three, animal topic differs from Pepsi, marathon and meat shower. Prediction, not proven."
   },
   "66-marathon-rat-poison.mp4": {
     "approved": true,

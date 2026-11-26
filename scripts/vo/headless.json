@@ -83,7 +83,7 @@
   {
    "say": "Message Health spots who's drifting, and follows up for you.",
    "caps": [
-    "Message Health spots",
+    "MsgHealth spots",
     "who's *drifting,*",
     "and *follows up for you.*"
    ],
