@@ -1,8 +1,8 @@
 {
-  "updated": "2026-11-26T15:13:27.070Z",
+  "updated": "2026-11-26T17:13:09.380Z",
   "timezone": "America/New_York",
   "metric": "views",
-  "reels_analyzed": 79,
+  "reels_analyzed": 80,
   "by_hour": [
     {
       "hour": 23,
@@ -18,6 +18,11 @@
       "hour": 13,
       "reels": 15,
       "median_score": 133
+    },
+    {
+      "hour": 10,
+      "reels": 2,
+      "median_score": 129
     },
     {
       "hour": 20,
@@ -65,7 +70,7 @@
       "median_score": 93
     },
     "6": {
-      "reels": 5,
+      "reels": 6,
       "median_score": 127
     }
   },
