@@ -77,7 +77,7 @@ const SCENES = {
     stage(t, 0.18); eyebrow(c.eyebrow, 330, IN.mid);
     const L = pop(t, a + 0.1, 0.35), Rr = pop(t, a + 1.2, 0.35);
     xf(300, 800, clamp(L), 0, () => { card(80, 560, 440, 480, { fill: 'rgba(255,255,255,0.02)', stroke: 'rgba(255,111,138,0.4)' }); text(c.l.title, 300, 630, 30, 800, MUTED, 'center', 0.1); text(c.l.big, 300, 790, fit(c.l.big, 96, 380), 800, MUTED, 'center', -0.03); (c.l.sub || []).forEach((s, i) => text(s, 300, 900 + i * 48, 34, 600, MUTED, 'center')); });
-    xf(780, 800, clamp(Rr), 0, () => { card(560, 560, 440, 480, { stroke: 'rgba(111,227,160,0.6)' }); text(c.r.title, 780, 630, 30, 800, OK, 'center', 0.1); text(c.r.big, 780, 790, fit(c.r.big, 96, 380), 800, '#fff', 'center', -0.03); (c.r.sub || []).forEach((s, i) => text(s, 780, 900 + i * 48, 34, 600, OK, 'center')); });
+    xf(780, 800, clamp(Rr), 0, () => { card(560, 560, 440, 480, { stroke: 'rgba(255,255,255,0.7)' }); text(c.r.title, 780, 630, 30, 800, '#ffffff', 'center', 0.1); text(c.r.big, 780, 790, fit(c.r.big, 96, 380), 800, '#fff', 'center', -0.03); (c.r.sub || []).forEach((s, i) => text(s, 780, 900 + i * 48, 34, 600, '#ffffff', 'center')); });
   },
   split(t, a, c) { // two bars: share of A vs share of B
     stage(t, 0.16); eyebrow(c.eyebrow, 330, IN.mid);

@@ -1,0 +1,105 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A customer paid four hundred eighty thousand dollars, then quietly left.",
+   "caps": [
+    "A customer *paid*",
+    "*$480,000,*",
+    "then quietly left."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Eight years. Sixty thousand dollars a year, paid on time, all eight years.",
+   "caps": [
+    "*Eight years.*",
+    "*$60,000* a year,",
+    "paid on time."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "They never complained once, and never demanded a damn meeting.",
+   "caps": [
+    "They *never complained.*",
+    "Never demanded",
+    "a *damn meeting.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Then last year, their usage fell by half.",
+   "caps": [
+    "Then last year,",
+    "their usage",
+    "*fell by half.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The vendor never asked why. Its only message in eighteen months was an upsell.",
+   "caps": [
+    "Not one person *asked why.*",
+    "The only message",
+    "was an *upsell.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "So they quit, and signed with a competitor.",
+   "caps": [
+    "They *didn't renew.*",
+    "They signed with",
+    "*a competitor.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "On paper, a perfect customer. In real life, a year of leaving in plain sight.",
+   "caps": [
+    "On paper, *perfect.*",
+    "In real life,",
+    "*a year of leaving.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Customers never announce it, they just go quiet.",
+   "caps": [
+    "Customers don't *announce it.*",
+    "They just",
+    "*go quiet.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Your regulars do the same shit. Quiet for three weeks, then gone, and you never got a text.",
+   "caps": [
+    "Your regulars do",
+    "the same *shit.*",
+    "Quiet, then *gone.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health spots the drop-off and texts them first, while they're still yours.",
+   "caps": [
+    "*Message Health*",
+    "spots the drop-off",
+    "and texts them *first.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

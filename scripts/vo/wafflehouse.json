@@ -1,0 +1,106 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "After a hurricane, officials check if Waffle House is open.",
+   "caps": [
+    "After a *hurricane,*",
+    "officials check if",
+    "*Waffle House* is open."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Florida, 2004. Four fucking hurricanes in one season.",
+   "caps": [
+    "*Florida, 2004.*",
+    "Four fucking *hurricanes*",
+    "in one season."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The phones were dead, the power was out, and nobody could say how bad it was.",
+   "caps": [
+    "*No phones.* No power.",
+    "And nobody could",
+    "tell him *how bad.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Craig Fugate ran Florida's emergency management. He needed one thing that never closes.",
+   "caps": [
+    "Craig Fugate needed",
+    "one thing that",
+    "*never closes.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "A Waffle House. Open twenty-four hours, every damn day, even in a hurricane.",
+   "caps": [
+    "A *Waffle House.*",
+    "Open *24 hours,*",
+    "every damn day."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Full menu means green, the town's holding up. Closed means red, and that's where you send help first.",
+   "caps": [
+    "Full menu: *green.*",
+    "Closed: *red.*",
+    "Send help *first.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "In 2011, a tornado hit Joplin, Missouri. Two point eight billion dollars of damage.",
+   "caps": [
+    "In *2011,* a tornado",
+    "hit *Joplin, Missouri.*",
+    "*$2.8 billion* of damage."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Both Waffle Houses stayed open. That told them the town could bounce back.",
+   "caps": [
+    "Both *Waffle Houses*",
+    "stayed open.",
+    "The town would *bounce back.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Your clients work the same way. When a regular stops showing up, that's a Waffle House going dark.",
+   "caps": [
+    "Your clients work",
+    "the same way.",
+    "A regular *goes dark.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health watches your regulars, and texts the ones who go dark before they're gone for good.",
+   "caps": [
+    "*Message Health*",
+    "watches your regulars",
+    "and texts the ones",
+    "who *go dark.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

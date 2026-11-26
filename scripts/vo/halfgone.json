@@ -1,0 +1,106 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Harvard found CEOs lose half their customers every five years.",
+   "caps": [
+    "*Harvard* found CEOs",
+    "lose *half* their customers",
+    "every *five years.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "That came from a Bain fellow, in 1996.",
+   "caps": [
+    "That came from",
+    "a *Bain fellow,*",
+    "in *1996.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Start with a hundred customers. Five years later, fifty are gone.",
+   "caps": [
+    "Start with *100 customers.*",
+    "Five years later,",
+    "*fifty are gone.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And here's the fucked up part. They never storm out, they just stop showing up.",
+   "caps": [
+    "Here's the *fucked up part.*",
+    "They don't storm out.",
+    "They *stop showing up.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "No call, no complaint, and no goodbye.",
+   "caps": [
+    "*No call.*",
+    "No complaint.",
+    "*No goodbye.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "His point: the longer customers stay, the more they're worth.",
+   "caps": [
+    "The *longer they stay,*",
+    "the more",
+    "*they're worth.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And new customers cost money to find. Old ones already know you.",
+   "caps": [
+    "New customers",
+    "*cost money* to find.",
+    "Old ones *know you.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Finding a new client takes ads and luck. Keeping an old one can take a text.",
+   "caps": [
+    "New client:",
+    "*ads and luck.*",
+    "Old client: *a text.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Look at your own books. Which regulars haven't you seen in two months?",
+   "caps": [
+    "Look at *your books.*",
+    "Which regulars haven't",
+    "you seen in *2 months?*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Message Health finds those clients and texts them before they become part of the half you lost.",
+   "caps": [
+    "*Message Health*",
+    "finds those clients",
+    "and texts them before",
+    "they're *part of the half.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}
