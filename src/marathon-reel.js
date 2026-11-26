@@ -25,7 +25,7 @@
   const poison = (x, y, s, rot = 0) => { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
     fillRR(-62, -330, 124, 70, 12, '#8c8c8c'); fillRR(-80, -272, 160, 90, 26, '#4a4a4a'); fillRR(-170, -210, 340, 430, 56, '#2f2f2f'); strokeRR(-170, -210, 340, 430, 56, D_W, 8);
     fillRR(-140, -130, 280, 300, 16, D_W); skull(0, -50, 62); text('RAT', 0, 78, 58, 900, '#000', 'center', 0.06); text('POISON', 0, 136, 58, 900, '#000', 'center', 0.04); ctx.restore(); };
-  const medal = (x, y, r, label = '1ST') => { poly([[x - r * 0.9, y - r * 2.1], [x - r * 0.3, y - r * 2.1], [x + r * 0.2, y - r * 0.6], [x - r * 0.4, y - r * 0.5]], D_G); poly([[x + r * 0.9, y - r * 2.1], [x + r * 0.3, y - r * 2.1], [x - r * 0.2, y - r * 0.6], [x + r * 0.4, y - r * 0.5]], '#b0b0b0'); circle(x, y, r, D_W); ring(x, y, r * 0.76, '#000', r * 0.08); text(label, x, y + 3, r * 0.62, 900, '#000', 'center'); };
+  const medal = (x, y, r, label = '1ST', fs = 0.62) => { poly([[x - r * 0.9, y - r * 2.1], [x - r * 0.3, y - r * 2.1], [x + r * 0.2, y - r * 0.6], [x - r * 0.4, y - r * 0.5]], D_G); poly([[x + r * 0.9, y - r * 2.1], [x + r * 0.3, y - r * 2.1], [x - r * 0.2, y - r * 0.6], [x + r * 0.4, y - r * 0.5]], '#b0b0b0'); circle(x, y, r, D_W); ring(x, y, r * 0.76, '#000', r * 0.08); text(label, x, y + 3, r * fs, 900, '#000', 'center'); };
   const dog = (x, y, s, ph) => { ctx.save(); ctx.translate(x, y - Math.abs(Math.sin(ph)) * 18 * s); ctx.scale(s, s);
     [[-70, 0], [-40, 1.7], [55, 3.1], [85, 4.6]].forEach(([lx, p], i) => { const a = Math.sin(ph + p) * 0.7; line(lx, -70, lx + Math.sin(a) * 70, -70 + Math.cos(a) * 70, i % 2 ? D_L : '#8c8c8c', 22); });
     ellipse(0, -88, 112, 52, D_L, -0.05); line(-98, -105, -160, -150 + Math.sin(ph * 2) * 14, D_L, 20);
@@ -52,7 +52,7 @@
       dHead('THE CONDITIONS');
       const sx = 300, sy = 640; for (let i = 0; i < 12; i++) { const an = i * Math.PI / 6 + t * 0.5; line(sx + Math.cos(an) * 150, sy + Math.sin(an) * 150, sx + Math.cos(an) * (205 + Math.sin(t * 4 + i) * 14), sy + Math.sin(an) * (205 + Math.sin(t * 4 + i) * 14), D_L, 16); } circle(sx, sy, 120, D_W);
       const k = ease.out(seg(t, a, a + 1.2)); fillRR(740, 430, 110, 480, 55, 'rgba(255,255,255,0.12)'); strokeRR(740, 430, 110, 480, 55, D_W, 7); fillRR(770, 880 - 400 * k, 50, 400 * k, 25, D_W); circle(795, 930, 84, D_W);
-      dBig(Math.round(lerp(60, 90, k)) + '°F', 1100, t, a, 210);
+      dBig(Math.round(lerp(60, 90, k)) + '°F', 1160, t, a, 210);
       dStamp('LESS WATER, FOR SCIENCE', CX, 1315, t, ch(L, 2), 54, -0.04);
     } },
     { type: 'art', sfx: [[1, 'punch', 0.28]], draw(t, a, c, L) {
@@ -104,7 +104,7 @@
       runner(CX + Math.sin(t * 1.9) * 40, 1250 - carried * 70, 470, { lean: w, run: t * 3 });
       withFade(carried, () => { dMan(CX - 215 + Math.sin(t * 1.9) * 40, 1250, 400, D_G, { run: t * 4 }); dMan(CX + 215 + Math.sin(t * 1.9) * 40, 1250, 400, D_G, { run: t * 4 + 2 }); line(CX - 170, 970, CX - 40, 930, D_G, 20); line(CX + 170, 970, CX + 40, 930, D_G, 20); });
       withFade(dIn(t, ch(L, 1)), () => { spiral(330, 700, 80, t); spiral(760, 640, 100, -t); for (let i = 0; i < 6; i++) star(CX + Math.cos(t * 3 + i) * 190, 700 + Math.sin(t * 3 + i) * 70, 22, D_W); });
-      const g = pop(t, ch(L, 3), 0.4); if (g > 0) xf(CX, 600, clamp(g), 0, () => medal(CX, 630, 112, 'GOLD'));
+      const g = pop(t, ch(L, 3), 0.4); if (g > 0) xf(CX, 545, clamp(g), 0, () => medal(CX, 568, 90, 'GOLD', 0.46));
     } },
     { type: 'art', sfx: [[2, 'transitionHit', 0.25]], draw(t, a, c, L) {
       dHead('YOUR REGULARS');

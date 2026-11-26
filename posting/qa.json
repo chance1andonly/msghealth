@@ -379,9 +379,9 @@
   },
   "66-marathon-rat-poison.mp4": {
     "approved": true,
-    "sha1": "860ece981046c9c856619587127cf6a900d92d95",
-    "checked_at": "2026-11-26T07:51:20.786Z",
-    "note": "Release gate 2026-11-26: (1) pronunciation OK, qa.py clips + whisper-base.en int8 and fp32 on the final mix hear Message Health and every word (ate heard as homophone eight; the recognizer prints a stray break tag at a comma pause, the clip energy shows only that pause); (2) flicker.py none, per-caption stills and contact sheet viewed, art readable, caption zone clear; (3) predicted to beat recent: 3.6s absurd dated hook, illustrated art like the 1709-view pizza reel, brand only in last ~12s. Facts: Smithsonian + Wikipedia, 4th place Britannica + Wikipedia. Prediction, not proven."
+    "sha1": "deeb6eeec43c0248c28a4e6ca6d229946339931d",
+    "checked_at": "2026-11-26T15:18:40.345Z",
+    "note": "validated 2026-11-26 10:18 ET: pronunciation OK (audio stream bit-identical, md5 a030fc9f, to the mix that passed whisper-base.en int8+fp32 at 07:51Z; recognizer not rerun here because the model download was blocked), frames OK (re-rendered to fix thermometer bulb covering 90F and gold medal covering the runner's head; 1fps grids viewed, flicker.py no A-B-A), analytics (stats 15:13Z): dated 3.6s hook, illustrated true story like the 1709-view pizza reel, sport topic differs from the last two posts (Pepsi, floor collapse), caption matches rules. Prediction, not proven."
   },
   "67-pepsi-349.mp4": {
     "approved": true,
