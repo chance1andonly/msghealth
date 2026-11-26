@@ -80,6 +80,10 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-26 (10:11 ET posting run)
+- Fixed and posted 66 marathon: the thermometer bulb covered 90°F and the gold medal covered the runner's head. Check 1-per-second grids, not only one still per line. Video-only fix: render, then mux the new video with the old approved audio (`-map 0:v -map 1:a -c copy`).
+- To check before approving 68 meat shower: line 1 says "slapping down" but the caption says "falling".
+- This run could not rerun the ASR: huggingface.co answered 403, and the GitHub release (another repo) was outside the run's access.
 ### 2026-11-26 (night run, stats 07:23 UTC)
 - Found: 78 reels analyzed (the optimizer skips reels under 48h old, so nothing posted from 11-24 morning on is counted yet, including every black/white story reel). Top 3 unchanged: 1,709 / 1,291 / 794 views, sends/reach 0.07% / 0.17% / 0%; 15th best 150, and nothing posted after 11-17 is above it. Inferred from the 20:00 group (8 to 9 reels, median 123 to 127): 48-toy-funeral, the one newly counted reel, got about 127 to 149 views. Follows and profile visits are not in stats.json. Per day: 3 = median 129 (n=7), 5 = 93 (n=23), 6 = 123 (n=4).
 - The optimizer moved to 7 a day (slots 8, 10, 12, 13, 14, 16, 20). That includes 14:00 (median 12) and 16:00 (27), the weakest hours, on 4 reels each. Left automatic per the 11-24 owner note; owner told, since the routine goal says 5 a day and 7 a day empties the queue faster than 3 builds a run.
