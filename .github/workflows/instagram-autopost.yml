@@ -35,6 +35,9 @@ jobs:
       PUBLIC_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Latest branch head, not the commit at dispatch time: a queued run that saw the old queue posted the same reel twice (2026-11-26).
+          ref: ${{ github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -79,4 +82,4 @@ jobs:
           git config user.name "instagram-autopost"
           git config user.email "actions@users.noreply.github.com"
           git add -A posting
-          git diff --cached --quiet || (git commit -m "autopost: $(date -u +%F' '%H:%M) update" && git push)
+          git diff --cached --quiet || (git commit -m "autopost: $(date -u +%F' '%H:%M) update" && git pull --rebase && git push)

@@ -81,6 +81,7 @@ Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md.
 
 ## Daily review
 ### 2026-11-26 (14:08 ET posting run, stats 19:14 UTC)
+- DUPLICATE: 62 meux went out twice. Logged post 18113354720207155 (19:20 UTC). A second `due` run (45882867961, not dispatched by this session) had checked out the older commit and published it again at 19:21 UTC, media id 18066957329795339; its log push was rejected, so it is not in log.json. Owner has to delete it in the app. Workflow now checks out the branch head and rebases before pushing. Dispatch `due` once per slot, and check for a queued or running run first.
 - Re-rendered 62 meux before posting: the text-slam version opened on a nearly blank frame, so lines 0-6 are now illustrated art scenes, captions resynced to the speech pauses and show MsgHealth. Video only, approved audio muxed back bit for bit. Top 3 unchanged, 80 reels analyzed; no strategy change.
 - Still queued as text-slam reels (59 heater, 58 fortyone) or in the old gold look (56 stamps): illustrate or restyle before posting.
 - Schedule is 7 a day in schedule.json (optimizer), while the posting task text still says 5 (8, 11, 14, 17, 20).
