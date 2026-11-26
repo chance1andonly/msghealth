@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-26T07:23:04.330Z",
+  "updated": "2026-11-26T13:14:50.021Z",
   "timezone": "America/New_York",
   "metric": "views",
   "reels_analyzed": 78,
@@ -69,7 +69,7 @@
       "median_score": 123
     }
   },
-  "per_day_decision": "trying 7 a day: 6 a day is holding up (median 123 per reel)",
+  "per_day_decision": "holding: not enough reels at this rate yet (need 4, have 0)",
   "top_reels": [
     {
       "id": "17912640258490606",
