@@ -70,7 +70,7 @@ const SCENES = {
   },
   quote(t, a, c) { // one big card
     stage(t, 0.16); eyebrow(c.eyebrow, 330, IN.mid);
-    const e = pop(t, a + 0.15, 0.4); const lines = c.big, lh = c.size ? c.size * 1.1 : 92, size = c.size || 82, h = 220 + lines.length * lh + (c.sub ? 80 : 0), y0 = 800 - h / 2;
+    const e = c.instant ? 1 : pop(t, a + 0.15, 0.4); const lines = c.big, lh = c.size ? c.size * 1.1 : 92, size = c.size || 82, h = 220 + lines.length * lh + (c.sub ? 80 : 0), y0 = 800 - h / 2;
     xf(CX, 800, clamp(e), 0, () => { card(90, y0, 900, h, { r: 44, stroke: rgba(GOLD, 0.55) }); lines.forEach((l, i) => text(l, CX, y0 + 150 + i * lh, Math.min(size, fit(l, size, 800)), 800, i === lines.length - 1 && c.hl ? GOLD : '#fff', 'center', -0.03)); if (c.sub) text(c.sub, CX, y0 + 150 + lines.length * lh + 20, 32, 600, SOFT, 'center'); });
   },
   versus(t, a, c) { // two cards: muted vs green

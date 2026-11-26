@@ -80,6 +80,10 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-26 (16:08 ET posting run, stats 21:14 UTC)
+- Found: 81 reels analyzed; top 3 unchanged (1,709 / 1,291 / 794). No strategy change.
+- Fixed 63 thanksgiving: hook card now on screen from frame 0 (quote scene option `instant`), approved audio muxed back bit for bit.
+- Facts, 63: History.com, Smithsonian and Nat Geo support the over-order / leftover turkey story; no source names one person who ordered it, and Gerry Thomas's credit is disputed. For later scripts, voice disputed credit as "the story goes".
 ### 2026-11-26 (holiday batch run, stats 19:14 UTC)
 - Found: 80 reels analyzed. Top 3 unchanged: 1,709 / 1,291 / 794 views, sends/reach 0.07% / 0.17% / 0%; 15th best 150, nothing posted after 11-17 is in the top 15. Follows are not in stats.json. Per day: 3 = median 129 (n=7), 5 = 93 (n=23), 6 = 127 (n=6). research.json is from 15:43 UTC today (you: median 122 over 23 reels; hashtag search still refused by Meta).
 - Changed: no strategy change. Built the three holiday reels from posting/holidays.md first (F2 illustrated true stories): 69 Black Friday (Cards Against Humanity), 70 Small Business Saturday (Timothy Dexter's mock funeral), 71 Cyber Monday (Million Dollar Homepage). ig.mjs now honours meta.json "not_before" so a holiday reel cannot post early. Hanukkah (Dec 4, no cussing) has no reel yet: build it first next run.

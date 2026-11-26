@@ -397,9 +397,9 @@
   },
   "63-thanksgiving-tv-dinner.mp4": {
     "approved": true,
-    "sha1": "b5558b01d8020e664f59e9519c75d2611741886d",
-    "checked_at": "2026-11-26T19:20:14.832Z",
-    "note": "validated 2026-11-26: pronunciation OK (ASR), captions fit, flicker only counter ticks, analytics: true-story format like top reels, ad at end, Thanksgiving timely"
+    "sha1": "21bfb88c544b3f8c258f989e7a6e65d19d0a1f0d",
+    "checked_at": "2026-11-26T21:18:27.920Z",
+    "note": "validated 2026-11-26 16:2x ET after 21:14Z stats: pronunciation OK (audio stream bit-identical, md5 a3a27501, to the mix that passed ASR at the 19:20Z build; recognizer not rerun, not installed here); frames OK (re-rendered so the hook card is on screen from frame 0; 1fps sheets viewed, caption zone clear, flicker.py flags only the counter ticks at 18.1s/18.6s); analytics: dated number hook, true story like the 1709-view pizza reel, Thanksgiving expires tomorrow. Text-card style, 16:00 is a weak hour: prediction, not proven. Facts: 260 tons, 10 rail cars, 98c, 10M check out; one person ordering it is comic licence and Gerry Thomas credit is disputed."
   },
   "69-black-friday-bullshit.mp4": {
     "approved": true,
