@@ -325,9 +325,9 @@
   },
   "58-fortyone-miles.mp4": {
     "approved": true,
-    "sha1": "af2e91ea99895bc156692319ef83ce6db7119523",
-    "checked_at": "2026-11-25T04:15:39.966Z",
-    "note": "Release gate: (1) qa.py ASR hears Message Health, every word right; (2) flicker.py none, contact sheet readable, nothing cropped or in caption zone; (3) black/white true-story format (or labeled original fiction), hook under 4.5s, like top story reels. New idea, cussing, brand only last ~12s."
+    "sha1": "51afc12065e1a2e377dff5ef445b90037f48c094",
+    "checked_at": "2026-11-26T23:21:44.448Z",
+    "note": "validated 2026-11-26 18:21 ET after 23:13Z stats: pronunciation OK (audio stream bit-identical, md5 95b5161f, to the approved mix that passed qa.py ASR on 11-25; recognizer not rerun here), frames OK (re-rendered as illustrated scenes, captions now match the voice and show MsgHealth; 1fps sheet and cover viewed, flicker.py no A-B-A, caption zone clear); analytics (judgment, not measured): 3.2s number plus scene hook, illustrated like the top true-story reels, shortest eligible reel (39s), barber topic differs from the last two history posts; it is labelled made-up, while the top reels are true stories. moral: clients drift away silently when nobody tells them anything, and one timely text would have kept him; pivot: Message Health shows you who they are and sends the text you never got around to; grip: 41 miles in the first 2 seconds, labelled original fiction"
   },
   "59-heater-sign.mp4": {
     "approved": true,

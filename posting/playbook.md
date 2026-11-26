@@ -80,6 +80,10 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-26 (18:08 ET run, stats 23:13 UTC)
+- Found: 82 reels analyzed; top 3 unchanged (1,709 / 1,291 / 794). Slots unchanged (7 a day). No strategy change.
+- Restyled 58 fortyone from text slams to illustrated scenes (video only, approved audio muxed back bit for bit), captions synced to the voice and show MsgHealth. It goes next for the 20:00 slot; 69-71 are date-locked until 11-27/28/29.
+- Still to restyle before posting: 59 heater (text slams), 56 stamps (old gold look).
 ### 2026-11-26 (16:08 ET posting run, stats 21:14 UTC)
 - Found: 81 reels analyzed; top 3 unchanged (1,709 / 1,291 / 794). No strategy change.
 - Fixed 63 thanksgiving: hook card now on screen from frame 0 (quote scene option `instant`), approved audio muxed back bit for bit.

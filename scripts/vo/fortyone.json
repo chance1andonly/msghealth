@@ -16,7 +16,7 @@
    "caps": [
     "Every two weeks,",
     "for nine years.",
-    "Nearly *20,000 miles*",
+    "Nearly *20,000* fucking miles",
     "for a haircut."
    ],
    "gap": 0.4
@@ -25,8 +25,8 @@
    "say": "And all because his barber raised the price five dollars and never said a damn word about it.",
    "caps": [
     "All because his barber raised",
-    "the price *five bucks,*",
-    "and said nothing."
+    "the price *five dollars,*",
+    "and never said a damn word."
    ],
    "gap": 0.5
   },
@@ -42,8 +42,8 @@
    "say": "So he left without a word. The barber told everybody that guy was a flaky son of a bitch.",
    "caps": [
     "He left without a word.",
-    "The barber called him",
-    "*a flaky son of a bitch.*"
+    "The barber told everybody",
+    "he was *a flaky son of a bitch.*"
    ],
    "gap": 0.5
   },
@@ -51,7 +51,7 @@
    "say": "Meanwhile the guy told ninety-one people that barber was a prick. He counted.",
    "caps": [
     "The guy told *91 people*",
-    "the barber was a",
+    "that barber was a",
     "prick. He counted."
    ],
    "gap": 0.5,
@@ -61,8 +61,8 @@
    "say": "I made that guy up. But you've got three of him on your books right now.",
    "caps": [
     "I made that guy up.",
-    "You've got *three",
-    "*of him* right now."
+    "But you've got *three",
+    "*of him* on your books."
    ],
    "gap": 0.7,
    "speed": 1.0
@@ -70,9 +70,9 @@
   {
    "say": "Message Health shows you who they are, and sends the text you never got around to.",
    "caps": [
-    "Message Health shows you who,",
+    "MsgHealth shows you who,",
     "and *sends the text*",
-    "you never sent."
+    "you never got around to."
    ],
    "gap": 0.5
   },

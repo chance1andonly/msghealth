@@ -2,13 +2,13 @@
 // caption chunk start times and when each clip starts. Don't edit by hand.
 window.VO_CLIPS = [
   { dur: 3.18, chunks: [["He drove *41 miles* to dodge", 0.0], ["a barber ten minutes away.", 1.44]] }, // 00
-  { dur: 4.32, chunks: [["Every two weeks,", 0.0], ["for nine years.", 1.44], ["Nearly *20,000 miles*", 2.14], ["for a haircut.", 3.02]] }, // 01
-  { dur: 4.67, chunks: [["All because his barber raised", 0.0], ["the price *five bucks,*", 2.2], ["and said nothing.", 3.27]] }, // 02
+  { dur: 4.32, chunks: [["Every two weeks,", 0.0], ["for nine years.", 1.44], ["Nearly *20,000* fucking miles", 2.14], ["for a haircut.", 3.02]] }, // 01
+  { dur: 4.67, chunks: [["All because his barber raised", 0.0], ["the price *five dollars,*", 2.2], ["and never said a damn word.", 3.27]] }, // 02
   { dur: 2.86, chunks: [["No text. No heads up.", 0.0], ["Just *a new number* on the sign.", 1.26]] }, // 03
-  { dur: 4.92, chunks: [["He left without a word.", 0.0], ["The barber called him", 1.43], ["*a flaky son of a bitch.*", 3.13]] }, // 04
-  { dur: 4.245, chunks: [["The guy told *91 people*", 0.0], ["the barber was a", 1.45], ["prick. He counted.", 2.97]] }, // 05
-  { dur: 3.59, chunks: [["I made that guy up.", 0.0], ["You've got *three", 1.45], ["*of him* right now.", 2.28]] }, // 06
-  { dur: 3.895, chunks: [["Message Health shows you who,", 0.0], ["and *sends the text*", 1.83], ["you never sent.", 2.65]] }, // 07
+  { dur: 4.92, chunks: [["He left without a word.", 0.0], ["The barber told everybody", 1.43], ["he was *a flaky son of a bitch.*", 3.13]] }, // 04
+  { dur: 4.245, chunks: [["The guy told *91 people*", 0.0], ["that barber was a", 1.45], ["prick. He counted.", 2.97]] }, // 05
+  { dur: 3.59, chunks: [["I made that guy up.", 0.0], ["But you've got *three", 1.45], ["*of him* on your books.", 2.28]] }, // 06
+  { dur: 3.895, chunks: [["MsgHealth shows you who,", 0.0], ["and *sends the text*", 1.83], ["you never got around to.", 2.65]] }, // 07
   { dur: 2.085, chunks: [["Comment *KEEP* to get a full", 0.0], ["*retention audit.*", 1.02]] }, // 08
 ];
 window.VO_AT = [0.3, 3.93, 8.65, 13.82, 17.18, 22.6, 27.35, 31.64, 36.03];
