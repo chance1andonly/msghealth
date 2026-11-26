@@ -362,8 +362,8 @@
   "63-erfurt-floor.mp4": {
     "approved": true,
     "sha1": "dbd08c1426b5059400f4178ec1c073313060a01b",
-    "checked_at": "2026-11-25T19:57:59.563Z",
-    "note": "Release gate 2026-11-25: (1) pronunciation OK, qa.py + whisper-base.en (int8 and fp32) on clips/final mix hear Message Health and every word; (2) flicker.py none, contact sheet viewed, art readable, nothing cropped, caption zone clear; (3) predicted to beat recent: dated true story with a number, 3.4s hook, new illustrated motion graphics (like the 1,709 pizza reel, unlike text-only slams), brand only last ~12s. Facts: Wikipedia, history.co.uk, TheCollector."
+    "checked_at": "2026-11-26T00:16:21.903Z",
+    "note": "validated 2026-11-25 19:2x ET after 00:13Z stats refresh: pronunciation OK on the basis of today's 19:57Z ASR check of this byte-identical file (sha1 unchanged; speech recognition NOT re-run this time, ASR model not fetched: huggingface blocked by proxy); frames OK (two frames per spoken line viewed, flicker.py none, nothing cropped, captions clear); analytics: dated true-story opener like the 1709-view pizza reel, 3.4s hook, illustrated art, brand only last ~12s; goes before 65 so two animal stories (whale, chicken) are not back to back; medieval like formosus two posts back. Prediction, not proven."
   },
   "64-whale-dynamite.mp4": {
     "approved": true,
