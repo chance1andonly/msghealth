@@ -4,13 +4,14 @@
   "slots": [
     8,
     10,
+    12,
     13,
-    15,
-    18,
+    14,
+    16,
     20
   ],
-  "per_day": 6,
+  "per_day": 7,
   "trial": null,
   "basis": "median views of your own reels by posting hour",
-  "slots_updated": "2026-11-26T00:13:42.555Z"
+  "slots_updated": "2026-11-26T07:23:04.330Z"
 }

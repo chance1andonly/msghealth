@@ -1,8 +1,8 @@
 {
-  "updated": "2026-11-26T00:13:42.555Z",
+  "updated": "2026-11-26T07:23:04.330Z",
   "timezone": "America/New_York",
   "metric": "views",
-  "reels_analyzed": 77,
+  "reels_analyzed": 78,
   "by_hour": [
     {
       "hour": 23,
@@ -21,8 +21,8 @@
     },
     {
       "hour": 20,
-      "reels": 8,
-      "median_score": 123
+      "reels": 9,
+      "median_score": 127
     },
     {
       "hour": 8,
@@ -65,11 +65,11 @@
       "median_score": 93
     },
     "6": {
-      "reels": 3,
+      "reels": 4,
       "median_score": 123
     }
   },
-  "per_day_decision": "holding: not enough reels at this rate yet (need 4, have 3)",
+  "per_day_decision": "trying 7 a day: 6 a day is holding up (median 123 per reel)",
   "top_reels": [
     {
       "id": "17912640258490606",
