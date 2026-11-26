@@ -398,7 +398,7 @@
   "63-thanksgiving-tv-dinner.mp4": {
     "approved": true,
     "sha1": "b5558b01d8020e664f59e9519c75d2611741886d",
-    "checked_at": "2026-11-26T19:20:05.120Z",
-    "note": "validated 2026-11-26: pronunciation OK (ASR, years as pairs), captions fit, flicker only counter ticks, analytics: true-story format like top reels, ad at end, Thanksgiving timely"
+    "checked_at": "2026-11-26T19:20:14.832Z",
+    "note": "validated 2026-11-26: pronunciation OK (ASR), captions fit, flicker only counter ticks, analytics: true-story format like top reels, ad at end, Thanksgiving timely"
   }
 }
