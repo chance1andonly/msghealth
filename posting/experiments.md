@@ -46,4 +46,7 @@ format | reel | views | sends/reach | likes/reach | follows | profile visits | v
 2026-11-25 afternoon | F2 black/white: 56, 57, 60 posted today | not in top 15 yet (<150), under 12h old | sends n/a | follows n/a | do not judge before 48h
 2026-11-25 afternoon | F1 toy-world (11-23 posts now over 48h) | none in top 15 (<150) | sends n/a | follows n/a | no win; account median per reel not available, stays capped at 1 in 5
 2026-11-25 afternoon | F2-art (illustrated scenes) 63 erfurt, 64 whale, 65 headless queued | pending | | | TEST vs F2 text slams (56-62), same hour bands, judge after 48h
-
+2026-11-26 night | F2 true-story older top 3 | 1,709 / 1,291 / 794 views | sends/reach 0.07% / 0.17% / 0% | follows n/a | still the only clear winner
+2026-11-26 night | F1 toy-world 48-toy-funeral (first newly counted reel) | about 127 to 149 views (inferred from the 20:00 median) | sends n/a | follows n/a | under the 150 cut-off like the other 11-23 toy reels; stays capped at 1 in 5
+2026-11-26 night | F2 black/white (56-62) and F2-art (63-65) | not counted yet (under 48h) | | | do not judge
+2026-11-26 night | F2-art 66 marathon, 67 pepsi, 68 meat shower queued | pending | | | REPLICATE F2; art vs text-slam test continues, same hour bands

@@ -1,0 +1,122 @@
+{
+ "voice": "am_adam",
+ "speed": 1.19,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "In 1876, it rained raw fucking meat on Kentucky.",
+   "caps": [
+    "In 1876, it rained",
+    "*raw fucking meat*",
+    "on Kentucky."
+   ],
+   "gap": 0.33,
+   "speed": 1.08
+  },
+  {
+   "say": "Clear sky. A farmer's wife is outside making soap, and chunks start slapping down.",
+   "caps": [
+    "Clear sky.",
+    "A farmer's wife",
+    "is outside making soap,",
+    "and *chunks start falling.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "For several minutes, it covered a patch about the size of a football field.",
+   "caps": [
+    "For *several minutes,*",
+    "it covered a patch",
+    "about the size",
+    "of a *football field.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Some pieces were three inches wide. Holy hell.",
+   "caps": [
+    "Some pieces were",
+    "*three inches wide.*",
+    "Holy *hell.*"
+   ],
+   "gap": 0.37
+  },
+  {
+   "say": "So naturally, two dudes tasted it, and guessed it was mutton, or maybe deer.",
+   "caps": [
+    "So naturally,",
+    "*two dudes tasted it,*",
+    "and guessed mutton,",
+    "or maybe *deer.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.15
+  },
+  {
+   "say": "Scientists got samples and found lung, muscle, and cartilage.",
+   "caps": [
+    "Scientists got samples",
+    "and found *lung,*",
+    "*muscle and cartilage.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "The leading theory? Vultures puked up their lunch mid-flight.",
+   "caps": [
+    "The leading theory?",
+    "Vultures *puked up lunch*",
+    "*mid-flight.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.1
+  },
+  {
+   "say": "If that's right, those two idiots swallowed vulture vomit.",
+   "caps": [
+    "If that's right,",
+    "those two idiots",
+    "*swallowed vulture vomit.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.12
+  },
+  {
+   "say": "One piece is still sitting in a jar at Transylvania University. No shit.",
+   "caps": [
+    "One piece is still in a jar",
+    "at *Transylvania University.*",
+    "*No shit.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "Those folks had to guess. You don't.",
+   "caps": [
+    "Those folks had to guess.",
+    "*You don't.*"
+   ],
+   "gap": 0.37,
+   "speed": 1.13
+  },
+  {
+   "say": "Message Health scores every client, flags the quiet ones, and sends them a text.",
+   "caps": [
+    "Message Health scores clients,",
+    "flags the *quiet ones,*",
+    "and *sends them a text.*"
+   ],
+   "gap": 0.42
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  }
+ ]
+}

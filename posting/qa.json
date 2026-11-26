@@ -376,5 +376,23 @@
     "sha1": "b1f3a875c67f7468518f088f0510d1663351d9b3",
     "checked_at": "2026-11-25T19:57:59.660Z",
     "note": "Release gate 2026-11-25: (1) pronunciation OK, qa.py + whisper-base.en (int8 and fp32) on final mix hear Message Health and every word; (2) flicker.py none, contact sheet viewed, art readable, no gore, caption zone clear; (3) predicted to beat recent: 2.6s absurd hook with a number, illustrated motion graphics, brand only last ~11s. Facts: Wikipedia, Guinness, Scientific American."
+  },
+  "66-marathon-rat-poison.mp4": {
+    "approved": true,
+    "sha1": "860ece981046c9c856619587127cf6a900d92d95",
+    "checked_at": "2026-11-26T07:51:20.786Z",
+    "note": "Release gate 2026-11-26: (1) pronunciation OK, qa.py clips + whisper-base.en int8 and fp32 on the final mix hear Message Health and every word (ate heard as homophone eight; the recognizer prints a stray break tag at a comma pause, the clip energy shows only that pause); (2) flicker.py none, per-caption stills and contact sheet viewed, art readable, caption zone clear; (3) predicted to beat recent: 3.6s absurd dated hook, illustrated art like the 1709-view pizza reel, brand only in last ~12s. Facts: Smithsonian + Wikipedia, 4th place Britannica + Wikipedia. Prediction, not proven."
+  },
+  "67-pepsi-349.mp4": {
+    "approved": true,
+    "sha1": "245634816e6784ee4caae784001e68a470abb3ed",
+    "checked_at": "2026-11-26T07:51:20.835Z",
+    "note": "Release gate 2026-11-26: (1) pronunciation OK, qa.py clips + whisper-base.en int8 and fp32 on the final mix hear Message Health and every word; (2) flicker.py none after steadying the counter, stills and contact sheet viewed, readable, caption zone clear; (3) predicted to beat recent: 3.1s hook with date and swear, illustrated, famous brand disaster, brand pitch only in last ~12s. Facts: Wikipedia, The Takeout, CS Monitor 1993; low numbers. qa flag clipped fragments accepted. Prediction, not proven."
+  },
+  "68-meat-shower.mp4": {
+    "approved": true,
+    "sha1": "e530ceb6a9cc944b81e828d3b903ebdf9a8e52c9",
+    "checked_at": "2026-11-26T07:51:20.883Z",
+    "note": "Release gate 2026-11-26: (1) pronunciation OK, qa.py clips + whisper-base.en int8 and fp32 on the final mix hear Message Health and every word; (2) flicker.py none, stills and contact sheet viewed, readable, caption zone clear; (3) predicted to beat recent: 3.6s gross-out dated hook, illustrated, escalating payoff, brand only in last ~11s. Facts: Wikipedia, Mental Floss, Scientific American; vulture theory labeled as a theory. Prediction, not proven."
   }
 }

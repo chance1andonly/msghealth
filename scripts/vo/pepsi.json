@@ -1,0 +1,120 @@
+{
+ "voice": "am_adam",
+ "speed": 1.19,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "In 1992, Pepsi picked the wrong fucking number.",
+   "caps": [
+    "In 1992,",
+    "Pepsi picked the wrong",
+    "*fucking number.*"
+   ],
+   "gap": 0.35,
+   "speed": 1.08
+  },
+  {
+   "say": "One lucky bottle cap in the Philippines was worth a million pesos.",
+   "caps": [
+    "One lucky bottle cap",
+    "in the Philippines",
+    "was worth *a million pesos.*"
+   ],
+   "gap": 0.27
+  },
+  {
+   "say": "That night, the news read out the winner. Three forty-nine.",
+   "caps": [
+    "That night, the news",
+    "read out the winner:",
+    "*three forty-nine.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Problem. Hundreds of thousands of regular caps also said three forty-nine.",
+   "caps": [
+    "Problem.",
+    "*Hundreds of thousands*",
+    "of regular caps",
+    "*also* said 349."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Nearly half a million people came to collect.",
+   "caps": [
+    "*Nearly half a million*",
+    "people came to collect."
+   ],
+   "gap": 0.37
+  },
+  {
+   "say": "Pepsi's counteroffer? About eighteen bucks.",
+   "caps": [
+    "Pepsi's counteroffer?",
+    "About *18 bucks.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.1
+  },
+  {
+   "say": "People lost their shit. Over thirty Pepsi trucks got torched or trashed.",
+   "caps": [
+    "People *lost their shit.*",
+    "Over *30 Pepsi trucks*",
+    "got torched or trashed."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Then came the explosives, and at least five people died.",
+   "caps": [
+    "Then came the explosives,",
+    "and at least",
+    "*five people died.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.1
+  },
+  {
+   "say": "Thousands of people sued. Years later, their top court said Pepsi didn't owe that damn prize.",
+   "caps": [
+    "Thousands of people sued.",
+    "Years later, their top court",
+    "said Pepsi didn't owe",
+    "*that damn prize.*"
+   ],
+   "gap": 0.55,
+   "speed": 1.15
+  },
+  {
+   "say": "One wrong number did that. Your quiet regulars haven't heard shit from you.",
+   "caps": [
+    "One wrong number did that.",
+    "Your quiet regulars",
+    "*haven't heard shit* from you."
+   ],
+   "gap": 0.37,
+   "speed": 1.13
+  },
+  {
+   "say": "Message Health spots who's going quiet, and sends each one a text.",
+   "caps": [
+    "Message Health spots",
+    "who's *going quiet,*",
+    "and *sends each one a text.*"
+   ],
+   "gap": 0.42
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  }
+ ]
+}

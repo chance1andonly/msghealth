@@ -1,0 +1,113 @@
+{
+ "voice": "am_adam",
+ "speed": 1.19,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "In 1904, an Olympic runner won on fucking rat poison.",
+   "caps": [
+    "In 1904,",
+    "an Olympic runner won",
+    "on *fucking rat poison.*"
+   ],
+   "gap": 0.33,
+   "speed": 1.1
+  },
+  {
+   "say": "It was ninety degrees in St. Louis, and the boss wanted to study dehydration.",
+   "caps": [
+    "*90 degrees* in St. Louis,",
+    "and the boss wanted",
+    "to study *dehydration.*"
+   ],
+   "gap": 0.25
+  },
+  {
+   "say": "So twenty-four miles got one damn water stop.",
+   "caps": [
+    "So 24 miles got",
+    "*one damn water stop.*"
+   ],
+   "gap": 0.37
+  },
+  {
+   "say": "One runner got chased a mile off course by a wild dog.",
+   "caps": [
+    "One runner got chased",
+    "*a mile off course*",
+    "by a *wild dog.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "A Cuban mailman ran in street clothes, ate rotten apples, took a nap, and still finished fourth.",
+   "caps": [
+    "A Cuban mailman ran",
+    "in street clothes,",
+    "ate *rotten apples,*",
+    "took a *nap,*",
+    "and still finished *fourth.*"
+   ],
+   "gap": 0.37
+  },
+  {
+   "say": "Another son of a bitch rode ten miles in a car, jogged in first, and got cheered.",
+   "caps": [
+    "Another son of a bitch",
+    "rode *10 miles in a car,*",
+    "jogged in first,",
+    "and *got cheered.*"
+   ],
+   "gap": 0.37
+  },
+  {
+   "say": "The real winner was Tom Hicks. His own trainers dosed him with rat poison and brandy.",
+   "caps": [
+    "The real winner: Tom Hicks.",
+    "His own trainers",
+    "dosed him with *rat poison*",
+    "and *brandy.*"
+   ],
+   "gap": 0.35,
+   "speed": 1.15
+  },
+  {
+   "say": "He finished hallucinating his ass off, had to be carried, and took the gold.",
+   "caps": [
+    "He finished",
+    "*hallucinating his ass off,*",
+    "had to be carried,",
+    "and *took the gold.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "That runner got one water stop. Your regulars get zero check-ins.",
+   "caps": [
+    "That runner got one water stop.",
+    "Your regulars get",
+    "*zero check-ins.*"
+   ],
+   "gap": 0.37,
+   "speed": 1.13
+  },
+  {
+   "say": "Message Health spots who's fading, and sends each one a text.",
+   "caps": [
+    "Message Health spots",
+    "who's *fading,*",
+    "and *sends each one a text.*"
+   ],
+   "gap": 0.42
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  }
+ ]
+}
