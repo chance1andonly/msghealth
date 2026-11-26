@@ -155,3 +155,6 @@ A reel may only post if all three hold. If one fails, fix the script and re-rend
 Record the three checks in the approve note.
 
 - Release gate, pronunciation: years must be spoken as pairs ("nineteen nineteen", "twenty oh four"). Listen/ASR check every year; ads-vo.py converts them, but verify.
+
+## Sound effects (Drive library)
+Owner's SFX library is copied to assets/sfx/drive/. Story reels (src/hist.js) auto-cue quiet defaults: dwhooshsoft on every cut, dimpact on stat reveals, dthud on versus, dimpact2 on the opener, dcash on the end card. Extra kinds usable in a scene's `sfx:[[chunk,'kind',gain]]`: dwhoosh, dcine, dboom, dhit, dmsg, dcheck, dshutter, dglitch, driser, dknock, dclang, dding, dtype, dcount. Keep gains <=0.35 (quiet rule).

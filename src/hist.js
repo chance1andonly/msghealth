@@ -135,5 +135,8 @@ const SC = R.scenes.map((c, i) => [i ? VO_AT[i] : 0, VO_AT[i + 1], (t) => SCENES
 SC.push([END, 999, (t) => finale(t, END)]);
 R.scenes.forEach((c, i) => { if (c.type === 'chat') c.msgs.forEach((m) => cue(VO_AT[i] + m.at, 'notification', 0.22)); });
 R.scenes.forEach((c, i) => (c.sfx || []).forEach(([k, kind, gain, d = 0]) => cue(ch(i, k) + 0.05 + d, kind, gain)));
+// Drive SFX defaults (quiet): soft whoosh on each cut, thud on stat/versus reveals, hit on the opener, cash on the end card
+R.scenes.forEach((c, i) => { if (i) cue(VO_AT[i] - 0.08, 'dwhooshsoft', 0.3); if (c.type === 'stat') cue(VO_AT[i] + 0.05, 'dimpact', 0.3); if (c.type === 'versus') cue(VO_AT[i] + 0.1, 'dthud', 0.3); });
+cue(0.12, 'dimpact2', 0.3); cue(END + 0.35, 'dcash', 0.25);
 cue(END + 1.25, 'tap', 0.3);
 boot({ duration: DURATION, scenes: SC, brandAt: END, hideCaption: (t) => t >= END }, R.name);

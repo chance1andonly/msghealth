@@ -55,6 +55,14 @@ const SOUNDS = {
   transitionHit: { file: 'fx-transition-hit.wav', anchor: 0.62, skip: 0.36 }, key: { file: 'fx-key.wav', anchor: 0.036 }, ding: { file: 'fx-ding.wav', anchor: 0.058 },
   notification: { file: 'fx-notification.wav', anchor: 0.043 }, punch: { file: 'fx-punch.wav', anchor: 0.052 }, tap: { file: 'fx-tap.wav', anchor: 0.046 },
   pop: { file: '../sfx/pop-small-in.wav', anchor: 0.01 }, whoosh: { file: '../sfx/whoosh-fast-soft.wav', anchor: 0.099 }, click: { file: '../sfx/click-mouse-soft.wav', anchor: 0.009 }, // CC0 quiet set (assets/sfx)
+  // Drive library (assets/sfx/drive): anchor = first peak (s); len trims long tails
+  dwhoosh: { file: '../sfx/drive/woosh-fast5.mp3', anchor: 0.48 }, dwhooshsoft: { file: '../sfx/drive/woosh-fav1.mp3', anchor: 0.341 }, dcine: { file: '../sfx/drive/whoosh-cinematic.mp3', anchor: 0.344 },
+  dimpact: { file: '../sfx/drive/impact-11.mp3', anchor: 0.078 }, dimpact2: { file: '../sfx/drive/impact-6.mp3', anchor: 0.027 }, dthud: { file: '../sfx/drive/impact-2.mp3', anchor: 0.148 },
+  dboom: { file: '../sfx/drive/boom-bass.mp3', anchor: 0.003, len: 1.6 }, dhit: { file: '../sfx/drive/hit-dark-cinematic.mp3', anchor: 0.128, len: 2.2 },
+  dcash: { file: '../sfx/drive/cash-register.mp3', anchor: 0.656 }, dmsg: { file: '../sfx/drive/ui-message.mp3', anchor: 0.281 }, dcheck: { file: '../sfx/drive/ui-checkmark.mp3', anchor: 0.094 },
+  dshutter: { file: '../sfx/drive/camera-shutter.wav', anchor: 0.189 }, dglitch: { file: '../sfx/drive/glitch-tv.mp3', anchor: 0.243 }, driser: { file: '../sfx/drive/riser-2.mp3', anchor: 1.513 },
+  dknock: { file: '../sfx/drive/knock-wood.mp3', anchor: 0.287, len: 1.2 }, dclang: { file: '../sfx/drive/clang-metal.mp3', anchor: 0.281, len: 1.3 }, dding: { file: '../sfx/drive/ding.mp3', anchor: 0.083 },
+  dtype: { file: '../sfx/drive/typing-fast.mp3', anchor: 0.086, len: 1.6 }, dcount: { file: '../sfx/drive/counter-readout.mp3', anchor: 0.589, len: 2.0 },
 };
 const unknown = [...new Set(sfx.map((c) => c.kind))].filter((k) => !SOUNDS[k]);
 if (unknown.length) throw new Error(`no sound for cue kind(s): ${unknown.join(', ')}`);
@@ -69,7 +77,7 @@ kinds.forEach((k, ki) => {
   graph.push(`[${idx}:a]aresample=${SR},asplit=${cues.length}${cues.map((_, i) => `[${k}${i}]`).join('')}`);
   cues.forEach((c, i) => {
     const lead = SOUNDS[k].skip ?? 0, start = c.t - SOUNDS[k].anchor + lead, ms = Math.max(0, Math.round(start * 1000)), cut = lead + Math.max(0, -start);
-    graph.push(`[${k}${i}]volume=${(FX_GAIN * (c.gain ?? 1)).toFixed(3)}${cut > 0 ? `,atrim=start=${cut.toFixed(3)},asetpts=PTS-STARTPTS` : ''},adelay=${ms}|${ms}[${k}d${i}]`);
+    graph.push(`[${k}${i}]${SOUNDS[k].len ? `atrim=0:${SOUNDS[k].len},afade=t=out:st=${(SOUNDS[k].len - 0.2).toFixed(2)}:d=0.2,asetpts=PTS-STARTPTS,` : ''}volume=${(FX_GAIN * (c.gain ?? 1)).toFixed(3)}${cut > 0 ? `,atrim=start=${cut.toFixed(3)},asetpts=PTS-STARTPTS` : ''},adelay=${ms}|${ms}[${k}d${i}]`);
     fxIn.push(`[${k}d${i}]`);
   });
 });
