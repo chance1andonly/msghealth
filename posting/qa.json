@@ -386,8 +386,8 @@
   "67-pepsi-349.mp4": {
     "approved": true,
     "sha1": "245634816e6784ee4caae784001e68a470abb3ed",
-    "checked_at": "2026-11-26T07:51:20.835Z",
-    "note": "Release gate 2026-11-26: (1) pronunciation OK, qa.py clips + whisper-base.en int8 and fp32 on the final mix hear Message Health and every word; (2) flicker.py none after steadying the counter, stills and contact sheet viewed, readable, caption zone clear; (3) predicted to beat recent: 3.1s hook with date and swear, illustrated, famous brand disaster, brand pitch only in last ~12s. Facts: Wikipedia, The Takeout, CS Monitor 1993; low numbers. qa flag clipped fragments accepted. Prediction, not proven."
+    "checked_at": "2026-11-26T13:17:35.713Z",
+    "note": "validated 2026-11-26 08:19 ET: pronunciation OK (qa.py clips + whisper-base.en int8 and fp32 on final mix hear Message Health and every word; fp32 prints a stray break tag at a pause), frames OK (30 stills checked, flicker.py none, nothing cropped, caption zone clear), analytics (stats 13:14Z): dated hook with a number and a famous brand, true-story illustrated format like the 1709-view pizza reel, earlier Pepsi story made the top 15 (156), differs in topic from the last two posts (whale, floor collapse). Prediction, not proven."
   },
   "68-meat-shower.mp4": {
     "approved": true,
