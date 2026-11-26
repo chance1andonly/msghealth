@@ -1,8 +1,8 @@
 {
-  "updated": "2026-11-26T13:14:50.021Z",
+  "updated": "2026-11-26T15:13:27.070Z",
   "timezone": "America/New_York",
   "metric": "views",
-  "reels_analyzed": 78,
+  "reels_analyzed": 79,
   "by_hour": [
     {
       "hour": 23,
@@ -26,7 +26,7 @@
     },
     {
       "hour": 8,
-      "reels": 13,
+      "reels": 14,
       "median_score": 122
     },
     {
@@ -65,8 +65,8 @@
       "median_score": 93
     },
     "6": {
-      "reels": 4,
-      "median_score": 123
+      "reels": 5,
+      "median_score": 127
     }
   },
   "per_day_decision": "holding: not enough reels at this rate yet (need 4, have 0)",
