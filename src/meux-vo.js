@@ -2,13 +2,13 @@
 // caption chunk start times and when each clip starts. Don't edit by hand.
 window.VO_CLIPS = [
   { dur: 2.565, chunks: [["A London beer vat", 0.0], ["*burst.* *8 dead.*", 1.93]] }, // 00
-  { dur: 3.55, chunks: [["A hoop slipped off", 0.0], ["that afternoon.", 1.19], ["*Nobody gave a shit.*", 2.24]] }, // 01
+  { dur: 3.55, chunks: [["A hoop slipped off", 0.0], ["that afternoon.", 1.19], ["*Nobody gave a shit.*", 2.44]] }, // 01
   { dur: 3.475, chunks: [["*100,000+ gallons*", 0.0], ["of beer hit the slums", 0.62], ["like a wave.", 2.22]] }, // 02
-  { dur: 2.735, chunks: [["*8 drowned.*", 0.0], ["Mourners at a toddler's wake", 0.24], ["in a basement.", 1.89]] }, // 03
-  { dur: 3.025, chunks: [["The court: *act of God.*", 0.0], ["The brewery paid", 1.21], ["*nothing.*", 2.35]] }, // 04
-  { dur: 3.195, chunks: [["*God didn't do it.*", 0.0], ["The warning came first,", 0.9], ["like always.", 2.29]] }, // 05
-  { dur: 4.24, chunks: [["Four weeks. Six. Nine.", 0.0], ["The hoop is *slipping.*", 1.26], ["Then it bursts.", 3.32]] }, // 06
-  { dur: 3.98, chunks: [["Message Health spots", 0.0], ["the slipping ones and", 0.98], ["*texts them for you.*", 2.99]] }, // 07
+  { dur: 2.735, chunks: [["*8 drowned.*", 0.0], ["Mourners at a toddler's wake", 0.9], ["in a basement.", 1.98]] }, // 03
+  { dur: 3.025, chunks: [["The court: *act of God.*", 0.0], ["The brewery paid", 1.8], ["*nothing.*", 2.35]] }, // 04
+  { dur: 3.195, chunks: [["*God didn't do it.*", 0.0], ["The warning came first,", 1.06], ["like always.", 2.29]] }, // 05
+  { dur: 4.24, chunks: [["Your clients do it too.", 0.0], ["Four weeks. Six. Nine.", 1.44], ["Then it *bursts.*", 3.32]] }, // 06
+  { dur: 3.98, chunks: [["MsgHealth spots", 0.0], ["the slipping ones and", 0.98], ["*texts them for you,*", 1.9], ["before it bursts.", 3.06]] }, // 07
   { dur: 2.085, chunks: [["Comment *KEEP* to get a full", 0.0], ["*retention audit.*", 1.02]] }, // 08
 ];
 window.VO_AT = [0.3, 3.31, 7.31, 11.24, 14.47, 18.0, 21.7, 26.39, 30.87];

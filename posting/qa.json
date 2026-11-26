@@ -355,9 +355,9 @@
   },
   "62-meux-beer-flood.mp4": {
     "approved": true,
-    "sha1": "a99b44532386bf191c0ded8a6248da2f4e0849a5",
-    "checked_at": "2026-11-25T07:35:36.726Z",
-    "note": "QA ASR ok (message health heard, words right); flicker none + contact sheet readable, captions clear of content; true-story F2 format matches top reels (hook ~2.5s, brand only in last ~10s)"
+    "sha1": "a5eb7b30e94c1e1d05ed6b40a6df668415068fc0",
+    "checked_at": "2026-11-26T19:18:25.678Z",
+    "note": "validated 2026-11-26 14:18 ET: pronunciation OK (audio stream bit-identical, md5 e638c3aa, to the mix that passed ASR on 11-25; recognizer not rerun here), frames OK (re-rendered as illustrated scenes, captions resynced to speech pauses and show MsgHealth; 1fps grid viewed, flicker.py no A-B-A), analytics (stats 19:14Z): only queued true historical story, number plus disaster hook, illustrated like the top reels, historical disaster after gross-out and animal topics. Prediction, not proven."
   },
   "63-erfurt-floor.mp4": {
     "approved": true,

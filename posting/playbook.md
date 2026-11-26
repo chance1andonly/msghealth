@@ -80,6 +80,10 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-26 (14:08 ET posting run, stats 19:14 UTC)
+- Re-rendered 62 meux before posting: the text-slam version opened on a nearly blank frame, so lines 0-6 are now illustrated art scenes, captions resynced to the speech pauses and show MsgHealth. Video only, approved audio muxed back bit for bit. Top 3 unchanged, 80 reels analyzed; no strategy change.
+- Still queued as text-slam reels (59 heater, 58 fortyone) or in the old gold look (56 stamps): illustrate or restyle before posting.
+- Schedule is 7 a day in schedule.json (optimizer), while the posting task text still says 5 (8, 11, 14, 17, 20).
 ### 2026-11-26 (12:08 ET posting run, stats 17:13 UTC)
 - Fixed 68 meat shower: caption now matches the voice ("slapping down"), shows MsgHealth, stamps moved off the big meat chunk. Video-only re-render, approved audio muxed back bit for bit. No strategy change: top 3 unchanged, 80 reels analyzed.
 - Whisper still not downloadable here (huggingface.co 403), and without it or the Kokoro files a script change cannot be re-voiced or re-checked in this environment.

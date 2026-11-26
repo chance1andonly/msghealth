@@ -59,18 +59,19 @@
   {
    "say": "Your clients do it too. Four weeks between cuts, then six, then nine, then it bursts.",
    "caps": [
+    "Your clients do it too.",
     "Four weeks. Six. Nine.",
-    "The hoop is *slipping.*",
-    "Then it bursts."
+    "Then it *bursts.*"
    ],
    "gap": 0.45
   },
   {
    "say": "Message Health spots the slipping ones and texts them for you, before it bursts.",
    "caps": [
-    "Message Health spots",
+    "MsgHealth spots",
     "the slipping ones and",
-    "*texts them for you.*"
+    "*texts them for you,*",
+    "before it bursts."
    ],
    "gap": 0.5
   },
