@@ -50,3 +50,7 @@ format | reel | views | sends/reach | likes/reach | follows | profile visits | v
 2026-11-26 night | F1 toy-world 48-toy-funeral (first newly counted reel) | about 127 to 149 views (inferred from the 20:00 median) | sends n/a | follows n/a | under the 150 cut-off like the other 11-23 toy reels; stays capped at 1 in 5
 2026-11-26 night | F2 black/white (56-62) and F2-art (63-65) | not counted yet (under 48h) | | | do not judge
 2026-11-26 night | F2-art 66 marathon, 67 pepsi, 68 meat shower queued | pending | | | REPLICATE F2; art vs text-slam test continues, same hour bands
+2026-11-26 afternoon | F2 true-story older top 3 | 1,709 / 1,291 / 794 views | sends/reach 0.07% / 0.17% / 0% | follows n/a | unchanged, still the only clear winner
+2026-11-26 afternoon | F2 black/white and F2-art posted 11-25/26 (56-68) | not in top 15, which needs 150, and not yet counted (under 48h) | sends n/a | follows n/a | do not judge
+2026-11-26 afternoon | F2-art holiday: 69 Black Friday, 70 Small Business Saturday, 71 Cyber Monday queued | pending | | | TEST holiday tie-in (one variable: topic is dated), judge 48h after each posts
+

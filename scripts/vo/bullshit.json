@@ -1,0 +1,116 @@
+{
+ "voice": "am_adam",
+ "speed": 1.19,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "A company sold thirty thousand boxes of actual bullshit.",
+   "caps": [
+    "A company sold",
+    "*30,000 boxes*",
+    "of *actual bullshit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  },
+  {
+   "say": "Black Friday, twenty fourteen. Cards Against Humanity wanted six bucks a box. Gone in under two hours.",
+   "caps": [
+    "Black Friday, 2014.",
+    "Cards Against Humanity",
+    "wanted *6 bucks a box.*",
+    "Gone in",
+    "*under 2 hours.*"
+   ],
+   "gap": 0.28
+  },
+  {
+   "say": "The year before, their Black Friday deal was five bucks more fucking expensive.",
+   "caps": [
+    "The year before,",
+    "their Black Friday deal",
+    "was *5 bucks MORE*",
+    "*fucking expensive.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "In twenty fifteen, they sold nothing. You paid five dollars and got jack shit.",
+   "caps": [
+    "In 2015,",
+    "they sold *nothing.*",
+    "You paid 5 dollars",
+    "and got *jack shit.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "Over eleven thousand people paid up. Seventy one thousand dollars, for absolutely nothing.",
+   "caps": [
+    "Over *11,000 people* paid up.",
+    "*71,000 dollars,*",
+    "for absolutely *nothing.*"
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "The staff just split the cash and bought themselves toys. You can't make this shit up.",
+   "caps": [
+    "The staff just *split the cash*",
+    "and bought themselves toys.",
+    "You can't make",
+    "*this shit up.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "In twenty sixteen, people chipped in a hundred grand so they could dig a hole. A fucking hole.",
+   "caps": [
+    "In 2016,",
+    "people chipped in",
+    "*100 grand*",
+    "so they could dig a hole.",
+    "A *fucking hole.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "No prize, no reason, just a big stupid hole in the ground.",
+   "caps": [
+    "No prize, no reason,",
+    "just a *big stupid hole*",
+    "in the ground."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "People will pay for bullshit when somebody asks. Your client who vanished? Did anybody even ask?",
+   "caps": [
+    "People will pay for bullshit",
+    "when somebody *asks.*",
+    "Your client who vanished?",
+    "*Did anybody even ask?*"
+   ],
+   "gap": 0.34,
+   "speed": 1.16
+  },
+  {
+   "say": "Message Health spots who's gone quiet, and sends each one a text.",
+   "caps": [
+    "MsgHealth spots",
+    "who's *gone quiet,*",
+    "and *sends each one a text.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  }
+ ]
+}

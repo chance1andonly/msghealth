@@ -24,8 +24,18 @@ def year_words(y):
 def spoken_years(t):
     # years must be read as pairs ("nineteen nineteen"), never "nineteen hundred nineteen"
     return re.sub(r'(?<![\d,.$])(1[0-9]{3}|20[0-9]{2})(?![\d%])(?!,\d)(?!\s*(?:dollars|miles|people|views|calls|texts|clients|customers|years))', lambda m: year_words(int(m.group(1))), t)
+def num_words(n):
+    o = 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split()
+    t = 'x x twenty thirty forty fifty sixty seventy eighty ninety'.split()
+    if n < 20: return o[n]
+    if n < 100: return t[n // 10] + (' ' + o[n % 10] if n % 10 else '')
+    for v, w in ((10**9, 'billion'), (10**6, 'million'), (1000, 'thousand'), (100, 'hundred')):
+        if n >= v: return num_words(n // v) + ' ' + w + (' ' + num_words(n % v) if n % v else '')
 def syl(s):
     s = s.lower().replace('*', '')
+    # digits in captions are spoken as words: count them, or number chunks get no time and the captions run early
+    s = re.sub(r'(?<![\d,])(1[0-9]{3}|20[0-9]{2})(?![\d,]\d)(?!\d)', lambda m: year_words(int(m.group(1))), s)
+    s = re.sub(r'\d[\d,]*', lambda m: ' ' + num_words(int(m.group(0).replace(',', ''))) + ' ', s)
     for a, b in {'msghealth.net': 'mes sage health dot net', 'msghealth': 'mes sage health', 'fifty-one': 'fif ty one'}.items(): s = s.replace(a, b)
     n = 0
     for w in re.findall(r"[a-z']+", s):

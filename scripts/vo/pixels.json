@@ -1,0 +1,119 @@
+{
+ "voice": "am_adam",
+ "speed": 1.19,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "A student sold dots on a screen for a million fucking dollars.",
+   "caps": [
+    "A student sold",
+    "*dots on a screen*",
+    "for a",
+    "*million fucking dollars.*"
+   ],
+   "gap": 0.32,
+   "speed": 1.1
+  },
+  {
+   "say": "England, two thousand five. Alex, twenty one, was sweating a student loan.",
+   "caps": [
+    "England, 2005.",
+    "Alex Tew, *21,*",
+    "was sweating",
+    "a *student loan.*"
+   ],
+   "gap": 0.28
+  },
+  {
+   "say": "So he builds one ugly web page. A million pixels, a dollar each, hundred dollar minimum.",
+   "caps": [
+    "So he builds",
+    "one *ugly web page.*",
+    "A million pixels,",
+    "*a dollar each,*",
+    "100 dollar minimum."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "Companies lost their damn minds. In months he made one million, thirty seven thousand dollars.",
+   "caps": [
+    "Companies lost",
+    "their *damn minds.*",
+    "In months he made",
+    "*1,037,000 dollars.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "The last thousand pixels went on eBay for thirty eight grand. For a fucking speck.",
+   "caps": [
+    "The last 1,000 pixels",
+    "went on eBay",
+    "for *38 grand.*",
+    "For a *fucking speck.*"
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then hackers emailed him to pay up, first five grand, and then fifty grand.",
+   "caps": [
+    "Then hackers emailed him",
+    "to *pay up,*",
+    "first 5 grand,",
+    "and then *50 grand.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "He refused to pay a damn cent, so they knocked his whole site offline.",
+   "caps": [
+    "He refused to pay",
+    "a *damn cent,*",
+    "so they knocked",
+    "his whole site *offline.*"
+   ],
+   "gap": 0.36
+  },
+  {
+   "say": "Those links people paid for? By twenty seventeen, about one in five was dead as shit.",
+   "caps": [
+    "Those links",
+    "people paid for?",
+    "By 2017,",
+    "about *one in five*",
+    "was *dead as shit.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Happy Cyber Monday. Nobody checked those links, and your client list rots the same damn way.",
+   "caps": [
+    "Happy Cyber Monday.",
+    "Nobody checked those links,",
+    "and your client list",
+    "rots the *same damn way.*"
+   ],
+   "gap": 0.34,
+   "speed": 1.16
+  },
+  {
+   "say": "Message Health spots who's gone quiet, and sends each one a text.",
+   "caps": [
+    "MsgHealth spots",
+    "who's *gone quiet,*",
+    "and *sends each one a text.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  }
+ ]
+}

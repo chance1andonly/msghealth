@@ -1,0 +1,121 @@
+{
+ "voice": "am_adam",
+ "speed": 1.19,
+ "start": 0.25,
+ "lines": [
+  {
+   "say": "This rich asshole staged his own funeral while still alive.",
+   "caps": [
+    "This rich asshole",
+    "staged *his own funeral*",
+    "while *still alive.*"
+   ],
+   "gap": 0.32,
+   "speed": 1.1
+  },
+  {
+   "say": "Timothy Dexter, Massachusetts. He got rich buying old war money everybody thought was worthless.",
+   "caps": [
+    "Timothy Dexter,",
+    "Massachusetts.",
+    "He got rich buying",
+    "old war money",
+    "everybody thought",
+    "was *worthless.*"
+   ],
+   "gap": 0.28
+  },
+  {
+   "say": "Legend says his rivals told him to ship bed warmers to the Caribbean. The fucking Caribbean.",
+   "caps": [
+    "Legend says his rivals",
+    "told him to ship",
+    "*bed warmers*",
+    "to the Caribbean.",
+    "The *fucking Caribbean.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "His captain sold them as molasses ladles, and the lucky bastard cashed in.",
+   "caps": [
+    "His captain sold them",
+    "as *molasses ladles,*",
+    "and the lucky bastard",
+    "*cashed in.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "Next, they say he shipped coal to a coal town, hit a miners' strike, and got paid again.",
+   "caps": [
+    "Next, they say he shipped",
+    "*coal to a coal town,*",
+    "hit a miners' strike,",
+    "and *got paid again.*"
+   ],
+   "gap": 0.32
+  },
+  {
+   "say": "He wrote a book with zero punctuation. The second edition added a whole damn page of it.",
+   "caps": [
+    "He wrote a book with",
+    "*zero punctuation.*",
+    "The second edition added",
+    "a *whole damn page* of it."
+   ],
+   "gap": 0.3
+  },
+  {
+   "say": "He put up a statue of himself that called him the greatest philosopher in the Western World.",
+   "caps": [
+    "He put up",
+    "a statue of himself",
+    "that called him",
+    "the *greatest philosopher*",
+    "in the Western World."
+   ],
+   "gap": 0.34
+  },
+  {
+   "say": "Then came the funeral. About three thousand people showed up, and the son of a bitch was fine.",
+   "caps": [
+    "Then came the funeral.",
+    "About *3,000 people*",
+    "showed up,",
+    "and the son of a bitch",
+    "was *fine.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The man had to play dead to learn who gave a shit. It's Small Business Saturday. No casket needed.",
+   "caps": [
+    "The man had to *play dead*",
+    "to learn who gave a shit.",
+    "It's Small Business Saturday.",
+    "*No casket needed.*"
+   ],
+   "gap": 0.34,
+   "speed": 1.16
+  },
+  {
+   "say": "Message Health spots who's gone quiet, and sends each one a text.",
+   "caps": [
+    "MsgHealth spots",
+    "who's *gone quiet,*",
+    "and *sends each one a text.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a full",
+    "*retention audit.*"
+   ],
+   "gap": 0.3,
+   "speed": 1.1
+  }
+ ]
+}
