@@ -80,6 +80,9 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-26 (12:08 ET posting run, stats 17:13 UTC)
+- Fixed 68 meat shower: caption now matches the voice ("slapping down"), shows MsgHealth, stamps moved off the big meat chunk. Video-only re-render, approved audio muxed back bit for bit. No strategy change: top 3 unchanged, 80 reels analyzed.
+- Whisper still not downloadable here (huggingface.co 403), and without it or the Kokoro files a script change cannot be re-voiced or re-checked in this environment.
 ### 2026-11-26 (10:11 ET posting run)
 - Fixed and posted 66 marathon: the thermometer bulb covered 90°F and the gold medal covered the runner's head. Check 1-per-second grids, not only one still per line. Video-only fix: render, then mux the new video with the old approved audio (`-map 0:v -map 1:a -c copy`).
 - To check before approving 68 meat shower: line 1 says "slapping down" but the caption says "falling".

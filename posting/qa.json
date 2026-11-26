@@ -391,8 +391,8 @@
   },
   "68-meat-shower.mp4": {
     "approved": true,
-    "sha1": "e530ceb6a9cc944b81e828d3b903ebdf9a8e52c9",
-    "checked_at": "2026-11-26T07:51:20.883Z",
-    "note": "Release gate 2026-11-26: (1) pronunciation OK, qa.py clips + whisper-base.en int8 and fp32 on the final mix hear Message Health and every word; (2) flicker.py none, stills and contact sheet viewed, readable, caption zone clear; (3) predicted to beat recent: 3.6s gross-out dated hook, illustrated, escalating payoff, brand only in last ~11s. Facts: Wikipedia, Mental Floss, Scientific American; vulture theory labeled as a theory. Prediction, not proven."
+    "sha1": "f6aede547f5da6790c54392d8eea0fd72bb871a9",
+    "checked_at": "2026-11-26T17:17:46.528Z",
+    "note": "validated 2026-11-26 12:18 ET: pronunciation OK (audio stream bit-identical, md5 71acf94c, to the mix that passed whisper-base.en int8+fp32 at 07:51Z; recognizer not rerun, model download blocked), frames OK (re-rendered: caption now matches voice 'slapping down', shows MsgHealth, RAW MEAT/HOLY HELL stamps moved off the big meat chunk; 1fps grids viewed, flicker.py no A-B-A), analytics (stats 17:13Z): 3.6s dated hook with a number, illustrated true story like the 1709-view pizza reel; next in set order; topic differs from Pepsi and marathon, though gross dated tone is close to marathon. Prediction, not proven."
   }
 }

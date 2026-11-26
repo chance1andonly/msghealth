@@ -18,7 +18,7 @@
   const S = [
     { type: 'art', sfx: [[1, 'punch', 0.28]], draw(t, a, c, L) {
       dHead('BATH COUNTY, KENTUCKY · 1876'); line(0, 1250, W, 1250, D_D, 8); house(250, 1250, 1.2); dMan(760, 1250, 300, D_L, { arms: 'up', run: t * 8 }); rain(t, a - 2, 20, 380, 1235, 42);
-      meat(CX, 700 + Math.sin(t * 3) * 14, 170, Math.sin(t * 1.7) * 0.25, 7);
+      meat(CX, 765 + Math.sin(t * 3) * 14, 165, Math.sin(t * 1.7) * 0.25, 7);
       dStamp('RAW MEAT', CX, 480, t, ch(L, 2), 118, -0.06);
     } },
     { type: 'art', sfx: [[3, 'punch', 0.25]], draw(t, a, c, L) {
@@ -36,10 +36,10 @@
       const k = pop(t, ch(L, 3), 0.4); if (k > 0) xf(CX, 1150, clamp(k), 0, () => { text('≈ 1 FOOTBALL FIELD', CX, 1100, 70, 900, D_W, 'center', 0.01); text('OF MEAT', CX, 1200, 70, 900, D_G, 'center', 0.1); });
     } },
     { type: 'art', sfx: [[1, 'punch', 0.25]], draw(t, a, c, L) {
-      dHead('THE PIECES'); const k = pop(t, a, 0.4); xf(CX, 720, clamp(k), 0, () => meat(CX, 720, 270, Math.sin(t * 1.5) * 0.12, 4));
+      dHead('THE PIECES'); const k = pop(t, a, 0.4); xf(CX, 760, clamp(k), 0, () => meat(CX, 760, 245, Math.sin(t * 1.5) * 0.12, 4));
       withFade(dIn(t, ch(L, 1) - 0.1), () => { fillRR(160, 1050, 760, 120, 12, D_W); for (let i = 0; i <= 24; i++) line(190 + i * 29.2, 1052, 190 + i * 29.2, 1052 + (i % 8 ? 30 : 55), '#000', i % 8 ? 3 : 6); ['0', '1', '2', '3'].forEach((s, i) => text(s, 190 + i * 233.6, 1135, 38, 900, '#000', 'center')); });
       withFade(dIn(t, ch(L, 1)), () => text('UP TO 3 INCHES', CX, 1270, 66, 900, D_W, 'center', 0.04));
-      dStamp('HOLY HELL', CX, 440, t, ch(L, 2), 86, -0.07);
+      dStamp('HOLY HELL', CX, 446, t, ch(L, 2), 86, -0.07);
     } },
     { type: 'art', sfx: [[1, 'pop', 0.25]], draw(t, a, c, L) {
       dHead('QUALITY CONTROL'); line(0, 1280, W, 1280, D_D, 8);

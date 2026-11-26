@@ -2,7 +2,7 @@
 // caption chunk start times and when each clip starts. Don't edit by hand.
 window.VO_CLIPS = [
   { dur: 3.615, chunks: [["In 1876, it rained", 0.0], ["*raw fucking meat*", 1.31], ["on Kentucky.", 2.51]] }, // 00
-  { dur: 4.21, chunks: [["Clear sky.", 0.0], ["A farmer's wife", 0.7], ["is outside making soap,", 1.61], ["and *chunks start falling.*", 2.75]] }, // 01
+  { dur: 4.21, chunks: [["Clear sky.", 0.0], ["A farmer's wife", 0.7], ["is outside making soap,", 1.61], ["and *chunks start*", 2.75], ["*slapping down.*", 3.28]] }, // 01
   { dur: 3.165, chunks: [["For *several minutes,*", 0.0], ["it covered a patch", 0.84], ["about the size", 1.78], ["of a *football field.*", 2.56]] }, // 02
   { dur: 2.28, chunks: [["Some pieces were", 0.0], ["*three inches wide.*", 0.68], ["Holy *hell.*", 1.67]] }, // 03
   { dur: 3.845, chunks: [["So naturally,", 0.0], ["*two dudes tasted it,*", 1.13], ["and guessed mutton,", 2.31], ["or maybe *deer.*", 3.02]] }, // 04
@@ -11,7 +11,7 @@ window.VO_CLIPS = [
   { dur: 2.78, chunks: [["If that's right,", 0.0], ["those two idiots", 0.7], ["*swallowed vulture vomit.*", 1.44]] }, // 07
   { dur: 4.01, chunks: [["One piece is still in a jar", 0.0], ["at *Transylvania University.*", 1.31], ["*No shit.*", 3.42]] }, // 08
   { dur: 1.605, chunks: [["Those folks had to guess.", 0.0], ["*You don't.*", 1.16]] }, // 09
-  { dur: 4.06, chunks: [["Message Health scores clients,", 0.0], ["flags the *quiet ones,*", 1.7], ["and *sends them a text.*", 2.59]] }, // 10
+  { dur: 4.06, chunks: [["MsgHealth scores clients,", 0.0], ["flags the *quiet ones,*", 1.7], ["and *sends them a text.*", 2.59]] }, // 10
   { dur: 2.16, chunks: [["Comment *KEEP* to get a full", 0.0], ["*retention audit.*", 1.1]] }, // 11
 ];
 window.VO_AT = [0.25, 4.2, 8.71, 12.17, 14.82, 19.12, 22.57, 26.04, 29.27, 33.83, 35.8, 40.28];

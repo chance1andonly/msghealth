@@ -19,7 +19,8 @@
     "Clear sky.",
     "A farmer's wife",
     "is outside making soap,",
-    "and *chunks start falling.*"
+    "and *chunks start*",
+    "*slapping down.*"
    ],
    "gap": 0.3
   },
@@ -103,7 +104,7 @@
   {
    "say": "Message Health scores every client, flags the quiet ones, and sends them a text.",
    "caps": [
-    "Message Health scores clients,",
+    "MsgHealth scores clients,",
     "flags the *quiet ones,*",
     "and *sends them a text.*"
    ],
