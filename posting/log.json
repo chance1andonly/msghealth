@@ -551,5 +551,15 @@
     "trial": null,
     "per_day": 7,
     "posted_at": "2026-11-27T13:19:47.582Z"
+  },
+  {
+    "date": "2026-11-27",
+    "slot": 10,
+    "hour": 10,
+    "file": "72-half-your-customers.mp4",
+    "media_id": "18148872235593803",
+    "trial": null,
+    "per_day": 7,
+    "posted_at": "2026-11-27T15:20:24.992Z"
   }
 ]
