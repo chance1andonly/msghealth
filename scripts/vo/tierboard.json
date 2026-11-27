@@ -1,0 +1,133 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Tier F, doing nothing. Clients drift away, and you never even notice.",
+   "caps": [
+    "*Tier F,* doing nothing.",
+    "Clients *drift away,*",
+    "and you *never notice.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier C, asking at the chair. It only reaches whoever is sitting in front of you.",
+   "caps": [
+    "*Tier C,* asking at the chair.",
+    "It only reaches who's",
+    "*in front of you.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier B, texting them yourself. It works, until you have hundreds of clients and somebody slips through.",
+   "caps": [
+    "*Tier B,* texting them yourself.",
+    "Works, until you have",
+    "*hundreds* of clients."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Also tier B, Vah-rah-go. A booking tool first, and text marketing is a paid add-on.",
+   "caps": [
+    "Also *tier B,* Vagaro.",
+    "A *booking tool* first.",
+    "Text marketing *costs extra.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier A, Book-see. Solid reactivation messages, with two thousand marketing texts included.",
+   "caps": [
+    "*Tier A,* Booksy.",
+    "Solid *reactivation messages,*",
+    "*2,000* texts included."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Gloss Genius. Automated rebooking reminder texts on the Gold plan.",
+   "caps": [
+    "*GlossGenius.* Automated",
+    "rebooking *reminder texts*",
+    "on the *Gold plan.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Squire. Smart Rebooking learns client habits, and it runs win-back campaigns.",
+   "caps": [
+    "*Squire.* Smart Rebooking",
+    "learns *client habits,*",
+    "plus *win-back campaigns.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier S, Message Health. A texting and retention platform that scores every client against their own rhythm.",
+   "caps": [
+    "*Tier S,* *Message Health.*",
+    "Scores every client against",
+    "*their own rhythm.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Not a fixed rule like ninety days. It shows you exactly why a client is at risk.",
+   "caps": [
+    "Not a *fixed rule*",
+    "like ninety days. It shows",
+    "*exactly why* they're at risk."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Then it texts the quiet ones back for you, and every reply lands in one shared inbox.",
+   "caps": [
+    "Then it *texts the quiet*",
+    "*ones back* for you.",
+    "Replies land in *one inbox.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Reminders, review requests, bookings, payments, and analytics, all in one place.",
+   "caps": [
+    "*Reminders,* review requests,",
+    "*bookings, payments,*",
+    "and *analytics.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "And you can tie Message Health into your favorite tool with your API keys.",
+   "caps": [
+    "Tie *Message Health* into",
+    "your *favorite tool*",
+    "with your *API keys.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Plans start at fifty dollars a month, and your first month is half off.",
+   "caps": [
+    "Plans start at *$50 a month,*",
+    "and your first month",
+    "is *half off.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "If you wanna see why we are better, comment RETAIN, and I will DM you. Not an automated one.",
+   "caps": [
+    "If you wanna see why we're better,",
+    "comment *RETAIN* and I'll DM you.",
+    "*Not* an automated one."
+   ],
+   "gap": 0.5
+  }
+ ]
+}

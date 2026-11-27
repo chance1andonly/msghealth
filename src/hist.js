@@ -41,6 +41,9 @@ function env(x, y, w, h, col, a = 1) { // envelope
   ctx.save(); ctx.globalAlpha *= clamp(a); fillRR(x, y, w, h, 10, rgba(col, 0.16)); strokeRR(x, y, w, h, 10, rgba(col, 0.7), 3);
   ctx.beginPath(); ctx.moveTo(x + 6, y + 8); ctx.lineTo(x + w / 2, y + h * 0.58); ctx.lineTo(x + w - 6, y + 8); ctx.strokeStyle = rgba(col, 0.7); ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
 }
+const tileDraw = (im, x, y, sz, mode) => { if (!im) return; ctx.save(); rr(x, y, sz, sz, sz * 0.16); ctx.clip(); const m = Math.min(im.width, im.height) * (im.zoom || 1), sx = (im.width - m) / 2, sy = (im.height - m) / 2;
+      if (mode) { const g = document.createElement('canvas'); g.width = g.height = 256; const q = g.getContext('2d'); q.fillStyle = mode === 'bw' ? '#fff' : '#161616'; q.fillRect(0, 0, 256, 256); const k = document.createElement('canvas'); k.width = k.height = 176; const z = k.getContext('2d'); z.drawImage(im, 0, 0, 176, 176); z.globalCompositeOperation = 'source-in'; z.fillStyle = mode === 'bw' ? '#000' : '#fff'; z.fillRect(0, 0, 176, 176); q.drawImage(k, 40, 40); ctx.drawImage(g, x, y, sz, sz); } else ctx.drawImage(im, sx, sy, m, m, x, y, sz, sz);
+      ctx.restore(); if (mode === 'wb') strokeRR(x, y, sz, sz, sz * 0.16, 'rgba(255,255,255,0.5)', 3); };
 const SCENES = {
   art(t, a, c, L) { // illustrated documentary scene: c.draw(t, a, c, L) from the reel config (helpers in src/doc.js), slow push-in
     stage(t, c.glow ?? 0.16); const z = 1 + 0.035 * ease.out(seg(t, a, VO_AT[L + 1] + 0.2));
@@ -130,9 +133,7 @@ const SCENES = {
     stage(t, 0.14); eyebrow('THE KEEP-YOUR-CLIENTS TIER LIST', 330, IN.mid);
     const rows = ['S', 'A', 'B', 'C', 'D', 'F'], shade = { S: '#ffffff', A: '#d8d8d8', B: '#b0b0b0', C: '#8c8c8c', D: '#666666', F: '#444444' };
     const X0 = 60, BW = 960, RH = 120, Y0 = 400, LW = 120;
-    const tile = (im, x, y, sz, mode) => { if (!im) return; ctx.save(); rr(x, y, sz, sz, sz * 0.16); ctx.clip(); const m = Math.min(im.width, im.height) * (im.zoom || 1), sx = (im.width - m) / 2, sy = (im.height - m) / 2;
-      if (mode) { const g = document.createElement('canvas'); g.width = g.height = 256; const q = g.getContext('2d'); q.fillStyle = mode === 'bw' ? '#fff' : '#161616'; q.fillRect(0, 0, 256, 256); const k = document.createElement('canvas'); k.width = k.height = 176; const z = k.getContext('2d'); z.drawImage(im, 0, 0, 176, 176); z.globalCompositeOperation = 'source-in'; z.fillStyle = mode === 'bw' ? '#000' : '#fff'; z.fillRect(0, 0, 176, 176); q.drawImage(k, 40, 40); ctx.drawImage(g, x, y, sz, sz); } else ctx.drawImage(im, sx, sy, m, m, x, y, sz, sz);
-      ctx.restore(); if (mode === 'wb') strokeRR(x, y, sz, sz, sz * 0.16, 'rgba(255,255,255,0.5)', 3); };
+    const tile = tileDraw;
     const imgOf = (k) => (k === 'msg' ? { im: LOGO, white: true } : { im: (window.IMG || {})[k], white: false });
     const placed = R.scenes.map((sc, i) => [sc, i]).filter(([sc, i]) => sc.type === 'tier' && !sc.more && i <= L);
     rows.forEach((r, ri) => {
@@ -154,6 +155,23 @@ const SCENES = {
     if (hasBig) withFade(seg(t, a + 0.3, a + 0.6), () => tile(big.im, 70, 1195, 220, big.white ? 'wb' : null));
     lines.forEach((l, i) => withFade(seg(t, a + 0.45 + i * 0.25, a + 0.8 + i * 0.25), () => text(l, tx, 1215 + (hasBig ? 22 : 0) + i * 62, fit(l, i === 0 ? 42 : 32, mw), i === 0 ? 800 : 600, i === 0 ? '#fff' : SOFT, al, -0.01)));
   },
+  board(t, a, c, L) { // template tier board (R.boardImg): logos only, no text. scenes of type 'board' accumulate onto rows; c.more = no new item (shows c.img big)
+    stage(t, 0.1);
+    const tp = (window.IMG || {}).tpl, BY = 330, K = W / 623, RY = { S: 9, A: 78, B: 148, C: 217, D: 286, E: 356, F: 426 };
+    if (tp) ctx.drawImage(tp, 0, BY, W, tp.height * (W / tp.width));
+    const imgOf = (k) => (k === 'msg' ? { im: LOGO, mode: 'wb' } : { im: (window.IMG || {})[k], mode: null });
+    const placed = R.scenes.map((sc, i) => [sc, i]).filter(([sc, i]) => sc.type === 'board' && !sc.more && i <= L);
+    const TS = 100;
+    Object.keys(RY).forEach((r) => {
+      const items = placed.filter(([sc]) => sc.row === r); items.forEach(([sc, i], k) => {
+        const cur = i === L, e = cur ? pop(t, a + 0.1, 0.4) : 1; if (e <= 0) return;
+        const x = 168 + k * (TS + 22), y = BY + RY[r] * K + (64 * K - TS) / 2, g = imgOf(sc.img);
+        xf(x + TS / 2, y + TS / 2, clamp(e), 0, () => { tileDraw(g.im, x, y, TS, g.mode); strokeRR(x, y, TS, TS, TS * 0.16, cur ? '#fff' : 'rgba(0,0,0,0.55)', cur ? 5 : 3); });
+      });
+    });
+    const big = c.img ? imgOf(c.img) : null;
+    if (big && big.im) withFade(seg(t, a + 0.25, a + 0.55), () => xf(CX, 1300, 1, 0, () => tileDraw(big.im, CX - 100, 1210, 200, big.mode)));
+  },
   chat(t, a, c, i) { // phone with a text thread
     stage(t, 0.14); const until = VO_AT[i + 1] + 0.2;
     phoneChat(t, a - 0.1, until, () => c.msgs.forEach((m, j) => msg(m.out ? 40 : 60, m.y, 520, m.lines, m.out, seg(t, a + m.at, a + m.at + 0.2), m.out ? seg(t, a + m.at + 0.1, a + m.at + 1.5) : 1)));
@@ -166,4 +184,4 @@ if (!R.nosfx) R.scenes.forEach((c, i) => (c.sfx || []).forEach(([k, kind, gain, 
 // Drive SFX defaults (quiet): soft whoosh on each cut, thud on stat/versus reveals, hit on the opener, cash on the end card
 if (!R.nosfx) R.scenes.forEach((c, i) => { if (i) cue(VO_AT[i] - 0.08, 'dwhooshsoft', 0.3); if (c.type === 'stat') cue(VO_AT[i] + 0.05, 'dimpact', 0.3); if (c.type === 'versus') cue(VO_AT[i] + 0.1, 'dthud', 0.3); if (c.type === 'tier') cue(VO_AT[i] + 0.12, c.row === 'S' ? 'dhit' : 'dthud', 0.3); });
 if (!R.nosfx) { cue(0.12, 'dimpact2', 0.3); cue(END + 0.35, 'dcash', 0.25); cue(END + 1.25, 'tap', 0.3); }
-boot({ duration: DURATION, scenes: SC, brandAt: END, hideCaption: (t) => t >= END, preload: async () => { window.IMG = {}; await Promise.all(Object.entries(R.imgs || {}).map(([k, src]) => new Promise((res) => { const im = new Image(); im.onload = () => { if (k === 'squire') im.zoom = 0.55; window.IMG[k] = im; res(); }; im.onerror = res; im.src = src; }))); } }, R.name);
+boot({ duration: DURATION, scenes: SC, brandAt: END, hideCaption: (t) => t >= END, preload: async () => { window.IMG = {}; await Promise.all(Object.entries(R.imgs || {}).map(([k, src]) => new Promise((res) => { const im = new Image(); im.onload = () => { if (k === 'squire') im.zoom = 0.55; if (k === 'imsg') im.zoom = 0.88; window.IMG[k] = im; res(); }; im.onerror = res; im.src = src; }))); } }, R.name);

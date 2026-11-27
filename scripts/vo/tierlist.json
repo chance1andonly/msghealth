@@ -49,47 +49,47 @@
    "gap": 0.5
   },
   {
-   "say": "Tier A, Book-see. A great booking app, but its big push is bringing in new clients.",
+   "say": "Tier A, Book-see. Solid reactivation messages, with two thousand marketing texts included.",
    "caps": [
     "*Tier A,* Booksy.",
-    "A great booking app,",
-    "pushing *new clients.*"
+    "Solid *reactivation messages,*",
+    "*2,000* texts included."
    ],
    "gap": 0.5
   },
   {
-   "say": "Gloss Genius. Built to run the whole business, so retention is one feature of many.",
+   "say": "Gloss Genius. Automated rebooking texts that bring regulars back.",
    "caps": [
-    "*GlossGenius.* Built",
-    "to run the whole business,",
-    "retention is *one of many.*"
+    "*GlossGenius.* Automated",
+    "rebooking texts that",
+    "bring *regulars back.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Squire runs the whole shop well. Retention is just one tool in the box.",
+   "say": "Squire. Smart Rebooking learns client habits, and it runs automated win-back campaigns.",
    "caps": [
-    "*Squire* runs the",
-    "whole shop well.",
-    "Retention is *one tool.*"
+    "*Squire.* Smart Rebooking",
+    "learns *client habits,*",
+    "plus *win-back campaigns.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Tier S, Message Health. It scores every client, and catches who's drifting.",
+   "say": "Tier S, Message Health. It scores every client against their own rhythm, not a fixed rule.",
    "caps": [
     "*Tier S,* *Message Health.*",
-    "Scores every client,",
-    "catches who's *drifting.*"
+    "Scores every client against",
+    "*their own rhythm.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Then it texts them for you. Built for Atlanta barbers, with a real person to call.",
+   "say": "It weighs no-shows and slow replies, shows you why, and your first month is half off.",
    "caps": [
-    "Then it *texts them*",
-    "for you. Built for *Atlanta*",
-    "barbers, a *real person.*"
+    "It weighs *no-shows*",
+    "and *slow replies,* shows why,",
+    "first month *half off.*"
    ],
    "gap": 0.5
   },
