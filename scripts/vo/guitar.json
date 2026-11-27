@@ -1,0 +1,110 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 2008, a passenger saw baggage handlers throwing fucking guitars.",
+   "caps": [
+    "In *2008,* a passenger",
+    "saw baggage handlers",
+    "throwing",
+    "*fucking guitars.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Dave Carroll owned one. It cost thirty five hundred bucks, and the bottom got smashed.",
+   "caps": [
+    "*Dave Carroll* owned one.",
+    "*$3,500,*",
+    "and the bottom",
+    "got *smashed.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "He told three United employees at the airport. Not one of them helped.",
+   "caps": [
+    "He told *three*",
+    "United employees.",
+    "*Not one* of them helped."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "For nine months, he chased the airline over a twelve hundred dollar repair.",
+   "caps": [
+    "For *nine months,*",
+    "he chased the airline",
+    "over a *$1,200* repair."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The answer was no. He hadn't filed a claim within twenty four hours.",
+   "caps": [
+    "The answer was *no.*",
+    "He didn't file within",
+    "*24 hours.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "So this magnificent bastard wrote a song. United Breaks Guitars.",
+   "caps": [
+    "So this *magnificent*",
+    "*bastard* wrote a song.",
+    "*United Breaks Guitars.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "The video hit YouTube in July 2009, and millions of people watched that shit.",
+   "caps": [
+    "The video hit YouTube,",
+    "*July 2009.*",
+    "*Millions* of people",
+    "watched that shit."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Suddenly United was calling to apologize, and asking to use it for staff training.",
+   "caps": [
+    "Suddenly United called",
+    "to *apologize,*",
+    "and asked to use it",
+    "for *staff training.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Your clients won't write a song. They'll just quietly book somebody else.",
+   "caps": [
+    "Your clients won't",
+    "write a song.",
+    "They'll quietly book",
+    "*somebody else.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health catches who's gone quiet, and follows up before they're gone.",
+   "caps": [
+    "*Message Health*",
+    "catches who's gone quiet",
+    "and *follows up* first."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

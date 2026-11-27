@@ -103,13 +103,14 @@ async function publish0(uid, file, caption, trial) {
 // Next-reel choice. posting/order.json ({"order":["NAME.mp4",...]}) lets the validator put the best reel first; otherwise name order.
 // A reel counts as FRESH when its approval (a review against the latest analytics) is at most FRESH_HOURS old; the poster prefers fresh reels
 // and only falls back to a stale approved one (with a warning) so the channel never goes silent. Optional posting/queue/NAME.meta.json
-// {"expires":"YYYY-MM-DD"} moves a time-sensitive reel to posting/held/ once it is past its date. {"not_before":"YYYY-MM-DD"} keeps a
+// {"expires":"YYYY-MM-DD"} (the day AFTER the last day it may post) moves a time-sensitive reel to posting/held/ from that date on. {"not_before":"YYYY-MM-DD"} keeps a
 // holiday reel in the queue, unposted, until that date in the schedule's time zone.
 const FRESH_HOURS = +(process.env.FRESH_HOURS || 4);
 const ORDER = path.join(DIR, 'order.json');
 function ageHours(f) { const q = readJson(QA, {})[f]; return q && q.checked_at ? (Date.now() - Date.parse(q.checked_at)) / 3600000 : 1e9; }
-function expired(f) { const m = path.join(QUEUE, f.replace(/\.mp4$/, '.meta.json')); const j = fs.existsSync(m) ? readJson(m, {}) : {}; return j.expires && j.expires < new Date().toISOString().slice(0, 10); }
-function early(f) { const m = path.join(QUEUE, f.replace(/\.mp4$/, '.meta.json')); const j = fs.existsSync(m) ? readJson(m, {}) : {}; const today = new Intl.DateTimeFormat('en-CA', { timeZone: readJson(SCHEDULE, {}).timezone || 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); return Boolean(j.not_before) && today < j.not_before; }
+const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: readJson(SCHEDULE, {}).timezone || 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); // YYYY-MM-DD in the schedule's time zone
+function expired(f) { const m = path.join(QUEUE, f.replace(/\.mp4$/, '.meta.json')); const j = fs.existsSync(m) ? readJson(m, {}) : {}; return Boolean(j.expires) && today() >= j.expires; }
+function early(f) { const m = path.join(QUEUE, f.replace(/\.mp4$/, '.meta.json')); const j = fs.existsSync(m) ? readJson(m, {}) : {}; return Boolean(j.not_before) && today() < j.not_before; }
 function ordered(all) { const o = (readJson(ORDER, {}).order || []).filter((f) => all.includes(f)); return o.concat(all.filter((f) => !o.includes(f))); }
 function pick(all) {
   all.filter(expired).forEach((f) => { const H = path.join(DIR, 'held'); fs.mkdirSync(H, { recursive: true }); for (const e of ['.mp4', '.txt', '.meta.json']) { const a = path.join(QUEUE, f.replace(/\.mp4$/, e)); if (fs.existsSync(a)) fs.renameSync(a, path.join(H, path.basename(a))); } say(`expired, moved to held: ${f}`); });

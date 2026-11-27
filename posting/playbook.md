@@ -80,6 +80,15 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-27 (03:20 ET batch run, stats 07:21 UTC)
+- Found: 83 reels analyzed. Top 3 unchanged (1,709 / 1,291 / 794); 15th best is 150 and nothing posted after 11-17 is in the top 15. Follows are not in stats.json. Per day: 3 = median 129 (n=7), 5 = 93 (n=23), 6 = 127 (n=9); optimizer holding. No black/white F2 reel has reached 48h yet. research.json is from 11-26 15:43 UTC (you: median 122 over 23 reels).
+- Changed: no strategy change. Built 73 Hanukkah gelt first (holidays.md; not_before 12-04), then 74 KFC chicken shortage (win-back family) and 75 United Breaks Guitars (missed-signals family). All three illustrated.
+- Order set: 69 Black Friday is today only (11-27), then 70 and 71 on their dates (73 waits for 12-04), then 72, 74, 75, 59, 56. Posting runs: validate 69 today.
+- Fixed in ig.mjs: "expires" was compared with `<` against the UTC date, so a holiday reel could still post the day after. It now stops on the expires date in the schedule's time zone.
+- Facts, 73: Wikipedia, Forward, Time, Reform Judaism (18th-century teacher tokens, food/honey/whiskey, shift to children in the 19th century, Loft's foil coins in the 1920s). Origins are disputed; the butcher tip is NPR only, left out. 74: CNN, CNBC, NME, police headlines; "more than half" of about 900 closed (low figure); gold at Cannes (MediaPost, Everything-PR); no sales claims. 75: Wikipedia, NBC, MusicRadar; the $180M stock claim is disputed, left out.
+- Process: fresh container needed pip install kokoro-onnx soundfile sherpa-onnx, node_modules/playwright link, Kokoro and whisper from GitHub releases. Research command needs IG_TOKEN (not set here), so research.json was read as is.
+- Held reels 13-39 were not re-rendered this run (3-reel cap went to the new ones). 56 and 59 still need restyling.
+- wafflehouse and eightyears drafts are still waiting for the owner's review; not queued.
 ### 2026-11-26 (18:08 ET run, stats 23:13 UTC)
 - Found: 82 reels analyzed; top 3 unchanged (1,709 / 1,291 / 794). Slots unchanged (7 a day). No strategy change.
 - Restyled 58 fortyone from text slams to illustrated scenes (video only, approved audio muxed back bit for bit), captions synced to the voice and show MsgHealth. It goes next for the 20:00 slot; 69-71 are date-locked until 11-27/28/29.

@@ -8,10 +8,10 @@ Tie the story back to retention where it fits (regulars, gone-quiet clients, hol
 | Date | Holiday | Notes |
 |------|---------|-------|
 | Thu 2026-11-26 | Thanksgiving | DONE: 63-thanksgiving-tv-dinner (Swanson 1953 leftover turkey) |
-| Fri 2026-11-27 | Black Friday | shopping/deal story |
-| Sat 2026-11-28 | Small Business Saturday | very on-brand for barbers and stylists |
-| Mon 2026-11-30 | Cyber Monday | |
-| Fri 2026-12-04 to Sat 12-12 | Hanukkah | respectful, no cussing |
+| Fri 2026-11-27 | Black Friday | DONE: 69-black-friday-bullshit |
+| Sat 2026-11-28 | Small Business Saturday | DONE: 70-small-business-funeral |
+| Mon 2026-11-30 | Cyber Monday | DONE: 71-cyber-monday-pixels |
+| Fri 2026-12-04 to Sat 12-12 | Hanukkah | DONE: 73-hanukkah-gelt (no cussing) |
 | Dec 14-24 | Holiday cut rush | booking-rush stories |
 | Fri 2026-12-25 | Christmas (post Dec 23-25) | 2 reels: Dec 24 and Dec 25 |
 | Thu 2026-12-31 / Fri 2027-01-01 | New Year's Eve / Day | new year, new cut; fresh-start story |

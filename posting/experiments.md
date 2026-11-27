@@ -53,4 +53,6 @@ format | reel | views | sends/reach | likes/reach | follows | profile visits | v
 2026-11-26 afternoon | F2 true-story older top 3 | 1,709 / 1,291 / 794 views | sends/reach 0.07% / 0.17% / 0% | follows n/a | unchanged, still the only clear winner
 2026-11-26 afternoon | F2 black/white and F2-art posted 11-25/26 (56-68) | not in top 15, which needs 150, and not yet counted (under 48h) | sends n/a | follows n/a | do not judge
 2026-11-26 afternoon | F2-art holiday: 69 Black Friday, 70 Small Business Saturday, 71 Cyber Monday queued | pending | | | TEST holiday tie-in (one variable: topic is dated), judge 48h after each posts
-
+2026-11-27 night | F2 true-story older top 3 | 1,709 / 1,291 / 794 views | sends/reach 0.07% / 0.17% / 0% | follows n/a | unchanged, still the only clear winner
+2026-11-27 night | F2 black/white and F2-art posted 11-25/26 (56-68) | none in top 15 (needs 150), all under 48h at 07:21 UTC | sends n/a | follows n/a | do not judge yet; 56, 57, 60, 61 pass 48h later today
+2026-11-27 night | F2-art 73 gelt (holiday, 12-04), 74 KFC, 75 guitars queued | pending | | | REPLICATE F2 illustrated; KFC and United test recent famous-brand stories against older history, same hour bands

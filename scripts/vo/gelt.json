@@ -1,0 +1,100 @@
+{
+ "voice": "am_adam",
+ "speed": 1.12,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In the seventeen hundreds, Hanukkah coins weren't only for kids.",
+   "caps": [
+    "In the *1700s,*",
+    "Hanukkah *coins*",
+    "weren't only for kids."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Across Eastern Europe, people gave them to religious teachers, as a thank you.",
+   "caps": [
+    "Across Eastern Europe,",
+    "they went to *teachers,*",
+    "as a *thank you.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Some of those teachers traveled village to village to give lessons.",
+   "caps": [
+    "Some teachers traveled",
+    "*village to village*",
+    "to give lessons."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "People paid them with what they had. Coins, food, honey, even whiskey.",
+   "caps": [
+    "People paid with",
+    "what they had.",
+    "*Coins, food, honey,*",
+    "even *whiskey.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "By the eighteen hundreds, the coins had moved mostly to the children.",
+   "caps": [
+    "By the *1800s,*",
+    "the coins moved mostly",
+    "to the *children.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Then in the nineteen twenties, an American candy company wrapped chocolate coins in gold foil.",
+   "caps": [
+    "In the *1920s,*",
+    "an American candy maker",
+    "wrapped *chocolate coins*",
+    "in *gold foil.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The chocolate stuck around. The thank you is easy to forget.",
+   "caps": [
+    "The *chocolate*",
+    "stuck around.",
+    "The *thank you*",
+    "is easy to forget."
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Your regulars showed up for you all year. Did you reach back?",
+   "caps": [
+    "Your *regulars* showed up",
+    "for you all year.",
+    "Did you *reach back?*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Message Health spots who's gone quiet, and texts them before they drift.",
+   "caps": [
+    "*Message Health*",
+    "spots who's gone quiet",
+    "and texts them",
+    "*before they drift.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

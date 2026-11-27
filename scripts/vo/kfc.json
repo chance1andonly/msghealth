@@ -1,0 +1,118 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "In 2018, a chicken restaurant ran out of fucking chicken.",
+   "caps": [
+    "In *2018,* a chicken",
+    "restaurant *ran out*",
+    "of *fucking chicken.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "K F C had about nine hundred shops in Britain. More than half had to close.",
+   "caps": [
+    "*KFC* had about *900*",
+    "shops in Britain.",
+    "*More than half*",
+    "had to close."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "They'd switched delivery companies, and the new setup fell flat on its ass.",
+   "caps": [
+    "They switched",
+    "*delivery companies,*",
+    "and it fell",
+    "*flat on its ass.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "People lost their shit. Some of them actually called the police.",
+   "caps": [
+    "People *lost their shit.*",
+    "Some actually called",
+    "*the police.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "The cops had to ask them to stop. Missing chicken isn't a crime.",
+   "caps": [
+    "The cops had to",
+    "ask them to *stop.*",
+    "Missing chicken",
+    "*isn't a crime.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So K F C bought newspaper ads showing one empty bucket.",
+   "caps": [
+    "So KFC bought",
+    "*newspaper ads*",
+    "with *one empty bucket.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "They scrambled their own three letters on it. F, C, K.",
+   "caps": [
+    "They scrambled",
+    "their *own letters.*",
+    "*F. C. K.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "Under it, they said sorry. A chicken restaurant without any chicken. It's not ideal.",
+   "caps": [
+    "Under it, *sorry.*",
+    "*A chicken restaurant*",
+    "without any chicken.",
+    "*It's not ideal.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Honest as hell. That apology won a gold advertising award.",
+   "caps": [
+    "*Honest as hell.*",
+    "That apology won",
+    "a *gold ad award.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "When your regulars drift, one honest text can bring them back.",
+   "caps": [
+    "When *regulars* drift,",
+    "*one honest text*",
+    "can bring them back."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Message Health finds who's gone quiet, and texts them for you.",
+   "caps": [
+    "*Message Health*",
+    "finds who's gone quiet",
+    "and *texts them* for you."
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

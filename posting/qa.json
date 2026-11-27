@@ -424,5 +424,23 @@
     "sha1": "b2ac32d02311d2c6541b39490ba497aef875bff9",
     "checked_at": "2026-11-27T01:15:40.889Z",
     "note": "validated 2026-11-26 20:15 ET: pronunciation OK (ASR clean, Reichheld name avoided), frames OK (contact sheet, no flicker), analytics: signal/customers-leaving theme like the top true-story reels; owner said 'real good'. moral: customers quietly leave, half in five years; pivot: text the regulars gone quiet; grip: half every five years, HBR 1996"
+  },
+  "73-hanukkah-gelt.mp4": {
+    "approved": true,
+    "sha1": "e7ba9bbba75d477af23bf32faa0f8be30fbaf9d1",
+    "checked_at": "2026-11-27T07:53:25.612Z",
+    "note": "validated 2026-11-27 build: (1) pronunciation OK: whisper-base.en on clips and final mix hears message health, every word and year (Message Health line heard as 'text them'); (2) frames OK: flicker.py no A-B-A, 1fps sheet viewed, nothing cropped, captions fit; fixed an empty tile scene before approval; (3) prediction (judgment, not measured): dated 3.3s hook and illustrated true story like the top three; calmer topic, so weaker grip than 74 and 75; holiday timed. Respectful, no cussing. Facts: Wikipedia, Forward, Time, Reform Judaism. moral: a small thank-you to the people who showed up keeps the relationship and is easy to forget; pivot: your regulars showed up all year, Message Health spots who has gone quiet and texts them; grip: in the 1700s Hanukkah coins were not only for kids"
+  },
+  "74-kfc-no-chicken.mp4": {
+    "approved": true,
+    "sha1": "07eb5e907d63286c0957c6d169efaf5ab2476273",
+    "checked_at": "2026-11-27T07:53:25.663Z",
+    "note": "validated 2026-11-27 build: (1) pronunciation OK: whisper-base.en on clips and final mix hears message health, 2018 and every word (one fp32 mix pass wrote KFC as AFC, clips and int8 mix hear KFC); (2) frames OK: flicker.py no A-B-A, 1fps sheet viewed, nothing cropped, captions fit; shop grid fixed to 26 of 45 closed; (3) prediction (judgment, not measured): dated 3.3s hook with a famous brand and absurd stake like the top true stories, ad only at the end. Facts: CNN Money, CNBC, NME, police headlines (Yahoo, RNZ, The Week), MediaPost and Everything-PR for the Cannes gold. moral: when customers feel let down, one honest message from you first can win them back; pivot: when regulars drift one honest text can bring them back; grip: 2018, a chicken restaurant ran out of chicken"
+  },
+  "75-united-guitars.mp4": {
+    "approved": true,
+    "sha1": "d7c3086e37fae6b3a141eb06c0e5a6110c152f66",
+    "checked_at": "2026-11-27T07:53:25.720Z",
+    "note": "validated 2026-11-27 build: (1) pronunciation OK: whisper-base.en on clips and final mix hears message health, 2008, 2009 and every word (int8 mix once wrote So as Though, fp32 and clips hear So); (2) frames OK: flicker.py no A-B-A, 1fps sheet viewed, nothing cropped, captions fit; (3) prediction (judgment, not measured): dated hook with a vivid scene in the first 3s, escalation each line, ad only at the end. Facts: Wikipedia, NBC News, MusicRadar; disputed stock-loss figure left out. moral: a follow-up that never happens can cost far more than the fix; pivot: clients won't write a song, they quietly book somebody else, Message Health follows up first; grip: 2008, baggage handlers throwing guitars"
   }
 }
