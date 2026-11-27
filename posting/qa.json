@@ -404,8 +404,8 @@
   "69-black-friday-bullshit.mp4": {
     "approved": true,
     "sha1": "2a8a1cc652c47e1692bb8b4ebf3a9f82b4033e1f",
-    "checked_at": "2026-11-26T19:49:08.346Z",
-    "note": "validated 2026-11-26 build: (1) pronunciation OK: ASR on clips and on the final mix hears message health and every word; (2) frames OK: flicker.py no A-B-A, 1fps sheet viewed, nothing cropped or in the caption zone; (3) predicted strong: true illustrated story, number plus outlandish object in the first second like the top 3, ad only in the last 12s, Black Friday timely (judgment, not measured). Facts checked on Wikipedia, UPI, Time, CBS."
+    "checked_at": "2026-11-27T13:15:53.308Z",
+    "note": "validated 2026-11-27 08:17 ET: pronunciation OK (qa.py ASR on every line matches, no flags), frames OK (per-line and 1/s sheets viewed, flicker.py no A-B-A, nothing cropped or in the caption zone), analytics (13:14Z stats): predicted strong, true story with number and odd object on frame 0 like the top 3, ad only at the end, Black Friday is today only (judgment, not measured)"
   },
   "70-small-business-funeral.mp4": {
     "approved": true,
