@@ -440,8 +440,8 @@
   "75-united-guitars.mp4": {
     "approved": true,
     "sha1": "d7c3086e37fae6b3a141eb06c0e5a6110c152f66",
-    "checked_at": "2026-11-27T07:53:25.720Z",
-    "note": "validated 2026-11-27 build: (1) pronunciation OK: whisper-base.en on clips and final mix hears message health, 2008, 2009 and every word (int8 mix once wrote So as Though, fp32 and clips hear So); (2) frames OK: flicker.py no A-B-A, 1fps sheet viewed, nothing cropped, captions fit; (3) prediction (judgment, not measured): dated hook with a vivid scene in the first 3s, escalation each line, ad only at the end. Facts: Wikipedia, NBC News, MusicRadar; disputed stock-loss figure left out. moral: a follow-up that never happens can cost far more than the fix; pivot: clients won't write a song, they quietly book somebody else, Message Health follows up first; grip: 2008, baggage handlers throwing guitars"
+    "checked_at": "2026-11-27T17:22:48.943Z",
+    "note": "validated 2026-11-27 12:22 ET (stats 17:15Z): (a) pronunciation OK: file unchanged (sha1) since the 11-27 build checked with whisper-base.en on clips and final mix; ASR not re-run today (no model access); qa.py no flags; (b) frames OK: one frame per spoken line viewed, flicker.py no A-B-A, nothing cropped, captions clear; (c) analytics (judgment, not measured): true story, money stake and a 4.2s scene hook like the top reels; same style as the last post (74) but a different topic, and the only other fresh option (73 tier list) has no pronunciation check"
   },
   "73-tier-list-keep-clients.mp4": {
     "approved": true,
