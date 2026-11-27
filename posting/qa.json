@@ -422,8 +422,8 @@
   "72-half-your-customers.mp4": {
     "approved": true,
     "sha1": "b2ac32d02311d2c6541b39490ba497aef875bff9",
-    "checked_at": "2026-11-27T01:15:40.889Z",
-    "note": "validated 2026-11-26 20:15 ET: pronunciation OK (ASR clean, Reichheld name avoided), frames OK (contact sheet, no flicker), analytics: signal/customers-leaving theme like the top true-story reels; owner said 'real good'. moral: customers quietly leave, half in five years; pivot: text the regulars gone quiet; grip: half every five years, HBR 1996"
+    "checked_at": "2026-11-27T15:17:11.549Z",
+    "note": "validated 2026-11-27 10:18 ET (stats 15:15Z): pronunciation OK: file unchanged (sha1) since the 11-26 build that passed ASR and was owner approved; ASR not re-run today (no model access), qa.py no flags; frames OK: 12-frame sheet, nothing cropped, captions clear, text readable; analytics (judgment, not measured): number hook in 3.4s on customers quietly leaving, a different style from the last two story posts; recent reels since 11-17 are all under 150 views, owner picked it to go next; not expected to approach the top true-story reels"
   },
   "73-hanukkah-gelt.mp4": {
     "approved": true,
