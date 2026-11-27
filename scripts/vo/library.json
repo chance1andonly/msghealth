@@ -1,0 +1,121 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "This library book came back one hundred years late.",
+   "caps": [
+    "This library book",
+    "came back",
+    "*100 years late.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.1
+  },
+  {
+   "say": "The book's called Forty Minutes Late, I shit you not.",
+   "caps": [
+    "The book's called",
+    "*Forty Minutes Late.*",
+    "I *shit* you not."
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "A woman checked it out in San Francisco, around 1917.",
+   "caps": [
+    "A woman checked it",
+    "out in *San Francisco,*",
+    "around *1917.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "She died before it was even due.",
+   "caps": [
+    "She *died* before",
+    "it was even *due.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.05
+  },
+  {
+   "say": "So it stayed in the family, old trunk and all, for damn near a century.",
+   "caps": [
+    "So it stayed in",
+    "the family, *old trunk*",
+    "and all, for",
+    "*damn near a century.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Now the library made a deal. Six weeks, with zero late fees.",
+   "caps": [
+    "Now the library",
+    "made a *deal:*",
+    "*six weeks,*",
+    "with *zero late fees.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "And in January 2017, her great grandson walks in and hands it back.",
+   "caps": [
+    "In *January 2017,*",
+    "her *great grandson*",
+    "walks in and",
+    "*hands it back.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "He wasn't alone. Nearly seven hundred thousand things came flooding back.",
+   "caps": [
+    "He *wasn't alone.*",
+    "Nearly *700,000*",
+    "things came",
+    "*flooding back.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Over five thousand people got their borrowing privileges back.",
+   "caps": [
+    "Over *5,000 people*",
+    "got their borrowing",
+    "*privileges back.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "Some of your clients have been gone so long, coming back feels weird.",
+   "caps": [
+    "Some of your clients",
+    "have been *gone so long*",
+    "coming back",
+    "*feels weird.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health sees who's gone quiet, and reaches out first.",
+   "caps": [
+    "*Message Health* sees",
+    "who's *gone quiet*",
+    "and *reaches out first.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

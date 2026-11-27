@@ -1,0 +1,124 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "One bright idea cost JCPenney four billion dollars.",
+   "caps": [
+    "One *bright idea*",
+    "cost *JCPenney*",
+    "*$4 billion.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.12
+  },
+  {
+   "say": "The new boss was the hotshot behind Apple's stores.",
+   "caps": [
+    "The new boss was",
+    "the *hotshot* behind",
+    "*Apple's stores.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "In 2012, he killed the coupons, and most of the damn sales.",
+   "caps": [
+    "In *2012,* he killed",
+    "the *coupons* and",
+    "most of the",
+    "*damn sales.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Just low prices, every day. No clipping, no waiting, no bullshit.",
+   "caps": [
+    "Just *low prices,*",
+    "every day.",
+    "No clipping, no waiting,",
+    "*no bullshit.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "And the regulars? They quietly drifted off.",
+   "caps": [
+    "And the *regulars?*",
+    "They *quietly*",
+    "*drifted off.*"
+   ],
+   "gap": 0.55,
+   "speed": 1.08
+  },
+  {
+   "say": "In one year, sales fell almost twenty five percent.",
+   "caps": [
+    "In *one year,*",
+    "sales fell",
+    "*almost 25%.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The company lost nine hundred eighty five million dollars.",
+   "caps": [
+    "The company lost",
+    "*$985,000,000.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.1
+  },
+  {
+   "say": "April 2013, the genius got shown the fucking door.",
+   "caps": [
+    "*April 2013,* the",
+    "genius got shown",
+    "the *fucking door.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Then in May, a commercial went out, basically begging. Come back. We heard you.",
+   "caps": [
+    "Then in May, a",
+    "commercial went out",
+    "*basically begging:*",
+    "*Come back.*",
+    "*We heard you.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "Your regulars won't get a TV ad. They drift off, and nobody says a word.",
+   "caps": [
+    "Your regulars won't",
+    "get a *TV ad.*",
+    "They *drift off,* and",
+    "nobody says a word."
+   ],
+   "gap": 0.35,
+   "speed": 1.15
+  },
+  {
+   "say": "Message Health spots who's drifting, and sends each one a text before they're gone.",
+   "caps": [
+    "*Message Health*",
+    "spots who's *drifting*",
+    "and sends each one",
+    "*a text* before",
+    "they're gone."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

@@ -1,0 +1,112 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "One man has eaten thirty five thousand Big Macs.",
+   "caps": [
+    "One man has eaten",
+    "*35,000* Big Macs."
+   ],
+   "gap": 0.4,
+   "speed": 1.15
+  },
+  {
+   "say": "It started May seventeenth, 1972, the day he bought his first car.",
+   "caps": [
+    "It started *May 17,*",
+    "*1972,* the day he",
+    "bought his *first car.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "At first, this beautiful maniac ate as many as nine a day.",
+   "caps": [
+    "At first, this",
+    "*beautiful maniac* ate",
+    "up to *nine a day.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "These days he's down to two. Lunch and dinner.",
+   "caps": [
+    "These days he's",
+    "*down to two.*",
+    "*Lunch and dinner.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "He saves the boxes, and the receipts. Of course he fucking does.",
+   "caps": [
+    "He saves the *boxes*",
+    "and the *receipts.*",
+    "Of course he",
+    "*fucking does.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "He keeps spares in the freezer, in case a blizzard shuts the place down.",
+   "caps": [
+    "He keeps *spares*",
+    "in the freezer, in case",
+    "a *blizzard* shuts",
+    "the place down."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The man even popped the question at McDonald's. And she said yes.",
+   "caps": [
+    "The man even",
+    "*popped the question*",
+    "at *McDonald's.*",
+    "And she *said yes.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "In March 2025, Guinness counted number thirty five thousand.",
+   "caps": [
+    "In *March 2025,*",
+    "Guinness counted",
+    "*number 35,000.*"
+   ],
+   "gap": 0.6
+  },
+  {
+   "say": "You've got regulars too. If one quit coming, how long before you noticed?",
+   "caps": [
+    "You've got *regulars*",
+    "too. If one",
+    "*quit coming,*",
+    "would you *notice?*"
+   ],
+   "gap": 0.4,
+   "speed": 1.12
+  },
+  {
+   "say": "Message Health learns every client's rhythm, and sends a text when one goes quiet.",
+   "caps": [
+    "*Message Health* learns",
+    "every client's *rhythm*",
+    "and *sends a text*",
+    "when one goes quiet."
+   ],
+   "gap": 0.35,
+   "speed": 1.15
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

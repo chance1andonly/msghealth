@@ -31,6 +31,12 @@ function dMan(x, y, h, col = D_W, o = {}) {
   if (o.crown) poly([[-12 * u, -97 * u], [-14 * u, -116 * u], [-6 * u, -107 * u], [0, -119 * u], [6 * u, -107 * u], [14 * u, -116 * u], [12 * u, -97 * u]], o.crownCol || D_W);
   ctx.restore();
 }
+// a counting number: every digit sits in a fixed slot so it does not jitter while it ticks
+function dNum(s, y, size, col = D_W, x = CX) {
+  const w = [...s].map((ch) => (/\d/.test(ch) ? size * 0.64 : /[,.]/.test(ch) ? size * 0.28 : tw(ch, size, 900, 0)));
+  let px = x - w.reduce((p, v) => p + v, 0) / 2;
+  [...s].forEach((ch, i) => { text(ch, px + w[i] / 2, y, size, 900, col, 'center', 0); px += w[i]; });
+}
 // drifting dust / debris specks
 function dDust(t, x, y, w, h, n = 30, a = 0.5, vy = -18) {
   for (let i = 0; i < n; i++) { const px = x + hash(i) * w + Math.sin(t * 0.8 + i) * 14, py = y + ((hash(i + 50) * h + t * vy * (0.5 + hash(i + 9))) % h + h) % h; circle(px, py, 2 + hash(i + 3) * 4, `rgba(255,255,255,${a * (0.25 + hash(i + 7) * 0.5)})`); }
