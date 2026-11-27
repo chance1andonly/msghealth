@@ -81,6 +81,11 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-27 (18:10 ET posting run, stats 23:14 UTC)
+- 88 reels analyzed; top 3 unchanged (1,709 / 1,291 / 794). No strategy change. Order: 78, 70, 71.
+- HELD 77 JCPenney: line 3 says he killed "the coupons, and most of the damn sales", but sales fell about 25% (line 6 says so). Fix the say and caps (for example "and a quarter of the damn sales"), re-voice, re-render, re-validate. This run had no voice model.
+- 73 tier list not validated: detail text is very small, it opens on a nearly empty board, and list reels have underperformed. It expires 11-28 unless the owner decides otherwise.
+- Supply: after 78, only 70 (from 11-28), 71 (from 11-29) and 56 (old look, needs restyle) can post before Hanukkah, apart from new builds.
 ### 2026-11-27 (14:20 ET batch run, stats 19:22 UTC)
 - Found: 86 reels analyzed. Top 3 unchanged (1,709 / 1,291 / 794, sends/reach 0.07% / 0.17% / 0%); 15th best is 150 and nothing posted after 11-17 is in the top 15, including the black/white reels now past 48h (so each is under 150 views). Follows and per-reel views are not in stats.json. Per day: 3 = median 129 (n=7), 5 = 93 (n=23), 6 = 123 (n=12); optimizer holding. research.json 19:25 UTC: you median 127 over 23 reels, niche median 9,054; hashtag search still refused by Meta.
 - Changed: no strategy change. No holiday in the next 10 days lacks a reel (Hanukkah 73 is queued). Built 3 illustrated true stories, one per family: 76 Big Mac regular (loyalty math), 77 JCPenney coupons (silent churn), 78 library book 100 years late (win-back).
