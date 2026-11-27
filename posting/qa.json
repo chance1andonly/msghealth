@@ -445,8 +445,8 @@
   },
   "73-tier-list-keep-clients.mp4": {
     "approved": true,
-    "sha1": "0c770dccb25a59042a60900afd578168fa924751",
-    "checked_at": "2026-11-27T09:41:55.106Z",
-    "note": "validated 2026-11-27 04:45 ET: pronunciation OK except Vagaro/Booksy respells (ASR cannot confirm, listen); frames OK (contact sheet); analytics: owner-requested comparison tier list, all competitor figures sourced from live 2026 pages; no MsgHealth price claim"
+    "sha1": "626b82c83c6e4fad5d1644e188d843def7844932",
+    "checked_at": "2026-11-27T09:58:15.002Z",
+    "note": "validated 2026-11-27 05:00 ET (v2, owner edits): no sfx, tier list on screen from frame 1, brand logos supplied by owner (Booksy, GlossGenius, Squire; Vagaro text only), CTA RETAIN per owner; ASR clean except Vagaro respell (listen); frames OK; all competitor facts from live 2026 sources"
   }
 }

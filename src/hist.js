@@ -33,7 +33,7 @@ function drawCaption(caps, t, hide) { // black label, white words, accent word i
 function finale(t, at) { // the toy end card: black, wordmark, tagline, url, then the KEEP line
   const k = ease.quint(seg(t, at, at + 0.4)); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1080, 1920); ctx.save(); ctx.globalAlpha = k;
   text('MsgHealth', 540, 700, 130, 900, '#fff', 'center', 0); text('Know your customers. Keep your customers.', 540, 800, 36, 500, '#bbb', 'center', 0); ctx.fillStyle = '#fff'; ctx.fillRect(300, 880, 480, 4); text('MSGHEALTH.NET', 540, 960, 40, 800, '#fff', 'center', 0.12); ctx.restore();
-  withFade(seg(t, at + 0.9, at + 1.2), () => { fillRR(120, 1090, 840, 130, 20, '#fff'); text('Comment KEEP to get a full', 540, 1137, 44, 800, '#000', 'center', 0); text('retention audit.', 540, 1189, 44, 800, '#000', 'center', 0); });
+  withFade(seg(t, at + 0.9, at + 1.2), () => { fillRR(120, 1090, 840, 130, 20, '#fff'); text((R.cta || ['Comment KEEP to get a full', 'retention audit.'])[0], 540, 1137, 44, 800, '#000', 'center', 0); text((R.cta || ['Comment KEEP to get a full', 'retention audit.'])[1], 540, 1189, 44, 800, '#000', 'center', 0); });
 }
 const fit = (s, size, maxW, w = 800) => Math.min(size, size * maxW / tw(s, size, w));
 const ch = (l, k) => wordAt(l, Math.min(k, VO_CLIPS[l].chunks.length - 1)) - 0.05; // time of caption chunk k of line l
@@ -126,11 +126,15 @@ const SCENES = {
     if (c.label) withFade(seg(t, a + 1.4, a + 1.8), () => text(c.label, CX, 1700, fit(c.label, 56, 900), 800, '#fff', 'center', -0.02));
     if (c.sub) withFade(seg(t, a + 1.9, a + 2.3), () => text(c.sub, CX, 1775, 34, 600, SOFT, 'center'));
   },
-  tier(t, a, c, L) { // tier list board: R.scenes of type 'tier' accumulate onto S..F rows; the current one pops; c.why = reason lines
+  tier(t, a, c, L) { // tier list board: R.scenes of type 'tier' accumulate onto S..F rows; the current one pops; c.why = reason lines; c.img = logo key shown big beside the reasons; c.more = reasons only (no new item)
     stage(t, 0.14); eyebrow('THE KEEP-YOUR-CLIENTS TIER LIST', 330, IN.mid);
     const rows = ['S', 'A', 'B', 'C', 'D', 'F'], shade = { S: '#ffffff', A: '#d8d8d8', B: '#b0b0b0', C: '#8c8c8c', D: '#666666', F: '#444444' };
     const X0 = 60, BW = 960, RH = 120, Y0 = 400, LW = 120;
-    const placed = R.scenes.map((sc, i) => [sc, i]).filter(([sc, i]) => sc.type === 'tier' && i <= L);
+    const tile = (im, x, y, sz, mode) => { if (!im) return; ctx.save(); rr(x, y, sz, sz, sz * 0.16); ctx.clip(); const m = Math.min(im.width, im.height) * (im.zoom || 1), sx = (im.width - m) / 2, sy = (im.height - m) / 2;
+      if (mode) { const g = document.createElement('canvas'); g.width = g.height = 256; const q = g.getContext('2d'); q.fillStyle = mode === 'bw' ? '#fff' : '#161616'; q.fillRect(0, 0, 256, 256); const k = document.createElement('canvas'); k.width = k.height = 176; const z = k.getContext('2d'); z.drawImage(im, 0, 0, 176, 176); z.globalCompositeOperation = 'source-in'; z.fillStyle = mode === 'bw' ? '#000' : '#fff'; z.fillRect(0, 0, 176, 176); q.drawImage(k, 40, 40); ctx.drawImage(g, x, y, sz, sz); } else ctx.drawImage(im, sx, sy, m, m, x, y, sz, sz);
+      ctx.restore(); if (mode === 'wb') strokeRR(x, y, sz, sz, sz * 0.16, 'rgba(255,255,255,0.5)', 3); };
+    const imgOf = (k) => (k === 'msg' ? { im: LOGO, white: true } : { im: (window.IMG || {})[k], white: false });
+    const placed = R.scenes.map((sc, i) => [sc, i]).filter(([sc, i]) => sc.type === 'tier' && !sc.more && i <= L);
     rows.forEach((r, ri) => {
       const y = Y0 + ri * RH; card(X0, y, BW, RH - 10, { r: 14, fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)' });
       fillRR(X0, y, LW, RH - 10, 14, shade[r]); text(r, X0 + LW / 2, y + (RH - 10) / 2 + 2, 76, 900, ri < 3 ? '#000' : '#fff', 'center', 0);
@@ -138,16 +142,17 @@ const SCENES = {
       const slotW = (BW - LW - 30 - (n - 1) * 14) / n;
       items.forEach(([sc, i], k) => {
         const cur = i === L, e = cur ? pop(t, a + 0.1, 0.4) : 1; if (e <= 0) return;
-        const x = X0 + LW + 15 + k * (slotW + 14), cy = y + (RH - 10) / 2, hot = !!sc.logo;
+        const x = X0 + LW + 15 + k * (slotW + 14), cy = y + (RH - 10) / 2, hot = sc.img === 'msg', lg = sc.logoPill ? imgOf(sc.img) : null;
         xf(x + slotW / 2, cy, clamp(e), 0, () => {
           fillRR(x, y + 12, slotW, RH - 34, 12, hot ? '#fff' : '#111'); strokeRR(x, y + 12, slotW, RH - 34, 12, cur ? '#fff' : 'rgba(255,255,255,0.35)', cur ? 4 : 2);
-          if (hot && LOGO) { const lg = document.createElement('canvas'); lg.width = lg.height = 256; const q = lg.getContext('2d'); q.drawImage(LOGO, 0, 0, 256, 256); q.globalCompositeOperation = 'source-in'; q.fillStyle = '#000'; q.fillRect(0, 0, 256, 256); ctx.drawImage(lg, x + 24, cy - 40, 80, 80); }
-          const tx = hot && LOGO ? x + 112 + (slotW - 112) / 2 : x + slotW / 2; const mw = hot && LOGO ? slotW - 130 : slotW - 24;
-          text(sc.name, tx, cy + 2, fit(sc.name, 44, mw, 900), 900, hot ? '#000' : '#fff', 'center', 0);
+          if (lg && lg.im) { const ts = RH - 44; if (hot) { tile(lg.im, x + 24, cy - ts / 2 + 1, ts, 'bw'); text(sc.name, x + 24 + ts + (slotW - ts - 24) / 2, cy + 2, fit(sc.name, 44, slotW - ts - 60, 900), 900, '#000', 'center', 0); } else tile(lg.im, x + slotW / 2 - ts / 2, cy - ts / 2 + 1, ts, null); }
+          else text(sc.name, x + slotW / 2, cy + 2, fit(sc.name, 44, slotW - 24, 900), 900, '#fff', 'center', 0);
         });
       });
     });
-    const lines = c.why || []; lines.forEach((l, i) => withFade(seg(t, a + 0.45 + i * 0.25, a + 0.8 + i * 0.25), () => text(l, CX, 1200 + i * 62, fit(l, i === 0 ? 44 : 34, 960), i === 0 ? 800 : 600, i === 0 ? '#fff' : SOFT, 'center', -0.01)));
+    const lines = c.why || [], big = c.img ? imgOf(c.img) : null, hasBig = !!(big && big.im), tx = hasBig ? 330 : CX, mw = hasBig ? 700 : 960, al = hasBig ? 'left' : 'center';
+    if (hasBig) withFade(seg(t, a + 0.3, a + 0.6), () => tile(big.im, 70, 1195, 220, big.white ? 'wb' : null));
+    lines.forEach((l, i) => withFade(seg(t, a + 0.45 + i * 0.25, a + 0.8 + i * 0.25), () => text(l, tx, 1215 + (hasBig ? 22 : 0) + i * 62, fit(l, i === 0 ? 42 : 32, mw), i === 0 ? 800 : 600, i === 0 ? '#fff' : SOFT, al, -0.01)));
   },
   chat(t, a, c, i) { // phone with a text thread
     stage(t, 0.14); const until = VO_AT[i + 1] + 0.2;
@@ -156,10 +161,9 @@ const SCENES = {
 };
 const SC = R.scenes.map((c, i) => [i ? VO_AT[i] : 0, VO_AT[i + 1], (t) => SCENES[c.type](t, VO_AT[i], c, i)]);
 SC.push([END, 999, (t) => finale(t, END)]);
-R.scenes.forEach((c, i) => { if (c.type === 'chat') c.msgs.forEach((m) => cue(VO_AT[i] + m.at, 'notification', 0.22)); });
-R.scenes.forEach((c, i) => (c.sfx || []).forEach(([k, kind, gain, d = 0]) => cue(ch(i, k) + 0.05 + d, kind, gain)));
+if (!R.nosfx) R.scenes.forEach((c, i) => { if (c.type === 'chat') c.msgs.forEach((m) => cue(VO_AT[i] + m.at, 'notification', 0.22)); });
+if (!R.nosfx) R.scenes.forEach((c, i) => (c.sfx || []).forEach(([k, kind, gain, d = 0]) => cue(ch(i, k) + 0.05 + d, kind, gain)));
 // Drive SFX defaults (quiet): soft whoosh on each cut, thud on stat/versus reveals, hit on the opener, cash on the end card
-R.scenes.forEach((c, i) => { if (i) cue(VO_AT[i] - 0.08, 'dwhooshsoft', 0.3); if (c.type === 'stat') cue(VO_AT[i] + 0.05, 'dimpact', 0.3); if (c.type === 'versus') cue(VO_AT[i] + 0.1, 'dthud', 0.3); if (c.type === 'tier') cue(VO_AT[i] + 0.12, c.row === 'S' ? 'dhit' : 'dthud', 0.3); });
-cue(0.12, 'dimpact2', 0.3); cue(END + 0.35, 'dcash', 0.25);
-cue(END + 1.25, 'tap', 0.3);
-boot({ duration: DURATION, scenes: SC, brandAt: END, hideCaption: (t) => t >= END }, R.name);
+if (!R.nosfx) R.scenes.forEach((c, i) => { if (i) cue(VO_AT[i] - 0.08, 'dwhooshsoft', 0.3); if (c.type === 'stat') cue(VO_AT[i] + 0.05, 'dimpact', 0.3); if (c.type === 'versus') cue(VO_AT[i] + 0.1, 'dthud', 0.3); if (c.type === 'tier') cue(VO_AT[i] + 0.12, c.row === 'S' ? 'dhit' : 'dthud', 0.3); });
+if (!R.nosfx) { cue(0.12, 'dimpact2', 0.3); cue(END + 0.35, 'dcash', 0.25); cue(END + 1.25, 'tap', 0.3); }
+boot({ duration: DURATION, scenes: SC, brandAt: END, hideCaption: (t) => t >= END, preload: async () => { window.IMG = {}; await Promise.all(Object.entries(R.imgs || {}).map(([k, src]) => new Promise((res) => { const im = new Image(); im.onload = () => { if (k === 'squire') im.zoom = 0.55; window.IMG[k] = im; res(); }; im.onerror = res; im.src = src; }))); } }, R.name);

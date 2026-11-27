@@ -4,25 +4,16 @@
  "start": 0.3,
  "lines": [
   {
-   "say": "Every way to keep your clients, ranked with real 2026 data.",
-   "caps": [
-    "Every way to *keep*",
-    "your clients,",
-    "ranked with *real data.*"
-   ],
-   "gap": 0.5
-  },
-  {
-   "say": "Tier F, doing nothing. Squire's own data: forty-eight percent of clients book once.",
+   "say": "Tier F, doing nothing. Almost half of Squire's clients book once, then vanish.",
    "caps": [
     "*Tier F,* doing nothing.",
-    "Squire's own data:",
-    "*48%* book once."
+    "Almost *half* of Squire's",
+    "clients *book once.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Tier D, paying for new clients. Book-see Boost takes thirty percent of the first visit.",
+   "say": "Tier D, paying for new clients. Book-see Boost takes thirty percent of that first visit.",
    "caps": [
     "*Tier D,* paying for",
     "new clients. Boost takes",
@@ -40,64 +31,74 @@
    "gap": 0.5
   },
   {
-   "say": "Tier B, texting them yourself. Works, until you have hundreds of clients.",
+   "say": "Tier B, texting them yourself. It works, until you have hundreds of clients and forget somebody.",
    "caps": [
     "*Tier B,* texting",
     "them yourself. Works,",
-    "until *hundreds of clients.*"
+    "until you *forget somebody.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Also tier B, Vuh-gair-oh. Text marketing is a twenty dollar add-on.",
+   "say": "Also tier B, Vah-rah-go. A booking tool first, and text marketing costs extra.",
    "caps": [
-    "Also *B,* Vagaro.",
-    "Text marketing is",
-    "a *$20 add-on.*"
+    "Also *tier B,* Vagaro.",
+    "A booking tool first.",
+    "Texting costs *extra.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Tier A, Book-see. Two thousand marketing texts included, but extra barbers cost twenty each.",
+   "say": "Tier A, Book-see. A great booking app, but its big push is bringing in new clients.",
    "caps": [
     "*Tier A,* Booksy.",
-    "*2,000* marketing texts",
-    "included. Barbers *$20 each.*"
+    "A great booking app,",
+    "pushing *new clients.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Gloss Genius, from twenty-four a month. The biggest text allowance is one forty-eight.",
+   "say": "Gloss Genius. Built to run the whole business, so retention is one feature of many.",
    "caps": [
-    "*GlossGenius,* from",
-    "*$24* a month. Big text",
-    "allowance is *$148.*"
+    "*GlossGenius.* Built",
+    "to run the whole business,",
+    "retention is *one of many.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Squire, fifty a month for the shop, with retention reports.",
+   "say": "Squire runs the whole shop well. Retention is just one tool in the box.",
    "caps": [
-    "*Squire,* *$50* a month",
-    "for the whole shop,",
-    "with retention *reports.*"
+    "*Squire* runs the",
+    "whole shop well.",
+    "Retention is *one tool.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Tier S, Message Health. Scores every client, texts the quiet ones for you.",
+   "say": "Tier S, Message Health. It scores every client, and catches who's drifting.",
    "caps": [
     "*Tier S,* *Message Health.*",
     "Scores every client,",
-    "texts the *quiet ones.*"
+    "catches who's *drifting.*"
    ],
    "gap": 0.5
   },
   {
-   "say": "Comment KEEP to get a full retention audit.",
+   "say": "Then it texts them for you. Built for Atlanta barbers, with a real person to call.",
    "caps": [
-    "Comment *KEEP* to get a",
-    "full *retention audit.*"
+    "Then it *texts them*",
+    "for you. Built for *Atlanta*",
+    "barbers, a *real person.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "If you wanna see why we are better, comment RETAIN, and I will DM you. Not an automated one.",
+   "caps": [
+    "If you wanna see why *we're better,*",
+    "comment *RETAIN* and I'll DM you.",
+    "Not an *automated* one."
    ],
    "gap": 0.5
   }

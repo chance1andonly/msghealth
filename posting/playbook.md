@@ -171,3 +171,6 @@ Record the three checks in the approve note.
 
 ## Sound effects (Drive library)
 Owner's SFX library is copied to assets/sfx/drive/. Story reels (src/hist.js) auto-cue quiet defaults: dwhooshsoft on every cut, dimpact on stat reveals, dthud on versus, dimpact2 on the opener, dcash on the end card. Extra kinds usable in a scene's `sfx:[[chunk,'kind',gain]]`: dwhoosh, dcine, dboom, dhit, dmsg, dcheck, dshutter, dglitch, driser, dknock, dclang, dding, dtype, dcount. Keep gains <=0.35 (quiet rule).
+
+## Tier-list reel exceptions (owner 2026-11-27)
+src/hist.js scene type 'tier' (F-S board; c.img logo key, c.more reasons only). REEL flags: nosfx (no effects), cta [line1,line2] (custom end-card button), imgs {key:path}. Tier-list reel CTA is "comment RETAIN" with a real (non-automated) DM, not KEEP; Vagaro is spoken "Vah-rah-go". Logos come from owner-supplied files in assets/img/cmp-*.
