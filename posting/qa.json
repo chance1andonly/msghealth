@@ -434,8 +434,8 @@
   "74-kfc-no-chicken.mp4": {
     "approved": true,
     "sha1": "07eb5e907d63286c0957c6d169efaf5ab2476273",
-    "checked_at": "2026-11-27T07:53:25.663Z",
-    "note": "validated 2026-11-27 build: (1) pronunciation OK: whisper-base.en on clips and final mix hears message health, 2018 and every word (one fp32 mix pass wrote KFC as AFC, clips and int8 mix hear KFC); (2) frames OK: flicker.py no A-B-A, 1fps sheet viewed, nothing cropped, captions fit; shop grid fixed to 26 of 45 closed; (3) prediction (judgment, not measured): dated 3.3s hook with a famous brand and absurd stake like the top true stories, ad only at the end. Facts: CNN Money, CNBC, NME, police headlines (Yahoo, RNZ, The Week), MediaPost and Everything-PR for the Cannes gold. moral: when customers feel let down, one honest message from you first can win them back; pivot: when regulars drift one honest text can bring them back; grip: 2018, a chicken restaurant ran out of chicken"
+    "checked_at": "2026-11-27T17:18:10.522Z",
+    "note": "validated 2026-11-27 12:18 ET (stats 17:15Z): (a) pronunciation OK: file unchanged (sha1) since the 11-27 build checked with whisper-base.en on clips and final mix; ASR not re-run today (no model access); qa.py no flags; (b) frames OK: one frame per spoken line viewed, flicker.py no A-B-A, nothing cropped, captions clear; (c) analytics (judgment, not measured): true story with a famous brand and a 3.3s hook, the family behind the top reels (1709/1291/794), unlike the list/promo style that sits at 200 or lower. Tier list (73) not chosen: no pronunciation check on record"
   },
   "75-united-guitars.mp4": {
     "approved": true,
