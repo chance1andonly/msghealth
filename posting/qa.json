@@ -418,5 +418,11 @@
     "sha1": "ce283b1960d9727b942482fdaf31ced45ca1ff0e",
     "checked_at": "2026-11-26T19:49:08.432Z",
     "note": "validated 2026-11-26 build: (1) pronunciation OK: ASR on clips and final mix, message health heard (speck is heard as spec, same sound); (2) frames OK: flicker.py no A-B-A, 1fps sheet viewed, caption zone clear; (3) predicted strong: true story with a money number in the first second like the top 3, ad only at the end, Cyber Monday tie (judgment). Facts checked on Wikipedia, TechSpot, InformationWeek."
+  },
+  "72-half-your-customers.mp4": {
+    "approved": true,
+    "sha1": "b2ac32d02311d2c6541b39490ba497aef875bff9",
+    "checked_at": "2026-11-27T01:15:40.889Z",
+    "note": "validated 2026-11-26 20:15 ET: pronunciation OK (ASR clean, Reichheld name avoided), frames OK (contact sheet, no flicker), analytics: signal/customers-leaving theme like the top true-story reels; owner said 'real good'. moral: customers quietly leave, half in five years; pivot: text the regulars gone quiet; grip: half every five years, HBR 1996"
   }
 }
