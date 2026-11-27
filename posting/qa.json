@@ -331,9 +331,9 @@
   },
   "59-heater-sign.mp4": {
     "approved": true,
-    "sha1": "a5d204b0279cd4065aca9db2d81d479175aef3fd",
-    "checked_at": "2026-11-25T04:30:52.044Z",
-    "note": "Release gate: (1) qa.py ASR hears Message Health and all words right (Tylenol respelled Tie-lenol); (2) flicker none, contact sheet readable, nothing cropped or in caption zone; (3) black/white story format like top reels, hook under 4.5s, new idea, cussing, brand only last ~12s."
+    "sha1": "b850e022cd4fd7fd2db4f4d35bf90d1beffa6b2c",
+    "checked_at": "2026-11-27T19:24:31.257Z",
+    "note": "validated 2026-11-27 14:30 ET (stats 19:22Z): (a) pronunciation OK: audio muxed bit for bit (md5 e71652ac) from the 11-24 approved file whose ASR check passed (Message Health and all words right); no new ASR run today. (b) frames OK: restyled from text slams to illustrated scenes, 1 per second sheet viewed, flicker.py no A-B-A, nothing cropped or in the caption zone, captions resynced to the unchanged voice. (c) analytics (judgment, not measured): number-and-outcome-withheld story hook (3.6s) in the illustrated story style of the top family, topic differs from 74 and 75; made-up story and labelled so, weaker than a famous true story. Tier list (73) not chosen: no pronunciation check possible"
   },
   "60-tylenol-31-million.mp4": {
     "approved": true,

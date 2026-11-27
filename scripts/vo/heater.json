@@ -25,6 +25,7 @@
   {
    "say": "Six days. By day three, his regulars were at a gas station guy's cold garage.",
    "caps": [
+    "Six days.",
     "By day three,",
     "his regulars were",
     "at a gas station",
@@ -36,17 +37,17 @@
    "say": "He fixed it on day seven, told nobody, and sat there. Five weeks. Nobody came in.",
    "caps": [
     "He fixed it on day seven,",
-    "told no one, and sat there.",
-    "*Five weeks.* Nobody walked in."
+    "told nobody, and sat there.",
+    "*Five weeks.* Nobody came in."
    ],
    "gap": 0.5
   },
   {
    "say": "Forty clients, all sure his shop was still shut. Still freezing. Damn.",
    "caps": [
-    "Forty clients,",
-    "all sure the shop",
-    "was *still shut and freezing.*"
+    "Forty clients, all sure",
+    "his shop was still shut.",
+    "*Still freezing.* Damn."
    ],
    "gap": 0.5
   },
@@ -54,7 +55,8 @@
    "say": "Then a kid asked in March why the sign still said closed. He'd never flipped it.",
    "caps": [
     "A kid asked in March why",
-    "the sign still said *closed.*"
+    "the sign still said *closed.*",
+    "He'd never flipped it."
    ],
    "gap": 0.5,
    "speed": 1.04
@@ -71,15 +73,17 @@
   {
    "say": "Your clients don't know your chair is open either. Nobody told them they were still welcome.",
    "caps": [
-    "Your lapsed clients don't know",
-    "your chair is *still open.*"
+    "Your clients don't know",
+    "your chair is *open* either.",
+    "Nobody told them",
+    "they were still welcome."
    ],
    "gap": 0.45
   },
   {
    "say": "Message Health finds who went quiet and texts them for you, so they know.",
    "caps": [
-    "Message Health",
+    "*MsgHealth*",
     "finds who went quiet",
     "and *texts them for you.*"
    ],

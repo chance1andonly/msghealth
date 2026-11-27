@@ -80,6 +80,10 @@ Goal: views and new audience. Profanity allowed (no slurs). Original archetypes 
 Goal: new followers understand what we sell. Facts only from posting/PRODUCT.md. Steps with counters (STEP 1: SCORE, STEP 2: TEXT, STEP 3: BOOK), the real app screens, light humor, no profanity, 35-50 s. Reference: src/toyexplain2-reel.js.
 
 ## Daily review
+### 2026-11-27 (14:10 ET posting run, stats 19:22 UTC)
+- Found: 86 reels analyzed; top 3 unchanged (1,709 / 1,291 / 794). No strategy change.
+- Restyled 59 heater from text slams to illustrated scenes (video only, approved audio muxed back bit for bit), captions resynced to the voice and show MsgHealth. Chosen for the 14:00 slot.
+- 73 tier list not validated: no pronunciation check is on record, and the usual speech models could not be fetched in this run (huggingface.co refused). It expires after 11-27 unless someone verifies the audio (owner can listen) and approves it today.
 ### 2026-11-27 (03:20 ET batch run, stats 07:21 UTC)
 - Found: 83 reels analyzed. Top 3 unchanged (1,709 / 1,291 / 794); 15th best is 150 and nothing posted after 11-17 is in the top 15. Follows are not in stats.json. Per day: 3 = median 129 (n=7), 5 = 93 (n=23), 6 = 127 (n=9); optimizer holding. No black/white F2 reel has reached 48h yet. research.json is from 11-26 15:43 UTC (you: median 122 over 23 reels).
 - Changed: no strategy change. Built 73 Hanukkah gelt first (holidays.md; not_before 12-04), then 74 KFC chicken shortage (win-back family) and 75 United Breaks Guitars (missed-signals family). All three illustrated.
