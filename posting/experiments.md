@@ -56,3 +56,6 @@ format | reel | views | sends/reach | likes/reach | follows | profile visits | v
 2026-11-27 night | F2 true-story older top 3 | 1,709 / 1,291 / 794 views | sends/reach 0.07% / 0.17% / 0% | follows n/a | unchanged, still the only clear winner
 2026-11-27 night | F2 black/white and F2-art posted 11-25/26 (56-68) | none in top 15 (needs 150), all under 48h at 07:21 UTC | sends n/a | follows n/a | do not judge yet; 56, 57, 60, 61 pass 48h later today
 2026-11-27 night | F2-art 73 gelt (holiday, 12-04), 74 KFC, 75 guitars queued | pending | | | REPLICATE F2 illustrated; KFC and United test recent famous-brand stories against older history, same hour bands
+
+## 2026-11-27 · F8 competitor tier list (owner request)
+73-tier-list-keep-clients: tiers F-S ranking doing nothing, paying for new clients, asking at the chair, DIY texting, Vagaro, Booksy/GlossGenius/Squire, then Message Health. Every competitor number comes from live 2026 pages (Booksy pricing page, Vagaro add-on pricing, GlossGenius plans, Squire pricing and trends report). Rules: only cite what a source states, no MsgHealth price claim (not in PRODUCT.md), competitor names as plain text (no logo files available). Track views/sends vs story reels before repeating.

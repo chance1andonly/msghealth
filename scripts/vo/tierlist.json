@@ -1,0 +1,105 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Every way to keep your clients, ranked with real 2026 data.",
+   "caps": [
+    "Every way to *keep*",
+    "your clients,",
+    "ranked with *real data.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier F, doing nothing. Squire's own data: forty-eight percent of clients book once.",
+   "caps": [
+    "*Tier F,* doing nothing.",
+    "Squire's own data:",
+    "*48%* book once."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier D, paying for new clients. Book-see Boost takes thirty percent of the first visit.",
+   "caps": [
+    "*Tier D,* paying for",
+    "new clients. Boost takes",
+    "*30%* of the first visit."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier C, asking at the chair. It misses everyone who already left.",
+   "caps": [
+    "*Tier C,* asking",
+    "at the chair. It misses",
+    "everyone *who left.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier B, texting them yourself. Works, until you have hundreds of clients.",
+   "caps": [
+    "*Tier B,* texting",
+    "them yourself. Works,",
+    "until *hundreds of clients.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Also tier B, Vuh-gair-oh. Text marketing is a twenty dollar add-on.",
+   "caps": [
+    "Also *B,* Vagaro.",
+    "Text marketing is",
+    "a *$20 add-on.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier A, Book-see. Two thousand marketing texts included, but extra barbers cost twenty each.",
+   "caps": [
+    "*Tier A,* Booksy.",
+    "*2,000* marketing texts",
+    "included. Barbers *$20 each.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Gloss Genius, from twenty-four a month. The biggest text allowance is one forty-eight.",
+   "caps": [
+    "*GlossGenius,* from",
+    "*$24* a month. Big text",
+    "allowance is *$148.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Squire, fifty a month for the shop, with retention reports.",
+   "caps": [
+    "*Squire,* *$50* a month",
+    "for the whole shop,",
+    "with retention *reports.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Tier S, Message Health. Scores every client, texts the quiet ones for you.",
+   "caps": [
+    "*Tier S,* *Message Health.*",
+    "Scores every client,",
+    "texts the *quiet ones.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

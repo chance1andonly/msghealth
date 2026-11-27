@@ -126,6 +126,29 @@ const SCENES = {
     if (c.label) withFade(seg(t, a + 1.4, a + 1.8), () => text(c.label, CX, 1700, fit(c.label, 56, 900), 800, '#fff', 'center', -0.02));
     if (c.sub) withFade(seg(t, a + 1.9, a + 2.3), () => text(c.sub, CX, 1775, 34, 600, SOFT, 'center'));
   },
+  tier(t, a, c, L) { // tier list board: R.scenes of type 'tier' accumulate onto S..F rows; the current one pops; c.why = reason lines
+    stage(t, 0.14); eyebrow('THE KEEP-YOUR-CLIENTS TIER LIST', 330, IN.mid);
+    const rows = ['S', 'A', 'B', 'C', 'D', 'F'], shade = { S: '#ffffff', A: '#d8d8d8', B: '#b0b0b0', C: '#8c8c8c', D: '#666666', F: '#444444' };
+    const X0 = 60, BW = 960, RH = 120, Y0 = 400, LW = 120;
+    const placed = R.scenes.map((sc, i) => [sc, i]).filter(([sc, i]) => sc.type === 'tier' && i <= L);
+    rows.forEach((r, ri) => {
+      const y = Y0 + ri * RH; card(X0, y, BW, RH - 10, { r: 14, fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)' });
+      fillRR(X0, y, LW, RH - 10, 14, shade[r]); text(r, X0 + LW / 2, y + (RH - 10) / 2 + 2, 76, 900, ri < 3 ? '#000' : '#fff', 'center', 0);
+      const items = placed.filter(([sc]) => sc.row === r), n = items.length; if (!n) return;
+      const slotW = (BW - LW - 30 - (n - 1) * 14) / n;
+      items.forEach(([sc, i], k) => {
+        const cur = i === L, e = cur ? pop(t, a + 0.1, 0.4) : 1; if (e <= 0) return;
+        const x = X0 + LW + 15 + k * (slotW + 14), cy = y + (RH - 10) / 2, hot = !!sc.logo;
+        xf(x + slotW / 2, cy, clamp(e), 0, () => {
+          fillRR(x, y + 12, slotW, RH - 34, 12, hot ? '#fff' : '#111'); strokeRR(x, y + 12, slotW, RH - 34, 12, cur ? '#fff' : 'rgba(255,255,255,0.35)', cur ? 4 : 2);
+          if (hot && LOGO) { const lg = document.createElement('canvas'); lg.width = lg.height = 256; const q = lg.getContext('2d'); q.drawImage(LOGO, 0, 0, 256, 256); q.globalCompositeOperation = 'source-in'; q.fillStyle = '#000'; q.fillRect(0, 0, 256, 256); ctx.drawImage(lg, x + 24, cy - 40, 80, 80); }
+          const tx = hot && LOGO ? x + 112 + (slotW - 112) / 2 : x + slotW / 2; const mw = hot && LOGO ? slotW - 130 : slotW - 24;
+          text(sc.name, tx, cy + 2, fit(sc.name, 44, mw, 900), 900, hot ? '#000' : '#fff', 'center', 0);
+        });
+      });
+    });
+    const lines = c.why || []; lines.forEach((l, i) => withFade(seg(t, a + 0.45 + i * 0.25, a + 0.8 + i * 0.25), () => text(l, CX, 1200 + i * 62, fit(l, i === 0 ? 44 : 34, 960), i === 0 ? 800 : 600, i === 0 ? '#fff' : SOFT, 'center', -0.01)));
+  },
   chat(t, a, c, i) { // phone with a text thread
     stage(t, 0.14); const until = VO_AT[i + 1] + 0.2;
     phoneChat(t, a - 0.1, until, () => c.msgs.forEach((m, j) => msg(m.out ? 40 : 60, m.y, 520, m.lines, m.out, seg(t, a + m.at, a + m.at + 0.2), m.out ? seg(t, a + m.at + 0.1, a + m.at + 1.5) : 1)));
@@ -136,7 +159,7 @@ SC.push([END, 999, (t) => finale(t, END)]);
 R.scenes.forEach((c, i) => { if (c.type === 'chat') c.msgs.forEach((m) => cue(VO_AT[i] + m.at, 'notification', 0.22)); });
 R.scenes.forEach((c, i) => (c.sfx || []).forEach(([k, kind, gain, d = 0]) => cue(ch(i, k) + 0.05 + d, kind, gain)));
 // Drive SFX defaults (quiet): soft whoosh on each cut, thud on stat/versus reveals, hit on the opener, cash on the end card
-R.scenes.forEach((c, i) => { if (i) cue(VO_AT[i] - 0.08, 'dwhooshsoft', 0.3); if (c.type === 'stat') cue(VO_AT[i] + 0.05, 'dimpact', 0.3); if (c.type === 'versus') cue(VO_AT[i] + 0.1, 'dthud', 0.3); });
+R.scenes.forEach((c, i) => { if (i) cue(VO_AT[i] - 0.08, 'dwhooshsoft', 0.3); if (c.type === 'stat') cue(VO_AT[i] + 0.05, 'dimpact', 0.3); if (c.type === 'versus') cue(VO_AT[i] + 0.1, 'dthud', 0.3); if (c.type === 'tier') cue(VO_AT[i] + 0.12, c.row === 'S' ? 'dhit' : 'dthud', 0.3); });
 cue(0.12, 'dimpact2', 0.3); cue(END + 0.35, 'dcash', 0.25);
 cue(END + 1.25, 'tap', 0.3);
 boot({ duration: DURATION, scenes: SC, brandAt: END, hideCaption: (t) => t >= END }, R.name);
