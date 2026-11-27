@@ -452,8 +452,8 @@
   "76-big-mac-regular.mp4": {
     "approved": true,
     "sha1": "bf97cbcdcd270bf2613ff89e409b05f74a00c41c",
-    "checked_at": "2026-11-27T19:57:32.085Z",
-    "note": "validated 2026-11-27 14:55 ET batch build (stats 19:22Z): (1) pronunciation OK: whisper-base.en on clips and final mix hears message health, every word and both years (1972, 2025); qa.py no flags; (2) frames OK: flicker.py no A-B-A, 1fps sheet of final render viewed, nothing cropped, captions fit; (3) prediction (judgment, not measured): 2.5s number hook and an illustrated true story like the top reels; recent reels since 11-17 are all under 150 views. moral: one loyal regular is worth thousands of visits, so notice when one stops; pivot: Message Health learns each client's rhythm and texts when one goes quiet; grip: 35,000 Big Macs since May 17, 1972. Facts: Guinness (record page and news), Wikipedia, Chowhound, Tasting Table."
+    "checked_at": "2026-11-27T21:17:41.634Z",
+    "note": "validated 2026-11-27 16:18 ET (stats 21:14Z, 87 reels, top 3 unchanged): pronunciation OK (whisper-base.en on clips and final mix hears every line, Message Health, May 17 1972, March 2025, 35,000; qa.py no flags); frames OK (one frame per line plus 1fps sheet viewed, nothing cropped or in the caption zone, count lands on 35,000); analytics (judgment, not measured): 2.5s number hook on an illustrated true story like the top reels, a person story unlike the last two posts (heater fiction, United guitars); caption shape OK. moral: one loyal regular is worth thousands of visits, so notice when one stops; pivot: Message Health learns each client's rhythm and texts when one goes quiet; grip: 35,000 Big Macs since May 17, 1972."
   },
   "77-jcpenney-coupons.mp4": {
     "approved": true,
