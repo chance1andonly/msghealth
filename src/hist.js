@@ -41,9 +41,9 @@ function env(x, y, w, h, col, a = 1) { // envelope
   ctx.save(); ctx.globalAlpha *= clamp(a); fillRR(x, y, w, h, 10, rgba(col, 0.16)); strokeRR(x, y, w, h, 10, rgba(col, 0.7), 3);
   ctx.beginPath(); ctx.moveTo(x + 6, y + 8); ctx.lineTo(x + w / 2, y + h * 0.58); ctx.lineTo(x + w - 6, y + 8); ctx.strokeStyle = rgba(col, 0.7); ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
 }
-const tileDraw = (im, x, y, sz, mode) => { if (!im) return; ctx.save(); rr(x, y, sz, sz, sz * 0.16); ctx.clip(); const m = Math.min(im.width, im.height) * (im.zoom || 1), sx = (im.width - m) / 2, sy = (im.height - m) / 2;
+const tileDraw = (im, x, y, sz, mode, rad = 0.16) => { if (!im) return; ctx.save(); rr(x, y, sz, sz, sz * rad); ctx.clip(); const m = Math.min(im.width, im.height) * (im.zoom || 1), sx = (im.width - m) / 2, sy = (im.height - m) / 2;
       if (mode) { const g = document.createElement('canvas'); g.width = g.height = 256; const q = g.getContext('2d'); q.fillStyle = mode === 'bw' ? '#fff' : '#161616'; q.fillRect(0, 0, 256, 256); const k = document.createElement('canvas'); k.width = k.height = 176; const z = k.getContext('2d'); z.drawImage(im, 0, 0, 176, 176); z.globalCompositeOperation = 'source-in'; z.fillStyle = mode === 'bw' ? '#000' : '#fff'; z.fillRect(0, 0, 176, 176); q.drawImage(k, 40, 40); ctx.drawImage(g, x, y, sz, sz); } else ctx.drawImage(im, sx, sy, m, m, x, y, sz, sz);
-      ctx.restore(); if (mode === 'wb') strokeRR(x, y, sz, sz, sz * 0.16, 'rgba(255,255,255,0.5)', 3); };
+      ctx.restore(); if (mode === 'wb') strokeRR(x, y, sz, sz, sz * rad, 'rgba(255,255,255,0.5)', 3); };
 const SCENES = {
   art(t, a, c, L) { // illustrated documentary scene: c.draw(t, a, c, L) from the reel config (helpers in src/doc.js), slow push-in
     stage(t, c.glow ?? 0.16); const z = 1 + 0.035 * ease.out(seg(t, a, VO_AT[L + 1] + 0.2));
@@ -166,11 +166,11 @@ const SCENES = {
       const items = placed.filter(([sc]) => sc.row === r); items.forEach(([sc, i], k) => {
         const cur = i === L, e = cur ? pop(t, a + 0.1, 0.4) : 1; if (e <= 0) return;
         const x = 168 + k * (TS + 22), y = BY + RY[r] * K + (64 * K - TS) / 2, g = imgOf(sc.img);
-        xf(x + TS / 2, y + TS / 2, clamp(e), 0, () => { tileDraw(g.im, x, y, TS, g.mode); strokeRR(x, y, TS, TS, TS * 0.16, cur ? '#fff' : 'rgba(0,0,0,0.55)', cur ? 5 : 3); });
+        xf(x + TS / 2, y + TS / 2, clamp(e), 0, () => { const rd = sc.img === 'imsg' ? 0.2 : 0; tileDraw(g.im, x, y, TS, g.mode, rd); strokeRR(x, y, TS, TS, TS * rd, cur ? '#fff' : 'rgba(0,0,0,0.55)', cur ? 5 : 3); });
       });
     });
     const big = c.img ? imgOf(c.img) : null;
-    if (big && big.im) withFade(seg(t, a + 0.25, a + 0.55), () => xf(CX, 1300, 1, 0, () => tileDraw(big.im, CX - 100, 1210, 200, big.mode)));
+    if (big && big.im) withFade(seg(t, a + 0.25, a + 0.55), () => xf(CX, 1300, 1, 0, () => tileDraw(big.im, CX - 100, 1210, 200, big.mode, c.img === 'imsg' ? 0.2 : 0)));
   },
   chat(t, a, c, i) { // phone with a text thread
     stage(t, 0.14); const until = VO_AT[i + 1] + 0.2;

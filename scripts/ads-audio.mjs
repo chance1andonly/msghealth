@@ -12,7 +12,7 @@ const FFMPEG = process.env.FFMPEG || 'ffmpeg';
 const entry = process.env.ENTRY || 'qr.html';
 const out = process.argv[2] || path.join(ROOT, `dist/${entry.replace('.html', '')}-audio.wav`);
 const film = await openFilm(entry);
-const { sfx, vo, DUR, M } = await film.page.evaluate(() => ({ sfx: window.SFX, vo: window.VO, DUR: DURATION, M: window.MUSIC }));
+const { sfx, vo, DUR, M, noMusic } = await film.page.evaluate(() => ({ sfx: window.SFX, vo: window.VO, DUR: DURATION, M: window.MUSIC, noMusic: !!(window.REEL && window.REEL.nomusic) }));
 await film.close();
 
 const SR = 48000, N = Math.ceil(SR * DUR);
@@ -82,7 +82,8 @@ kinds.forEach((k, ki) => {
   });
 });
 graph.push(`${voIn.join('')}amix=inputs=${voIn.length}:normalize=0:duration=longest,apad=whole_dur=${DUR},asplit=2[voice][key]`);
-graph.push(`[0:a][key]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=280:makeup=1[duck]`);
+graph.push(`[0:a]volume=${noMusic ? 0 : 1}[m0]`);
+graph.push(`[m0][key]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=280:makeup=1[duck]`);
 graph.push(`[duck][voice]${fxIn.join('')}amix=inputs=${2 + fxIn.length}:normalize=0:duration=first,alimiter=limit=0.89:level=disabled,afade=t=out:st=${(DUR - 0.6).toFixed(3)}:d=0.6,atrim=0:${DUR.toFixed(3)}[out]`);
 execFileSync(FFMPEG, ['-loglevel', 'error', '-y', ...inputs, '-filter_complex', graph.join(';'), '-map', '[out]', '-ac', '2', '-c:a', 'pcm_s16le', out], { stdio: 'inherit' });
 fs.rmSync(TMP, { recursive: true, force: true });

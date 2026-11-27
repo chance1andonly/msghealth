@@ -1,16 +1,16 @@
 {
- "voice": "am_adam",
- "speed": 1.15,
+ "voice": "af_heart",
+ "speed": 1.1,
  "start": 0.3,
  "lines": [
   {
-   "say": "Tier F, doing nothing. Clients drift away, and you never even notice.",
+   "say": "Tier F, doing nothing. Clients quietly drift away, and you never find out.",
    "caps": [
     "*Tier F,* doing nothing.",
-    "Clients *drift away,*",
-    "and you *never notice.*"
+    "Clients *quietly drift away,*",
+    "and you *never find out.*"
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
    "say": "Tier C, asking at the chair. It only reaches whoever is sitting in front of you.",
@@ -19,43 +19,43 @@
     "It only reaches who's",
     "*in front of you.*"
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
-   "say": "Tier B, texting them yourself. It works, until you have hundreds of clients and somebody slips through.",
+   "say": "Tier B, texting them yourself. It works, but with hundreds of clients, someone slips through.",
    "caps": [
     "*Tier B,* texting them yourself.",
-    "Works, until you have",
-    "*hundreds* of clients."
+    "Works, but with *hundreds*",
+    "of clients, *someone slips.*"
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
-   "say": "Also tier B, Vah-rah-go. A booking tool first, and text marketing is a paid add-on.",
+   "say": "Also tier B, Vah-rah-go. Booking comes first, and text marketing costs extra.",
    "caps": [
     "Also *tier B,* Vagaro.",
-    "A *booking tool* first.",
-    "Text marketing *costs extra.*"
+    "*Booking* comes first,",
+    "text marketing *costs extra.*"
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
-   "say": "Tier A, Book-see. Solid reactivation messages, with two thousand marketing texts included.",
+   "say": "Tier A, Book-see. It texts lapsed clients for you, with two thousand marketing texts included.",
    "caps": [
-    "*Tier A,* Booksy.",
-    "Solid *reactivation messages,*",
+    "*Tier A,* Booksy. It texts",
+    "*lapsed clients* for you,",
     "*2,000* texts included."
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
-   "say": "Gloss Genius. Automated rebooking reminder texts on the Gold plan.",
+   "say": "Gloss Genius. Automatic rebooking texts, but only on the Gold plan.",
    "caps": [
-    "*GlossGenius.* Automated",
-    "rebooking *reminder texts*",
+    "*GlossGenius.* Automatic",
+    "*rebooking texts,* but only",
     "on the *Gold plan.*"
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
    "say": "Squire. Smart Rebooking learns client habits, and it runs win-back campaigns.",
@@ -64,68 +64,42 @@
     "learns *client habits,*",
     "plus *win-back campaigns.*"
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
-   "say": "Tier S, Message Health. A texting and retention platform that scores every client against their own rhythm.",
+   "say": "Tier S, Message Health. It scores every client against their own rhythm, and shows why they're at risk.",
    "caps": [
     "*Tier S,* *Message Health.*",
     "Scores every client against",
-    "*their own rhythm.*"
+    "*their own rhythm,*",
+    "and shows *why they're at risk.*"
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
-   "say": "Not a fixed rule like ninety days. It shows you exactly why a client is at risk.",
-   "caps": [
-    "Not a *fixed rule*",
-    "like ninety days. It shows",
-    "*exactly why* they're at risk."
-   ],
-   "gap": 0.5
-  },
-  {
-   "say": "Then it texts the quiet ones back for you, and every reply lands in one shared inbox.",
+   "say": "Then it texts the quiet ones back. Tie it into your favorite tool with your API keys.",
    "caps": [
     "Then it *texts the quiet*",
-    "*ones back* for you.",
-    "Replies land in *one inbox.*"
+    "*ones back.* Tie it into your",
+    "favorite tool with *API keys.*"
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
-   "say": "Reminders, review requests, bookings, payments, and analytics, all in one place.",
+   "say": "Plans start at fifty dollars, and your first month is half off.",
    "caps": [
-    "*Reminders,* review requests,",
-    "*bookings, payments,*",
-    "and *analytics.*"
-   ],
-   "gap": 0.5
-  },
-  {
-   "say": "And you can tie Message Health into your favorite tool with your API keys.",
-   "caps": [
-    "Tie *Message Health* into",
-    "your *favorite tool*",
-    "with your *API keys.*"
-   ],
-   "gap": 0.5
-  },
-  {
-   "say": "Plans start at fifty dollars a month, and your first month is half off.",
-   "caps": [
-    "Plans start at *$50 a month,*",
+    "Plans start at *$50,*",
     "and your first month",
     "is *half off.*"
    ],
-   "gap": 0.5
+   "gap": 0.45
   },
   {
-   "say": "If you wanna see why we are better, comment RETAIN, and I will DM you. Not an automated one.",
+   "say": "Comment RETAIN, and I will DM you personally. Not those automated bullshit ones.",
    "caps": [
-    "If you wanna see why we're better,",
-    "comment *RETAIN* and I'll DM you.",
-    "*Not* an automated one."
+    "Comment *RETAIN* and I'll",
+    "DM you *personally.*",
+    "Not those *automated bullshit ones.*"
    ],
    "gap": 0.5
   }
