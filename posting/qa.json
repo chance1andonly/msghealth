@@ -410,8 +410,8 @@
   "70-small-business-funeral.mp4": {
     "approved": true,
     "sha1": "a36d1702d9447154162d09af1810b124cce014e1",
-    "checked_at": "2026-11-26T19:49:08.392Z",
-    "note": "validated 2026-11-26 build: (1) pronunciation OK: ASR on clips and final mix, message health heard; (2) frames OK: flicker.py no A-B-A, 1fps sheet viewed, caption zone clear; (3) predicted strong: true story, man stages own funeral hook like the top scene-first reels, ad only at the end, Small Business Saturday tie (judgment). Disputed anecdotes are voiced as legend."
+    "checked_at": "2026-11-28T02:20:32.974Z",
+    "note": "validated 2026-11-27 21:22 ET (after 02:17Z stats): pronunciation OK on record (ASR passed at 11-26 build on this exact file, sha1 unchanged; ASR not rerun, model download blocked in this run); frames OK (frame per line + 1fps grid viewed, flicker.py no A-B-A, nothing cropped, caption zone clear); analytics (judgment): 3.1s odd true-scene hook like the top 3, 3,000-people number in caption, Small Business Saturday is 11-28 only, new topic vs library and Big Mac"
   },
   "71-cyber-monday-pixels.mp4": {
     "approved": true,
