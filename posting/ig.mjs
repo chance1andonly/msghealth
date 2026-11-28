@@ -113,8 +113,9 @@ function expired(f) { const m = path.join(QUEUE, f.replace(/\.mp4$/, '.meta.json
 function early(f) { const m = path.join(QUEUE, f.replace(/\.mp4$/, '.meta.json')); const j = fs.existsSync(m) ? readJson(m, {}) : {}; return Boolean(j.not_before) && today() < j.not_before; }
 function ordered(all) { const o = (readJson(ORDER, {}).order || []).filter((f) => all.includes(f)); return o.concat(all.filter((f) => !o.includes(f))); }
 function pick(all) {
-  all.filter(expired).forEach((f) => { const H = path.join(DIR, 'held'); fs.mkdirSync(H, { recursive: true }); for (const e of ['.mp4', '.txt', '.meta.json']) { const a = path.join(QUEUE, f.replace(/\.mp4$/, e)); if (fs.existsSync(a)) fs.renameSync(a, path.join(H, path.basename(a))); } say(`expired, moved to held: ${f}`); });
-  const live = ordered(all.filter((f) => !expired(f) && !early(f))).filter(approved);
+  const gone = all.filter(expired); // decided once: moving a reel also moves its meta file, so expired() would then say false
+  gone.forEach((f) => { const H = path.join(DIR, 'held'); fs.mkdirSync(H, { recursive: true }); for (const e of ['.mp4', '.txt', '.meta.json']) { const a = path.join(QUEUE, f.replace(/\.mp4$/, e)); if (fs.existsSync(a)) fs.renameSync(a, path.join(H, path.basename(a))); } say(`expired, moved to held: ${f}`); });
+  const live = ordered(all.filter((f) => !gone.includes(f) && !early(f))).filter(approved);
   const fresh = live.find((f) => ageHours(f) <= FRESH_HOURS);
   if (fresh) return fresh;
   if (live[0]) say(`WARNING: no reel was validated in the last ${FRESH_HOURS}h; posting ${live[0]} on its older approval (${ageHours(live[0]).toFixed(1)}h old)`);
