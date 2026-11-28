@@ -466,5 +466,23 @@
     "sha1": "fcb20ca1344700238d8529007dc9edd702bc3858",
     "checked_at": "2026-11-27T23:16:08.858Z",
     "note": "validated 2026-11-27 18:18 ET (stats 23:14Z, 88 reels, top 3 unchanged): pronunciation OK per the 14:55 ET batch whisper-base.en check of this same file (sha1 unchanged; speech recognition not re-run here); frames OK (1fps sheet viewed, nothing cropped, captions readable); VOICE.md and caption OK; analytics (judgment, not measured): odd true scene plus a number in a 10-word hook, same shape as the top 3; person win-back story, unlike the last two posts (heater, Big Mac)."
+  },
+  "79-schlitz-flakes.mp4": {
+    "approved": true,
+    "sha1": "a6d20727c7fae5dfeb9c5083e7476a8fa26be321",
+    "checked_at": "2026-11-28T08:03:47.486Z",
+    "note": " Checks 2026-11-28: (1) qa.py no flags, whisper on the final mix hears every line incl. Message Health and the years; (2) flicker.py none, 1 fps contact sheets readable, nothing cropped, captions 24 chars or less; (3) judgment call: same true-story family as the 1,709/1,291/794 winners, a number on frame 0, brand only in the last ~11 s. moral: let quality slip and regulars quietly switch, chasing them late does not save you; pivot: your regulars send no recall notice, Message Health flags who is drifting and texts them; grip: 10 million beers recalled, 1976."
+  },
+  "80-hoover-flights.mp4": {
+    "approved": true,
+    "sha1": "fd5121a1ffb2e1a6a0c23739e07987ee0feb66f4",
+    "checked_at": "2026-11-28T08:03:47.536Z",
+    "note": " Checks 2026-11-28: (1) qa.py no flags, whisper on the final mix hears every line incl. Message Health and the years; (2) flicker.py none, 1 fps contact sheets readable, nothing cropped, captions 24 chars or less; (3) judgment call: same true-story family as the 1,709/1,291/794 winners, a number on frame 0, brand only in the last ~11 s. moral: chasing strangers with a gimmick and breaking your word can wreck a trusted name; pivot: your regulars already like you, Message Health spots who went quiet and reaches out first; grip: 100 pound vacuum, two free flights, 1992, about 50 million pounds burned."
+  },
+  "81-pudding-miles.mp4": {
+    "approved": true,
+    "sha1": "0ef168b032af7579d04195cbba5dd4863ba0a0ac",
+    "checked_at": "2026-11-28T08:03:47.586Z",
+    "note": " Checks 2026-11-28: (1) qa.py no flags, whisper on the final mix hears every line incl. Message Health and the years; (2) flicker.py none, 1 fps contact sheets readable, nothing cropped, captions 24 chars or less; (3) judgment call: same true-story family as the 1,709/1,291/794 winners, a number on frame 0, brand only in the last ~11 s. moral: a good reason to come back turns a small habit huge; pivot: your regulars only need a nudge, Message Health tracks them and sends it; grip: 12,000 cups of pudding, 1999."
   }
 }

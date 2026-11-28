@@ -1,0 +1,138 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "A beer company had to recall ten million fucking beers.",
+   "caps": [
+    "A beer company had to",
+    "recall *10 million*",
+    "*fucking beers.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.12
+  },
+  {
+   "say": "This was Schlitz, the number two beer in America.",
+   "caps": [
+    "This was *Schlitz,*",
+    "the *number two*",
+    "beer in America."
+   ],
+   "gap": 0.4,
+   "speed": 1.1
+  },
+  {
+   "say": "Then the bosses got cheap as hell. Less malt, more corn syrup, and a rushed brew.",
+   "caps": [
+    "Then the bosses got",
+    "*cheap as hell.*",
+    "Less malt,",
+    "more *corn syrup,*",
+    "and a *rushed brew.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "In 1976, a new additive reacted inside the beer.",
+   "caps": [
+    "In *1976,*",
+    "a new additive",
+    "*reacted* inside",
+    "the beer."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Flakes. Floating in your fucking beer.",
+   "caps": [
+    "*Flakes.*",
+    "Floating in your",
+    "*fucking beer.*"
+   ],
+   "gap": 0.55,
+   "speed": 1.02
+  },
+  {
+   "say": "The recall cost them one point four million dollars. Then drinkers started switching.",
+   "caps": [
+    "The recall cost them",
+    "*$1.4 million.*",
+    "Then drinkers",
+    "*started switching.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "So in 1977, they ran ads to win people over. A boxer. A lumberjack with a pet cougar.",
+   "caps": [
+    "So in *1977,*",
+    "they ran ads to",
+    "win people over.",
+    "A *boxer.*",
+    "A lumberjack with",
+    "a *pet cougar.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "All threatening the guy who asked them to switch.",
+   "caps": [
+    "All *threatening*",
+    "the guy who asked",
+    "them to *switch.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "People called those ads, drink Schlitz, or I will kill you.",
+   "caps": [
+    "People called those ads",
+    "*Drink Schlitz*",
+    "*or I will kill you.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.05
+  },
+  {
+   "say": "The ads got yanked after ten weeks. By 1982, another brewer bought the whole damn company.",
+   "caps": [
+    "The ads got yanked",
+    "after *ten weeks.*",
+    "By *1982,*",
+    "another brewer bought",
+    "the *whole damn company.*"
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "Your regulars won't send a recall notice. They just stop showing up.",
+   "caps": [
+    "Your regulars won't",
+    "send a *recall notice.*",
+    "They just",
+    "*stop showing up.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health flags who's drifting, and sends each one a text.",
+   "caps": [
+    "*Message Health* flags",
+    "who's *drifting*",
+    "and sends each one",
+    "a *text.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

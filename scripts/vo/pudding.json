@@ -1,0 +1,129 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "This man bought twelve thousand cups of pudding. On purpose.",
+   "caps": [
+    "This man bought",
+    "*12,000 cups*",
+    "of *pudding.*",
+    "On purpose."
+   ],
+   "gap": 0.4,
+   "speed": 1.12
+  },
+  {
+   "say": "David Phillips, 1999. You mail in ten barcodes early, and get a thousand airline miles.",
+   "caps": [
+    "*David Phillips,*",
+    "*1999.*",
+    "You mail in",
+    "ten barcodes early,",
+    "and get *1,000*",
+    "*airline miles.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "And the cups cost twenty five fucking cents.",
+   "caps": [
+    "And the cups cost",
+    "*25 fucking cents.*"
+   ],
+   "gap": 0.45,
+   "speed": 1.08
+  },
+  {
+   "say": "So he spent about three grand, and told the stores he was stocking up for Y2K.",
+   "caps": [
+    "So he spent about",
+    "*three grand,*",
+    "and told the stores",
+    "he was stocking up",
+    "for *Y2K.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Problem is, peeling twelve thousand barcodes takes forever. So he called the Salvation Army.",
+   "caps": [
+    "Problem is, peeling",
+    "12,000 barcodes",
+    "*takes forever.*",
+    "So he called",
+    "the *Salvation Army.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "They peeled the labels, they got the pudding, and he got an eight hundred dollar tax write off.",
+   "caps": [
+    "They peeled",
+    "the labels,",
+    "they *got the pudding,*",
+    "and he got an",
+    "*$800 tax write-off.*"
+   ],
+   "gap": 0.45
+  },
+  {
+   "say": "He walked away with over one point two million airline miles.",
+   "caps": [
+    "He walked away with",
+    "over *1.2 million*",
+    "*airline miles.*"
+   ],
+   "gap": 0.5,
+   "speed": 1.08
+  },
+  {
+   "say": "Plus American Airlines Gold status. For life. The crazy bastard.",
+   "caps": [
+    "Plus American Airlines",
+    "*Gold status.*",
+    "*For life.*",
+    "The *crazy bastard.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "A good reason to come back will make people do wild shit.",
+   "caps": [
+    "A good reason to",
+    "come back will make",
+    "people do *wild shit.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "All your regulars need is a nudge. No pudding required.",
+   "caps": [
+    "All your regulars need",
+    "is a *nudge.*",
+    "No pudding",
+    "required."
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health tracks every regular, and sends the nudge for you.",
+   "caps": [
+    "*Message Health* tracks",
+    "*every regular*",
+    "and sends the",
+    "*nudge for you.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}

@@ -1,0 +1,131 @@
+{
+ "voice": "am_adam",
+ "speed": 1.15,
+ "start": 0.3,
+ "lines": [
+  {
+   "say": "Buy a vacuum, get two free flights to America.",
+   "caps": [
+    "Buy a vacuum,",
+    "get *two free flights*",
+    "to *America.*"
+   ],
+   "gap": 0.4,
+   "speed": 1.12
+  },
+  {
+   "say": "Hoover offered that in Britain, in 1992. Spend just a hundred pounds, and fly free.",
+   "caps": [
+    "*Hoover* offered that",
+    "in Britain, in *1992.*",
+    "Spend just",
+    "*100 pounds,*",
+    "and *fly free.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "The flights were worth about six hundred pounds. Do the damn math.",
+   "caps": [
+    "The flights were worth",
+    "about *600 pounds.*",
+    "Do the *damn math.*"
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "Britain lost its shit. Around three hundred thousand people jumped on it.",
+   "caps": [
+    "Britain *lost its shit.*",
+    "Around *300,000*",
+    "people jumped on it."
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "So Hoover made them jump through hoops. Forms, deadlines, and airports nowhere near home.",
+   "caps": [
+    "So Hoover made them",
+    "*jump through hoops.*",
+    "Forms, *deadlines,*",
+    "and airports",
+    "*nowhere near home.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "A man named Dave Dixon says the repair guy called him an idiot for expecting tickets.",
+   "caps": [
+    "A man named",
+    "*Dave Dixon* says",
+    "the repair guy called",
+    "him an *idiot*",
+    "for expecting tickets."
+   ],
+   "gap": 0.5
+  },
+  {
+   "say": "So Dave blocked the Hoover van with his truck, and held it thirteen damn days.",
+   "caps": [
+    "So Dave *blocked*",
+    "the *Hoover van*",
+    "with his truck,",
+    "and held it",
+    "*13 damn days.*"
+   ],
+   "gap": 0.55,
+   "speed": 1.08
+  },
+  {
+   "say": "The company burned about fifty million pounds. Three bosses got fired.",
+   "caps": [
+    "The company burned",
+    "about *50 million*",
+    "*pounds.*",
+    "*Three bosses*",
+    "got *fired.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "In 1995, the European business got sold. Later, the royal seal got yanked too.",
+   "caps": [
+    "In *1995,* the",
+    "European business",
+    "got *sold.*",
+    "Later, the",
+    "*royal seal*",
+    "got *yanked* too."
+   ],
+   "gap": 0.55
+  },
+  {
+   "say": "Chasing strangers with gimmicks gets expensive. Your regulars already like you.",
+   "caps": [
+    "Chasing strangers",
+    "with gimmicks gets",
+    "*expensive.*",
+    "Your regulars",
+    "*already like you.*"
+   ],
+   "gap": 0.35
+  },
+  {
+   "say": "Message Health spots who's gone quiet, and reaches out first.",
+   "caps": [
+    "*Message Health* spots",
+    "who's *gone quiet*",
+    "and *reaches out first.*"
+   ],
+   "gap": 0.4
+  },
+  {
+   "say": "Comment KEEP to get a full retention audit.",
+   "caps": [
+    "Comment *KEEP* to get a",
+    "full *retention audit.*"
+   ],
+   "gap": 0.5
+  }
+ ]
+}
