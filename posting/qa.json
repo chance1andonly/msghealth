@@ -410,8 +410,8 @@
   "70-small-business-funeral.mp4": {
     "approved": true,
     "sha1": "a36d1702d9447154162d09af1810b124cce014e1",
-    "checked_at": "2026-11-28T02:20:32.974Z",
-    "note": "validated 2026-11-27 21:22 ET (after 02:17Z stats): pronunciation OK on record (ASR passed at 11-26 build on this exact file, sha1 unchanged; ASR not rerun, model download blocked in this run); frames OK (frame per line + 1fps grid viewed, flicker.py no A-B-A, nothing cropped, caption zone clear); analytics (judgment): 3.1s odd true-scene hook like the top 3, 3,000-people number in caption, Small Business Saturday is 11-28 only, new topic vs library and Big Mac"
+    "checked_at": "2026-11-28T13:17:08.129Z",
+    "note": "validated 2026-11-28 08:18 ET (after 13:15Z stats): pronunciation OK (qa.py and whisper-base.en on clips and final mix, every line incl. Message Health heard; only flag is line 8 at 19 words); frames OK (1 fps grid viewed, flicker.py no A-B-A, nothing cropped, caption zone clear, text readable); analytics (judgment, not measured): 3.1s odd true-scene hook with a 3,000-people number, same family as the 1,710/1,292/794 top reels; Small Business Saturday is today only; topic differs from library and Big Mac"
   },
   "71-cyber-monday-pixels.mp4": {
     "approved": true,
